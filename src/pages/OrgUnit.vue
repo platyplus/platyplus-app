@@ -34,16 +34,15 @@ export default {
     createChild () {
       this.$router.push(this.$route.path + '/create')
     },
-    save () {
-      this._mixinPreSave().then(res => {
-        if (this.parent_id) {
-          this.$router.replace(
-            this.$route.path.replace(`${this.parent_id}/create`, res.id)
-          )
-        } else {
-          this._mixinPostSave()
-        }
-      })
+    async save () {
+      const { id } = await this._mixinPreSave()
+      if (this.parent_id) {
+        this.$router.replace(
+          this.$route.path.replace(`${this.parent_id}/create`, id)
+        )
+      } else {
+        this._mixinPostSave()
+      }
     }
   },
   apollo: {

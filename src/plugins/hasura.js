@@ -1,14 +1,24 @@
 import gql from 'graphql-tag'
 import { fragments, mutations, settings } from 'plugins/platyplus'
 
-export const upsertMutation = ({ apollo, table, data, fragment = 'base' }) => {
+export const upsertMutation = async ({
+  apollo,
+  table,
+  data,
+  fragment = 'base'
+}) => {
   const update = Boolean(Array.isArray(data) ? data[0].id : data.id)
   return update
     ? updateMutation({ apollo, table, data, fragment })
     : insertMutation({ apollo, table, data, fragment })
 }
 
-export const updateMutation = ({ apollo, table, data, fragment = 'base' }) => {
+export const updateMutation = async ({
+  apollo,
+  table,
+  data,
+  fragment = 'base'
+}) => {
   const mutation = mutations[table].update
   const objects = Array.isArray(data) ? data : [data]
   const theloop = objects.map(item => {
@@ -26,7 +36,12 @@ export const updateMutation = ({ apollo, table, data, fragment = 'base' }) => {
   return Promise.all(theloop)
 }
 
-export const insertMutation = ({ apollo, table, data, fragment = 'base' }) => {
+export const insertMutation = async ({
+  apollo,
+  table,
+  data,
+  fragment = 'base'
+}) => {
   const objects = Array.isArray(data) ? data : [data]
   const mutation = gql`
     mutation insert_${table}($objects: [${table}_insert_input!]!) {
@@ -91,4 +106,65 @@ export const smartQueryHelper = ({ table, fragment, where, orderBy }) => ({
     }
   }
 })
+
+export const saveForm = async ({
+  apollo,
+  table,
+  fragment = 'base',
+  oldValues,
+  newValues,
+  relations
+}) => {
+  const relationsSettings = settings[table].relations || {}
+  const beforeSave = settings[table].beforeSave || (p => p)
+  const next = beforeSave({
+    newValues,
+    oldValues,
+    relations
+  }).newValues
+  if (oldValues.id) {
+    for await (const name of Object.keys(relationsSettings)) {
+      let relation = relationsSettings[name]
+      let data = relations[name]
+      let initialData = oldValues[name].map(item => item[relation.to].id)
+      const newData = data
+        .filter(item => !initialData.includes(item))
+        .map(item => ({
+          [`${table}_id`]: oldValues.id,
+          [`${relation.to}_id`]: item
+        }))
+      if (newData.length > 0) {
+        await insertMutation({
+          apollo,
+          table: relation.table,
+          fragment: 'minimal',
+          data: newData
+        })
+      }
+      const deletedData = initialData.filter(item => !data.includes(item))
+      if (deletedData.length > 0) {
+        await deleteMutation({
+          apollo,
+          table: relation.table,
+          key: relation.to,
+          data: deletedData
+        })
+      }
+    }
+    return upsertMutation({
+      apollo,
+      table,
+      fragment,
+      data: next
+    })
+  } else {
+    console.warn('TODO: add relations')
+    console.warn('TODO: return query')
+    return upsertMutation({
+      apollo,
+      table,
+      data: next
+    })
+  }
+}
 export default ({ app, router, Vue }) => {}

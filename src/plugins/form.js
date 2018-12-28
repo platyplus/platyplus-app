@@ -1,43 +1,42 @@
 import {
-  upsertMutation,
+  saveForm,
   smartQueryHelper,
   queryHelper,
   deleteMutation
 } from 'plugins/hasura'
+import { settings } from 'plugins/platyplus'
+
 import ButtonBar from 'components/ButtonBar.vue'
-import { insertMutation } from './hasura'
 
 export const mixin = ({
   table,
   fragment = 'base',
   formField = 'form',
-  relations = {}, // TODO: dans platyplus.settings
-  initialValues = {}, // TODO: dans platyplus.settings
-  unique = false,
-  beforeSave = p => p // TODO: dans platyplus.settings
+  unique = false
 }) => {
   return {
     props: ['id', 'createFlag', 'editFlag'],
     data () {
       return {
         [formField]: {},
-        relations: Object.keys(relations).reduce((aggr, curr) => {
-          aggr[curr] = []
-          return aggr
-        }, {}),
+        relations: settings[table].relations
+          ? Object.keys(settings[table].relations).reduce((aggr, curr) => {
+            aggr[curr] = []
+            return aggr
+          }, {})
+          : {},
         list: [],
-        item: initialValues
+        item: settings[table].defaultValues || {}
       }
     },
     methods: {
       create () {
         this.$router.push(this.$route.path + '/create')
       },
-      save (e) {
+      async save (e) {
         // Customize the save method in the component if needed
-        this._mixinPreSave().then(item => {
-          this._mixinPostSave()
-        })
+        await this._mixinPreSave()
+        this._mixinPostSave()
       },
       edit () {
         this.$router.replace(this.$route.path + '/edit')
@@ -49,16 +48,16 @@ export const mixin = ({
       },
       reset (e) {
         if (!this.id) {
-          this.item = initialValues
+          this.item = settings[table].defaultValues || {}
         }
         // Copy the initial data to the form data
         this[formField] = { ...this.item }
         // Flatten the M2M relation fields with the corresponding IDs
-        relations &&
-          Object.keys(relations).map(relation => {
+        settings[table].relations &&
+          Object.keys(settings[table].relations).map(relation => {
             if (this.item[relation]) {
               this.relations[relation] = this.item[relation].map(
-                item => item[relations[relation].to].id
+                item => item[settings[table].relations[relation].to].id
               )
             }
           })
@@ -77,57 +76,16 @@ export const mixin = ({
         })
         this.$router.go(-1)
       },
-      async _mixinPreSave () {
-        // TODO: move above to plugins/hasura
+      _mixinPreSave () {
         // this.submitted = true TODO: loading button
-        this[formField] = beforeSave({
-          form: this[formField],
-          initial: this.item,
+        return saveForm({
+          apollo: this.$apollo,
+          table,
+          fragment,
+          oldValues: this.item,
+          newValues: this[formField],
           relations: this.relations
-        }).form
-        if (this.item.id) {
-          for await (const name of Object.keys(relations)) {
-            let relation = relations[name]
-            let data = this.relations[name]
-            let initialData = this.item[name].map(item => item[relation.to].id)
-            const newData = data
-              .filter(item => !initialData.includes(item))
-              .map(item => ({
-                [`${table}_id`]: this.item.id,
-                [`${relation.to}_id`]: item
-              }))
-            if (newData.length > 0) {
-              await insertMutation({
-                apollo: this.$apollo,
-                table: relation.table,
-                fragment: 'minimal',
-                data: newData
-              })
-            }
-            const deletedData = initialData.filter(item => !data.includes(item))
-            if (deletedData.length > 0) {
-              await deleteMutation({
-                apollo: this.$apollo,
-                table: relation.table,
-                key: relation.to,
-                data: deletedData
-              })
-            }
-          }
-          return upsertMutation({
-            apollo: this.$apollo,
-            table,
-            data: this[formField]
-          })
-        } else {
-          console.warn('TODO: add relations')
-          console.warn('TODO: return query')
-          return upsertMutation({
-            apollo: this.$apollo,
-            table,
-            data: this[formField]
-          })
-        }
+        })
       },
       _mixinPostSave () {
         this.$router.replace(

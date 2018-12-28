@@ -23,28 +23,7 @@ import { mixin } from 'plugins/form'
 const FORM_CONFIG = {
   table: 'user',
   fragment: 'full',
-  unique: true,
-  relations: {
-    // TODO: move to settings in the platyplus module?
-    org_unit_memberships: {
-      table: 'user_org_unit',
-      to: 'org_unit'
-    }
-  },
-  initialValues: {
-    // TODO: move to settings in the platyplus module?
-    attributes: {}
-  },
-  beforeSave: ({ form, initial, relations }) => {
-    if (
-      !form.org_unit_memberships
-        .map(item => item.org_unit.id)
-        .includes(form.preferred_org_unit_id)
-    ) {
-      form.preferred_org_unit_id = null
-    }
-    return { form }
-  }
+  unique: true
 }
 export default {
   name: 'PageProfile',
@@ -55,11 +34,10 @@ export default {
     }
   },
   methods: {
-    save (e) {
-      this._mixinPreSave().then(user => {
-        this.$store.dispatch('authentication/updateUser', user)
-        this._mixinPostSave()
-      })
+    async save (e) {
+      const user = await this._mixinPreSave()
+      this.$store.dispatch('authentication/updateUser', user)
+      this._mixinPostSave()
     }
   },
   apollo: {

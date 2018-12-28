@@ -1,7 +1,27 @@
 import gql from 'graphql-tag'
 import * as orgUnit from './orgUnit'
 
-export const settings = {}
+export const settings = {
+  defaultValues: {
+    attributes: {}
+  },
+  relations: {
+    org_unit_memberships: {
+      table: 'user_org_unit',
+      to: 'org_unit'
+    }
+  },
+  beforeSave: ({ newValues, initial, relations }) => {
+    if (
+      !newValues.org_unit_memberships
+        .map(item => item.org_unit.id)
+        .includes(newValues.preferred_org_unit_id)
+    ) {
+      newValues.preferred_org_unit_id = null
+    }
+    return { newValues }
+  }
+}
 
 export const fragments = {
   full: gql`
