@@ -85,6 +85,7 @@ const link = split(
 export const apolloClient = new ApolloClient({
   link,
   cache,
+  shouldBatch: true, // https://blog.apollographql.com/query-batching-in-apollo-63acfd859862
   connectToDevTools: true
 })
 

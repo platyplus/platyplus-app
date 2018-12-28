@@ -7,7 +7,7 @@
       q-field(label="Name")
         q-input(:readonly="reading" v-model="form.name" ref="firstInput" @keyup.enter="save")
       q-field(label="Parent org unit" helper="Pick an org unit")
-        q-select(:readonly="reading || parent_id" clearable filter v-model="form.parent_id" :options="parentOptions")
+        q-select(:readonly="reading || Boolean(parent_id)" clearable filter v-model="form.parent_id" :options="parentOptions")
       q-field(label="Type" helper="Pick an org unit type")
         q-select(:readonly="reading" clearable v-model="form.type_id" :options="typeOptions")
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
@@ -73,11 +73,17 @@ export default {
     }
   },
   created () {
-    if (this.parent_id) this.item.parent_id = this.parent_id
+    if (this.parent_id) {
+      this.item.parent_id = this.parent_id
+      this.reset()
+    }
   },
   watch: {
     $route () {
-      if (this.parent_id) this.item.parent_id = this.parent_id
+      if (this.parent_id) {
+        this.item.parent_id = this.parent_id
+        this.reset()
+      }
     }
   }
 }

@@ -1,6 +1,11 @@
-import { mutations } from 'plugins/platyplus'
-import { upsertMutation, smartQueryHelper, queryHelper } from 'plugins/hasura'
+import {
+  upsertMutation,
+  smartQueryHelper,
+  queryHelper,
+  deleteMutation
+} from 'plugins/hasura'
 import ButtonBar from 'components/ButtonBar.vue'
+import { insertMutation } from './hasura'
 
 export const mixin = ({
   table,
@@ -76,48 +81,47 @@ export const mixin = ({
           relations: this.relations
         }).form
         if (this.item.id) {
-          // TODO: go from update mode to upsert mode!
           for await (const name of Object.keys(relations)) {
             let relation = relations[name]
             let data = this.relations[name]
             let initialData = this.item[name].map(item => item[relation.to].id)
-            const newData = data.filter(item => !initialData.includes(item))
+            const newData = data
+              .filter(item => !initialData.includes(item))
+              .map(item => ({
+                [`${table}_id`]: this.item.id,
+                [`${relation.to}_id`]: item
+              }))
             if (newData.length > 0) {
-              await this.$apollo
-                .mutate({
-                  mutation: mutations[relation.table].insert,
-                  variables: {
-                    objects: newData.map(item => ({
-                      [`${table}_id`]: this.item.id,
-                      [`${relation.to}_id`]: item
-                    }))
-                  }
-                })
-                .catch(error => {
-                  console.warn("TODO: erreur d'insert")
-                  console.error(error)
-                })
+              await insertMutation({
+                apollo: this.$apollo,
+                table: relation.table,
+                fragment: 'minimal',
+                data: newData
+              })
             }
             const deletedData = initialData.filter(item => !data.includes(item))
             if (deletedData.length > 0) {
-              await this.$apollo
-                .mutate({
-                  mutation: mutations[relation.table].delete,
-                  variables: {
-                    [`${relation.to}_ids`]: deletedData
-                  }
-                })
-                .catch(error => {
-                  console.warn('TODO: erreur de delete')
-                  console.error(error)
-                })
+              await deleteMutation({
+                apollo: this.$apollo,
+                table: relation.table,
+                key: relation.to,
+                ids: deletedData
+              })
             }
           }
-          return upsertMutation(this.$apollo, table, this[formField])
+          return upsertMutation({
+            apollo: this.$apollo,
+            table,
+            data: this[formField]
+          })
         } else {
           console.warn('TODO: add relations')
           console.warn('TODO: return query')
-          return upsertMutation(this.$apollo, table, this[formField])
+          return upsertMutation({
+            apollo: this.$apollo,
+            table,
+            data: this[formField]
+          })
         }
       },
       _mixinPostSave () {

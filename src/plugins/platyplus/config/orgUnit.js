@@ -36,18 +36,6 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
-  insert: gql`
-    mutation insert_org_unit($objects: [org_unit_insert_input!]!) {
-      insert_org_unit(objects: $objects) {
-        returning {
-          ...org_unit_base
-        }
-      }
-    }
-    ${fragments.base}
-  `,
-  // TODO: passer type.id et non type_id? Ainsi, enlever type_id des fragments.
-  // Contrepartie: mettre type: {} dans initialValues
   update: gql`
     mutation update_org_unit(
       $id: ID!

@@ -2,7 +2,13 @@ import gql from 'graphql-tag'
 
 export const settings = {}
 
-export const fragments = {}
+export const fragments = {
+  minimal: gql`
+    fragment user_org_unit_minimal on user_org_unit {
+      id
+    }
+  `
+}
 
 export const queries = {}
 
@@ -13,13 +19,6 @@ export const mutations = {
         returning {
           id
         }
-      }
-    }
-  `,
-  delete: gql`
-    mutation delete_user_org_unit($org_unit_ids: [ID!]!) {
-      delete_user_org_unit(where: { org_unit_id: { _in: $org_unit_ids } }) {
-        affected_rows
       }
     }
   `
