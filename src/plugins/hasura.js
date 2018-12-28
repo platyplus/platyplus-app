@@ -43,9 +43,10 @@ export const insertMutation = ({ apollo, table, data, fragment = 'base' }) => {
     .then(({ data }) => data[Object.keys(data)[0]].returning[0])
 }
 
-export const deleteMutation = ({ apollo, table, key, ids }) => {
+export const deleteMutation = ({ apollo, table, key, data }) => {
   const field = !key || key === 'id' ? 'id' : `${key}_id`
-  if (ids && ids.length) {
+  const ids = Array.isArray(data) ? data : [data]
+  if (ids.length) {
     return apollo.mutate({
       mutation: gql`
       mutation delete_${table}($ids: [ID!]!) {

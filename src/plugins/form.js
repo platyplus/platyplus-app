@@ -69,8 +69,13 @@ export const mixin = ({
           )
         }
       },
-      remove () {
-        console.log('TODO: implement')
+      async remove () {
+        await deleteMutation({
+          apollo: this.$apollo,
+          table,
+          data: this.id
+        })
+        this.$router.go(-1)
       },
       async _mixinPreSave () {
         // TODO: move above to plugins/hasura
@@ -105,7 +110,7 @@ export const mixin = ({
                 apollo: this.$apollo,
                 table: relation.table,
                 key: relation.to,
-                ids: deletedData
+                data: deletedData
               })
             }
           }
