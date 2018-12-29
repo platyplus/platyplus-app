@@ -7,9 +7,9 @@
       q-field(label="Name")
         q-input(:readonly="reading" v-model="form.name" ref="firstInput" @keyup.enter="save")
       q-field(label="Parent org unit" helper="Pick an org unit")
-        q-select(:readonly="reading || Boolean(parent_id)" clearable filter v-model="form.parent_id" :options="parentOptions")
+        q-select(:readonly="reading || Boolean(parent_id)" clearable filter v-model="form.parent_id" :options="options('parent')")
       q-field(label="Type" helper="Pick an org unit type")
-        q-select(:readonly="reading" clearable v-model="form.type_id" :options="typeOptions")
+        q-select(:readonly="reading" clearable v-model="form.type_id" :options="options('type')")
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
 </template>
 
@@ -17,12 +17,11 @@
 </style>
 
 <script>
-import { smartQueryHelper } from 'plugins/hasura'
 import { mixin } from 'plugins/form'
 
 export default {
   name: 'PageOrgUnit',
-  mixins: [mixin('org_unit')],
+  mixins: [mixin('org_unit', { where: { parent_id: { _is_null: true } } })],
   props: ['parent_id'],
   data () {
     return {
@@ -45,30 +44,9 @@ export default {
       }
     }
   },
-  apollo: {
-    list: smartQueryHelper({
-      table: 'org_unit',
-      where: { parent_id: { _is_null: true } }
-    }),
-    orgUnits: smartQueryHelper({
-      table: 'org_unit'
-    }),
-    types: smartQueryHelper({ table: 'org_unit_type' })
-  },
   computed: {
     children () {
       return this.item.children || this.list
-    },
-    typeOptions () {
-      return this.types.map(item => ({
-        value: item.id,
-        label: item.name
-      }))
-    },
-    parentOptions () {
-      return this.orgUnits
-        .filter(item => item.id !== this.item.id)
-        .map(item => ({ value: item.id, label: item.name }))
     }
   },
   created () {

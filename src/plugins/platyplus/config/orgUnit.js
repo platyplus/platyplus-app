@@ -2,6 +2,23 @@ import gql from 'graphql-tag'
 import * as orgUnitType from '../metadata/orgUnitType'
 
 export const settings = {
+  options: {
+    parent: {
+      table: 'org_unit',
+      transform: item => ({
+        value: item.id,
+        label: item.name
+      }) // TODO: put the basic transformation in the root settings of the table?
+      // TODO: remove self as a parent
+    },
+    type: {
+      table: 'org_unit_type',
+      transform: item => ({
+        value: item.id,
+        label: item.name
+      })
+    }
+  },
   orderBy: { name: 'asc' }
 }
 

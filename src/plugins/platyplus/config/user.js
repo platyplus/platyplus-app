@@ -13,6 +13,16 @@ export const settings = {
       }
     }
   },
+  options: {
+    org_unit_memberships: {
+      table: 'org_unit',
+      where: {},
+      transform: item => ({
+        value: item.id,
+        label: item.name
+      })
+    }
+  },
   relations: {
     org_unit_memberships: {
       table: 'user_org_unit',

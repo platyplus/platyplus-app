@@ -78,6 +78,7 @@ export const deleteMutation = ({ apollo, table, key, data }) => {
 }
 
 export const queryHelper = ({ table, fragment = 'base', subscription }) => {
+  // TODO: split arguments into 'table' and 'options'
   const type = subscription ? 'subscription' : 'query'
   return gql`
     ${type} ${table} ($where: ${table}_bool_exp, $orderBy:[${table}_order_by]) {
@@ -90,6 +91,7 @@ export const queryHelper = ({ table, fragment = 'base', subscription }) => {
 }
 
 export const smartQueryHelper = ({ table, fragment, where, orderBy }) => ({
+  // TODO: split arguments into 'table' and 'options'
   query: queryHelper({ table, fragment }),
   update: data => data[Object.keys(data)[0]],
   variables: {

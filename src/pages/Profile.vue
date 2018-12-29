@@ -9,7 +9,7 @@
     q-field(icon="fas fa-user" label="Last name")
       q-input(:readonly="reading" v-model="form.attributes.last_name" @keyup.enter="save")
     q-field(icon="fas fa-sitemap" label="Pick org units" helper="Pick org units")
-      q-select(:readonly="reading" filter multiple chips v-model="relations.org_unit_memberships" :options="orgUnitOptions")
+      q-select(:readonly="reading" filter multiple chips v-model="relations.org_unit_memberships" :options="options('org_unit_memberships')")
     q-field(icon="fas fa-sitemap" label="Preferred org unit" helper="Pick an org unit")
       q-select(:readonly="reading" clearable v-model="form.preferred_org_unit_id" :options="preferredOrgUnitOptions")
     button-bar(:reading="reading" :details="details" @edit="edit" @save="save" @reset="reset" @cancel="cancel")
@@ -18,7 +18,6 @@
 <style>
 </style>
 <script>
-import { smartQueryHelper } from 'plugins/hasura'
 import { mixin } from 'plugins/form'
 export default {
   name: 'PageProfile',
@@ -28,11 +27,6 @@ export default {
       unique: true
     })
   ],
-  data () {
-    return {
-      orgUnits: [] // TODO: put the options in the form mixin
-    }
-  },
   methods: {
     async save (e) {
       const user = await this._mixinPreSave()
@@ -40,20 +34,11 @@ export default {
       this._mixinPostSave()
     }
   },
-  apollo: {
-    orgUnits: smartQueryHelper({ table: 'org_unit' })
-  },
   computed: {
     preferredOrgUnitOptions () {
-      return this.orgUnitOptions.filter(item =>
+      return this.options('org_unit_memberships').filter(item =>
         this.relations.org_unit_memberships.includes(item.value)
       )
-    },
-    orgUnitOptions () {
-      return this.orgUnits.map(item => ({
-        value: item.id,
-        label: item.name
-      }))
     }
   }
 }

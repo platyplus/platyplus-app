@@ -86,13 +86,16 @@ export const mixin = (table, options = {}) => {
       _mixinPreSave () {
         // TODO: form validation
         // this.submitted = true TODO: loading button
-        return save({
-          apollo: this.$apollo,
-          table,
-          oldValues: this.item,
-          newValues: this[options.formField],
-          relations: this.relations
-        }, options)
+        return save(
+          {
+            apollo: this.$apollo,
+            table,
+            oldValues: this.item,
+            newValues: this[options.formField],
+            relations: this.relations
+          },
+          options
+        )
       },
       _mixinPostSave () {
         this.$router.replace(
@@ -101,6 +104,16 @@ export const mixin = (table, options = {}) => {
       },
       validate (field) {
         return get(options.validations, field) || ''
+      },
+      options (field) {
+        const settings = get(options.options, field)
+        if (settings) {
+          if (settings.table && this[`${field}_options`]) {
+            const transform = settings.transform || (p => p)
+            return this[`${field}_options`].map(item => transform(item))
+          }
+        }
+        return []
       }
     },
     computed: {
@@ -115,7 +128,7 @@ export const mixin = (table, options = {}) => {
       ...(options.unique
         ? {}
         : {
-          list: smartQueryHelper({ table })
+          list: smartQueryHelper({ table, where: options.where })
         }),
       item: {
         // TODO: code the subscription as well => make it generic in the hasura plugin?
@@ -132,7 +145,18 @@ export const mixin = (table, options = {}) => {
           return !this.id
         },
         update: data => data[Object.keys(data)[0]][0]
-      }
+      },
+      ...(options.options
+        ? Object.keys(options.options)
+          .filter(name => options.options[name].table)
+          .reduce((aggr, name) => {
+            aggr[`${name}_options`] = smartQueryHelper({
+              table: options.options[name].table,
+              where: options.options[name].where || {}
+            })
+            return aggr
+          }, {})
+        : {})
     },
     created () {
       this.reset()
