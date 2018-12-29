@@ -107,24 +107,27 @@ export const smartQueryHelper = ({ table, fragment, where, orderBy }) => ({
   }
 })
 
-export const save = async ({
-  apollo,
-  table,
-  fragment = 'base',
-  oldValues,
-  newValues,
-  relations
-}) => {
-  const relationsSettings = settings[table].relations || {}
-  const beforeSave = settings[table].beforeSave || (p => p)
-  const next = beforeSave({
+export const save = async (
+  { apollo, table, oldValues, newValues, relations },
+  options = {}
+) => {
+  options = {
+    ...{
+      fragment: 'base',
+      relations: {},
+      beforeSave: p => p
+    },
+    ...settings[table],
+    ...options
+  }
+  const next = options.beforeSave({
     newValues,
     oldValues,
     relations
   }).newValues
   if (oldValues.id) {
-    for await (const name of Object.keys(relationsSettings)) {
-      let relation = relationsSettings[name]
+    for await (const name of Object.keys(options.relations)) {
+      let relation = options.relations[name]
       let data = relations[name]
       let initialData = oldValues[name].map(item => item[relation.to].id)
       const newData = data
@@ -154,7 +157,7 @@ export const save = async ({
     return upsertMutation({
       apollo,
       table,
-      fragment,
+      fragment: options.fragment,
       data: next
     })
   } else {

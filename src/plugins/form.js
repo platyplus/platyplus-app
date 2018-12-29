@@ -89,11 +89,10 @@ export const mixin = (table, options = {}) => {
         return save({
           apollo: this.$apollo,
           table,
-          fragment: options.fragment,
           oldValues: this.item,
           newValues: this[options.formField],
           relations: this.relations
-        })
+        }, options)
       },
       _mixinPostSave () {
         this.$router.replace(
