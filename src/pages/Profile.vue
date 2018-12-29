@@ -5,7 +5,7 @@
     q-field(icon="fas fa-calendar" label="Member since")
       div {{form.created_at | moment("DD/MM/YYYY HH:mm") }}
     q-field(icon="fas fa-user" label="First name")
-      q-input(:readonly="reading" v-model="form.attributes.first_name" ref="firstInput" @keyup.enter="save")
+      q-input(:readonly="reading" v-model="form.attributes.first_name" ref="firstInput" @keyup.enter="save" v-validate="validate('attributes.first_name')" name="attributes.first_name")
     q-field(icon="fas fa-user" label="Last name")
       q-input(:readonly="reading" v-model="form.attributes.last_name" @keyup.enter="save")
     q-field(icon="fas fa-sitemap" label="Pick org units" helper="Pick org units")
@@ -20,14 +20,14 @@
 <script>
 import { smartQueryHelper } from 'plugins/hasura'
 import { mixin } from 'plugins/form'
-const FORM_CONFIG = {
-  table: 'user',
-  fragment: 'full',
-  unique: true
-}
 export default {
   name: 'PageProfile',
-  mixins: [mixin(FORM_CONFIG)],
+  mixins: [
+    mixin('user', {
+      fragment: 'full',
+      unique: true
+    })
+  ],
   data () {
     return {
       orgUnits: [] // TODO: put the options in the form mixin

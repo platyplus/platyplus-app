@@ -107,7 +107,7 @@ export const smartQueryHelper = ({ table, fragment, where, orderBy }) => ({
   }
 })
 
-export const saveForm = async ({
+export const save = async ({
   apollo,
   table,
   fragment = 'base',

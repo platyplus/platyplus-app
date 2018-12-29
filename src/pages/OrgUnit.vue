@@ -22,7 +22,7 @@ import { mixin } from 'plugins/form'
 
 export default {
   name: 'PageOrgUnit',
-  mixins: [mixin({ table: 'org_unit' })],
+  mixins: [mixin('org_unit')],
   props: ['parent_id'],
   data () {
     return {

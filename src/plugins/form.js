@@ -1,32 +1,39 @@
+import VeeValidate from 'vee-validate'
 import {
-  saveForm,
+  save,
   smartQueryHelper,
   queryHelper,
   deleteMutation
 } from 'plugins/hasura'
 import { settings } from 'plugins/platyplus'
-
+import get from 'lodash/get'
 import ButtonBar from 'components/ButtonBar.vue'
 
-export const mixin = ({
-  table,
-  fragment = 'base',
-  formField = 'form',
-  unique = false
-}) => {
+export const mixin = (table, options = {}) => {
+  options = {
+    ...{
+      fragment: 'base',
+      formField: 'form',
+      unique: false,
+      validations: {},
+      defaultValues: {}
+    },
+    ...settings[table],
+    ...options
+  }
   return {
     props: ['id', 'createFlag', 'editFlag'],
     data () {
       return {
-        [formField]: {},
-        relations: settings[table].relations
-          ? Object.keys(settings[table].relations).reduce((aggr, curr) => {
+        [options.formField]: {},
+        relations: options.relations
+          ? Object.keys(options.relations).reduce((aggr, curr) => {
             aggr[curr] = []
             return aggr
           }, {})
           : {},
         list: [],
-        item: settings[table].defaultValues || {}
+        item: options.defaultValues || {}
       }
     },
     methods: {
@@ -48,16 +55,16 @@ export const mixin = ({
       },
       reset (e) {
         if (!this.id) {
-          this.item = settings[table].defaultValues || {}
+          this.item = options.defaultValues || {}
         }
         // Copy the initial data to the form data
-        this[formField] = { ...this.item }
+        this[options.formField] = { ...this.item }
         // Flatten the M2M relation fields with the corresponding IDs
-        settings[table].relations &&
-          Object.keys(settings[table].relations).map(relation => {
+        options.relations &&
+          Object.keys(options.relations).map(relation => {
             if (this.item[relation]) {
               this.relations[relation] = this.item[relation].map(
-                item => item[settings[table].relations[relation].to].id
+                item => item[options.relations[relation].to].id
               )
             }
           })
@@ -77,13 +84,14 @@ export const mixin = ({
         this.$router.go(-1)
       },
       _mixinPreSave () {
+        // TODO: form validation
         // this.submitted = true TODO: loading button
-        return saveForm({
+        return save({
           apollo: this.$apollo,
           table,
-          fragment,
+          fragment: options.fragment,
           oldValues: this.item,
-          newValues: this[formField],
+          newValues: this[options.formField],
           relations: this.relations
         })
       },
@@ -91,6 +99,9 @@ export const mixin = ({
         this.$router.replace(
           this.$route.path.replace(this.createFlag ? '/create' : '/edit', '')
         )
+      },
+      validate (field) {
+        return get(options.validations, field) || ''
       }
     },
     computed: {
@@ -102,7 +113,7 @@ export const mixin = ({
       }
     },
     apollo: {
-      ...(unique
+      ...(options.unique
         ? {}
         : {
           list: smartQueryHelper({ table })
@@ -111,7 +122,7 @@ export const mixin = ({
         // TODO: code the subscription as well => make it generic in the hasura plugin?
         query: queryHelper({
           table,
-          fragment
+          fragment: options.fragment
         }),
         variables () {
           return {
@@ -137,5 +148,21 @@ export const mixin = ({
   }
 }
 export default ({ app, router, Vue }) => {
+  const config = {
+    aria: true,
+    classNames: {},
+    classes: false,
+    delay: 0,
+    dictionary: null,
+    errorBagName: 'errors', // change if property conflicts
+    events: 'input|blur',
+    fieldsBagName: 'fields',
+    i18n: null, // the vue-i18n plugin instance
+    i18nRootKey: 'validations', // the nested key under which the validation messages will be located
+    inject: true,
+    locale: 'en',
+    validity: false
+  }
+  Vue.use(VeeValidate, config)
   Vue.component('button-bar', ButtonBar)
 }

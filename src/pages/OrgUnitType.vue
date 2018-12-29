@@ -15,10 +15,6 @@ import { mixin } from 'plugins/form'
 
 export default {
   name: 'PageOrgUnitType',
-  mixins: [
-    mixin({
-      table: 'org_unit_type'
-    })
-  ]
+  mixins: [mixin('org_unit_type')]
 }
 </script>

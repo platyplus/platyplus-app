@@ -5,6 +5,14 @@ export const settings = {
   defaultValues: {
     attributes: {}
   },
+  validations: {
+    attributes: {
+      first_name: {
+        required: true,
+        min: 6
+      }
+    }
+  },
   relations: {
     org_unit_memberships: {
       table: 'user_org_unit',
