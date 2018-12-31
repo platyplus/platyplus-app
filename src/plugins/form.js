@@ -43,8 +43,8 @@ export const mixin = (table, settings = {}) => {
       },
       async save (e) {
         // Customize the save method in the component if needed
-        const save = await this._mixinPreSave()
-        if (save) this._mixinPostSave()
+        const save = await this._preSave()
+        if (save) this._postSave()
       },
       edit () {
         this.$router.replace(this.$route.path + '/edit')
@@ -55,8 +55,16 @@ export const mixin = (table, settings = {}) => {
         )
       },
       reset (e) {
-        if (!this.id) this.item = cloneDeep(settings.defaultValues)
-        // Copy the initial data to the form data
+        this._reset()
+      },
+      _reset (e) {
+        this._resetId()
+        this._resetItem()
+      },
+      _resetId () {
+        if (!this.id) this.item = { ...this.item, ...settings.defaultValues }
+      },
+      _resetItem () {
         this[settings.formField] = cloneDeep(this.item)
         // Flatten the M2M relation fields with the corresponding IDs
         settings.relations &&
@@ -82,7 +90,7 @@ export const mixin = (table, settings = {}) => {
         })
         this.$router.go(-1)
       },
-      async _mixinPreSave () {
+      async _preSave () {
         const validateAll = await this.$validator.validateAll()
         // this.submitted = true TODO: loading button
         if (validateAll) {
@@ -98,7 +106,7 @@ export const mixin = (table, settings = {}) => {
           )
         } else return false
       },
-      _mixinPostSave () {
+      _postSave () {
         this.$router.replace(
           this.$route.path.replace(this.createFlag ? '/create' : '/edit', '')
         )
@@ -175,8 +183,8 @@ export const mixin = (table, settings = {}) => {
       // TODO: calling reset at so many occasion is too broad and not optimal
       // call again the method if the route changes
       $route: 'reset',
-      item: 'reset',
-      id: 'reset'
+      item: '_resetItem',
+      id: '_resetId'
     }
   }
 }

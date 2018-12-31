@@ -16,7 +16,8 @@
       q-input(
         :readonly="reading"
         v-model="form.attributes.first_name"
-        ref="firstInput" @keyup.enter="save"
+        ref="firstInput"
+        @keyup.enter="save"
         v-validate="validate('attributes.first_name')"
         name="attributes.first_name")
     q-field(
@@ -70,10 +71,10 @@ export default {
   ],
   methods: {
     async save (e) {
-      const user = await this._mixinPreSave()
+      const user = await this._preSave()
       if (user) {
         this.$store.dispatch('authentication/updateUser', user)
-        this._mixinPostSave()
+        this._postSave()
       }
     }
   },

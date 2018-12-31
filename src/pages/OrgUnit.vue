@@ -34,33 +34,23 @@ export default {
       this.$router.push(this.$route.path + '/create')
     },
     async save () {
-      const { id } = await this._mixinPreSave()
+      const { id } = await this._preSave()
       if (this.parent_id) {
         this.$router.replace(
           this.$route.path.replace(`${this.parent_id}/create`, id)
         )
       } else {
-        this._mixinPostSave()
+        this._postSave()
       }
+    },
+    reset () {
+      if (this.parent_id) this.item.parent_id = this.parent_id
+      this._reset()
     }
   },
   computed: {
     children () {
       return this.item.children || this.list
-    }
-  },
-  created () {
-    if (this.parent_id) {
-      this.item.parent_id = this.parent_id
-      this.reset()
-    }
-  },
-  watch: {
-    $route () {
-      if (this.parent_id) {
-        this.item.parent_id = this.parent_id
-        this.reset()
-      }
     }
   }
 }
