@@ -83,12 +83,27 @@ export const mixin = (table, settings = {}) => {
         }
       },
       async remove () {
-        await deleteMutation({
-          apollo: this.$apollo,
-          table,
-          data: this.id
-        })
-        this.$router.go(-1)
+        try {
+          await this.$q.dialog({
+            title: 'Warning',
+            message: 'Do you want to remove this record?',
+            color: 'warning',
+            ok: true, // takes i18n value, or String for "OK" button label
+            cancel: true // takes i18n value, or String for "Cancel" button label
+          })
+          await deleteMutation({
+            apollo: this.$apollo,
+            table,
+            data: this.id
+          })
+          await this.$q.dialog({
+            title: 'Attention',
+            message: 'Record deleted',
+            color: 'primary',
+            ok: true
+          })
+          this.$router.go(-1)
+        } catch (error) {}
       },
       async _preSave () {
         const validateAll = await this.$validator.validateAll()
