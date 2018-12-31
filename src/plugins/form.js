@@ -5,12 +5,13 @@ import {
   queryHelper,
   deleteMutation
 } from 'plugins/hasura'
-import { settings } from 'plugins/platyplus'
+import { settings as globalSettings } from 'plugins/platyplus'
 import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 import ButtonBar from 'components/ButtonBar.vue'
 
-export const mixin = (table, options = {}) => {
-  options = {
+export const mixin = (table, settings = {}) => {
+  settings = {
     ...{
       fragment: 'base',
       formField: 'form',
@@ -18,22 +19,22 @@ export const mixin = (table, options = {}) => {
       validations: {},
       defaultValues: {}
     },
-    ...settings[table],
-    ...options
+    ...globalSettings[table],
+    ...settings
   }
   return {
     props: ['id', 'createFlag', 'editFlag'],
     data () {
       return {
-        [options.formField]: {},
-        relations: options.relations
-          ? Object.keys(options.relations).reduce((aggr, curr) => {
+        [settings.formField]: cloneDeep(settings.defaultValues),
+        relations: settings.relations
+          ? Object.keys(settings.relations).reduce((aggr, curr) => {
             aggr[curr] = []
             return aggr
           }, {})
           : {},
         list: [],
-        item: options.defaultValues || {}
+        item: cloneDeep(settings.defaultValues)
       }
     },
     methods: {
@@ -42,8 +43,8 @@ export const mixin = (table, options = {}) => {
       },
       async save (e) {
         // Customize the save method in the component if needed
-        await this._mixinPreSave()
-        this._mixinPostSave()
+        const save = await this._mixinPreSave()
+        if (save) this._mixinPostSave()
       },
       edit () {
         this.$router.replace(this.$route.path + '/edit')
@@ -54,17 +55,15 @@ export const mixin = (table, options = {}) => {
         )
       },
       reset (e) {
-        if (!this.id) {
-          this.item = options.defaultValues || {}
-        }
+        if (!this.id) this.item = cloneDeep(settings.defaultValues)
         // Copy the initial data to the form data
-        this[options.formField] = { ...this.item }
+        this[settings.formField] = cloneDeep(this.item)
         // Flatten the M2M relation fields with the corresponding IDs
-        options.relations &&
-          Object.keys(options.relations).map(relation => {
+        settings.relations &&
+          Object.keys(settings.relations).map(relation => {
             if (this.item[relation]) {
               this.relations[relation] = this.item[relation].map(
-                item => item[options.relations[relation].to].id
+                item => item[settings.relations[relation].to].id
               )
             }
           })
@@ -83,19 +82,21 @@ export const mixin = (table, options = {}) => {
         })
         this.$router.go(-1)
       },
-      _mixinPreSave () {
-        // TODO: form validation
+      async _mixinPreSave () {
+        const validateAll = await this.$validator.validateAll()
         // this.submitted = true TODO: loading button
-        return save(
-          {
-            apollo: this.$apollo,
-            table,
-            oldValues: this.item,
-            newValues: this[options.formField],
-            relations: this.relations
-          },
-          options
-        )
+        if (validateAll) {
+          return save(
+            {
+              apollo: this.$apollo,
+              table,
+              oldValues: this.item,
+              newValues: this[settings.formField],
+              relations: this.relations
+            },
+            settings
+          )
+        } else return false
       },
       _mixinPostSave () {
         this.$router.replace(
@@ -103,15 +104,24 @@ export const mixin = (table, options = {}) => {
         )
       },
       validate (field) {
-        return get(options.validations, field) || ''
+        return get(settings.validations, field) || ''
       },
       options (field) {
-        const settings = get(options.options, field)
-        if (settings) {
-          if (settings.table && this[`${field}_options`]) {
-            const transform = settings.transform || (p => p)
-            return this[`${field}_options`].map(item => transform(item))
-          }
+        const optionSettings = get(settings.options, field)
+        if (optionSettings) {
+          if (optionSettings.table && this[`${field}_options`]) {
+            const map = optionSettings.map || (p => p)
+            const filter = optionSettings.filter || ((p, q) => true)
+            return this[`${field}_options`]
+              .filter(item =>
+                filter(
+                  item,
+                  { item: this[settings.formField], relations: this.relations },
+                  optionSettings
+                )
+              )
+              .map(item => map(item))
+          } else if (Array.isArray(optionSettings)) return optionSettings
         }
         return []
       }
@@ -125,16 +135,16 @@ export const mixin = (table, options = {}) => {
       }
     },
     apollo: {
-      ...(options.unique
+      ...(settings.unique
         ? {}
         : {
-          list: smartQueryHelper({ table, where: options.where })
+          list: smartQueryHelper({ table, where: settings.where })
         }),
       item: {
         // TODO: code the subscription as well => make it generic in the hasura plugin?
         query: queryHelper({
           table,
-          fragment: options.fragment
+          fragment: settings.fragment
         }),
         variables () {
           return {
@@ -146,13 +156,13 @@ export const mixin = (table, options = {}) => {
         },
         update: data => data[Object.keys(data)[0]][0]
       },
-      ...(options.options
-        ? Object.keys(options.options)
-          .filter(name => options.options[name].table)
+      ...(settings.options
+        ? Object.keys(settings.options)
+          .filter(name => settings.options[name].table)
           .reduce((aggr, name) => {
             aggr[`${name}_options`] = smartQueryHelper({
-              table: options.options[name].table,
-              where: options.options[name].where || {}
+              table: settings.options[name].table,
+              where: settings.options[name].where || {}
             })
             return aggr
           }, {})

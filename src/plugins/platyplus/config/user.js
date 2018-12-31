@@ -9,7 +9,11 @@ export const settings = {
     attributes: {
       first_name: {
         required: true,
-        min: 6
+        min: 2
+      },
+      last_name: {
+        required: true,
+        min: 2
       }
     }
   },
@@ -17,7 +21,7 @@ export const settings = {
     org_unit_memberships: {
       table: 'org_unit',
       where: {},
-      transform: item => ({
+      map: item => ({
         value: item.id,
         label: item.name
       })

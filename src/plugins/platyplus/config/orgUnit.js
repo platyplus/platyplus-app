@@ -5,15 +5,17 @@ export const settings = {
   options: {
     parent: {
       table: 'org_unit',
-      transform: item => ({
+      filter: (item, data, settings) => {
+        return data.item.id !== item.id
+      },
+      map: item => ({
         value: item.id,
         label: item.name
       }) // TODO: put the basic transformation in the root settings of the table?
-      // TODO: remove self as a parent
     },
     type: {
       table: 'org_unit_type',
-      transform: item => ({
+      map: item => ({
         value: item.id,
         label: item.name
       })

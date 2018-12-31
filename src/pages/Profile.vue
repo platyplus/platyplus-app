@@ -1,18 +1,59 @@
 <template lang="pug">
   q-page(padding class="justify-center")
-    q-field(icon="fas fa-user" label="User name")
+    q-field(
+      icon="fas fa-user"
+      label="User name")
       div {{form.username}}
-    q-field(icon="fas fa-calendar" label="Member since")
+    q-field(
+      icon="fas fa-calendar"
+      label="Member since")
       div {{form.created_at | moment("DD/MM/YYYY HH:mm") }}
-    q-field(icon="fas fa-user" label="First name")
-      q-input(:readonly="reading" v-model="form.attributes.first_name" ref="firstInput" @keyup.enter="save" v-validate="validate('attributes.first_name')" name="attributes.first_name")
-    q-field(icon="fas fa-user" label="Last name")
-      q-input(:readonly="reading" v-model="form.attributes.last_name" @keyup.enter="save")
-    q-field(icon="fas fa-sitemap" label="Pick org units" helper="Pick org units")
-      q-select(:readonly="reading" filter multiple chips v-model="relations.org_unit_memberships" :options="options('org_unit_memberships')")
-    q-field(icon="fas fa-sitemap" label="Preferred org unit" helper="Pick an org unit")
-      q-select(:readonly="reading" clearable v-model="form.preferred_org_unit_id" :options="preferredOrgUnitOptions")
-    button-bar(:reading="reading" :details="details" @edit="edit" @save="save" @reset="reset" @cancel="cancel")
+    q-field(
+      icon="fas fa-user"
+      label="First name"
+      :error="errors.has('attributes.first_name')"
+      :error-label="errors.first('attributes.first_name')")
+      q-input(
+        :readonly="reading"
+        v-model="form.attributes.first_name"
+        ref="firstInput" @keyup.enter="save"
+        v-validate="validate('attributes.first_name')"
+        name="attributes.first_name")
+    q-field(
+      icon="fas fa-user"
+      label="Last name")
+      q-input(
+        :readonly="reading"
+        v-model="form.attributes.last_name"
+        @keyup.enter="save")
+    q-field(
+      icon="fas fa-sitemap"
+      label="Pick org units"
+      helper="Pick org units")
+      q-select(
+        :readonly="reading"
+        filter
+        multiple
+        chips
+        v-model="relations.org_unit_memberships"
+        :options="options('org_unit_memberships')")
+    q-field(
+      icon="fas fa-sitemap"
+      label="Preferred org unit"
+      helper="Pick an org unit")
+      q-select(
+        :readonly="reading"
+        clearable
+        v-model="form.preferred_org_unit_id"
+        :options="preferredOrgUnitOptions")
+    button-bar(
+      :reading="reading"
+      :details="details"
+      :disableSave="errors.count()"
+      @edit="edit"
+      @save="save"
+      @reset="reset"
+      @cancel="cancel")
 </template>
 
 <style>
@@ -30,8 +71,10 @@ export default {
   methods: {
     async save (e) {
       const user = await this._mixinPreSave()
-      this.$store.dispatch('authentication/updateUser', user)
-      this._mixinPostSave()
+      if (user) {
+        this.$store.dispatch('authentication/updateUser', user)
+        this._mixinPostSave()
+      }
     }
   },
   computed: {

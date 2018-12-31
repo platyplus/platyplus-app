@@ -2,7 +2,7 @@
   div
     q-btn(v-if="isCreate && !details" label="Create" @click="create")
     q-btn(v-if="isEdit && reading && details" label="Edit" @click="edit")
-    q-btn(v-if="isSave && !reading" label="Save" @click="save")
+    q-btn(v-if="isSave && !reading" :disable="isSaveDisabled" label="Save" @click="save")
     q-btn(v-if="isReset && !reading" label="Reset" @click="reset")
     q-btn(v-if="isCancel && !reading" label="Cancel" @click="cancel")
     q-btn(v-if="isRemove && reading && details" label="Delete" @click="remove")
@@ -11,7 +11,7 @@
 <script>
 export default {
   name: 'ButtonBar',
-  props: ['details', 'reading'],
+  props: ['details', 'reading', 'disableSave'],
   methods: {
     create () {
       this.$emit('create')
@@ -50,6 +50,9 @@ export default {
     },
     isRemove () {
       return this._events.remove !== undefined
+    },
+    isSaveDisabled () {
+      return Boolean(this.disableSave)
     }
   }
 }
