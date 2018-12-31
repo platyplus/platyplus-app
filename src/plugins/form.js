@@ -58,13 +58,15 @@ export const mixin = (table, settings = {}) => {
         this._reset()
       },
       _reset (e) {
-        this._resetId()
         this._resetItem()
-      },
-      _resetId () {
-        if (!this.id) this.item = { ...this.item, ...settings.defaultValues }
+        this._resetForm()
       },
       _resetItem () {
+        if (!this.id && !this.createFlag) {
+          this.item = cloneDeep(settings.defaultValues)
+        }
+      },
+      _resetForm () {
         this[settings.formField] = cloneDeep(this.item)
         // Flatten the M2M relation fields with the corresponding IDs
         settings.relations &&
@@ -86,7 +88,7 @@ export const mixin = (table, settings = {}) => {
         try {
           await this.$q.dialog({
             title: 'Warning',
-            message: 'Do you want to remove this record?',
+            message: 'Do you want to delete this record?',
             color: 'warning',
             ok: true, // takes i18n value, or String for "OK" button label
             cancel: true // takes i18n value, or String for "Cancel" button label
@@ -198,8 +200,8 @@ export const mixin = (table, settings = {}) => {
       // TODO: calling reset at so many occasion is too broad and not optimal
       // call again the method if the route changes
       $route: 'reset',
-      item: '_resetItem',
-      id: '_resetId'
+      item: '_resetForm',
+      id: '_resetItem'
     }
   }
 }

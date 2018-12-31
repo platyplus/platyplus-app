@@ -44,8 +44,9 @@ export default {
       }
     },
     reset () {
-      if (this.parent_id) this.item.parent_id = this.parent_id
-      this._reset()
+      this._resetItem()
+      if (this.parent_id) this.item = { parent_id: this.parent_id }
+      this._resetForm()
     }
   },
   computed: {

@@ -109,6 +109,43 @@ export const smartQueryHelper = ({ table, fragment, where, orderBy }) => ({
   }
 })
 
+const upsertRelations = async (
+  apollo,
+  table,
+  record,
+  relationsSettings,
+  relationsData
+) => {
+  for await (const name of Object.keys(relationsSettings)) {
+    let relation = relationsSettings[name]
+    let data = relationsData[name]
+    let initialData = record[name].map(item => item[relation.to].id)
+    const newData = data
+      .filter(item => !initialData.includes(item))
+      .map(item => ({
+        [`${table}_id`]: record.id,
+        [`${relation.to}_id`]: item
+      }))
+    if (newData.length > 0) {
+      await insertMutation({
+        apollo,
+        table: relation.table,
+        fragment: 'minimal',
+        data: newData
+      })
+    }
+    const deletedData = initialData.filter(item => !data.includes(item))
+    if (deletedData.length > 0) {
+      await deleteMutation({
+        apollo,
+        table: relation.table,
+        key: relation.to,
+        data: deletedData
+      })
+    }
+  }
+}
+
 export const save = async (
   { apollo, table, oldValues, newValues, relations },
   options = {}
@@ -128,34 +165,13 @@ export const save = async (
     relations
   }).newValues
   if (oldValues.id) {
-    for await (const name of Object.keys(options.relations)) {
-      let relation = options.relations[name]
-      let data = relations[name]
-      let initialData = oldValues[name].map(item => item[relation.to].id)
-      const newData = data
-        .filter(item => !initialData.includes(item))
-        .map(item => ({
-          [`${table}_id`]: oldValues.id,
-          [`${relation.to}_id`]: item
-        }))
-      if (newData.length > 0) {
-        await insertMutation({
-          apollo,
-          table: relation.table,
-          fragment: 'minimal',
-          data: newData
-        })
-      }
-      const deletedData = initialData.filter(item => !data.includes(item))
-      if (deletedData.length > 0) {
-        await deleteMutation({
-          apollo,
-          table: relation.table,
-          key: relation.to,
-          data: deletedData
-        })
-      }
-    }
+    await upsertRelations(
+      apollo,
+      table,
+      oldValues,
+      options.relations,
+      relations
+    )
     return upsertMutation({
       apollo,
       table,
@@ -163,13 +179,16 @@ export const save = async (
       data: next
     })
   } else {
-    console.warn('TODO: add relations')
-    console.warn('TODO: return query')
-    return upsertMutation({
+    const result = await upsertMutation({
       apollo,
       table,
       data: next
     })
+    // TODO: test upsert relations in this case (insert new record)
+    await upsertRelations(apollo, table, result, options.relations, relations)
+    // TODO: test return value: are the relations already in the cache,
+    // or shall we query the server again and return the result?
+    return result
   }
 }
 export default ({ app, router, Vue }) => {}
