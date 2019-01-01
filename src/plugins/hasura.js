@@ -123,7 +123,7 @@ const upsertRelations = async (
     const newData = data
       .filter(item => !initialData.includes(item))
       .map(item => ({
-        [`${table}_id`]: record.id,
+        [`${relation.from || table}_id`]: record.id,
         [`${relation.to}_id`]: item
       }))
     if (newData.length > 0) {

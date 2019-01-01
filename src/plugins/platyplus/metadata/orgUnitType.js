@@ -1,6 +1,36 @@
 import gql from 'graphql-tag'
 
-export const settings = {}
+export const settings = {
+  options: {
+    from: {
+      table: 'org_unit_type',
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
+    },
+    to: {
+      table: 'org_unit_type',
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
+    }
+  },
+  relations: {
+    from: {
+      table: 'org_unit_type_mapping',
+      from: 'to',
+      to: 'from'
+    },
+    to: {
+      table: 'org_unit_type_mapping',
+      from: 'from',
+      to: 'to'
+    }
+  },
+  orderBy: { name: 'asc' }
+}
 
 const minimal = gql`
   fragment org_unit_type_minimal on org_unit_type {
@@ -14,6 +44,16 @@ export const fragments = {
   base: gql`
     fragment org_unit_type_base on org_unit_type {
       ...org_unit_type_minimal
+      from {
+        from {
+          ...org_unit_type_minimal
+        }
+      }
+      to {
+        to {
+          ...org_unit_type_minimal
+        }
+      }
     }
     ${minimal}
   `

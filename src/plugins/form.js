@@ -29,7 +29,7 @@ export const mixin = (table, settings = {}) => {
         [settings.formField]: cloneDeep(settings.defaultValues),
         relations: settings.relations
           ? Object.keys(settings.relations).reduce((aggr, curr) => {
-            aggr[curr] = []
+            aggr[curr] = settings.relations[curr].default || []
             return aggr
           }, {})
           : {},
@@ -75,7 +75,7 @@ export const mixin = (table, settings = {}) => {
               this.relations[relation] = this.item[relation].map(
                 item => item[settings.relations[relation].to].id
               )
-            }
+            } else this.relations[relation] = settings.relations[relation].default || []
           })
         // Focus on the input referenced as 'firstInput' in the template
         if (!this.reading) {

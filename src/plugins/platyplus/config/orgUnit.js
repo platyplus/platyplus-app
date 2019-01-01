@@ -15,6 +15,18 @@ export const settings = {
     },
     type: {
       table: 'org_unit_type',
+      filter: (item, data, settings) => {
+        // Shows only the available types according to the parent's type
+        // TODO: transpose this server-side :D
+        // TODO: what if we change the parent???
+        if (data.item.parent) {
+          if (data.item.parent.type) {
+            if (data.item.parent.type.to) {
+              return data.item.parent.type.to.some(i => item.id === i.to.id)
+            } else return false
+          } else return false
+        } else return item.from.length === 0
+      },
       map: item => ({
         value: item.id,
         label: item.name
@@ -38,17 +50,20 @@ export const fragments = {
       parent_id
       parent {
         ...org_unit_minimal
+        type {
+          ...org_unit_type_base
+        }
       }
       children(order_by: { name: asc }) {
         ...org_unit_minimal
       }
       type_id
       type {
-        ...org_unit_type_minimal
+        ...org_unit_type_base
       }
     }
     ${minimal}
-    ${orgUnitType.fragments.minimal}
+    ${orgUnitType.fragments.base}
   `
 }
 
