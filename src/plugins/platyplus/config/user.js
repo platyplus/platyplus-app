@@ -35,6 +35,7 @@ export const settings = {
   },
   beforeSave: ({ newValues, initial, relations }) => {
     if (
+      // TODO: make generic in the form preSave? Or through a validation rule?
       !newValues.org_unit_memberships
         .map(item => item.org_unit.id)
         .includes(newValues.preferred_org_unit_id)

@@ -18,7 +18,6 @@ export const settings = {
       filter: (item, data, settings) => {
         // Shows only the available types according to the parent's type
         // TODO: transpose this server-side :D
-        // TODO: what if we change the parent???
         if (data.item.parent) {
           if (data.item.parent.type) {
             if (data.item.parent.type.to) {

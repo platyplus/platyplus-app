@@ -14,7 +14,6 @@ export const mixin = (table, settings = {}) => {
   settings = {
     ...{
       fragment: 'base',
-      formField: 'form',
       unique: false,
       validations: {},
       defaultValues: {}
@@ -26,7 +25,7 @@ export const mixin = (table, settings = {}) => {
     props: ['id', 'createFlag', 'editFlag'],
     data () {
       return {
-        [settings.formField]: cloneDeep(settings.defaultValues),
+        form: cloneDeep(settings.defaultValues),
         relations: settings.relations
           ? Object.keys(settings.relations).reduce((aggr, curr) => {
             aggr[curr] = settings.relations[curr].default || []
@@ -67,7 +66,7 @@ export const mixin = (table, settings = {}) => {
         }
       },
       _resetForm () {
-        this[settings.formField] = cloneDeep(this.item)
+        this.form = cloneDeep(this.item)
         // Flatten the M2M relation fields with the corresponding IDs
         settings.relations &&
           Object.keys(settings.relations).map(relation => {
@@ -116,7 +115,7 @@ export const mixin = (table, settings = {}) => {
               apollo: this.$apollo,
               table,
               oldValues: this.item,
-              newValues: this[settings.formField],
+              newValues: this.form,
               relations: this.relations
             },
             settings
@@ -141,7 +140,7 @@ export const mixin = (table, settings = {}) => {
               .filter(item =>
                 filter(
                   item,
-                  { item: this[settings.formField], relations: this.relations },
+                  { item: this.form, relations: this.relations },
                   optionSettings
                 )
               )
@@ -201,7 +200,19 @@ export const mixin = (table, settings = {}) => {
       // call again the method if the route changes
       $route: 'reset',
       item: '_resetForm',
-      id: '_resetItem'
+      id: '_resetItem',
+      ...Object.keys(settings.options).reduce((aggr, curr) => {
+        // Watches for id changes in the optionned fields
+        // If it changes, then it replaces the related object by the one found in the option list
+        aggr[`form.${curr}_id`] = {
+          handler (newValue) {
+            if (newValue && this[`${curr}_options`]) {
+              this.form[curr] = Object.assign({}, this.form[curr], this[`${curr}_options`].find(el => el.id === newValue))
+            } else this.form[curr] = {}
+          }
+        }
+        return aggr
+      }, {})
     }
   }
 }
