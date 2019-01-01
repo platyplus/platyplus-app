@@ -38,8 +38,17 @@ export default {
     }
   },
   methods: {
-    logout (e) {
-      this.$store.dispatch('authentication/logout')
+    async logout (e) {
+      try {
+        await this.$q.dialog({
+          title: 'Signing out', // TODO: internationalisation
+          message: 'Are you sure to want to sign out?', // TODO: internationalisation
+          // color: 'warning',
+          ok: 'Yes', // TODO: internationalisation
+          cancel: 'No' // TODO: internationalisation
+        })
+        this.$store.dispatch('authentication/logout')
+      } catch (error) {}
     }
   }
 }
