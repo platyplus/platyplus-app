@@ -26,7 +26,7 @@ export default function (/* { store, ssrContext } */) {
     if (store().state.authentication.status.loggedIn) {
       let user = store().getters['authentication/user']
       if (!user.preferred_org_unit && !to.meta.withoutPreferredOrgUnit) {
-        store().dispatch('authentication/routeRequest', { path: to.path })
+        store().dispatch('navigation/routeRequest', { path: to.path })
         next('/profile/current-org-unit')
       } else {
         next()
@@ -34,9 +34,11 @@ export default function (/* { store, ssrContext } */) {
     } else {
       if (to.path === '/') {
         next('/public')
-      } else {
-        store().dispatch('authentication/routeRequest', { path: to.path })
+      } else if (!to.meta.public) {
+        store().dispatch('navigation/routeRequest', { path: to.path })
         next('/auth/signin')
+      } else {
+        next()
       }
     }
   })

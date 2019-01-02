@@ -1,6 +1,7 @@
 <template lang="pug">
   q-page(padding class="justify-center")
-    div Select the organisational unit to use
+    div(v-if="user.preferred_org_unit") Your current unit: {{user.preferred_org_unit.name}}
+    div Select the organisational unit to use:
     q-list(link)
       q-item(v-for="(item, key) in list" :key="key" tag="label")
         q-item-side
@@ -38,8 +39,9 @@ export default {
           fragment: 'full'
         })
         this.$store.dispatch('authentication/updateUser', user)
-        const path = this.$store.state.authentication.routePath || '/'
-        this.$router.replace(path)
+        this.$store.dispatch('navigation/route', {
+          path: this.$from ? this.$from.path : '/profile/current-org-unit'
+        })
       }
     }
   },

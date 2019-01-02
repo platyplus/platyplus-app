@@ -82,7 +82,15 @@ const routes = [
   {
     path: '/auth',
     component: () => import('layouts/AnonymousLayout.vue'),
-    children: [{ path: 'signin', component: () => import('pages/SignIn.vue') }]
+    children: [
+      {
+        path: 'signin',
+        component: () => import('pages/SignIn.vue'),
+        meta: {
+          public: true
+        }
+      }
+    ]
   }
 ]
 

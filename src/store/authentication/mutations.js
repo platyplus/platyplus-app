@@ -6,7 +6,6 @@ export function loginRequest (state, user) {
 export function loginSuccess (state, user) {
   state.status = { loggedIn: true }
   state.user = user
-  state.routePath = null
 }
 
 export function updateProfile (state, user) {
@@ -21,9 +20,4 @@ export function loginFailure (state) {
 export function logout (state) {
   state.status = {}
   state.user = {}
-  state.routePath = null
-}
-
-export function routeRequest (state, path) {
-  state.routePath = path
 }
