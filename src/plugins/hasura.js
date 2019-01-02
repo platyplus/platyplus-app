@@ -168,6 +168,8 @@ export const save = async (
   }).newValues
   // Remove the option values put in the form so we don't send them to the server
   // TODO: options stored somewhere else than the form value?
+  // TODO: put the below loop in the form plugin instead?
+  // TODO: -> make a distring 'cleanForm' function to make it clear no matter where it is called
   Object.keys(options.options).map(name => {
     delete next[name]
   })

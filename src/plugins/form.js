@@ -196,8 +196,6 @@ export const mixin = (table, settings = {}) => {
       this.reset()
     },
     watch: {
-      // TODO: calling reset at so many occasion is too broad and not optimal
-      // call again the method if the route changes
       $route: 'reset',
       item: '_resetForm',
       id: '_resetItem',
