@@ -4,6 +4,7 @@ module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
+      'boot',
       'router',
       'auth',
       'i18n',
@@ -73,6 +74,7 @@ module.exports = function (ctx) {
         'QItem',
         'QItemMain',
         'QItemSide',
+        'QItemTile',
         'QLayout',
         'QList',
         'QListHeader',
@@ -80,6 +82,7 @@ module.exports = function (ctx) {
         'QLayoutDrawer',
         'QPageContainer',
         'QPage',
+        'QRadio',
         'QSelect',
         'QToolbar',
         'QToolbarTitle'

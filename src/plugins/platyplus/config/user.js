@@ -90,6 +90,20 @@ export const mutations = {
     }
     ${fragments.full}
   `,
+  update_preferred_org_unit: gql`
+    mutation update_preferred_org_unit($id: ID!, $preferred_org_unit_id: ID) {
+      update_user(
+        where: { id: { _eq: $id } }
+        _set: { preferred_org_unit_id: $preferred_org_unit_id }
+      ) {
+        affected_rows
+        returning {
+          ...user_full
+        }
+      }
+    }
+    ${fragments.full}
+  `,
   // TODO: test the above mutation
   insert: gql`
     mutation insert_user(

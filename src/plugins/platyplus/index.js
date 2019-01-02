@@ -21,6 +21,4 @@ export const mutations = {
   ...config.mutations
 }
 
-export default ({ app, router, Vue, store }) => {
-  store.dispatch('authentication/loadProfile')
-}
+export default ({ app, router, Vue, store }) => {}

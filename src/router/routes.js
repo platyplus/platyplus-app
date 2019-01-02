@@ -32,12 +32,21 @@ const routes = [
     path: '/',
     component: () => import('layouts/DefaultLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
+      {
+        path: '',
+        component: () => import('pages/Index.vue'),
+        meta: {
+          withoutPreferredOrgUnit: true
+        }
+      },
       {
         path: 'profile',
         component: () => import('pages/Profile.vue'),
         props: {
           id: store().getters['authentication/user'].id
+        },
+        meta: {
+          withoutPreferredOrgUnit: true
         }
       },
       {
@@ -46,6 +55,16 @@ const routes = [
         props: {
           editFlag: true,
           id: store().getters['authentication/user'].id
+        },
+        meta: {
+          withoutPreferredOrgUnit: true
+        }
+      },
+      {
+        path: 'profile/current-org-unit',
+        component: () => import('pages/CurrentOrgUnit.vue'),
+        meta: {
+          withoutPreferredOrgUnit: true
         }
       },
       ...crudRoutes('org-unit', 'OrgUnit'),
@@ -58,18 +77,7 @@ const routes = [
         })
       },
       ...crudRoutes('org-unit-type', 'OrgUnitType')
-    ],
-    beforeEnter: (to, from, next) => {
-      if (store().state.authentication.status.loggedIn) next()
-      else {
-        if (to.path === '/') {
-          next('/public')
-        } else {
-          store().dispatch('authentication/authRoute', { path: to.path })
-          next('/auth/signin')
-        }
-      }
-    }
+    ]
   },
   {
     path: '/auth',

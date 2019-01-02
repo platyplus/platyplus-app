@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,23 @@ export default function (/* { store, ssrContext } */) {
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
-
+  Router.beforeEach((to, from, next) => {
+    if (store().state.authentication.status.loggedIn) {
+      let user = store().getters['authentication/user']
+      if (!user.preferred_org_unit && !to.meta.withoutPreferredOrgUnit) {
+        store().dispatch('authentication/routeRequest', { path: to.path })
+        next('/profile/current-org-unit')
+      } else {
+        next()
+      }
+    } else {
+      if (to.path === '/') {
+        next('/public')
+      } else {
+        store().dispatch('authentication/routeRequest', { path: to.path })
+        next('/auth/signin')
+      }
+    }
+  })
   return Router
 }

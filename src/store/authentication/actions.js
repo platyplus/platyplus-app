@@ -12,7 +12,7 @@ export async function login (
     const path = state.routePath || '/'
     commit('loginSuccess', user)
     localStorage.setItem('user', JSON.stringify(user))
-    dispatch('loadProfile')
+    await dispatch('loadProfile')
     this.$router.push(path)
   } catch (error) {
     commit('loginFailure', error)
@@ -32,11 +32,11 @@ export async function loadProfile ({ dispatch, commit, state }) {
   }
 }
 
-export async function updateUser ({ dispatch, commit, state }, user) {
+export function updateUser ({ dispatch, commit, state }, user) {
   commit('updateProfile', user)
 }
 
-export function authRoute ({ dispatch, commit, state }, { path }) {
+export function routeRequest ({ dispatch, commit, state }, { path }) {
   commit('routeRequest', path)
 }
 

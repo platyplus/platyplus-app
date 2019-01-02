@@ -17,9 +17,10 @@ export const updateMutation = async ({
   apollo,
   table,
   data,
-  fragment = 'base'
+  fragment = 'base',
+  mutation = 'update'
 }) => {
-  const mutation = mutations[table].update
+  mutation = mutations[table][mutation]
   const objects = Array.isArray(data) ? data : [data]
   const theloop = objects.map(item => {
     const params = mutation.definitions
@@ -33,7 +34,8 @@ export const updateMutation = async ({
       .mutate({ mutation, variables: { ...params, id: item.id } })
       .then(({ data }) => data[Object.keys(data)[0]].returning[0])
   })
-  return Promise.all(theloop)
+  const res = await Promise.all(theloop)
+  return Array.isArray(data) ? res : res[0]
 }
 
 export const insertMutation = async ({
@@ -159,11 +161,16 @@ export const save = async (
     ...settings[table],
     ...options
   }
-  const next = options.beforeSave({
+  let next = options.beforeSave({
     newValues,
     oldValues,
     relations
   }).newValues
+  // Remove the option values put in the form so we don't send them to the server
+  // TODO: options stored somewhere else than the form value?
+  Object.keys(options.options).map(name => {
+    delete next[name]
+  })
   if (oldValues.id) {
     await upsertRelations(
       apollo,
