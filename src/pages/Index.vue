@@ -1,5 +1,8 @@
 <template lang="pug">
-  q-page(padding class="justify-center")
+  q-page(
+    v-if="user"
+    padding
+    class="justify-center")
     div(v-if="user.preferred_org_unit") You are in: {{user.preferred_org_unit.name}}
     q-list(
       v-if="user.org_unit_memberships.length > 1"

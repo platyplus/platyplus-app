@@ -29,7 +29,7 @@
         @keyup.enter="save")
     q-field(
       icon="fas fa-sitemap"
-      label="Pick org units"
+      label="Membership"
       helper="Pick org units")
       q-select(
         :readonly="reading"
