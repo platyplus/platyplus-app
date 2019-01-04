@@ -26,7 +26,15 @@ const routes = [
   {
     path: '/public',
     component: () => import('layouts/AnonymousLayout.vue'),
-    children: [{ path: '', component: () => import('pages/PublicIndex.vue') }]
+    children: [
+      {
+        path: '',
+        component: () => import('pages/PublicIndex.vue'),
+        meta: {
+          public: true
+        }
+      }
+    ]
   },
   {
     path: '/',
