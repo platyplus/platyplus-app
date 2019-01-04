@@ -39,7 +39,7 @@
         v-model="relations.org_unit_memberships"
         :options="options('org_unit_memberships')")
     q-field(
-      icon="fas fa-sitemap"
+      icon="fas fas fa-location-arrow"
       label="Preferred org unit"
       helper="Pick an org unit")
       q-select(

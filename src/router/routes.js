@@ -84,7 +84,8 @@ const routes = [
           parent_id: route.params.id
         })
       },
-      ...crudRoutes('org-unit-type', 'OrgUnitType')
+      ...crudRoutes('org-unit-type', 'OrgUnitType'),
+      ...crudRoutes('workflow', 'Workflow')
     ]
   },
   {

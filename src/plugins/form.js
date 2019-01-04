@@ -199,7 +199,7 @@ export const mixin = (table, settings = {}) => {
       $route: 'reset',
       item: '_resetForm',
       id: '_resetItem',
-      ...Object.keys(settings.options).reduce((aggr, curr) => {
+      ...(settings.options ? Object.keys(settings.options).reduce((aggr, curr) => {
         // Watches for id changes in the optionned fields
         // If it changes, then it replaces the related object by the one found in the option list
         aggr[`form.${curr}_id`] = {
@@ -210,7 +210,7 @@ export const mixin = (table, settings = {}) => {
           }
         }
         return aggr
-      }, {})
+      }, {}) : {})
     }
   }
 }

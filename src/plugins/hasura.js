@@ -170,9 +170,11 @@ export const save = async (
   // TODO: options stored somewhere else than the form value?
   // TODO: put the below loop in the form plugin instead?
   // TODO: -> make a distring 'cleanForm' function to make it clear no matter where it is called
-  Object.keys(options.options).map(name => {
-    delete next[name]
-  })
+  if (options.options) {
+    Object.keys(options.options).map(name => {
+      delete next[name]
+    })
+  }
   if (oldValues.id) {
     await upsertRelations(
       apollo,

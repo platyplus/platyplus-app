@@ -5,7 +5,7 @@
         q-btn(flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu")
           q-icon(name="fas fa-bars")
         q-toolbar-title Platyplus
-          div(slot="subtitle") Running on Quasar v{{ $q.version }}
+          div(slot="subtitle") TODO: current page
         q-btn(v-if="authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
 
     q-layout-drawer(v-model="leftDrawerOpen" :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null")
@@ -21,6 +21,9 @@
         q-item(to="/org-unit")
           q-item-side(icon="fas fa-sitemap")
           q-item-main(label="Org Units")
+        q-item(to="/workflow")
+          q-item-side(icon="fas fa-route")
+          q-item-main(label="Workflows")
         q-list-header Metadata
         q-item(to="/org-unit-type")
           q-item-side(icon="fas fa-sitemap")
