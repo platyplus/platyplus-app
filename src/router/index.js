@@ -23,24 +23,14 @@ export default function (/* { store, ssrContext } */) {
     base: process.env.VUE_ROUTER_BASE
   })
   Router.beforeEach((to, from, next) => {
-    if (store().state.authentication.status.loggedIn) {
-      let user = store().getters['authentication/user']
-      if (!user.preferred_org_unit && !to.meta.withoutPreferredOrgUnit) {
-        store().dispatch('navigation/routeRequest', { path: to.path })
-        next('/profile/current-org-unit')
-      } else {
-        next()
-      }
-    } else {
-      if (to.path === '/') {
-        next('/public')
-      } else if (!to.meta.public) {
-        store().dispatch('navigation/routeRequest', { path: to.path })
-        next('/auth/signin')
-      } else {
-        next()
-      }
-    }
+    // TODO: use prefetch, but then gather all profile routes to 'children' routes and all
+    // 'transactionnal' routes in 'children' routes so we can put this piece of code below
+    // in a shared prefetch method
+    let user = store().getters['authentication/user']
+    if (user && !user.preferred_org_unit && !to.meta.withoutPreferredOrgUnit) {
+      store().dispatch('navigation/routeRequest', { path: to.path })
+      next('/profile/current-org-unit')
+    } else next()
   })
   return Router
 }

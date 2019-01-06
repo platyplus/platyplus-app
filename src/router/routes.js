@@ -29,10 +29,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/PublicIndex.vue'),
-        meta: {
-          public: true
-        }
+        component: () => import('pages/PublicIndex.vue')
       }
     ]
   },
@@ -42,19 +39,13 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/Index.vue'),
-        meta: {
-          withoutPreferredOrgUnit: true
-        }
+        component: () => import('pages/Index.vue')
       },
       {
         path: 'profile',
         component: () => import('pages/Profile.vue'),
         props: {
           id: store().getters['authentication/user'].id
-        },
-        meta: {
-          withoutPreferredOrgUnit: true
         }
       },
       {
@@ -94,10 +85,7 @@ const routes = [
     children: [
       {
         path: 'signin',
-        component: () => import('pages/SignIn.vue'),
-        meta: {
-          public: true
-        }
+        component: () => import('pages/SignIn.vue')
       }
     ]
   }

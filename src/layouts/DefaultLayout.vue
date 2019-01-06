@@ -53,6 +53,12 @@ export default {
         this.$store.dispatch('authentication/logout')
       } catch (error) {}
     }
+  },
+  preFetch ({ store, currentRoute, previousRoute, redirect, ssrContext }) {
+    if (!store.getters['authentication/userStatus'].loggedIn) {
+      if (currentRoute.path === '/') redirect('/public')
+      else redirect('/auth/signin')
+    }
   }
 }
 </script>
