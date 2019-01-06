@@ -15,7 +15,7 @@ export default ({ app, router, store, Vue }) => {
   Vue.mixin({
     computed: {
       authenticated () {
-        return this.$store.getters['authentication/userStatus'].loggedIn
+        return this.$store.getters['authentication/status'].loggedIn
       },
       anonymous () {
         return !this.authenticated

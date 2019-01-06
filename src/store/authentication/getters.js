@@ -1,4 +1,4 @@
-export function userStatus (state) {
+export function status (state) {
   return state.status
 }
 

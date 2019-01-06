@@ -10,7 +10,7 @@
 export default {
   name: 'DefaultLayout',
   preFetch ({ store, currentRoute, previousRoute, redirect, ssrContext }) {
-    if (!store.getters['authentication/userStatus'].loggedIn) {
+    if (!store.getters['authentication/status'].loggedIn) {
       if (currentRoute.path === '/') redirect('/public')
       else redirect('/auth/signin')
     }
