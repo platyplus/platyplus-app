@@ -1,5 +1,5 @@
 <template lang="pug">
-  q-page(padding class="justify-center")
+  q-page(v-if="authenticated" padding class="justify-center")
     q-field(
       icon="fas fa-user"
       label="User name")

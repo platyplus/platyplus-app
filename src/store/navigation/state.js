@@ -1,4 +1,5 @@
 const initialState = {
-  routePath: null
+  routePath: null,
+  drawer: null
 }
 export default initialState

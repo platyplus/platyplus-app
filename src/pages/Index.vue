@@ -1,6 +1,6 @@
 <template lang="pug">
   q-page(
-    v-if="user"
+    v-if="authenticated"
     padding
     class="justify-center")
     div(v-if="user.preferred_org_unit") You are in: {{user.preferred_org_unit.name}}

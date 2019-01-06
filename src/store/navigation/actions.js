@@ -7,3 +7,11 @@ export function route ({ dispatch, commit, state }, { path }) {
   commit('routeReset')
   this.$router.replace(path)
 }
+
+export function toggleDrawer ({ dispatch, commit, state }) {
+  commit('toggleDrawer')
+}
+
+export function setDrawer ({ dispatch, commit, state }, { value }) {
+  commit('setDrawer', value)
+}

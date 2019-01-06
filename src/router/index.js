@@ -26,10 +26,12 @@ export default function (/* { store, ssrContext } */) {
     // TODO: use prefetch, but then gather all profile routes to 'children' routes and all
     // 'transactionnal' routes in 'children' routes so we can put this piece of code below
     // in a shared prefetch method
-    let user = store().getters['authentication/user']
-    if (user && !user.preferred_org_unit && !to.meta.withoutPreferredOrgUnit) {
-      store().dispatch('navigation/routeRequest', { path: to.path })
-      next('/profile/current-org-unit')
+    if (store().getters['authentication/userStatus'].loggedIn) {
+      let user = store().getters['authentication/user']
+      if (!user.preferred_org_unit && !to.meta.withoutPreferredOrgUnit) {
+        store().dispatch('navigation/routeRequest', { path: to.path })
+        next('/profile/current-org-unit')
+      } else next()
     } else next()
   })
   return Router
