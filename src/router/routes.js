@@ -44,17 +44,17 @@ const routes = [
       {
         path: 'profile',
         component: () => import('pages/Profile.vue'),
-        props: {
+        props: route => ({
           id: store().getters['authentication/user'].id
-        }
+        })
       },
       {
         path: 'profile/edit',
         component: () => import('pages/Profile.vue'),
-        props: {
+        props: route => ({
           editFlag: true,
           id: store().getters['authentication/user'].id
-        },
+        }),
         meta: {
           withoutPreferredOrgUnit: true
         }
