@@ -28,6 +28,13 @@
         v-model="form.attributes.last_name"
         @keyup.enter="save")
     q-field(
+      icon="fas fa-language"
+      label="Language")
+      q-select(
+        :readonly="reading"
+        :options="$locales"
+        v-model="form.locale")
+    q-field(
       icon="fas fa-sitemap"
       label="Membership"
       helper="Pick org units")
@@ -61,6 +68,7 @@
 </style>
 <script>
 import { mixin } from 'plugins/form'
+
 export default {
   name: 'PageProfile',
   mixins: [
@@ -74,6 +82,7 @@ export default {
       const user = await this._preSave()
       if (user) {
         this.$store.dispatch('authentication/updateUser', user)
+        if (user.locale) this.$locale = user.locale
         this._postSave()
       }
     }

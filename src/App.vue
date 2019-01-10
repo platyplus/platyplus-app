@@ -5,7 +5,10 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  async preFetch ({ store, currentRoute, previousRoute, redirect, ssrContext }) {
+    await store.dispatch('authentication/loadProfile')
+  }
 }
 </script>
 

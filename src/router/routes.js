@@ -23,6 +23,7 @@ function crudRoutes (path, page) {
   ]
 }
 const routes = [
+  // { path: '/', redirect: '/en/' }, // TODO: locale from the client's browser
   {
     path: '/public',
     component: () => import('layouts/AnonymousLayout.vue'),

@@ -7,34 +7,14 @@
           div(slot="subtitle") TODO: current page
         q-select(
           hide-underline
-          :options="options"
-          v-model="lang")
+          :options="$locales"
+          v-model="$locale")
         q-btn(v-if="authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
 </template>
 
 <script>
 export default {
   name: 'UserHeader',
-  data () {
-    return {
-      lang: this.$q.i18n.lang
-    }
-  },
-  watch: {
-    lang (lang) {
-      // dynamic import, so loading on demand only
-      import(`quasar-framework/i18n/${lang}`).then(language => {
-        this.$q.i18n.set(language.default)
-        this.$i18n.setLocaleMessage(lang, require(`i18n/${lang}`).default)
-        this.$i18n.locale = lang
-      })
-    }
-  },
-  computed: {
-    options () {
-      return [{ label: '🇬🇧', value: 'en-uk' }, { label: '🇫🇷', value: 'fr' }]
-    }
-  },
   methods: {
     toggleDrawer () {
       this.$store.dispatch('navigation/toggleDrawer')

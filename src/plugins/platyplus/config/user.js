@@ -53,6 +53,7 @@ export const fragments = {
       username
       attributes
       created_at
+      locale
       preferred_org_unit_id
       preferred_org_unit {
         ...org_unit_minimal
@@ -76,11 +77,12 @@ export const mutations = {
       $id: ID!
       $attributes: jsonb
       $preferred_org_unit_id: ID
+      $locale: String
     ) {
       update_user(
         where: { id: { _eq: $id } }
         _append: { attributes: $attributes }
-        _set: { preferred_org_unit_id: $preferred_org_unit_id }
+        _set: { preferred_org_unit_id: $preferred_org_unit_id, locale: $locale }
       ) {
         affected_rows
         returning {

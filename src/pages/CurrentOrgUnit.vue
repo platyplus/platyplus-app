@@ -1,14 +1,14 @@
 <template lang="pug">
   q-page(padding class="justify-center")
-    div(v-if="user.preferred_org_unit") Your current unit: {{user.preferred_org_unit.name}}
-    div Select the organisational unit to use:
+    div(v-if="user.preferred_org_unit" v-t="{path: 'location.message', args: {location: user.preferred_org_unit.name}}")
+    div(v-t="'location.select'")
     q-list(link)
       q-item(v-for="(item, key) in list" :key="key" tag="label")
         q-item-side
           q-radio(v-model="selection" :val="item.id")
         q-item-main
           q-item-tile(label) {{item.name}}
-    q-btn(@click='selectOrgUnit') Select
+    q-btn(@click='selectOrgUnit' v-t="'select'")
 </template>
 
 <style>

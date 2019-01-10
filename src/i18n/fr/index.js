@@ -4,9 +4,17 @@
 export default {
   yes: 'Oui',
   no: 'Non',
+  ok: 'OK',
+  cancel: 'Annuler',
+  reset: 'Réinitialiser',
+  edit: 'Editer',
+  create: 'Créer',
+  remove: 'Supprimer',
+  select: 'Sélectionner',
   location: {
-    message: 'Votre localisation: {location}',
-    change: "Changez d'endroit"
+    message: 'Votre emplacement: {location}.',
+    select: 'Choisissez votre emplacement:',
+    change: "Changez d'emplacement"
   },
   logout: {
     title: 'Déconnexion',

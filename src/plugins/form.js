@@ -6,7 +6,6 @@ import {
   deleteMutation
 } from 'plugins/hasura'
 import { settings as globalSettings } from 'plugins/platyplus'
-import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import ButtonBar from 'components/ButtonBar.vue'
 
@@ -74,13 +73,14 @@ export const mixin = (table, settings = {}) => {
               this.relations[relation] = this.item[relation].map(
                 item => item[settings.relations[relation].to].id
               )
-            } else this.relations[relation] = settings.relations[relation].default || []
+            } else {
+              this.relations[relation] =
+                settings.relations[relation].default || []
+            }
           })
         // Focus on the input referenced as 'firstInput' in the template
         if (!this.reading) {
-          this.$nextTick(
-            () => this.$refs.firstInput && this.$refs.firstInput.focus()
-          )
+          this.$nextTick(() => this.$refs.firstInput?.focus())
         }
       },
       async remove () {
@@ -107,9 +107,8 @@ export const mixin = (table, settings = {}) => {
         } catch (error) {}
       },
       async _preSave () {
-        const validateAll = await this.$validator.validateAll()
         // this.submitted = true TODO: loading button
-        if (validateAll) {
+        if (await this.$validator.validateAll()) {
           return save(
             {
               apollo: this.$apollo,
@@ -128,10 +127,10 @@ export const mixin = (table, settings = {}) => {
         )
       },
       validate (field) {
-        return get(settings.validations, field) || ''
+        return settings.validations?.[field]
       },
       options (field) {
-        const optionSettings = get(settings.options, field)
+        const optionSettings = settings.options?.[field]
         if (optionSettings) {
           if (optionSettings.table && this[`${field}_options`]) {
             const map = optionSettings.map || (p => p)
@@ -199,18 +198,24 @@ export const mixin = (table, settings = {}) => {
       $route: 'reset',
       item: '_resetForm',
       id: '_resetItem',
-      ...(settings.options ? Object.keys(settings.options).reduce((aggr, curr) => {
-        // Watches for id changes in the optionned fields
-        // If it changes, then it replaces the related object by the one found in the option list
-        aggr[`form.${curr}_id`] = {
-          handler (newValue) {
-            if (newValue && this[`${curr}_options`]) {
-              this.form[curr] = Object.assign({}, this.form[curr], this[`${curr}_options`].find(el => el.id === newValue))
-            } else this.form[curr] = {}
+      ...(settings.options
+        ? Object.keys(settings.options).reduce((aggr, curr) => {
+          // Watches for id changes in the optionned fields
+          // If it changes, then it replaces the related object by the one found in the option list
+          aggr[`form.${curr}_id`] = {
+            handler (newValue) {
+              if (newValue && this[`${curr}_options`]) {
+                this.form[curr] = Object.assign(
+                  {},
+                  this.form[curr],
+                  this[`${curr}_options`].find(el => el.id === newValue)
+                )
+              } else this.form[curr] = {}
+            }
           }
-        }
-        return aggr
-      }, {}) : {})
+          return aggr
+        }, {})
+        : {})
     }
   }
 }

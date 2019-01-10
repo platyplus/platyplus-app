@@ -1,11 +1,11 @@
 <template lang="pug">
   div
-    q-btn(v-if="isCreate && !details" label="Create" @click="create")
-    q-btn(v-if="isEdit && reading && details" label="Edit" @click="edit")
-    q-btn(v-if="isSave && !reading" :disable="isSaveDisabled" label="Save" @click="save")
-    q-btn(v-if="isReset && !reading" label="Reset" @click="reset")
-    q-btn(v-if="isCancel && !reading" label="Cancel" @click="cancel")
-    q-btn(v-if="isRemove && reading && details" label="Delete" @click="remove")
+    q-btn(v-if="isCreate && !details" v-t="'create'" @click="create")
+    q-btn(v-if="isEdit && reading && details" v-t="'edit'" @click="edit")
+    q-btn(v-if="isSave && !reading" :disable="isSaveDisabled" v-t="'ok'" @click="save")
+    q-btn(v-if="isReset && !reading" v-t="'reset'" @click="reset")
+    q-btn(v-if="isCancel && !reading" v-t="'cancel'" @click="cancel")
+    q-btn(v-if="isRemove && reading && details" v-t="'remove'" @click="remove")
 </template>
 
 <script>

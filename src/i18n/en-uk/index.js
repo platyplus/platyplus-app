@@ -4,8 +4,16 @@
 export default {
   yes: 'Yes',
   no: 'No',
+  ok: 'OK',
+  cancel: 'Cancel',
+  reset: 'Reset',
+  edit: 'Edit',
+  create: 'Create',
+  remove: 'Remove',
+  select: 'Select',
   location: {
-    message: 'You are in {location}',
+    message: 'You are in {location}.',
+    select: 'Select your location:',
     change: 'Change location'
   },
   logout: {
