@@ -16,14 +16,25 @@ export default {
     select: 'Choisissez votre emplacement:',
     change: "Changez d'emplacement"
   },
+  language: 'Langue',
   logout: {
     title: 'Déconnexion',
     message: 'Êtes-vous sûr de vouloir vous déconnecter?'
   },
   user: {
-    attributes: {
-      first_name: 'Prénom',
-      last_name: 'Nom de famille'
+    labels: {
+      username: "Nom d'utilisateur",
+      created_at: 'Membre depuis',
+      org_unit_memberships: 'Emplacements',
+      preferred_org_unit: 'Emplacement préféré',
+      attributes: {
+        first_name: 'Prénom',
+        last_name: 'Nom de famille'
+      }
+    },
+    helpers: {
+      org_unit_memberships: 'Choisir des emplacements',
+      preferred_org_unit: 'Choisir un emplacement'
     }
   }
 }

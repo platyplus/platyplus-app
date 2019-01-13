@@ -16,14 +16,25 @@ export default {
     select: 'Select your location:',
     change: 'Change location'
   },
+  language: 'Language',
   logout: {
     title: 'Signing out',
     message: 'Are you sure to want to sign out?'
   },
   user: {
-    attributes: {
-      first_name: 'First name',
-      last_name: 'Last name'
+    labels: {
+      username: 'User name',
+      created_at: 'Member since',
+      org_unit_memberships: 'Membership',
+      preferred_org_unit: 'Preferred location',
+      attributes: {
+        first_name: 'First name',
+        last_name: 'Last name'
+      }
+    },
+    helpers: {
+      org_unit_memberships: 'Pick org units',
+      preferred_org_unit: 'Pick an org unit'
     }
   }
 }
