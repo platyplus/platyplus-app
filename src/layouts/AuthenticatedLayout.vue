@@ -15,19 +15,17 @@ export default {
     if (!user) {
       if (currentRoute.path === '/') redirect('/public')
       else redirect('/auth/signin')
+    } else if (
+      !user.preferred_org_unit &&
+      !currentRoute.meta.withoutPreferredOrgUnit
+    ) {
+      // TODO: vraiment utile
+      // TODO: nest routes, as this layer won't prefetch again when already loaded
+      store.dispatch('navigation/routeRequest', { path: currentRoute.path })
+      redirect('/profile/current-org-unit')
     }
-    // Router.beforeEach(async (to, from, next) => {
-    //   // TODO: use prefetch, but then gather all profile routes to 'children' routes and all
-    //   // 'transactionnal' routes in 'children' routes so we can put this piece of code below
-    //   // in a shared prefetch method
-    //   const user = getUser()
-    //   if (user && !user.preferred_org_unit && !to.meta.withoutPreferredOrgUnit) {
-    //     store().dispatch('navigation/routeRequest', { path: to.path })
-    //     next('/profile/current-org-unit')
-    //   } else next()
-    // })
   },
-  async mounted () {
+  async created () {
     this.$locale = this.user.locale
   },
   async destroy () {
