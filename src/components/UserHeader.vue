@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { signout } from 'plugins/auth'
 export default {
   name: 'UserHeader',
   methods: {
@@ -28,7 +29,7 @@ export default {
           ok: this.$t('yes'),
           cancel: this.$t('no')
         })
-        localStorage.removeItem('user')
+        await signout()
         this.$router.replace('/public')
       } catch (error) {}
     }

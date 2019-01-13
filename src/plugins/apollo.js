@@ -8,6 +8,7 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { setContext } from 'apollo-link-context'
 import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
+import { getUserToken } from 'plugins/auth'
 
 const cache = new InMemoryCache()
 
@@ -57,8 +58,7 @@ const wsLink = new WebSocketLink({
 })
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const { token } = JSON.parse(localStorage.getItem('user'))
+  const token = getUserToken()
   // return the headers to the context so httpLink can read them
   return {
     headers: {

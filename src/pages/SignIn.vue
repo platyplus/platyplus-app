@@ -25,8 +25,7 @@ export default {
       // this.submitted = true TODO: loading button
       const { username, password } = this
       if (username && password) {
-        const user = await signin(username, password)
-        localStorage.setItem('user', JSON.stringify(user))
+        await signin(username, password)
         await this.$store.dispatch(
           'navigation/route',
           { path: '/' },
