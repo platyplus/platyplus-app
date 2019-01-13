@@ -5,7 +5,7 @@ export default ({ app, Vue, store }) => {
   Vue.use(VueI18n)
   // Set i18n instance on app
   app.i18n = new VueI18n({
-    locale: store.getters['authentication/user']?.locale || 'en-uk',
+    locale: 'en-uk',
     sync: true,
     fallbackLocale: 'en-uk',
     messages // TODO: only load the messages of the desired language?

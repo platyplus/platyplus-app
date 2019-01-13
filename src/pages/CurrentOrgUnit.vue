@@ -16,19 +16,19 @@
 
 <script>
 import { updateMutation } from 'plugins/hasura'
+import { getUser } from 'plugins/auth'
 
 export default {
   name: 'PageCurrentOrgUnit',
   data () {
-    const user = this.$store.getters['authentication/user']
     return {
-      selection: user.preferred_org_unit_id ? user.preferred_org_unit_id : ''
+      selection: getUser().preferred_org_unit_id || ''
     }
   },
   methods: {
     async selectOrgUnit () {
       if (this.selection !== '') {
-        const user = await updateMutation({
+        await updateMutation({
           apollo: this.$apollo,
           table: 'user',
           mutation: 'update_preferred_org_unit',
@@ -38,7 +38,6 @@ export default {
           },
           fragment: 'full'
         })
-        this.$store.dispatch('authentication/updateUser', user)
         this.$store.dispatch('navigation/route', {
           path: this.$from ? this.$from.path : '/profile/current-org-unit'
         })

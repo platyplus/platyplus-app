@@ -1,4 +1,5 @@
-import store from '../store'
+import { getUserId } from '../plugins/auth'
+
 function crudRoutes (path, page) {
   return [
     { path, component: () => import(`pages/${page}.vue`) },
@@ -36,7 +37,7 @@ const routes = [
   },
   {
     path: '/',
-    component: () => import('layouts/DefaultLayout.vue'),
+    component: () => import('layouts/AuthenticatedLayout.vue'),
     children: [
       {
         path: '',
@@ -46,7 +47,7 @@ const routes = [
         path: 'profile',
         component: () => import('pages/Profile.vue'),
         props: route => ({
-          id: store().getters['authentication/user'].id
+          id: getUserId()
         })
       },
       {
@@ -54,7 +55,7 @@ const routes = [
         component: () => import('pages/Profile.vue'),
         props: route => ({
           editFlag: true,
-          id: store().getters['authentication/user'].id
+          id: getUserId()
         }),
         meta: {
           withoutPreferredOrgUnit: true

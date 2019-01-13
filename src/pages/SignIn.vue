@@ -11,6 +11,7 @@
 </style>
 
 <script>
+import { signin } from 'plugins/auth'
 export default {
   name: 'PageSignIn',
   data () {
@@ -20,11 +21,17 @@ export default {
     }
   },
   methods: {
-    login (e) {
+    async login (e) {
       // this.submitted = true TODO: loading button
       const { username, password } = this
       if (username && password) {
-        this.$store.dispatch('authentication/login', { username, password })
+        const user = await signin(username, password)
+        localStorage.setItem('user', JSON.stringify(user))
+        await this.$store.dispatch(
+          'navigation/route',
+          { path: '/' },
+          { root: true }
+        )
       }
     }
   },

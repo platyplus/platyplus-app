@@ -28,7 +28,8 @@ export default {
           ok: this.$t('yes'),
           cancel: this.$t('no')
         })
-        this.$store.dispatch('authentication/logout')
+        localStorage.removeItem('user')
+        this.$router.replace('/public')
       } catch (error) {}
     }
   }

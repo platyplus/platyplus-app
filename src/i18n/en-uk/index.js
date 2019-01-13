@@ -19,5 +19,11 @@ export default {
   logout: {
     title: 'Signing out',
     message: 'Are you sure to want to sign out?'
+  },
+  user: {
+    attributes: {
+      first_name: 'First name',
+      last_name: 'Last name'
+    }
   }
 }

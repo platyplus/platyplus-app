@@ -6,9 +6,13 @@
 <script>
 export default {
   name: 'App',
-  async preFetch ({ store, currentRoute, previousRoute, redirect, ssrContext }) {
-    await store.dispatch('authentication/loadProfile')
-  }
+  async preFetch ({
+    store,
+    currentRoute,
+    previousRoute,
+    redirect,
+    ssrContext
+  }) {}
 }
 </script>
 

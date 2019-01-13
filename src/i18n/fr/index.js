@@ -19,5 +19,11 @@ export default {
   logout: {
     title: 'Déconnexion',
     message: 'Êtes-vous sûr de vouloir vous déconnecter?'
+  },
+  user: {
+    attributes: {
+      first_name: 'Prénom',
+      last_name: 'Nom de famille'
+    }
   }
 }

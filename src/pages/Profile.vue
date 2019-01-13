@@ -10,7 +10,7 @@
       div {{form.created_at | moment("DD/MM/YYYY HH:mm") }}
     q-field(
       icon="fas fa-user"
-      label="First name"
+      :label="$t('user.attributes.first_name')"
       :error="errors.has('attributes.first_name')"
       :error-label="errors.first('attributes.first_name')")
       q-input(
@@ -22,7 +22,7 @@
         name="attributes.first_name")
     q-field(
       icon="fas fa-user"
-      label="Last name")
+      :label="$t('user.attributes.last_name')")
       q-input(
         :readonly="reading"
         v-model="form.attributes.last_name"
@@ -81,7 +81,6 @@ export default {
     async save (e) {
       const user = await this._preSave()
       if (user) {
-        this.$store.dispatch('authentication/updateUser', user)
         if (user.locale) this.$locale = user.locale
         this._postSave()
       }
