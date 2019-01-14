@@ -16,9 +16,6 @@ export default {
   name: 'PageOrgUnit',
   mixins: [mixin('stage')],
   props: ['workflow_id'],
-  data () {
-    return {}
-  },
   methods: {
     cancel () {
       this.$router.replace(
