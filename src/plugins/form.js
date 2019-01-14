@@ -42,7 +42,7 @@ export const mixin = (table, settings = {}) => {
       async save (e) {
         // Customize the save method in the component if needed
         const save = await this._preSave()
-        if (save) this._postSave()
+        if (save) this._postSave(save)
       },
       edit () {
         this.$router.replace(this.$route.path + '/edit')
@@ -84,6 +84,7 @@ export const mixin = (table, settings = {}) => {
         }
       },
       async remove () {
+        // TODO: i18n
         try {
           await this.$q.dialog({
             title: 'Warning',
@@ -121,9 +122,11 @@ export const mixin = (table, settings = {}) => {
           )
         } else return false
       },
-      _postSave () {
+      _postSave (save) {
         this.$router.replace(
-          this.$route.path.replace(this.createFlag ? '/create' : '/edit', '')
+          this.createFlag
+            ? this.$route.path.replace('create', save?.id || '')
+            : this.$route.path.replace('/edit', '')
         )
       },
       validate (field) {
@@ -154,7 +157,7 @@ export const mixin = (table, settings = {}) => {
         return !this.editFlag && !this.createFlag
       },
       details () {
-        return this.item.id || this.createFlag
+        return Boolean(this.item.id) || this.createFlag
       }
     },
     apollo: {
@@ -229,10 +232,10 @@ export default ({ app, router, Vue }) => {
     errorBagName: 'errors', // change if property conflicts
     events: 'input|blur',
     fieldsBagName: 'fields',
-    i18n: null, // the vue-i18n plugin instance
+    i18n: null, // TODO: the vue-i18n plugin instance
     i18nRootKey: 'validations', // the nested key under which the validation messages will be located
     inject: true,
-    locale: 'en',
+    locale: 'en-uk',
     validity: false
   }
   Vue.use(VeeValidate, config)

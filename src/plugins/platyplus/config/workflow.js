@@ -1,9 +1,10 @@
 import gql from 'graphql-tag'
+import * as stage from './stage'
 
 export const settings = {
   orderBy: { name: 'asc' }
 }
-// TODO: specific settings file and fragments for the 'stage' table
+
 const minimal = gql`
   fragment workflow_minimal on workflow {
     id
@@ -15,12 +16,12 @@ export const fragments = {
   base: gql`
     fragment workflow_base on workflow {
       ...workflow_minimal
-      stages {
-        id
-        name
+      stages(order_by: { name: asc }) {
+        ...stage_minimal
       }
     }
     ${minimal}
+    ${stage.fragments.minimal}
   `
 }
 

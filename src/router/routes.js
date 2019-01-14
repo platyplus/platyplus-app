@@ -1,23 +1,33 @@
 import { getUserId } from '../plugins/auth'
 
-function crudRoutes (path, page) {
+const crudRoutes = (path, page, id = 'id') => {
   return [
     { path, component: () => import(`pages/${page}.vue`) },
     {
       path: `${path}/create`,
       component: () => import(`pages/${page}.vue`),
-      props: { createFlag: true }
+      props: route => ({
+        ...Object.keys(route.params).reduce((aggr, curs) => {
+          aggr[curs] = route.params[curs]
+          return aggr
+        }, {}),
+        createFlag: true
+      })
     },
     {
-      path: `${path}/:id`,
+      path: `${path}/:${id}`,
       component: () => import(`pages/${page}.vue`),
       props: true
     },
     {
-      path: `${path}/:id/edit`,
+      path: `${path}/:${id}/edit`,
       component: () => import(`pages/${page}.vue`),
       props: route => ({
-        id: route.params.id,
+        ...Object.keys(route.params).reduce((aggr, curs) => {
+          console.log(curs)
+          aggr[curs] = route.params[curs]
+          return aggr
+        }, {}),
         editFlag: true
       })
     }
@@ -78,7 +88,8 @@ const routes = [
         })
       },
       ...crudRoutes('org-unit-type', 'OrgUnitType'),
-      ...crudRoutes('workflow', 'Workflow')
+      ...crudRoutes('workflow', 'Workflow'),
+      ...crudRoutes('workflow/:workflow_id/stage', 'Stage')
     ]
   },
   {

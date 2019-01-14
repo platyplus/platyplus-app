@@ -25,7 +25,7 @@ export default {
     labels: {
       username: "Nom d'utilisateur",
       created_at: 'Membre depuis',
-      org_unit_memberships: 'Emplacements',
+      org_unit_memberships: 'Membre des emplacements',
       preferred_org_unit: 'Emplacement préféré',
       attributes: {
         first_name: 'Prénom',

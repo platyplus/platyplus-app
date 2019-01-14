@@ -1,7 +1,7 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     q-list(
-      v-if="list.length && !details"
+      v-if="reading && !details && list.length"
       highlight)
       q-item(
         v-for="item in list"
@@ -16,12 +16,13 @@
         ref="firstInput"
         @keyup.enter="save")
     q-list(
-      v-if="details && item.stages.length"
+      v-if="reading && details && item.stages.length"
       highlight)
       q-item(
-        v-for="item in item.stages"
-        :to="'/'+id+'/stage/'+item.id"
-        :key="item.id") {{ item.name }}
+        v-for="stage in item.stages"
+        :to="'/workflow/'+item.id+'/stage/'+stage.id"
+        :key="stage.id") {{ stage.name }}
+    q-btn(v-if="reading && details" label="Create stage" :to="'/workflow/'+item.id+'/stage/create'")
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
 </template>
 
