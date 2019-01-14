@@ -4,6 +4,7 @@ import * as userOrgUnit from './userOrgUnit'
 import * as workflow from './workflow'
 import * as stage from './stage'
 import * as stageTransition from './stageTransition'
+import * as encounterType from './encounterType'
 
 export const settings = {
   org_unit: orgUnit.settings,
@@ -11,7 +12,8 @@ export const settings = {
   user_org_unit: userOrgUnit.settings,
   workflow: workflow.settings,
   stage: stage.settings,
-  stage_transition: stageTransition.settings
+  stage_transition: stageTransition.settings,
+  encounter_type: encounterType.settings
 }
 
 export const fragments = {
@@ -20,7 +22,8 @@ export const fragments = {
   user_org_unit: userOrgUnit.fragments,
   workflow: workflow.fragments,
   stage: stage.fragments,
-  stage_transition: stageTransition.fragments
+  stage_transition: stageTransition.fragments,
+  encounter_type: encounterType.fragments
 }
 
 export const queries = {
@@ -29,7 +32,8 @@ export const queries = {
   user_org_unit: userOrgUnit.queries,
   workflow: workflow.queries,
   stage: stage.queries,
-  stage_transition: stageTransition.queries
+  stage_transition: stageTransition.queries,
+  encounter_type: encounterType.queries
 }
 
 export const mutations = {
@@ -38,5 +42,6 @@ export const mutations = {
   user_org_unit: userOrgUnit.mutations,
   workflow: workflow.mutations,
   stage: stage.mutations,
-  stage_transition: stageTransition.mutations
+  stage_transition: stageTransition.mutations,
+  encounter_type: encounterType.mutations
 }

@@ -15,6 +15,9 @@
       q-item(to="/workflow")
         q-item-side(icon="fas fa-route")
         q-item-main(label="Workflows")
+      q-item(to="/encounter-type")
+        q-item-side(icon="fas fa-table")
+        q-item-main(label="Encounter Types")
       q-list-header Metadata
       q-item(to="/org-unit-type")
         q-item-side(icon="fas fa-sitemap")
