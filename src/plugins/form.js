@@ -180,7 +180,7 @@ export const mixin = (table, settings = {}) => {
         skip () {
           return !this.id
         },
-        update: data => data[Object.keys(data)[0]][0]
+        update: data => data[Object.keys(data)[0]]?.[0]
       },
       ...(settings.options
         ? Object.keys(settings.options)

@@ -19,6 +19,9 @@
       q-item(to="/org-unit-type")
         q-item-side(icon="fas fa-sitemap")
         q-item-main(label="Org Unit Types")
+      q-item(to="/entity-type")
+        q-item-side(icon="fas fa-heartbeat")
+        q-item-main(label="Entity Types")
 </template>
 
 <script>

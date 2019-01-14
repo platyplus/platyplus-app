@@ -4,13 +4,41 @@ export const settings = {
   options: {
     workflow: {
       table: 'workflow',
-      filter: (item, data, settings) => {
-        return data.item.id !== item.id
-      },
+      filter: (item, data, settings) => data.item.id !== item.id,
       map: item => ({
         value: item.id,
         label: item.name
       })
+    },
+    previous: {
+      table: 'stage',
+      filter: (item, data, settings) =>
+        item.workflow_id === data.item.workflow_id,
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
+    },
+    next: {
+      table: 'stage',
+      filter: (item, data, settings) =>
+        item.workflow_id === data.item.workflow_id,
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
+    }
+  },
+  relations: {
+    previous: {
+      table: 'stage_transition',
+      from: 'previous',
+      to: 'next'
+    },
+    next: {
+      table: 'stage_transition',
+      from: 'next',
+      to: 'previous'
     }
   },
   orderBy: { name: 'asc' }
@@ -31,6 +59,16 @@ export const fragments = {
       workflow {
         id
         name
+      }
+      previous {
+        next {
+          ...stage_minimal
+        }
+      }
+      next {
+        previous {
+          ...stage_minimal
+        }
       }
     }
     ${minimal}

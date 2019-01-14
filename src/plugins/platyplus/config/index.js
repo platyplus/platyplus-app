@@ -3,13 +3,15 @@ import * as user from './user'
 import * as userOrgUnit from './userOrgUnit'
 import * as workflow from './workflow'
 import * as stage from './stage'
+import * as stageTransition from './stageTransition'
 
 export const settings = {
   org_unit: orgUnit.settings,
   user: user.settings,
   user_org_unit: userOrgUnit.settings,
   workflow: workflow.settings,
-  stage: stage.settings
+  stage: stage.settings,
+  stage_transition: stageTransition.settings
 }
 
 export const fragments = {
@@ -17,7 +19,8 @@ export const fragments = {
   user: user.fragments,
   user_org_unit: userOrgUnit.fragments,
   workflow: workflow.fragments,
-  stage: stage.fragments
+  stage: stage.fragments,
+  stage_transition: stageTransition.fragments
 }
 
 export const queries = {
@@ -25,7 +28,8 @@ export const queries = {
   user: user.queries,
   user_org_unit: userOrgUnit.queries,
   workflow: workflow.queries,
-  stage: stage.queries
+  stage: stage.queries,
+  stage_transition: stageTransition.queries
 }
 
 export const mutations = {
@@ -33,5 +37,6 @@ export const mutations = {
   user: user.mutations,
   user_org_unit: userOrgUnit.mutations,
   workflow: workflow.mutations,
-  stage: stage.mutations
+  stage: stage.mutations,
+  stage_transition: stageTransition.mutations
 }
