@@ -7,10 +7,7 @@ const crudRoutes = (path, page, id = 'id') => {
       path: `${path}/create`,
       component: () => import(`pages/${page}.vue`),
       props: route => ({
-        ...Object.keys(route.params).reduce((aggr, curs) => {
-          aggr[curs] = route.params[curs]
-          return aggr
-        }, {}),
+        ...route.params,
         createFlag: true
       })
     },
@@ -23,11 +20,7 @@ const crudRoutes = (path, page, id = 'id') => {
       path: `${path}/:${id}/edit`,
       component: () => import(`pages/${page}.vue`),
       props: route => ({
-        ...Object.keys(route.params).reduce((aggr, curs) => {
-          console.log(curs)
-          aggr[curs] = route.params[curs]
-          return aggr
-        }, {}),
+        ...route.params,
         editFlag: true
       })
     }
