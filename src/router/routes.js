@@ -88,7 +88,9 @@ const routes = [
       ),
       ...crudRoutes('encounter-type', 'EncounterType'),
       ...crudRoutes('workflow', 'Workflow'),
-      ...crudRoutes('workflow/:workflow_id/stage', 'Stage')
+      ...crudRoutes('workflow/:workflow_id/stage', 'Stage'),
+      ...crudRoutes('user', 'User'),
+      ...crudRoutes('role', 'Role')
     ]
   },
   {

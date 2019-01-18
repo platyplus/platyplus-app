@@ -46,26 +46,48 @@ export const settings = {
   }
 }
 
-export const fragments = {
-  full: gql`
-    fragment user_full on user {
+const minimal = gql`
+  fragment user_minimal on user {
+    id
+    username
+  }
+`
+
+const base = gql`
+  fragment user_base on user {
+    ...user_minimal
+    roles {
       id
-      username
-      attributes
-      created_at
-      locale
-      preferred_org_unit_id
-      preferred_org_unit {
-        ...org_unit_minimal
-      }
-      org_unit_memberships {
+      role {
         id
-        org_unit {
-          ...org_unit_minimal
-        }
       }
     }
-    ${orgUnit.fragments.minimal}
+    attributes
+    locale
+    preferred_org_unit_id
+    preferred_org_unit {
+      ...org_unit_minimal
+    }
+    org_unit_memberships {
+      id
+      org_unit {
+        ...org_unit_minimal
+      }
+    }
+  }
+  ${orgUnit.fragments.minimal}
+  ${minimal}
+`
+
+export const fragments = {
+  minimal,
+  base,
+  full: gql`
+    fragment user_full on user {
+      ...user_base
+      created_at
+    }
+    ${base}
   `
 }
 
