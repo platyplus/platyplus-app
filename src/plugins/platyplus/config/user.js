@@ -105,29 +105,29 @@ export const mutations = {
       }
     }
     ${fragments.full}
-  `,
-  // TODO: test the above mutation
-  insert: gql`
-    mutation insert_user(
-      $attributes: jsonb
-      $username: String!
-      $preferred_org_unit_id: ID
-    ) {
-      insert_user(
-        objects: [
-          {
-            username: $username
-            attributes: $attributes
-            preferred_org_unit_id: $preferred_org_unit_id
-          }
-        ]
-      ) {
-        affected_rows
-        returning {
-          ...user_full
-        }
-      }
-    }
-    ${fragments.full}
   `
+  // TODO: test the above mutation
+  // insert: gql`
+  //   mutation insert_user(
+  //     $attributes: jsonb
+  //     $username: String!
+  //     $preferred_org_unit_id: ID
+  //   ) {
+  //     insert_user(
+  //       objects: [
+  //         {
+  //           username: $username
+  //           attributes: $attributes
+  //           preferred_org_unit_id: $preferred_org_unit_id
+  //         }
+  //       ]
+  //     ) {
+  //       affected_rows
+  //       returning {
+  //         ...user_full
+  //       }
+  //     }
+  //   }
+  //   ${fragments.full}
+  // `
 }

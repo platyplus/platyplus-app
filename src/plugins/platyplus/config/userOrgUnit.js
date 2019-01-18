@@ -13,13 +13,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
-  insert: gql`
-    mutation insert_user_org_unit($objects: [user_org_unit_insert_input!]!) {
-      insert_user_org_unit(objects: $objects) {
-        returning {
-          id
-        }
-      }
-    }
-  `
+  // insert: gql`
+  //   mutation insert_user_org_unit($objects: [user_org_unit_insert_input!]!) {
+  //     insert_user_org_unit(objects: $objects) {
+  //       returning {
+  //         id
+  //       }
+  //     }
+  //   }
+  // `
 }

@@ -1,6 +1,16 @@
 import gql from 'graphql-tag'
+import * as entityType from '../metadata/entityType'
 
 export const settings = {
+  options: {
+    entity_type: {
+      table: 'entity_type',
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
+    }
+  },
   orderBy: { name: 'asc' }
 }
 
@@ -16,29 +26,28 @@ export const fragments = {
   base: gql`
     fragment encounter_type_base on encounter_type {
       ...encounter_type_minimal
+      entity_type_id
+      entity_type {
+        ...entity_type_minimal
+      }
     }
     ${minimal}
+    ${entityType.fragments.minimal}
   `
 }
 
 export const queries = {}
 
 export const mutations = {
-  insert: gql`
-    mutation insert_encounter_type($objects: [encounter_type_insert_input!]!) {
-      insert_encounter_type(objects: $objects) {
-        returning {
-          ...encounter_type_base
-        }
-      }
-    }
-    ${fragments.base}
-  `,
   update: gql`
-    mutation update_encounter_type($id: ID!, $name: String) {
+    mutation update_encounter_type(
+      $id: ID!
+      $name: String
+      $entity_type_id: ID
+    ) {
       update_encounter_type(
         where: { id: { _eq: $id } }
-        _set: { name: $name }
+        _set: { name: $name, entity_type_id: $entity_type_id }
       ) {
         affected_rows
         returning {

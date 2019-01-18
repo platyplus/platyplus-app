@@ -15,16 +15,16 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
-  insert: gql`
-    mutation insert_org_unit_type_mapping(
-      $objects: [org_unit_type_mapping_insert_input!]!
-    ) {
-      insert_org_unit_type_mapping(objects: $objects) {
-        returning {
-          ...org_unit_type_mapping_minimal
-        }
-      }
-    }
-    ${fragments.minimal}
-  `
+  // insert: gql`
+  //   mutation insert_org_unit_type_mapping(
+  //     $objects: [org_unit_type_mapping_insert_input!]!
+  //   ) {
+  //     insert_org_unit_type_mapping(objects: $objects) {
+  //       returning {
+  //         ...org_unit_type_mapping_minimal
+  //       }
+  //     }
+  //   }
+  //   ${fragments.minimal}
+  // `
 }

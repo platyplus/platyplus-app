@@ -82,6 +82,10 @@ const routes = [
       },
       ...crudRoutes('org-unit-type', 'OrgUnitType'),
       ...crudRoutes('entity-type', 'EntityType'),
+      ...crudRoutes(
+        'entity-type/:entity_type_id/encounter-type',
+        'EncounterType'
+      ),
       ...crudRoutes('encounter-type', 'EncounterType'),
       ...crudRoutes('workflow', 'Workflow'),
       ...crudRoutes('workflow/:workflow_id/stage', 'Stage')

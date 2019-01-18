@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-
 export const settings = {
   orderBy: { name: 'asc' }
 }
@@ -16,6 +15,11 @@ export const fragments = {
   base: gql`
     fragment entity_type_base on entity_type {
       ...entity_type_minimal
+      encounter_types(order_by: { name: asc }) {
+        # not through a fragment: circular reference
+        id
+        name
+      }
     }
     ${minimal}
   `
@@ -24,16 +28,16 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
-  insert: gql`
-    mutation insert_entity_type($objects: [entity_type_insert_input!]!) {
-      insert_entity_type(objects: $objects) {
-        returning {
-          ...entity_type_base
-        }
-      }
-    }
-    ${fragments.base}
-  `,
+  // insert: gql`
+  //   mutation insert_entity_type($objects: [entity_type_insert_input!]!) {
+  //     insert_entity_type(objects: $objects) {
+  //       returning {
+  //         ...entity_type_base
+  //       }
+  //     }
+  //   }
+  //   ${fragments.base}
+  // `,
   update: gql`
     mutation update_entity_type($id: ID!, $name: String) {
       update_entity_type(where: { id: { _eq: $id } }, _set: { name: $name }) {

@@ -62,16 +62,16 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
-  insert: gql`
-    mutation insert_org_unit_type($objects: [org_unit_type_insert_input!]!) {
-      insert_org_unit_type(objects: $objects) {
-        returning {
-          ...org_unit_type_base
-        }
-      }
-    }
-    ${fragments.base}
-  `,
+  // insert: gql`
+  //   mutation insert_org_unit_type($objects: [org_unit_type_insert_input!]!) {
+  //     insert_org_unit_type(objects: $objects) {
+  //       returning {
+  //         ...org_unit_type_base
+  //       }
+  //     }
+  //   }
+  //   ${fragments.base}
+  // `,
   update: gql`
     mutation update_org_unit_type($id: ID!, $name: String) {
       update_org_unit_type(where: { id: { _eq: $id } }, _set: { name: $name }) {

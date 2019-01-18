@@ -15,16 +15,16 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
-  insert: gql`
-    mutation insert_stage_transition(
-      $objects: [stage_transition_insert_input!]!
-    ) {
-      insert_stage_transition(objects: $objects) {
-        returning {
-          ...stage_transition_minimal
-        }
-      }
-    }
-    ${fragments.minimal}
-  `
+  // insert: gql`
+  //   mutation insert_stage_transition(
+  //     $objects: [stage_transition_insert_input!]!
+  //   ) {
+  //     insert_stage_transition(objects: $objects) {
+  //       returning {
+  //         ...stage_transition_minimal
+  //       }
+  //     }
+  //   }
+  //   ${fragments.minimal}
+  // `
 }
