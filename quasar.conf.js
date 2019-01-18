@@ -85,6 +85,11 @@ module.exports = function (ctx) {
         'QPage',
         'QRadio',
         'QSelect',
+        'QTable',
+        'QTh',
+        'QTr',
+        'QTd',
+        'QTableColumns',
         'QToolbar',
         'QToolbarTitle'
       ],

@@ -1,12 +1,5 @@
 <template lang="pug">
   q-page(padding class="justify-center")
-    q-list(
-      v-if="reading && !details && list.length"
-      highlight)
-      q-item(
-        v-for="item in list"
-        :to="'/encounter-type/'+item.id"
-        :key="item.id") {{ item.name }}
     div(v-if="details")
       q-field(
         label="Name")
@@ -15,8 +8,21 @@
           v-model="form.name"
           ref="firstInput"
           @keyup.enter="save")
+      q-field(
+        label="Form")
+        json-editor(
+          :readonly="reading"
+          :onChange="onChange"
+          :json="form.form")
       q-field(label="Entity type" helper="Pick an entity type")
         q-select(:readonly="reading" clearable v-model="form.entity_type_id" :options="options('entity_type')")
+    q-list(
+      v-else-if="list.length"
+      highlight)
+      q-item(
+        v-for="item in list"
+        :to="'/encounter-type/'+item.id"
+        :key="item.id") {{ item.name }} (TODO: group by entity type)
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
 </template>
 
@@ -43,6 +49,10 @@ export default {
       this._resetItem()
       if (this.entity_type_id) this.item.entity_type_id = this.entity_type_id
       this._resetForm()
+    },
+    onChange (newJson) {
+      // handle json changes
+      this.form.form = newJson
     }
   }
 }

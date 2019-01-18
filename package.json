@@ -24,6 +24,7 @@
     "axios": "^0.18.0",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
+    "jsoneditor": "^5.27.1",
     "lodash": "^4.17.11",
     "node-fetch": "^2.3.0",
     "subscriptions-transport-ws": "^0.9.15",
