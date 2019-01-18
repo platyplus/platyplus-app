@@ -20,11 +20,9 @@ import { getUser } from 'plugins/auth'
 
 export default {
   name: 'PageCurrentOrgUnit',
-  data () {
-    return {
-      selection: getUser().preferred_org_unit_id || ''
-    }
-  },
+  data: () => ({
+    selection: getUser().preferred_org_unit_id || ''
+  }),
   methods: {
     async selectOrgUnit () {
       if (this.selection !== '') {

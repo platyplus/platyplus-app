@@ -14,12 +14,10 @@
 import { signin } from 'plugins/auth'
 export default {
   name: 'PageSignIn',
-  data () {
-    return {
-      username: '',
-      password: ''
-    }
-  },
+  data: () => ({
+    username: '',
+    password: ''
+  }),
   methods: {
     async login (e) {
       // this.submitted = true TODO: loading button

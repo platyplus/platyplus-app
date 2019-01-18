@@ -35,8 +35,16 @@ import { mixin } from 'plugins/form'
 export default {
   name: 'PageEncounterType',
   mixins: [mixin('encounter_type')],
+  data: () => ({
+    jsonForm: {}
+  }),
   props: ['entity_type_id'],
   methods: {
+    async save () {
+      this.form.form = this.jsonForm
+      await this._preSave()
+      this._postSave()
+    },
     cancel () {
       this.$router.replace(
         this.$route.path.replace(
@@ -49,10 +57,10 @@ export default {
       this._resetItem()
       if (this.entity_type_id) this.item.entity_type_id = this.entity_type_id
       this._resetForm()
+      this.jsonForm = this.form.form
     },
     onChange (newJson) {
-      // handle json changes
-      this.form.form = newJson
+      this.jsonForm = newJson
     }
   }
 }

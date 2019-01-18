@@ -33,12 +33,10 @@ export default {
   name: 'PageOrgUnit',
   mixins: [mixin('org_unit', { where: { parent_id: { _is_null: true } } })],
   props: ['parent_id'],
-  data () {
-    return {
-      types: [],
-      orgUnits: []
-    }
-  },
+  data: () => ({
+    types: [],
+    orgUnits: []
+  }),
   methods: {
     createChild () {
       this.$router.push(this.$route.path + '/create')
