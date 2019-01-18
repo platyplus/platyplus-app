@@ -7,6 +7,16 @@
           v-model="form.name"
           ref="firstInput"
           @keyup.enter="save")
+      q-field(
+        icon="fas fa-sitemap"
+        label="Members")
+        q-select(
+          :readonly="reading"
+          filter
+          multiple
+          chips
+          v-model="relations.users"
+        :options="options('users')")
     q-list(
       v-else-if="list.length"
       highlight)
@@ -25,6 +35,9 @@ import { mixin } from 'plugins/form'
 
 export default {
   name: 'PageRole',
-  mixins: [mixin('role')]
+  mixins: [mixin('role')],
+  mounted () {
+    console.log(this.item)
+  }
 }
 </script>

@@ -1,6 +1,22 @@
 import gql from 'graphql-tag'
 
 export const settings = {
+  options: {
+    users: {
+      table: 'user',
+      where: {},
+      map: item => ({
+        value: item.id,
+        label: item.username
+      })
+    }
+  },
+  relations: {
+    users: {
+      table: 'user_role',
+      to: 'user'
+    }
+  },
   orderBy: { name: 'asc' }
 }
 
@@ -16,6 +32,13 @@ export const fragments = {
   base: gql`
     fragment role_base on role {
       ...role_minimal
+      users {
+        id
+        user {
+          id
+          username
+        }
+      }
       users_aggregate {
         aggregate {
           count

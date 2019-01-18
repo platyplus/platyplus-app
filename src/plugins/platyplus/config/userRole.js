@@ -4,7 +4,7 @@ export const settings = {}
 
 export const fragments = {
   minimal: gql`
-    fragment user_org_unit_minimal on user_org_unit {
+    fragment user_role_minimal on user_role {
       id
     }
   `

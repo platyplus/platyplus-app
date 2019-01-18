@@ -1,6 +1,7 @@
 import * as orgUnit from './orgUnit'
 import * as user from './user'
 import * as userOrgUnit from './userOrgUnit'
+import * as userRole from './userRole'
 import * as role from './role'
 import * as workflow from './workflow'
 import * as stage from './stage'
@@ -11,6 +12,7 @@ export const settings = {
   org_unit: orgUnit.settings,
   user: user.settings,
   user_org_unit: userOrgUnit.settings,
+  user_role: userRole.settings,
   role: role.settings,
   workflow: workflow.settings,
   stage: stage.settings,
@@ -22,6 +24,7 @@ export const fragments = {
   org_unit: orgUnit.fragments,
   user: user.fragments,
   user_org_unit: userOrgUnit.fragments,
+  user_role: userRole.fragments,
   role: role.fragments,
   workflow: workflow.fragments,
   stage: stage.fragments,
@@ -33,6 +36,7 @@ export const queries = {
   org_unit: orgUnit.queries,
   user: user.queries,
   user_org_unit: userOrgUnit.queries,
+  user_role: userRole.queries,
   role: role.queries,
   workflow: workflow.queries,
   stage: stage.queries,
@@ -44,6 +48,7 @@ export const mutations = {
   org_unit: orgUnit.mutations,
   user: user.mutations,
   user_org_unit: userOrgUnit.mutations,
+  user_role: userRole.mutations,
   role: role.mutations,
   workflow: workflow.mutations,
   stage: stage.mutations,
