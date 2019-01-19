@@ -62,6 +62,15 @@ const base = gql`
         id
       }
     }
+    role_attributions {
+      id
+      role {
+        id
+      }
+      org_unit {
+        id
+      }
+    }
     attributes
     locale
     preferred_org_unit_id

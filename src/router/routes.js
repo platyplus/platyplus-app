@@ -90,7 +90,8 @@ const routes = [
       ...crudRoutes('workflow', 'Workflow'),
       ...crudRoutes('workflow/:workflow_id/stage', 'Stage'),
       ...crudRoutes('user', 'User'),
-      ...crudRoutes('role', 'Role')
+      ...crudRoutes('role', 'Role'),
+      ...crudRoutes('role/:role_id/attribution', 'RoleAttribution')
     ]
   },
   {

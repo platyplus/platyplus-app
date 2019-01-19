@@ -51,7 +51,7 @@ const wsLink = new WebSocketLink({
     reconnect: true,
     connectionParams: {
       headers: {
-        'X-Hasura-Access-Key': 'mysecretaccesskey'
+        'X-Hasura-Access-Key': 'mysecretaccesskey' // TODO: token
       }
     }
   }

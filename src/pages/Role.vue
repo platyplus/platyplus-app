@@ -8,22 +8,22 @@
           ref="firstInput"
           @keyup.enter="save")
       q-field(
-        icon="fas fa-sitemap"
-        label="Members")
-        q-select(
-          :readonly="reading"
-          filter
-          multiple
-          chips
-          v-model="relations.users"
-        :options="options('users')")
+        label="Role attributions")
+        q-list(
+          v-if="item.role_attributions.length"
+          highlight)
+          q-item(
+            v-for="role in item.role_attributions"
+            :to="'/role/'+item.id+'/attribution/'+role.id"
+            :key="role.id") {{ role.user.username }} in {{ role.org_unit.name }}
+        q-btn(label="Create role attribution" :to="'/role/'+item.id+'/attribution/create'")
     q-list(
       v-else-if="list.length"
       highlight)
       q-item(
         v-for="item in list"
         :to="'/role/'+item.id"
-        :key="item.id") {{ item.name }} ({{item.users_aggregate.aggregate.count}})
+        :key="item.id") {{ item.name }}
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
 </template>
 
@@ -35,9 +35,6 @@ import { mixin } from 'plugins/form'
 
 export default {
   name: 'PageRole',
-  mixins: [mixin('role')],
-  mounted () {
-    console.log(this.item)
-  }
+  mixins: [mixin('role')]
 }
 </script>

@@ -15,7 +15,7 @@
             v-for="item in children"
             :to="'/org-unit/'+item.id"
             :key="item.id") {{ item.name }}
-        q-btn(label="Create child" @click="createChild")
+        q-btn(label="Create child" :to="'/org-unit/'+item.id+'/create'")
       q-field(label="Type" helper="Pick an org unit type")
         q-select(:readonly="reading" clearable v-model="form.type_id" :options="options('type')")
     q-list(v-else-if="children.length" highlight)
@@ -38,9 +38,6 @@ export default {
     orgUnits: []
   }),
   methods: {
-    createChild () {
-      this.$router.push(this.$route.path + '/create')
-    },
     async save () {
       const { id } = await this._preSave()
       if (this.parent_id) {
