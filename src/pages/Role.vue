@@ -8,6 +8,7 @@
           ref="firstInput"
           @keyup.enter="save")
       q-field(
+        v-if="reading"
         label="Role attributions")
         q-list(
           v-if="item.role_attributions.length"
