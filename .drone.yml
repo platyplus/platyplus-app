@@ -14,7 +14,7 @@ steps:
       - git config --global user.name "Drone.io CI"
       - git add -A
       - git diff-index --quiet HEAD || git commit -m 'deply'
-      - git push -f https://plmercereau:${GH_TOKEN}@github.com/platyplus/platyplus.github.io.git master
+      - git push -f https://plmercereau:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
     environment:
       GH_TOKEN:
         from_secret: GH_TOKEN
