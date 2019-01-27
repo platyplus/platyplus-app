@@ -1,5 +1,3 @@
 # Platyplus
 
-Pitch
-
-Link to vuepress documentation
+See [documentation](https://platyplus.github.io/)
