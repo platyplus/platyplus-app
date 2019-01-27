@@ -14,9 +14,8 @@ npm install
 # 1. pull/clone the github gh page repo into the ci image
 # 2. build the dist
 # 3. if dist files changed, commit and push
-cd docs/.vuepress/dist
+mkdir -p docs/.vuepress/dist && cd docs/.vuepress/dist
 git clone https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
-ls
 cd -
 
 # build the docs
