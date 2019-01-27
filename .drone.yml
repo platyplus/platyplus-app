@@ -12,5 +12,7 @@ steps:
     environment:
       GH_TOKEN:
         from_secret: GH_TOKEN
+      GH_USER:
+        from_secret: GH_USER
     when:
       branch: master

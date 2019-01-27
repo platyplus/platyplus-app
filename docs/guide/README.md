@@ -4,8 +4,8 @@
 
 ### Prerequisites
 
-Docker
-A DNS
+- Docker
+- A DNS
 
 ### Build the docker images
 
