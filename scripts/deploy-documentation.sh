@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+rm -rf .git
 
 # abort on errors
 set -e
