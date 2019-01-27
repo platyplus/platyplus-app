@@ -3,7 +3,7 @@
 # abort on errors
 set -e
 
-# build
+# build the docs
 npm run docs:build
 
 # navigate into the build output directory
