@@ -12,11 +12,10 @@ cd docs/.vuepress/dist
 git add -A
 if [[ `git diff-index --quiet HEAD` ]]; then
   echo changes
+  git commit -m 'deploy'
+  git push -f https://plmercereau:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
 else
   echo nochanges
 fi
-
-git diff-index --quiet HEAD || git commit -m 'deploy'
-git diff-index --quiet HEAD || git push -f https://plmercereau:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
 
 cd -
