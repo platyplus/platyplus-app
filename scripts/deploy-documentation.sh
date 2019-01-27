@@ -12,14 +12,16 @@ npm install
 # build the docs
 npm run docs:build
 
-cd docs/.vuepress/dist
+mkdir docs/.vuepress/dist.repo
+cd docs/.vuepress/dist.repo
 git init .
 git remote add origin https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
 git pull origin master
+cp -r ../dist/* ./
+git add -A
 
 echo "*** pre-add ****"
 ls -a
-git add -A
 
 echo "*** diff ****"
 git diff-index HEAD
