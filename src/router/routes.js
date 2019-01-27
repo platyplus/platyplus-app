@@ -80,6 +80,7 @@ const routes = [
           parent_id: route.params.id
         })
       },
+      ...crudRoutes('org-unit/:org_unit_id/attribution', 'RoleAttribution'),
       ...crudRoutes('org-unit-type', 'OrgUnitType'),
       ...crudRoutes('entity-type', 'EntityType'),
       ...crudRoutes(
@@ -90,6 +91,7 @@ const routes = [
       ...crudRoutes('workflow', 'Workflow'),
       ...crudRoutes('workflow/:workflow_id/stage', 'Stage'),
       ...crudRoutes('user', 'User'),
+      ...crudRoutes('user/:user_id/attribution', 'RoleAttribution'),
       ...crudRoutes('role', 'Role'),
       ...crudRoutes('role/:role_id/attribution', 'RoleAttribution')
     ]

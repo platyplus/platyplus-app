@@ -1,3 +1,5 @@
 # Platyplus
 
-> WIP
+Pitch
+
+Link to vuepress documentation

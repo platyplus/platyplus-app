@@ -8,6 +8,7 @@ const minimal = gql`
   fragment role_minimal on role {
     id
     name
+    global
   }
 `
 
@@ -36,8 +37,11 @@ export const queries = {}
 
 export const mutations = {
   update: gql`
-    mutation update_role($id: ID!, $name: String) {
-      update_role(where: { id: { _eq: $id } }, _set: { name: $name }) {
+    mutation update_role($id: ID!, $name: String, $global: Boolean) {
+      update_role(
+        where: { id: { _eq: $id } }
+        _set: { name: $name, global: $global }
+      ) {
         affected_rows
         returning {
           ...role_base

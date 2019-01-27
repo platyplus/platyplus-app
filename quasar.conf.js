@@ -91,6 +91,7 @@ module.exports = function (ctx) {
         'QTd',
         'QTableColumns',
         'QToolbar',
+        'QToggle',
         'QToolbarTitle'
       ],
       directives: ['Ripple'],

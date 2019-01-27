@@ -25,6 +25,7 @@ export default {
     labels: {
       username: 'User name',
       created_at: 'Member since',
+      roles: 'Global roles',
       org_unit_memberships: 'Membership',
       preferred_org_unit: 'Preferred location',
       attributes: {

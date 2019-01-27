@@ -5,6 +5,7 @@
       :label="$t('user.labels.username')")
       div {{form.username}}
     q-field(
+      v-if="reading"
       icon="fas fa-calendar"
       :label="$t('user.labels.created_at')")
       div {{form.created_at | moment("DD/MM/YYYY HH:mm") }}
@@ -28,6 +29,17 @@
         v-model="form.attributes.last_name"
         @keyup.enter="save")
     q-field(
+      v-if="reading"
+      icon="fas fa-user-lock"
+      :label="$t('user.labels.roles')")
+      q-select(
+        readonly
+        filter
+        multiple
+        chips
+        v-model="relations.roles"
+        :options="options('roles')")
+    q-field(
       icon="fas fa-language"
       :label="$t('language')")
       q-select(
@@ -35,11 +47,12 @@
         :options="$locales"
         v-model="form.locale")
     q-field(
+      v-if="reading"
       icon="fas fa-sitemap"
       :label="$t('user.labels.org_unit_memberships')"
       :helper="$t('user.helpers.org_unit_memberships')")
       q-select(
-        :readonly="reading"
+        readonly
         filter
         multiple
         chips
@@ -54,6 +67,17 @@
         clearable
         v-model="form.preferred_org_unit_id"
         :options="preferredOrgUnitOptions")
+    q-field(
+      v-if="reading"
+      icon="fas fas fa-user-lock"
+      label="Role attributions")
+      q-list(
+        v-if="item.role_attributions.length"
+        highlight)
+        q-item(
+          v-for="role in item.role_attributions"
+          :to="'/user/'+item.id+'/attribution/'+role.id"
+          :key="role.id") {{ role.role.name }} in {{ role.org_unit.name }}
     button-bar(
       :reading="reading"
       :details="details"

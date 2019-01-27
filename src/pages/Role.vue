@@ -7,6 +7,10 @@
           v-model="form.name"
           ref="firstInput"
           @keyup.enter="save")
+      q-field(label="Global")
+        q-toggle(
+          :readonly="reading"
+          v-model="form.global")
       q-field(
         v-if="reading"
         label="Role attributions")

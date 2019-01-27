@@ -25,17 +25,30 @@ export const settings = {
         value: item.id,
         label: item.name
       })
+    },
+    roles: {
+      table: 'role',
+      where: { global: { _eq: true } },
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
     }
   },
   relations: {
     org_unit_memberships: {
       table: 'user_org_unit',
       to: 'org_unit'
+    },
+    roles: {
+      table: 'user_role',
+      to: 'role'
     }
   },
   beforeSave: ({ newValues, initial, relations }) => {
     if (
       // TODO: make generic in the form preSave? Or through a validation rule?
+      newValues.org_unit_memberships &&
       !newValues.org_unit_memberships
         .map(item => item.org_unit.id)
         .includes(newValues.preferred_org_unit_id)
@@ -66,9 +79,11 @@ const base = gql`
       id
       role {
         id
+        name
       }
       org_unit {
         id
+        name
       }
     }
     attributes

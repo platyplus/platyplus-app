@@ -18,6 +18,17 @@
         q-btn(label="Create child" :to="'/org-unit/'+item.id+'/create'")
       q-field(label="Type" helper="Pick an org unit type")
         q-select(:readonly="reading" clearable v-model="form.type_id" :options="options('type')")
+      q-field(
+        v-if="reading"
+        label="Role attributions")
+        q-list(
+          v-if="item.role_attributions.length"
+          highlight)
+          q-item(
+            v-for="role in item.role_attributions"
+            :to="'/org-unit/'+item.id+'/attribution/'+role.id"
+            :key="role.id") {{ role.user.username }} as {{ role.role.name }}
+        q-btn(label="Create role attribution" :to="'/org-unit/'+item.id+'/attribution/create'")
     q-list(v-else-if="children.length" highlight)
       q-item(v-for="item in children" :to="'/org-unit/'+item.id" :key="item.id") {{ item.name }}
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")

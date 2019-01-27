@@ -60,6 +60,17 @@ export const fragments = {
       type {
         ...org_unit_type_base
       }
+      role_attributions {
+        id
+        user {
+          id
+          username
+        }
+        role {
+          id
+          name
+        }
+      }
     }
     ${minimal}
     ${orgUnitType.fragments.base}
