@@ -3,7 +3,6 @@
 # abort on errors
 set -e
 
-
 # navigate into the build output directory
 if [[ ! `git diff-index --quiet HEAD docs` ]]; then
     # build the docs
