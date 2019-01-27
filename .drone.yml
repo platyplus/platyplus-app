@@ -9,6 +9,8 @@ steps:
       - npm install
       - npm run docs:build
       - cd docs/.vuepress/dist
+      - git config --global user.email "no-reply@platy.plus"
+      - git config --global user.name "Drone.io CI"
       - ls && git commit -m 'deploy'
       - echo ${GH_TOKEN}
       - git push -f https://plmercereau:${GH_TOKEN}@github.com/platyplus/platyplus.github.io.git master
