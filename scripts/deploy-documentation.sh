@@ -20,7 +20,7 @@ cd docs/.vuepress/dist
 ls
 echo "*** init ****"
 git init
-git remote add origin https://$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
+git remote add origin https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
 git pull origin master
 git branch -a
 echo "*** init done ****"
