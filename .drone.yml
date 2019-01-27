@@ -6,7 +6,6 @@ steps:
     image: node:alpine
     commands:
       - apk add --no-cache git
-      - npm install
       - ./scripts/set-github-ci.sh
       - ./scripts/deploy-documentation.sh
     environment:

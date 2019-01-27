@@ -5,6 +5,7 @@ set -e
 
 # navigate into the build output directory
 if [[ ! `git diff-index --quiet HEAD docs` ]]; then
+    npm install
     # build the docs
     npm run docs:build
     cd docs/.vuepress/dist
