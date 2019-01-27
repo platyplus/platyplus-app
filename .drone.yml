@@ -10,6 +10,10 @@ steps:
       - npm run docs:build
       - cd docs/.vuepress/dist
       - ls && git commit -m 'deploy'
-      - git push -u origin master
+      - echo ${GH_TOKEN}
+      - git push -f https://plmercereau:${GH_TOKEN}@github.com/platyplus/platyplus.github.io.git master
+    settings:
+      GH_TOKEN:
+        from_secret: GH_TOKEN
     when:
       branch: master
