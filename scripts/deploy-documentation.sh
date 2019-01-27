@@ -24,7 +24,7 @@ npm run docs:build
 cd docs/.vuepress/dist
 git add -A
 
-if [[ ! `git diff-index --quiet HEAD docs/.vuepress/dist` ]]; then
+if [[ ! `git diff-index --quiet HEAD` ]]; then
     # deploy to github pages
     git commit -m 'deploy'
     git push https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
