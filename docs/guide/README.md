@@ -5,7 +5,7 @@
 ### Prerequisites
 
 Docker
-A DNS
+A DNS...
 
 ### Build the docker images
 
