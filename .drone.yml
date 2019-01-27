@@ -12,7 +12,7 @@ steps:
       - ls && git commit -m 'deploy'
       - echo ${GH_TOKEN}
       - git push -f https://plmercereau:${GH_TOKEN}@github.com/platyplus/platyplus.github.io.git master
-    settings:
+    environment:
       GH_TOKEN:
         from_secret: GH_TOKEN
     when:
