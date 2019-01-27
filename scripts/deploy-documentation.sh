@@ -21,16 +21,15 @@ cd -
 # build the docs
 npm run docs:build
 
-# Add created files
+cd docs/.vuepress/dist
 git add -A
 
 if [[ ! `git diff-index --quiet HEAD docs/.vuepress/dist` ]]; then
     # deploy to github pages
-    cd docs/.vuepress/dist
     git commit -m 'deploy'
     git push https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
-    cd -
 else
     echo "no changes"
 fi
+cd -
 
