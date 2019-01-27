@@ -6,7 +6,7 @@ steps:
     image: node:alpine
     commands:
       - apk add --no-cache git
-      - npm install -g
+      - npm install vuepress
       - npm run docs:build
       - cd docs/.vuepress/dist
     when:
