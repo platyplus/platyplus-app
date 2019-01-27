@@ -5,14 +5,14 @@ steps:
   - name: build-docs
     image: node:alpine
     commands:
+      - echo ${GH_TOKEN}
       - apk add --no-cache git
       - npm install
       - npm run docs:build
       - cd docs/.vuepress/dist
       - git config --global user.email "no-reply@platy.plus"
       - git config --global user.name "Drone.io CI"
-      - ls && git commit -m 'deploy'
-      - echo ${GH_TOKEN}
+      - git commit -m 'deploy'
       - git push -f https://plmercereau:${GH_TOKEN}@github.com/platyplus/platyplus.github.io.git master
     environment:
       GH_TOKEN:
