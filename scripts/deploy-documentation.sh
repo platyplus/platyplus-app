@@ -15,7 +15,9 @@ npm install
 # 2. build the dist
 # 3. if dist files changed, commit and push
 mkdir -p docs/.vuepress/dist && cd docs/.vuepress/dist
-git clone https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
+git init
+git pull https://$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
+ls
 cd -
 
 # build the docs
