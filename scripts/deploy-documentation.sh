@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-rm -rf .git
 
 # abort on errors
 set -e
@@ -10,28 +9,14 @@ export npm_config_loglevel=error
 # Install depedencies
 npm install
 
-# TODO: run tests
-# TODO: enable a smart way to deploy:
-# 1. pull/clone the github gh page repo into the ci image
-# 2. build the dist
-# 3. if dist files changed, commit and push
-mkdir -p docs/.vuepress/dist
-echo "*** dist ****"
-cd docs/.vuepress/dist
-ls
-echo "*** init ****"
-git init .
-git remote add origin https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
-git pull origin master
-git branch -a
-echo "*** init done ****"
-ls -a
-cd -
-
 # build the docs
 npm run docs:build
 
 cd docs/.vuepress/dist
+git init .
+git remote add origin https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
+git pull origin master
+
 echo "*** pre-add ****"
 ls -a
 git add -A
