@@ -21,7 +21,7 @@ ls
 echo "*** init ****"
 git init
 git remote add origin https://$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
-git pull origin
+git pull origin master
 git branch -a
 echo "*** init done ****"
 ls
