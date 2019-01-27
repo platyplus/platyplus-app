@@ -37,6 +37,8 @@ git add -A
 
 echo "*** diff ****"
 git diff-index HEAD
+echo "*** diff dot ****"
+git diff-index HEAD .
 echo "*** end diff ****"
 if [[ ! `git diff-index --quiet HEAD` ]]; then
     # deploy to github pages
