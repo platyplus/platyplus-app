@@ -43,7 +43,7 @@ echo "*** end diff ****"
 if [[ ! `git diff-index --quiet HEAD` ]]; then
     # deploy to github pages
     git commit -m 'deploy'
-    git push -u origin master
+    git push origin master
 else
     echo "no changes"
 fi
