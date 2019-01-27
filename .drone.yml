@@ -9,5 +9,7 @@ steps:
       - npm install
       - npm run docs:build
       - cd docs/.vuepress/dist
+      - ls && git commit -m 'deploy'
+      - git push -u origin master
     when:
       branch: master
