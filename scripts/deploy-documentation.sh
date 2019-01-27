@@ -16,6 +16,7 @@ npm install
 # 3. if dist files changed, commit and push
 cd docs/.vuepress/dist
 git clone https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
+ls
 cd -
 
 # build the docs
@@ -24,6 +25,7 @@ npm run docs:build
 cd docs/.vuepress/dist
 git add -A
 
+git diff-index HEAD
 if [[ ! `git diff-index --quiet HEAD` ]]; then
     # deploy to github pages
     git commit -m 'deploy'
