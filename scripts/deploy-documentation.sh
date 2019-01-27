@@ -20,7 +20,8 @@ cd docs/.vuepress/dist
 ls
 echo "*** init ****"
 git init
-git pull https://$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
+git remote add origin https://$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
+git pull origin
 git branch -a
 echo "*** init done ****"
 ls
@@ -40,7 +41,7 @@ echo "*** end diff ****"
 if [[ ! `git diff-index --quiet HEAD` ]]; then
     # deploy to github pages
     git commit -m 'deploy'
-    git push https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
+    git push -u origin master
 else
     echo "no changes"
 fi
