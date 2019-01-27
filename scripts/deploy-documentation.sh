@@ -20,12 +20,12 @@ echo "*** dist ****"
 cd docs/.vuepress/dist
 ls
 echo "*** init ****"
-git init
+git init .
 git remote add origin https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
 git pull origin master
 git branch -a
 echo "*** init done ****"
-ls
+ls -a
 cd -
 
 # build the docs
@@ -33,7 +33,7 @@ npm run docs:build
 
 cd docs/.vuepress/dist
 echo "*** pre-add ****"
-ls
+ls -a
 git add -A
 
 echo "*** diff ****"
