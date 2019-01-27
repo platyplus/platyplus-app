@@ -15,12 +15,14 @@ npm install
 # 2. build the dist
 # 3. if dist files changed, commit and push
 mkdir -p docs/.vuepress/dist
+echo "*** dist ****"
 cd docs/.vuepress/dist
 ls
-echo init
+echo "*** init ****"
 git init
 git pull https://$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
 git branch -a
+echo "*** init done ****"
 ls
 cd -
 
@@ -28,17 +30,19 @@ cd -
 npm run docs:build
 
 cd docs/.vuepress/dist
+echo "*** pre-add ****"
+ls
 git add -A
-cd -
 
+echo "*** diff ****"
 git diff-index HEAD
-if [[ ! `git diff-index --quiet HEAD docs/.vuepress/dist` ]]; then
-    cd docs/.vuepress/dist
+echo "*** end diff ****"
+if [[ ! `git diff-index --quiet HEAD` ]]; then
     # deploy to github pages
     git commit -m 'deploy'
     git push https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
-    cd -
 else
     echo "no changes"
 fi
+cd -
 
