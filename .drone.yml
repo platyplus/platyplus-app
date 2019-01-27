@@ -1,0 +1,13 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: build-docs
+    image: node:alpine
+    commands:
+      - apk add --no-cache git
+      - npm install -g
+      - npm run docs:build
+      - cd docs/.vuepress/dist
+    when:
+      branch: master
