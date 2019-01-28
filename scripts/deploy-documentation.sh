@@ -12,8 +12,8 @@ npm install
 npm run docs:build
 
 # Instanciate the original github repo
-mkdir .dist.repo
-cd dist.repo
+mkdir dist-repo
+cd dist-repo
 git init .
 git pull https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
 
