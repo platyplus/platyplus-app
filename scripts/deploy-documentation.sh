@@ -5,32 +5,25 @@ set -e
 
 # change npm verbosity
 export npm_config_loglevel=error
-
 # Install depedencies
 npm install
 
 # build the docs
 npm run docs:build
 
-mkdir docs/.vuepress/dist.repo
-cd docs/.vuepress/dist.repo
+# Instanciate the original github repo
+mkdir .dist.repo
+cd dist.repo
 git init .
-git remote add origin https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
-git pull origin master
-cp -r ../dist/* ./
-echo "*** pre-add ****"
-git add .
-ls -a
+git pull https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
 
-echo "*** diff ****"
-git diff-index HEAD
-echo "*** end diff ****"
-if [[ ! `git diff-index --quiet HEAD` ]]; then
-    # deploy to github pages
-    git commit -m 'deploy'
-    git push origin master
-else
-    echo "no changes"
-fi
+# Copy the built files into the repo
+cp -r ../docs/.vuepress/dist/* ./
+git add .
+
+# TODO: check if any change in the previous commit in the docs directory
+# Deploy to github pages
+git commit -m 'deploy'
+git push https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
 cd -
 
