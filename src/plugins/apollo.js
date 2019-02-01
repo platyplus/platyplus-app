@@ -12,12 +12,8 @@ import { getUserToken } from 'plugins/auth'
 import config from 'clientconfig'
 
 const cache = new InMemoryCache()
-console.error('ERROR???')
 const HTTP_PROTOCOL = config.HTTP_PROTOCOL || process.env.HTTP_PROTOCOL
 const API = config.API || process.env.API
-console.error(API)
-console.error(config)
-console.error(document.cookie)
 console.error(config)
 const resolvers = {
   Mutation: {
@@ -65,8 +61,6 @@ const wsLink = new WebSocketLink({
 })
 
 const authLink = setContext((_, { headers }) => {
-  console.error('AUTH LINK')
-  console.error(config)
   const token = getUserToken()
   // return the headers to the context so httpLink can read them
   return {
