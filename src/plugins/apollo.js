@@ -14,7 +14,9 @@ import config from 'clientconfig'
 const cache = new InMemoryCache()
 const HTTP_PROTOCOL = config.HTTP_PROTOCOL || process.env.HTTP_PROTOCOL
 const API = config.API || process.env.API
-
+console.warn(config)
+console.warn(document.cookie)
+console.warn(config)
 const resolvers = {
   Mutation: {
     // updateProfile (_, { id, token }, { cache }) {
