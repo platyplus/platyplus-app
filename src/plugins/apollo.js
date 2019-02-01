@@ -60,7 +60,6 @@ const wsLink = new WebSocketLink({
 })
 
 const authLink = setContext((_, { headers }) => {
-  console.log('auth link')
   const token = getUserToken()
   // return the headers to the context so httpLink can read them
   return token
