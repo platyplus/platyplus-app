@@ -2,7 +2,7 @@ version: '3.1'
 services:
   reverse-proxy:
     image: traefik # The official Traefik docker image
-    command: --api --docker # Enables the web UI and tells Traefik to listen to docker
+    command: --api --docker --docker.watch=true
     ports:
       - '80:80' # The HTTP port
       - '8080:8080' # The Web UI (enabled by --api)
@@ -16,7 +16,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
   authentication:
-    image: platyplus/authentication
+    image: platyplus/authentication:latest
     restart: always
     labels:
       - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
@@ -41,5 +41,19 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE}'
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256", "key":"${PUBLIC_KEY}"}'
       HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+  app:
+    image: platyplus/platyplus:latest
+    restart: always
+    labels:
+      - 'traefik.backend=nginx'
+      - 'traefik.frontend.rule=Host:app.${DOMAIN}'
+      - 'traefik.port=80'
+      - 'traefik.enable=true'
+    depends_on:
+      - 'authentication'
+    environment:
+      APP_CONF: config={"HTTP_PROTOCOL":"${HTTP_PROTOCOL}", "AUTH_API":"auth.${DOMAIN}", "API":"graphql.${DOMAIN}/v1alpha1/graphql"}
+      AUTH_API: 'auth.${DOMAIN}'
+      API: 'graphql.${DOMAIN}'
 volumes:
   db_data:
