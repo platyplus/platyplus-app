@@ -1,10 +1,8 @@
 # Build stage
 FROM node:10.15.1-alpine as build-stage
 WORKDIR /app
-COPY . .
-RUN yarn
-RUN $(npm bin)/quasar build -m pwa -t mat
-CMD ls .
+COPY . /app
+RUN yarn && $(npm bin)/quasar build -m pwa -t mat
 
 # Production stage
 FROM nginx:1.15.8-alpine as production-stage
