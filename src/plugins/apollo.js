@@ -63,13 +63,15 @@ const wsLink = new WebSocketLink({
 const authLink = setContext((_, { headers }) => {
   const token = getUserToken()
   // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : ''
-      // 'X-Hasura-Access-Key': 'mysecretaccesskey'
+  return token
+    ? {
+      headers: {
+        ...headers,
+        authorization: `Bearer ${token}`
+        // 'X-Hasura-Access-Key': 'mysecretaccesskey'
+      }
     }
-  }
+    : { headers }
 })
 
 // using the ability to split links, you can send data to each link
@@ -109,8 +111,6 @@ export const apolloProvider = new VueApollo({
 })
 
 export default ({ app, Vue }) => {
-  console.error('EEERRROR?')
-  console.error(config)
   Vue.use(VueApollo)
   app.apolloProvider = apolloProvider
 }
