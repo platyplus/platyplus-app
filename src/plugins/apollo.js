@@ -53,7 +53,7 @@ const wsLink = new WebSocketLink({
     reconnect: true,
     connectionParams: {
       headers: {
-        'X-Hasura-Access-Key': 'mysecretaccesskey' // TODO: token
+        ...(getUserToken() ? { authorization: `Bearer ${getUserToken()}` } : {})
       }
     }
   }
@@ -67,7 +67,6 @@ const authLink = setContext((_, { headers }) => {
       headers: {
         ...headers,
         authorization: `Bearer ${token}`
-        // 'X-Hasura-Access-Key': 'mysecretaccesskey'
       }
     }
     : { headers }
