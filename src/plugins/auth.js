@@ -17,10 +17,13 @@ export const signout = async () => {
   localStorage.removeItem('user')
 }
 
-export const getUserId = () => JSON.parse(localStorage.getItem('user'))?.id
+export function getUserId () {
+  return JSON.parse(localStorage.getItem('user'))?.id
+}
 
-export const getUserToken = () =>
-  JSON.parse(localStorage.getItem('user'))?.token
+export function getUserToken () {
+  return JSON.parse(localStorage.getItem('user'))?.token
+}
 
 export const getUser = () => {
   if (!getUserId() || !getUserToken()) return null

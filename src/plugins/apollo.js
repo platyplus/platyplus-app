@@ -59,18 +59,12 @@ const wsLink = new WebSocketLink({
   }
 })
 
-const authLink = setContext((_, { headers }) => {
-  const token = getUserToken()
-  // return the headers to the context so httpLink can read them
-  return token
-    ? {
-      headers: {
-        ...headers,
-        authorization: `Bearer ${token}`
-      }
-    }
-    : { headers }
-})
+const authLink = setContext((_, { headers }) => ({
+  headers: {
+    ...headers,
+    ...(getUserToken() ? { authorization: `Bearer ${getUserToken()}` } : {})
+  }
+}))
 
 // using the ability to split links, you can send data to each link
 // depending on what kind of operation is being sent
