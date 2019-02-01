@@ -19,7 +19,7 @@ steps:
 ---
 kind: pipeline
 name: application
-
+# https://github.com/drone/autoscaler/blob/master/.drone.yml
 steps:
   - name: build-app
     image: plugins/docker
