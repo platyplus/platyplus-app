@@ -24,9 +24,10 @@ steps:
   - name: build-app
     image: plugins/docker
     settings:
+      repo: platyplus/platyplus
+      target: production-stage
+      tags: latest
       username:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
-      repo: platyplus/platyplus
-      tags: latest
