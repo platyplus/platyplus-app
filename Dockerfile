@@ -1,8 +1,10 @@
 # Build stage
 FROM node:10.15.1-alpine as build-stage
 WORKDIR /app
-COPY . /app
-RUN yarn && $(npm bin)/quasar build -m pwa -t mat
+COPY package.json yarn.lock ./
+RUN yarn
+COPY . ./
+RUN $(npm bin)/quasar build -m pwa -t mat
 
 # Production stage
 FROM nginx:1.15.8-alpine as production-stage
