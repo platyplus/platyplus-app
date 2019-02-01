@@ -21,7 +21,6 @@ git pull https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git
 cp -r ../docs/.vuepress/dist/* ./
 git add .
 
-# TODO: check if any change in the previous commit in the docs directory
 # Deploy to github pages
 git commit -m 'deploy'
 git push https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master

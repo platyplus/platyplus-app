@@ -9,8 +9,11 @@ import { setContext } from 'apollo-link-context'
 import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
 import { getUserToken } from 'plugins/auth'
+import config from 'clientconfig'
 
 const cache = new InMemoryCache()
+const HTTP_PROTOCOL = config.HTTP_PROTOCOL || process.env.HTTP_PROTOCOL
+const API = config.API || process.env.API
 
 const resolvers = {
   Mutation: {
@@ -40,13 +43,13 @@ const stateLink = withClientState({
 })
 
 const httpLink = createHttpLink({
-  uri: `${process.env.HTTP_PROTOCOL}://${process.env.API}`,
+  uri: `${HTTP_PROTOCOL}://${API}`,
   fetch: fetch
 })
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://${process.env.API}`,
+  uri: `ws://${API}`,
   options: {
     reconnect: true,
     connectionParams: {

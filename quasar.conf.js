@@ -34,6 +34,7 @@ module.exports = function (ctx) {
         }
         : {
           HTTP_PROTOCOL: JSON.stringify('https'),
+          AUTH_API: JSON.stringify('auth.platyplus.io'),
           API: JSON.stringify('graphql.platyplus.io')
         },
       vueRouterMode: 'history',
@@ -96,7 +97,7 @@ module.exports = function (ctx) {
       ],
       directives: ['Ripple'],
       // Quasar plugins
-      plugins: ['Notify', 'Dialog'],
+      plugins: ['Notify', 'Dialog', 'Cookies'],
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       iconSet: 'fontawesome',
       i18n: 'en-uk' // Quasar language

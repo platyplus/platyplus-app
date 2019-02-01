@@ -1,8 +1,11 @@
 import axios from 'axios'
 import { apolloClient } from 'plugins/apollo'
 import { queryHelper } from 'plugins/hasura'
+import config from 'clientconfig'
+const AUTH_API = config.API || process.env.AUTH_API
+const HTTP_PROTOCOL = config.HTTP_PROTOCOL || process.env.HTTP_PROTOCOL
 
-const AUTH_URL = `${process.env.HTTP_PROTOCOL}://${process.env.AUTH_API}`
+const AUTH_URL = `${HTTP_PROTOCOL}://${AUTH_API}`
 
 export const signin = async (username, password) => {
   const { data } = await axios.post(`${AUTH_URL}/login`, { username, password })

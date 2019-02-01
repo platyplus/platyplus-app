@@ -27,9 +27,9 @@ services:
       NODE_ENV: production
       DATABASE_URL: postgres://postgres:@postgres:5432/postgres
       AUTH_PRIVATE_KEY: '${PRIVATE_KEY}'
-      AUTH_KEY_ID: '${KEY_ID}'
+      AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
   graphql-engine:
-    image: hasura/graphql-engine:v1.0.0-alpha35
+    image: hasura/graphql-engine:v1.0.0-alpha37
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - 'traefik.port=8080'

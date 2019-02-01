@@ -1,5 +1,5 @@
 kind: pipeline
-name: default
+name: documentation
 
 steps:
   - name: build-docs
@@ -15,3 +15,18 @@ steps:
         from_secret: GH_USER
     when:
       branch: master
+
+---
+kind: pipeline
+name: application
+
+steps:
+  - name: build-app
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DH_USER
+      password:
+        from_secret: DH_PASSWORD
+      repo: platyplus/platyplus
+      tags: latest
