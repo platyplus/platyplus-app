@@ -14,7 +14,6 @@ import config from 'clientconfig'
 const cache = new InMemoryCache()
 const HTTP_PROTOCOL = config.HTTP_PROTOCOL || process.env.HTTP_PROTOCOL
 const API = config.API || process.env.API
-console.error(config)
 const resolvers = {
   Mutation: {
     // updateProfile (_, { id, token }, { cache }) {
@@ -61,6 +60,7 @@ const wsLink = new WebSocketLink({
 })
 
 const authLink = setContext((_, { headers }) => {
+  console.log('auth link')
   const token = getUserToken()
   // return the headers to the context so httpLink can read them
   return token

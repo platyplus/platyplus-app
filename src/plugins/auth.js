@@ -13,6 +13,7 @@ export const signin = async (username, password) => {
 }
 
 export const signout = async () => {
+  apolloClient.resetStore()
   localStorage.removeItem('user')
 }
 
@@ -21,15 +22,20 @@ export const getUserId = () => JSON.parse(localStorage.getItem('user'))?.id
 export const getUserToken = () =>
   JSON.parse(localStorage.getItem('user'))?.token
 
-export const getUser = () =>
-  apolloClient.readQuery({
-    query: queryHelper({ table: 'user', fragment: 'full' }),
-    variables: {
-      where: { id: { _eq: getUserId() } }
-    }
-  }).user[0]
+export const getUser = () => {
+  if (!getUserId() || !getUserToken()) return null
+  else {
+    return apolloClient.readQuery({
+      query: queryHelper({ table: 'user', fragment: 'full' }),
+      variables: {
+        where: { id: { _eq: getUserId() } }
+      }
+    }).user[0]
+  }
+}
 
 export const loadUser = async () => {
+  if (!getUserId() || !getUserToken()) return null
   const { data } = await apolloClient.query({
     query: queryHelper({ table: 'user', fragment: 'full' }),
     variables: {
