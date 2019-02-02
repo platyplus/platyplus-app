@@ -22,8 +22,7 @@ export function getUserId () {
 }
 
 export function getUserToken () {
-  console.log('get user token')
-  console.log(JSON.parse(localStorage.getItem('user')))
+  console.log(JSON.parse(localStorage.getItem('user'))?.token)
   return JSON.parse(localStorage.getItem('user'))?.token
 }
 
