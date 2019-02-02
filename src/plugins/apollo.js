@@ -45,7 +45,10 @@ const httpLink = createHttpLink({
   uri: `${HTTP_PROTOCOL}://${API}`,
   fetch: fetch
 })
+
+// TODO: remove
 console.log(API)
+console.log(document.cookie)
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
   uri: `ws://${API}`,
