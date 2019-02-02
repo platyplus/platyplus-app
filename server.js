@@ -7,7 +7,7 @@ const path = require('path'),
 const app = express()
 
 app.use(history())
-app.use(serveStatic(path.join(__dirname, '/dist/spa-mat')))
+app.use(serveStatic(path.join(__dirname, '/dist/pwa-mat')))
 app.use(function (req, res, next) {
   res.setHeader('Set-Cookie', process.env.APP_CONF)
   next()
