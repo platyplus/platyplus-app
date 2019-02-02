@@ -11,7 +11,8 @@ app.use(history())
 app.use(compression())
 app.get('/', function (req, res) {
   console.log(process.env.APP_CONF)
-  res.send(process.env.APP_CONF)
+  const { config } = JSON.parse(process.env.APP_CONF)
+  res.send(config)
 })
 app.use(serveStatic(path.join(__dirname, '/pwa-mat')))
 // app.get(function (req, res, next) {
