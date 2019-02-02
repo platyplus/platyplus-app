@@ -57,11 +57,12 @@ const authHeaders = () => {
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
   uri: `ws://${config.API}`,
-  reconnect: true,
   options: {
+    lazy: true,
     reconnect: true,
     connectionParams: () => ({
-      headers: authHeaders()
+      headers: authHeaders(),
+      ...authHeaders()
     })
   }
 })
