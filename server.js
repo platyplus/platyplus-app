@@ -9,7 +9,7 @@ const app = express()
 
 app.use(history())
 app.use(compression())
-app.get('/', function (req, res) {
+app.get('/config', function (req, res) {
   console.log(process.env.APP_CONF)
   const { config } = JSON.parse(process.env.APP_CONF)
   res.send(config)
