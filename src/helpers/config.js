@@ -16,7 +16,7 @@ export function getConfig () {
         AUTH_API: process.env.AUTH_API
       }
     }
-    localStorage.setItem('config', conf)
-  }
+    localStorage.setItem('config', JSON.stringify(conf))
+  } else conf = JSON.parse(conf)
   return conf
 }

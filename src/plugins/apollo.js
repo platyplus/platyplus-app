@@ -14,7 +14,6 @@ import { getConfig } from '../helpers/config'
 const cache = new InMemoryCache()
 
 const config = getConfig()
-console.log(window.location)
 const resolvers = {
   Mutation: {
     // updateProfile (_, { id, token }, { cache }) {
