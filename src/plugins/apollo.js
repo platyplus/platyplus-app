@@ -9,9 +9,30 @@ import { setContext } from 'apollo-link-context'
 import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
 import { getUserToken } from 'plugins/auth'
-import config from 'clientconfig'
 
 const cache = new InMemoryCache()
+// TODO: remove
+async function getConfig () {
+  if (process.env.PROD) {
+    var xhr = new XMLHttpRequest()
+    // xhr.open('GET', `${window.location.origin}/config`, true)
+    xhr.open('GET', `${window.location.origin}/config`, false)
+    xhr.send()
+    if (xhr.status === 200) {
+      return JSON.parse(xhr.response)
+    } else {
+      console.error(xhr)
+    }
+  } else {
+    return {
+      HTTP_PROTOCOL: process.env.HTTP_PROTOCOL,
+      API: process.env.API,
+      AUTH_API: process.env.AUTH_API
+    }
+  }
+}
+const config = getConfig()
+console.log(config)
 const HTTP_PROTOCOL = config.HTTP_PROTOCOL || process.env.HTTP_PROTOCOL
 const API = config.API || process.env.API
 const resolvers = {
@@ -46,26 +67,30 @@ const httpLink = createHttpLink({
   fetch: fetch
 })
 
-// TODO: remove
-console.log(API)
-console.log(document.cookie)
+const authHeaders = () => {
+  const token = getUserToken()
+  if (token) {
+    return {
+      Authorization: `Bearer ${token}`
+    }
+  } else return {}
+}
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
   uri: `ws://${API}`,
+  reconnect: true,
   options: {
     reconnect: true,
-    connectionParams: {
-      headers: {
-        ...(getUserToken() ? { authorization: `Bearer ${getUserToken()}` } : {})
-      }
-    }
+    connectionParams: () => ({
+      headers: authHeaders()
+    })
   }
 })
 
 const authLink = setContext((_, { headers }) => ({
   headers: {
     ...headers,
-    ...(getUserToken() ? { authorization: `Bearer ${getUserToken()}` } : {})
+    ...authHeaders()
   }
 }))
 
