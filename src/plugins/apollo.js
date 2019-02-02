@@ -45,7 +45,7 @@ const httpLink = createHttpLink({
   uri: `${HTTP_PROTOCOL}://${API}`,
   fetch: fetch
 })
-
+console.log(API)
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
   uri: `ws://${API}`,
