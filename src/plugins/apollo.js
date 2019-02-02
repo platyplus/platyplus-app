@@ -13,25 +13,37 @@ import { getUserToken } from 'plugins/auth'
 const cache = new InMemoryCache()
 
 function getConfig () {
-  if (process.env.PROD) {
-    var xhr = new XMLHttpRequest()
-    console.log(`${window.location.origin}/config`)
-    // xhr.open('GET', `${window.location.origin}/config`, true)
-    xhr.open('GET', `${window.location.origin}/config`, false)
-    xhr.send()
-    console.log(xhr)
-    if (xhr.status === 200) {
-      return JSON.parse(xhr.response)
+  // TODO: store and get in localstorage
+  localStorage.removeItem('config')
+  let conf = localStorage.getItem('config')
+  console.log(`initial config ${JSON.stringify(conf)}`)
+  if (!conf) {
+    if (process.env.PROD) {
+      var xhr = new XMLHttpRequest()
+      console.log(`${window.location.origin}/config`)
+      // xhr.open('GET', `${window.location.origin}/config`, true)
+      xhr.open('GET', `${window.location.origin}/config`, false)
+      xhr.send()
+      console.log(xhr)
+      if (xhr.status === 200) {
+        conf = JSON.parse(xhr.response)
+      } else {
+        console.error(xhr)
+      }
     } else {
-      console.error(xhr)
+      console.log(process.env)
+      conf = {
+        HTTP_PROTOCOL: process.env.HTTP_PROTOCOL,
+        API: process.env.API,
+        AUTH_API: process.env.AUTH_API
+      }
+      console.log(conf.API)
     }
-  } else {
-    return {
-      HTTP_PROTOCOL: process.env.HTTP_PROTOCOL,
-      API: process.env.API,
-      AUTH_API: process.env.AUTH_API
-    }
+    localStorage.setItem('config', conf)
   }
+  console.log(conf)
+  console.log(conf.API)
+  return conf
 }
 const config = getConfig()
 console.log(config)
