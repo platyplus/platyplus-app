@@ -9,6 +9,6 @@ RUN $(npm bin)/quasar build -m pwa -t mat
 FROM node:10.15.1-alpine as production-stage
 WORKDIR /app
 COPY --from=build-stage /app/dist /app/server.js ./
-RUN yarn add express serve-static connect-history-api-fallback
+RUN yarn add express serve-static connect-history-api-fallback compression
 EXPOSE 80
 CMD ["node", "server.js"]
