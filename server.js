@@ -7,6 +7,11 @@ const path = require('path'),
 
 const app = express()
 
+app.get('/config', function (req, res) {
+  console.log(process.env.APP_CONF)
+  const { config } = JSON.parse(process.env.APP_CONF)
+  res.send(config)
+})
 app.use(history())
 app.use(compression())
 app.use(serveStatic(path.join(__dirname, '/pwa-mat')))
@@ -14,10 +19,5 @@ app.use(serveStatic(path.join(__dirname, '/pwa-mat')))
 //   res.setHeader('Set-Cookie', process.env.APP_CONF)
 //   next()
 // })
-app.get('/config', function (req, res) {
-  console.log(process.env.APP_CONF)
-  const { config } = JSON.parse(process.env.APP_CONF)
-  res.send(config)
-})
 app.listen(port)
 console.log(`Server running on port ${port}`)
