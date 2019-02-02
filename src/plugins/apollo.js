@@ -15,9 +15,11 @@ const cache = new InMemoryCache()
 async function getConfig () {
   if (process.env.PROD) {
     var xhr = new XMLHttpRequest()
+    console.log(`${window.location.origin}/config`)
     // xhr.open('GET', `${window.location.origin}/config`, true)
     xhr.open('GET', `${window.location.origin}/config`, false)
     xhr.send()
+    console.log(xhr)
     if (xhr.status === 200) {
       return JSON.parse(xhr.response)
     } else {
