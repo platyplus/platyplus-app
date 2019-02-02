@@ -8,19 +8,13 @@ const path = require('path'),
 const app = express()
 
 app.get('/config', function (req, res) {
-  console.log(process.env.API)
   res.send({
     API: process.env.API,
-    AUTH_API: process.env.AUTH_API,
-    HTTP_PROTOCOL: process.env.HTTP_PROTOCOL
+    AUTH_API: process.env.AUTH_API
   })
 })
 app.use(history())
 app.use(compression())
 app.use(serveStatic(path.join(__dirname, '/pwa-mat')))
-// app.get(function (req, res, next) {
-//   res.setHeader('Set-Cookie', process.env.APP_CONF)
-//   next()
-// })
 app.listen(port)
 console.log(`Server running on port ${port}`)

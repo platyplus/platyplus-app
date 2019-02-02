@@ -9,45 +9,12 @@ import { setContext } from 'apollo-link-context'
 import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
 import { getUserToken } from 'plugins/auth'
+import { getConfig } from '../helpers/config'
 
 const cache = new InMemoryCache()
 
-function getConfig () {
-  // TODO: store and get in localstorage
-  localStorage.removeItem('config')
-  let conf = localStorage.getItem('config')
-  console.log(`initial config ${JSON.stringify(conf)}`)
-  if (!conf) {
-    if (process.env.PROD) {
-      var xhr = new XMLHttpRequest()
-      console.log(`${window.location.origin}/config`)
-      // xhr.open('GET', `${window.location.origin}/config`, true)
-      xhr.open('GET', `${window.location.origin}/config`, false)
-      xhr.send()
-      console.log(xhr)
-      if (xhr.status === 200) {
-        conf = JSON.parse(xhr.response)
-      } else {
-        console.error(xhr)
-      }
-    } else {
-      console.log(process.env)
-      conf = {
-        HTTP_PROTOCOL: process.env.HTTP_PROTOCOL,
-        API: process.env.API,
-        AUTH_API: process.env.AUTH_API
-      }
-      console.log(conf.API)
-    }
-    localStorage.setItem('config', conf)
-  }
-  console.log(conf)
-  console.log(conf.API)
-  return conf
-}
 const config = getConfig()
-console.log(config)
-
+console.log(window.location)
 const resolvers = {
   Mutation: {
     // updateProfile (_, { id, token }, { cache }) {
@@ -76,7 +43,7 @@ const stateLink = withClientState({
 })
 
 const httpLink = createHttpLink({
-  uri: `${config.HTTP_PROTOCOL}://${config.API}`,
+  uri: `${window.location.protocol}//${config.API}`,
   fetch: fetch
 })
 
