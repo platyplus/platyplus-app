@@ -8,9 +8,12 @@ const path = require('path'),
 const app = express()
 
 app.get('/config', function (req, res) {
-  console.log(process.env.APP_CONF)
-  const { config } = JSON.parse(process.env.APP_CONF)
-  res.send(config)
+  console.log(process.env.API)
+  res.send({
+    API: process.env.API,
+    AUTH_API: process.env.AUTH_API,
+    HTTP_PROTOCOL: process.env.HTTP_PROTOCOL
+  })
 })
 app.use(history())
 app.use(compression())

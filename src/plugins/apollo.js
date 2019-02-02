@@ -11,8 +11,8 @@ import { split } from 'apollo-link'
 import { getUserToken } from 'plugins/auth'
 
 const cache = new InMemoryCache()
-// TODO: remove
-async function getConfig () {
+
+function getConfig () {
   if (process.env.PROD) {
     var xhr = new XMLHttpRequest()
     console.log(`${window.location.origin}/config`)
@@ -35,8 +35,7 @@ async function getConfig () {
 }
 const config = getConfig()
 console.log(config)
-const HTTP_PROTOCOL = config.HTTP_PROTOCOL || process.env.HTTP_PROTOCOL
-const API = config.API || process.env.API
+
 const resolvers = {
   Mutation: {
     // updateProfile (_, { id, token }, { cache }) {
@@ -65,7 +64,7 @@ const stateLink = withClientState({
 })
 
 const httpLink = createHttpLink({
-  uri: `${HTTP_PROTOCOL}://${API}`,
+  uri: `${config.HTTP_PROTOCOL}://${config.API}`,
   fetch: fetch
 })
 
@@ -79,7 +78,7 @@ const authHeaders = () => {
 }
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://${API}`,
+  uri: `ws://${config.API}`,
   reconnect: true,
   options: {
     reconnect: true,
