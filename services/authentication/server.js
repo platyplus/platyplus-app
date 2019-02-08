@@ -34,6 +34,7 @@ const SIGNUP = `
 const ME = `
   query me($id: uuid) {
     user(where: { id: { _eq: $id } }) {
+      id
       username
     }
   }
@@ -51,6 +52,7 @@ const typeDefs = gql`
     token: String
   }
   type User {
+    id: ID
     username: String
   }
 `
@@ -117,7 +119,7 @@ const resolvers = {
           privateKey,
           { algorithm }
         )
-        return { token }
+        return { id: user.id, token }
       } else {
         throw new Error('Invalid password.')
       }

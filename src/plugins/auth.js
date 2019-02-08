@@ -16,8 +16,8 @@ export const signin = async (username, password) => {
       password
     }
   })
-  console.log(data)
-  localStorage.setItem('user', JSON.stringify(data))
+  console.log(data.login)
+  localStorage.setItem('user', JSON.stringify(data.login))
 }
 
 export const signout = async () => {
