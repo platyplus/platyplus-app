@@ -49,7 +49,6 @@ const typeDefs = gql`
     login(username: String, password: String): AuthPayload!
   }
   type AuthPayload {
-    id: ID
     token: String
   }
   type User {
@@ -96,7 +95,7 @@ const resolvers = {
         { algorithm }
       )
 
-      return { id: user.id, token }
+      return { token }
     },
     login: async (_, { username, password }) => {
       const user = await graphql
@@ -120,7 +119,7 @@ const resolvers = {
           privateKey,
           { algorithm }
         )
-        return { id: user.id, token }
+        return { token }
       } else {
         throw new Error('Invalid password.')
       }

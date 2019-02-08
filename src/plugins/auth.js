@@ -1,8 +1,7 @@
 import gql from 'graphql-tag'
 import { apolloClient } from 'plugins/apollo'
-import { queryHelper } from 'plugins/hasura'
-
 export const signin = async (username, password) => {
+  console.log(username)
   const { data } = await apolloClient.mutate({
     mutation: gql`
       mutation($username: String!, $password: String!) {
@@ -17,50 +16,56 @@ export const signin = async (username, password) => {
     }
   })
   console.log(data.login)
-  localStorage.setItem('user', JSON.stringify(data.login))
+  localStorage.setItem('token', data.login.token)
 }
 
 export const signout = async () => {
   apolloClient.resetStore()
-  localStorage.removeItem('user')
-}
-
-export function getUserId () {
-  return JSON.parse(localStorage.getItem('user'))?.id
+  localStorage.removeItem('token')
 }
 
 export function getUserToken () {
-  return JSON.parse(localStorage.getItem('user'))?.token
+  console.log(localStorage.getItem('token'))
+  return localStorage.getItem('token')
 }
 
 export const getUser = () => {
-  if (!getUserId() || !getUserToken()) return null
+  if (!getUserToken()) return null
   else {
     return apolloClient.readQuery({
-      query: queryHelper({ table: 'user', fragment: 'full' }),
-      variables: {
-        where: { id: { _eq: getUserId() } }
-      }
-    }).user[0]
+      // TODO: fragment
+      query: gql`
+        me {
+          id
+          username
+        }
+      `
+    })
   }
 }
 
 export const loadUser = async () => {
-  if (!getUserId() || !getUserToken()) return null
-  const { data } = await apolloClient.query({
-    query: queryHelper({ table: 'user', fragment: 'full' }),
-    variables: {
-      where: { id: { _eq: getUserId() } }
-    }
-  })
-  return data.user[0]
+  if (!getUserToken()) return null
+  else {
+    const { data } = await apolloClient.query({
+      // TODO: fragment
+      query: gql`
+        me {
+          id
+          username
+        }
+      `
+    })
+    console.log(data)
+    return data
+  }
 }
 
 export default ({ app, router, store, Vue }) => {
   Vue.mixin({
     computed: {
       authenticated () {
-        return Boolean(getUserId())
+        return Boolean(getUserToken())
       },
       anonymous () {
         return !this.authenticated
