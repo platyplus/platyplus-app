@@ -21,3 +21,9 @@ Docker
 ### Set the environment variables
 
 ### Install the stack
+
+In developpment mode:
+
+```
+docker stack deploy --compose-file docker-compose.yml --compose-file docker-compose-dev.yml platyplus
+```

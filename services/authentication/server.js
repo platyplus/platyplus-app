@@ -12,17 +12,24 @@ const graphql = new GraphQLClient(process.env.HASURA_URL, {
 })
 
 const LOGIN = gql`
-  query user($email: String) {
-    user(where: { email: { _eq: $email } }) {
+  query user($username: String) {
+    user(where: { username: { _eq: $username } }) {
       id
       password
+      roles {
+        id
+        role {
+          id
+          name
+        }
+      }
     }
   }
 `
 
 const SIGNUP = gql`
-  mutation signup($email: String, $password: String) {
-    insert_user(objects: [{ email: $email, password: $password }]) {
+  mutation signup($username: String, $password: String) {
+    insert_user(objects: [{ username: $username, password: $password }]) {
       returning {
         id
       }
@@ -33,7 +40,7 @@ const SIGNUP = gql`
 const ME = gql`
   query me($id: uuid) {
     user(where: { id: { _eq: $id } }) {
-      email
+      username
     }
   }
 `
@@ -43,14 +50,14 @@ const typeDefs = gql`
     me: User!
   }
   type Mutation {
-    signup(email: String, password: String): AuthPayload!
-    login(email: String, password: String): AuthPayload!
+    signup(username: String, password: String): AuthPayload!
+    login(username: String, password: String): AuthPayload!
   }
   type AuthPayload {
     token: String
   }
   type User {
-    email: String
+    username: String
   }
 `
 
@@ -63,9 +70,7 @@ const resolvers = {
         const verifiedToken = jwt.verify(token, jwtKey)
         const user = await graphql
           .request(ME, { id: verifiedToken.userId })
-          .then(data => {
-            return data.user[0]
-          })
+          .then(data => data.user[0])
         return { ...user }
       } else {
         throw new Error('Not logged in.')
@@ -73,13 +78,11 @@ const resolvers = {
     }
   },
   Mutation: {
-    signup: async (_, { email, password }) => {
+    signup: async (_, { username, password }) => {
       const hashedPassword = await bcrypt.hash(password, 10)
       const user = await graphql
-        .request(SIGNUP, { email, password: hashedPassword })
-        .then(data => {
-          return data.insert_user.returning[0]
-        })
+        .request(SIGNUP, { username, password: hashedPassword })
+        .then(data => data.insert_user.returning[0])
 
       const token = jwt.sign(
         {
@@ -95,10 +98,10 @@ const resolvers = {
 
       return { token }
     },
-    login: async (_, { email, password }) => {
-      const user = await graphql.request(LOGIN, { email }).then(data => {
-        return data.user[0]
-      })
+    login: async (_, { username, password }) => {
+      const user = await graphql
+        .request(LOGIN, { username })
+        .then(data => data.user[0])
 
       if (!user) throw new Error('No such user found.')
 

@@ -1,7 +1,7 @@
 FROM node:11-alpine
 WORKDIR /root/app
 COPY package.json yarn.lock ./
-RUN npm install --only=production
+RUN yarn
 COPY server.js .
 EXPOSE 8080
 CMD yarn run start

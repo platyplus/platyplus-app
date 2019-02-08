@@ -6,7 +6,6 @@ services:
     command:
       - '--api'
       - '--docker'
-      - '--docker.watch'
     ports:
       - '80:80' # The HTTP port
     volumes:
@@ -19,22 +18,21 @@ services:
   authentication:
     image: platyplus/authentication
     restart: always
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
-      - 'traefik.port=8080'
+    #labels:
+    #  - 'traefik.enable=true'
+    #  - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
+    #  - 'traefik.port=8080'
     depends_on:
       - 'postgres'
     environment:
       AUTH_PRIVATE_KEY: '${PRIVATE_KEY}'
       #AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
       HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
-      HASURA_URL: 'http://graphql.${DOMAIN}/v1alpha1/graphql'
-graphql-engine:
+      HASURA_URL: 'http://graphql:8080/v1alpha1/graphql'
+  graphql-engine:
     image: hasura/graphql-engine:v1.0.0-alpha37
     restart: always
     labels:
-      - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - 'traefik.port=8080'
     depends_on:
@@ -48,14 +46,13 @@ graphql-engine:
     image: platyplus/platyplus
     restart: always
     labels:
-      - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - 'traefik.port=80'
     depends_on:
       - 'authentication'
       - 'graphql-engine'
     environment:
-      AUTH_API: 'auth.${DOMAIN}'
+      #AUTH_API: 'auth.${DOMAIN}'
       API: 'graphql.${DOMAIN}/v1alpha1/graphql'
 volumes:
   db_data:
