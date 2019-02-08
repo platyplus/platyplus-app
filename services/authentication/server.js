@@ -96,15 +96,19 @@ const resolvers = {
       return { token }
     },
     login: async (_, { username, password }) => {
+      console.log('login...')
       const user = await graphql
         .request(LOGIN, { username })
         .then(data => data.user[0])
 
+      console.log('request done')
       if (!user) throw new Error('No such user found.')
 
+      console.log('user found')
       const valid = await bcrypt.compare(password, user.password)
 
       if (valid) {
+        console.log('valid auth')
         const token = jwt.sign(
           {
             userId: user.id,
@@ -117,6 +121,7 @@ const resolvers = {
           key,
           { algorithm }
         )
+        console.log(token)
 
         return { token }
       } else {
