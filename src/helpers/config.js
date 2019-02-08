@@ -12,8 +12,7 @@ export function getConfig () {
       }
     } else {
       conf = {
-        API: process.env.API,
-        AUTH_API: process.env.AUTH_API
+        API: process.env.API
       }
     }
     localStorage.setItem('config', JSON.stringify(conf))

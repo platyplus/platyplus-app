@@ -2,8 +2,9 @@ const { ApolloServer, gql } = require('apollo-server')
 const { GraphQLClient } = require('graphql-request')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-
-const jwtKey = process.env.AUTH_PRIVATE_KEY.replace(/\\n/g, '\n')
+const jwtConfig = JSON.parse(process.env.HASURA_GRAPHQL_JWT_SECRET)
+const key = jwtConfig.key.replace(/\\n/g, '\n')
+const algorithm = jwtConfig.type
 
 const graphql = new GraphQLClient(process.env.HASURA_URL, {
   headers: {
@@ -60,8 +61,8 @@ const resolvers = {
       const Authorization = req.headers.authorization
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '')
-        const verifiedToken = jwt.verify(token, jwtKey, {
-          algorithms: ['RS256']
+        const verifiedToken = jwt.verify(token, key, {
+          algorithms: [algorithm]
         })
         const user = await graphql
           .request(ME, { id: verifiedToken.userId })
@@ -88,10 +89,8 @@ const resolvers = {
             'x-hasura-user-id': user.id
           }
         },
-        jwtKey,
-        {
-          algorithm: 'RS256'
-        }
+        key,
+        { algorithm }
       )
 
       return { token }
@@ -115,10 +114,8 @@ const resolvers = {
               'x-hasura-user-id': user.id
             }
           },
-          jwtKey,
-          {
-            algorithm: 'RS256'
-          }
+          key,
+          { algorithm }
         )
 
         return { token }

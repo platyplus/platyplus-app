@@ -1,13 +1,22 @@
-import axios from 'axios'
+import gql from 'graphql-tag'
 import { apolloClient } from 'plugins/apollo'
 import { queryHelper } from 'plugins/hasura'
-import { getConfig } from '../helpers/config'
-
-const AUTH_API = getConfig().AUTH_API
-const AUTH_URL = `${window.location.protocol}//${AUTH_API}`
 
 export const signin = async (username, password) => {
-  const { data } = await axios.post(`${AUTH_URL}/login`, { username, password })
+  const { data } = await apolloClient.mutate({
+    mutation: gql`
+      mutation($email: String!, $password: String!) {
+        signin(email: $email, password: $password) {
+          token
+        }
+      }
+    `,
+    variables: {
+      username,
+      password
+    }
+  })
+  console.log(data)
   localStorage.setItem('user', JSON.stringify(data))
 }
 

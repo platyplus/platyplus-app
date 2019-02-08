@@ -9,8 +9,7 @@ const app = express()
 
 app.get('/config', function (req, res) {
   res.send({
-    API: process.env.API,
-    AUTH_API: process.env.AUTH_API
+    API: process.env.API
   })
 })
 app.use(history())

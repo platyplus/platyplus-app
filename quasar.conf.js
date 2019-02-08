@@ -28,13 +28,9 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       env: ctx.dev
         ? {
-          HTTP_PROTOCOL: JSON.stringify('http'),
-          AUTH_API: JSON.stringify('auth.localhost'),
           API: JSON.stringify('graphql.localhost/v1alpha1/graphql')
         }
         : {
-          HTTP_PROTOCOL: JSON.stringify('https'),
-          AUTH_API: JSON.stringify('auth.platyplus.io'),
           API: JSON.stringify('graphql.platyplus.io')
         },
       vueRouterMode: 'history',
