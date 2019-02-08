@@ -60,7 +60,9 @@ const resolvers = {
       const Authorization = req.headers.authorization
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '')
-        const verifiedToken = jwt.verify(token, jwtKey)
+        const verifiedToken = jwt.verify(token, jwtKey, {
+          algorithms: ['RS256']
+        })
         const user = await graphql
           .request(ME, { id: verifiedToken.userId })
           .then(data => data.user[0])
@@ -86,7 +88,10 @@ const resolvers = {
             'x-hasura-user-id': user.id
           }
         },
-        jwtKey
+        jwtKey,
+        {
+          algorithm: 'RS256'
+        }
       )
 
       return { token }
@@ -110,7 +115,10 @@ const resolvers = {
               'x-hasura-user-id': user.id
             }
           },
-          jwtKey
+          jwtKey,
+          {
+            algorithm: 'RS256'
+          }
         )
 
         return { token }
