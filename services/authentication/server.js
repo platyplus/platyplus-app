@@ -2,10 +2,9 @@ const { ApolloServer, gql } = require('apollo-server')
 const { GraphQLClient } = require('graphql-request')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const jwtConfig = JSON.parse(process.env.HASURA_GRAPHQL_JWT_SECRET)
-const key = jwtConfig.key.replace(/\\n/g, '\n')
-const privateKey = jwtConfig.secret.replace(/\\n/g, '\n')
-const algorithm = jwtConfig.type
+const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n')
+const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n')
+const algorithm = process.env.ALGORITHM
 
 const graphql = new GraphQLClient(process.env.HASURA_URL, {
   headers: {
@@ -62,7 +61,7 @@ const resolvers = {
       const Authorization = req.headers.authorization
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '')
-        const verifiedToken = jwt.verify(token, key, {
+        const verifiedToken = jwt.verify(token, publicKey, {
           algorithms: [algorithm]
         })
         const user = await graphql
@@ -97,21 +96,15 @@ const resolvers = {
       return { token }
     },
     login: async (_, { username, password }) => {
-      console.log('login...')
       const user = await graphql
         .request(LOGIN, { username })
         .then(data => data.user[0])
 
-      console.log('request done')
       if (!user) throw new Error('No such user found.')
 
-      console.log('user found')
       const valid = await bcrypt.compare(password, user.password)
 
       if (valid) {
-        console.log('valid auth')
-        console.log(key)
-        console.log(privateKey)
         const token = jwt.sign(
           {
             userId: user.id,
@@ -124,8 +117,6 @@ const resolvers = {
           privateKey,
           { algorithm }
         )
-        console.log(token)
-
         return { token }
       } else {
         throw new Error('Invalid password.')
