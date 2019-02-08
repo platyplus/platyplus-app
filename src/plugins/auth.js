@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { apolloClient } from 'plugins/apollo'
+import { fragments } from 'plugins/platyplus/config/user'
 export const signin = async (username, password) => {
-  console.log(username)
   const { data } = await apolloClient.mutate({
     mutation: gql`
       mutation($username: String!, $password: String!) {
@@ -15,9 +15,18 @@ export const signin = async (username, password) => {
       password
     }
   })
-  console.log(data.login)
   localStorage.setItem('token', data.login.token)
 }
+
+// TODO: fragment
+const ME = gql`
+  query {
+    me {
+      ...user_full
+    }
+  }
+  ${fragments.full}
+`
 
 export const signout = async () => {
   apolloClient.resetStore()
@@ -25,22 +34,13 @@ export const signout = async () => {
 }
 
 export function getUserToken () {
-  console.log(localStorage.getItem('token'))
   return localStorage.getItem('token')
 }
 
 export const getUser = () => {
   if (!getUserToken()) return null
   else {
-    return apolloClient.readQuery({
-      // TODO: fragment
-      query: gql`
-        me {
-          id
-          username
-        }
-      `
-    })
+    return apolloClient.readQuery({ query: ME }).me
   }
 }
 
@@ -48,16 +48,9 @@ export const loadUser = async () => {
   if (!getUserToken()) return null
   else {
     const { data } = await apolloClient.query({
-      // TODO: fragment
-      query: gql`
-        me {
-          id
-          username
-        }
-      `
+      query: ME
     })
-    console.log(data)
-    return data
+    return data.me
   }
 }
 
