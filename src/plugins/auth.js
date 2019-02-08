@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import { apolloClient } from 'plugins/apollo'
-import { fragments } from 'plugins/platyplus/config/user'
+import { queryHelper } from 'plugins/hasura'
 export const signin = async (username, password) => {
   const { data } = await apolloClient.mutate({
     mutation: gql`
@@ -18,14 +18,13 @@ export const signin = async (username, password) => {
   localStorage.setItem('token', data.login.token)
 }
 
-// TODO: fragment
 const ME = gql`
   query {
     me {
-      ...user_full
+      id
+      username
     }
   }
-  ${fragments.full}
 `
 
 export const signout = async () => {
@@ -40,7 +39,13 @@ export function getUserToken () {
 export const getUser = () => {
   if (!getUserToken()) return null
   else {
-    return apolloClient.readQuery({ query: ME }).me
+    const id = apolloClient.readQuery({ query: ME }).me?.id
+    return apolloClient.readQuery({
+      query: queryHelper({ table: 'user', fragment: 'full' }),
+      variables: {
+        where: { id: { _eq: id } }
+      }
+    }).user[0]
   }
 }
 
@@ -50,7 +55,14 @@ export const loadUser = async () => {
     const { data } = await apolloClient.query({
       query: ME
     })
-    return data.me
+    const id = data.me?.id
+    const query = await apolloClient.query({
+      query: queryHelper({ table: 'user', fragment: 'full' }),
+      variables: {
+        where: { id: { _eq: id } }
+      }
+    })
+    return query.data.user[0]
   }
 }
 
