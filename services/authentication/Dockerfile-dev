@@ -1,0 +1,5 @@
+FROM node:11-alpine
+WORKDIR /root/app
+RUN yarn install
+EXPOSE 8080
+CMD yarn run dev
