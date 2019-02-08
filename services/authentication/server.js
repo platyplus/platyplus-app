@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const jwtConfig = JSON.parse(process.env.HASURA_GRAPHQL_JWT_SECRET)
 const key = jwtConfig.key.replace(/\\n/g, '\n')
+const privateKey = jwtConfig.secret.replace(/\\n/g, '\n')
 const algorithm = jwtConfig.type
 
 const graphql = new GraphQLClient(process.env.HASURA_URL, {
@@ -89,7 +90,7 @@ const resolvers = {
             'x-hasura-user-id': user.id
           }
         },
-        jwtConfig.key,
+        privateKey,
         { algorithm }
       )
 
@@ -110,7 +111,7 @@ const resolvers = {
       if (valid) {
         console.log('valid auth')
         console.log(key)
-        console.log(jwtConfig.key)
+        console.log(privateKey)
         const token = jwt.sign(
           {
             userId: user.id,
@@ -120,7 +121,7 @@ const resolvers = {
               'x-hasura-user-id': user.id
             }
           },
-          jwtConfig.key,
+          privateKey,
           { algorithm }
         )
         console.log(token)
