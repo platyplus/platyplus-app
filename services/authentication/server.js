@@ -17,6 +17,11 @@ const LOGIN = `
     user(where: { username: { _eq: $username } }) {
       id
       password
+      roles {
+        role {
+          name
+        }
+      }  
     }
   }
 `
@@ -98,6 +103,7 @@ const resolvers = {
 
       return { id: user.id, token }
     },
+    // TODO: test if active user
     login: async (_, { username, password }) => {
       const user = await graphql
         .request(LOGIN, { username })
@@ -108,11 +114,12 @@ const resolvers = {
       const valid = await bcrypt.compare(password, user.password)
 
       if (valid) {
+        const roles = user.roles.map(node => node.role.name).concat('user')
         const token = jwt.sign(
           {
             userId: user.id,
             'https://hasura.io/jwt/claims': {
-              'x-hasura-allowed-roles': ['user'],
+              'x-hasura-allowed-roles': roles,
               'x-hasura-default-role': 'user',
               'x-hasura-user-id': user.id
             }

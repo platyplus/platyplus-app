@@ -20,19 +20,9 @@ export const signin = async (username, password) => {
   localStorage.setItem('userId', data.login.id)
 }
 
-const ME = gql`
-  query {
-    me {
-      id
-      username
-    }
-  }
-`
-
 export const signout = async () => {
   apolloClient.resetStore()
-  localStorage.removeItem('token')
-  localStorage.removeItem('userId')
+  localStorage.clear()
 }
 
 export function getUserToken () {
