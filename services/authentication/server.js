@@ -89,7 +89,7 @@ const resolvers = {
             'x-hasura-user-id': user.id
           }
         },
-        key,
+        jwtConfig.key,
         { algorithm }
       )
 
@@ -110,6 +110,7 @@ const resolvers = {
       if (valid) {
         console.log('valid auth')
         console.log(key)
+        console.log(jwtConfig.key)
         const token = jwt.sign(
           {
             userId: user.id,
@@ -119,7 +120,7 @@ const resolvers = {
               'x-hasura-user-id': user.id
             }
           },
-          key,
+          jwtConfig.key,
           { algorithm }
         )
         console.log(token)
