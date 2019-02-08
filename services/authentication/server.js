@@ -11,23 +11,16 @@ const graphql = new GraphQLClient(process.env.HASURA_URL, {
   }
 })
 
-const LOGIN = gql`
+const LOGIN = `
   query user($username: String) {
     user(where: { username: { _eq: $username } }) {
       id
       password
-      roles {
-        id
-        role {
-          id
-          name
-        }
-      }
     }
   }
 `
 
-const SIGNUP = gql`
+const SIGNUP = `
   mutation signup($username: String, $password: String) {
     insert_user(objects: [{ username: $username, password: $password }]) {
       returning {
@@ -37,7 +30,7 @@ const SIGNUP = gql`
   }
 `
 
-const ME = gql`
+const ME = `
   query me($id: uuid) {
     user(where: { id: { _eq: $id } }) {
       username
