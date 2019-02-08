@@ -1,21 +1,16 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { GraphQLClient } = require('graphql-request')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { HttpLink } = require('apollo-link-http')
-const fetch = require('node-fetch')
-// const { printSchema } = require('graphql/utilities')
-const {
-  introspectSchema,
-  mergeSchemas,
-  transformSchema,
-  FilterRootFields
-} = require('graphql-tools')
-const { ApolloClient } = require('apollo-client')
-const { InMemoryCache } = require('apollo-cache-inmemory')
-
 const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n')
 const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n')
 const algorithm = process.env.ALGORITHM
+
+const graphql = new GraphQLClient(process.env.HASURA_URL, {
+  headers: {
+    'X-Hasura-Access-Key': process.env.HASURA_GRAPHQL_ACCESS_KEY
+  }
+})
 
 const LOGIN = `
   query user($username: String) {
@@ -45,18 +40,23 @@ const ME = `
   }
 `
 
-const link = new HttpLink({
-  uri: process.env.HASURA_URL,
-  fetch,
-  headers: {
-    'X-Hasura-Access-Key': process.env.HASURA_GRAPHQL_ACCESS_KEY
+const typeDefs = gql`
+  type Query {
+    me: User!
   }
-})
-
-const graphql = new ApolloClient({
-  link,
-  cache: new InMemoryCache()
-})
+  type Mutation {
+    signup(username: String, password: String): AuthPayload!
+    login(username: String, password: String): AuthPayload!
+  }
+  type AuthPayload {
+    id: ID
+    token: String
+  }
+  type User {
+    id: ID
+    username: String
+  }
+`
 
 const resolvers = {
   Query: {
@@ -96,7 +96,7 @@ const resolvers = {
         { algorithm }
       )
 
-      return { token }
+      return { id: user.id, token }
     },
     login: async (_, { username, password }) => {
       const user = await graphql
@@ -120,7 +120,7 @@ const resolvers = {
           privateKey,
           { algorithm }
         )
-        return { token }
+        return { id: user.id, token }
       } else {
         throw new Error('Invalid password.')
       }
@@ -128,57 +128,14 @@ const resolvers = {
   }
 }
 
-const extendSchema = async () => {
-  const typeExtensions = gql`
-    type Query {
-      me: User!
-    }
-    type Mutation {
-      signup(username: String, password: String): AuthPayload!
-      login(username: String, password: String): AuthPayload!
-    }
-    type AuthPayload {
-      token: String
-    }
-  `
-  const initialSchema = await introspectSchema(link)
-
-  const newSchema = mergeSchemas({
-    schemas: [
-      transformSchema(initialSchema, [
-        new FilterRootFields(operation => false)
-      ]),
-      typeExtensions
-    ],
-    resolvers
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => ({
+    ...req
   })
-  return newSchema
-}
+})
 
-const startServer = async () => {
-  const schema = await extendSchema()
-  const server = new ApolloServer({
-    schema,
-    context: ({ req }) => ({
-      ...req
-    })
-  })
-  // const server = new ApolloServer({
-  //   typeDefs,
-  //   resolvers,
-  //   schema
-  //   context: ({ req }) => ({
-  //     ...req
-  //   })
-  // })
-
-  server.listen({ port: process.env.port || 8080 }).then(({ url }) => {
-    console.log(`🚀 Server ready at ${url}`)
-  })
-}
-
-try {
-  startServer()
-} catch (e) {
-  console.error(e)
-}
+server.listen({ port: process.env.port || 8080 }).then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`)
+})

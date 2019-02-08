@@ -13,12 +13,10 @@
   "author": "Pierre-Louis Mercereau",
   "license": "MIT",
   "dependencies": {
-    "apollo-cache-inmemory": "^1.4.2",
-    "apollo-client": "^2.4.12",
-    "apollo-link-http": "^1.5.11",
     "apollo-server": "^2.3.3",
     "bcryptjs": "^2.4.3",
     "graphql": "^14.1.1",
+    "graphql-request": "^1.8.2",
     "jsonwebtoken": "^8.4.0"
   }
 }
