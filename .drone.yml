@@ -21,6 +21,16 @@ kind: pipeline
 name: application
 # https://github.com/drone/autoscaler/blob/master/.drone.yml
 steps:
+  - name: build-auth-service
+    image: plugins/docker
+    settings:
+      context: services/authentication
+      repo: platyplus/authentication
+      tags: latest
+      username:
+        from_secret: DH_USER
+      password:
+        from_secret: DH_PASSWORD
   - name: build-app
     image: plugins/docker
     settings:

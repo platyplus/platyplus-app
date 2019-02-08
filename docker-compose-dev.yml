@@ -1,0 +1,8 @@
+version: '3.1'
+services:
+  reverse-proxy:
+    ports:
+      - '8080:8080' # The Web UI (enabled by --api)
+  postgres:
+    ports:
+      - '55432:5432'

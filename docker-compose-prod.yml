@@ -1,0 +1,25 @@
+version: '3.1'
+services:
+  reverse-proxy:
+    command:
+      - '--entrypoints=Name:http Address::80 Redirect.EntryPoint:https'
+      - '--entrypoints=Name:https Address::443 TLS'
+      - '--defaultentrypoints=http,https'
+      - '--acme'
+      - '--acme.storage=/etc/traefik/acme/acme.json'
+      - '--acme.entryPoint=https'
+      - '--acme.httpChallenge.entryPoint=http'
+      - '--acme.onHostRule=true'
+      - '--acme.onDemand=false'
+      - '--acme.email=admin@platy.plus'
+      - '--acme.domains=${DOMAIN}'
+    ports:
+      - '443:443'
+    volumes:
+      - acme:/etc/traefik/acme
+  authentication:
+    environment:
+      NODE_ENV: production
+      HASURA_URL: 'https://graphql.${DOMAIN}/v1alpha1/graphql'
+volumes:
+  acme:

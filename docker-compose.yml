@@ -2,58 +2,60 @@ version: '3.1'
 services:
   reverse-proxy:
     image: traefik # The official Traefik docker image
-    command: --api --docker --docker.watch=true
+    restart: always
+    command:
+      - '--api'
+      - '--docker'
+      - '--docker.watch'
     ports:
       - '80:80' # The HTTP port
-      - '8080:8080' # The Web UI (enabled by --api)
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock:ro
   postgres:
     image: mdillon/postgis:11-alpine
     restart: always
-    ports:
-      - '55432:5432' # only for dev. to be removed in prod
     volumes:
       - db_data:/var/lib/postgresql/data
   authentication:
-    image: platyplus/authentication:latest
+    image: platyplus/authentication
     restart: always
     labels:
+      - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
       - 'traefik.port=8080'
     depends_on:
       - 'postgres'
     environment:
-      NODE_ENV: production
-      DATABASE_URL: postgres://postgres:@postgres:5432/postgres
       AUTH_PRIVATE_KEY: '${PRIVATE_KEY}'
-      AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
-  graphql-engine:
+      #AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      HASURA_URL: 'http://graphql.${DOMAIN}/v1alpha1/graphql'
+graphql-engine:
     image: hasura/graphql-engine:v1.0.0-alpha37
+    restart: always
     labels:
+      - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - 'traefik.port=8080'
     depends_on:
       - 'postgres'
-    restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@postgres:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE}'
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256", "key":"${PUBLIC_KEY}"}'
       HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
   app:
-    image: platyplus/platyplus:latest
+    image: platyplus/platyplus
     restart: always
     labels:
-      - 'traefik.backend=nginx'
+      - 'traefik.enable=true'
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - 'traefik.port=80'
-      - 'traefik.enable=true'
     depends_on:
       - 'authentication'
+      - 'graphql-engine'
     environment:
-      APP_CONF: config={"HTTP_PROTOCOL":"${HTTP_PROTOCOL}", "AUTH_API":"auth.${DOMAIN}", "API":"graphql.${DOMAIN}/v1alpha1/graphql"}
       AUTH_API: 'auth.${DOMAIN}'
-      API: 'graphql.${DOMAIN}'
+      API: 'graphql.${DOMAIN}/v1alpha1/graphql'
 volumes:
   db_data:
