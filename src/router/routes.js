@@ -1,4 +1,4 @@
-import { getUser } from '../plugins/auth'
+import { getUserId } from '../plugins/auth'
 
 const crudRoutes = (path, page, id = 'id') => {
   return [
@@ -50,7 +50,7 @@ const routes = [
         path: 'profile',
         component: () => import('pages/Profile.vue'),
         props: route => ({
-          id: getUser()?.id
+          id: getUserId()
         })
       },
       {
@@ -58,7 +58,7 @@ const routes = [
         component: () => import('pages/Profile.vue'),
         props: route => ({
           editFlag: true,
-          id: getUser()?.id
+          id: getUserId()
         }),
         meta: {
           withoutPreferredOrgUnit: true

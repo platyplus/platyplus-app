@@ -6,6 +6,7 @@ export const signin = async (username, password) => {
     mutation: gql`
       mutation($username: String!, $password: String!) {
         login(username: $username, password: $password) {
+          id
           token
         }
       }
@@ -16,6 +17,7 @@ export const signin = async (username, password) => {
     }
   })
   localStorage.setItem('token', data.login.token)
+  localStorage.setItem('userId', data.login.id)
 }
 
 const ME = gql`
@@ -30,20 +32,24 @@ const ME = gql`
 export const signout = async () => {
   apolloClient.resetStore()
   localStorage.removeItem('token')
+  localStorage.removeItem('userId')
 }
 
 export function getUserToken () {
   return localStorage.getItem('token')
 }
 
+export function getUserId () {
+  return localStorage.getItem('userId')
+}
+
 export const getUser = () => {
   if (!getUserToken()) return null
   else {
-    const id = apolloClient.readQuery({ query: ME }).me?.id
     return apolloClient.readQuery({
       query: queryHelper({ table: 'user', fragment: 'full' }),
       variables: {
-        where: { id: { _eq: id } }
+        where: { id: { _eq: getUserId() } }
       }
     }).user[0]
   }
@@ -53,16 +59,12 @@ export const loadUser = async () => {
   if (!getUserToken()) return null
   else {
     const { data } = await apolloClient.query({
-      query: ME
-    })
-    const id = data.me?.id
-    const query = await apolloClient.query({
       query: queryHelper({ table: 'user', fragment: 'full' }),
       variables: {
-        where: { id: { _eq: id } }
+        where: { id: { _eq: getUserId() } }
       }
     })
-    return query.data.user[0]
+    return data.user[0]
   }
 }
 
