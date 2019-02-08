@@ -109,6 +109,7 @@ const resolvers = {
 
       if (valid) {
         console.log('valid auth')
+        console.log(key)
         const token = jwt.sign(
           {
             userId: user.id,
