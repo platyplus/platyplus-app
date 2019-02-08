@@ -4,7 +4,12 @@ const jwt = require('jsonwebtoken')
 const { HttpLink } = require('apollo-link-http')
 const fetch = require('node-fetch')
 // const { printSchema } = require('graphql/utilities')
-const { introspectSchema, mergeSchemas } = require('graphql-tools')
+const {
+  introspectSchema,
+  mergeSchemas,
+  transformSchema,
+  FilterRootFields
+} = require('graphql-tools')
 const { ApolloClient } = require('apollo-client')
 const { InMemoryCache } = require('apollo-cache-inmemory')
 
@@ -137,8 +142,14 @@ const extendSchema = async () => {
     }
   `
   const initialSchema = await introspectSchema(link)
+
   const newSchema = mergeSchemas({
-    schemas: [initialSchema, typeExtensions],
+    schemas: [
+      transformSchema(initialSchema, [
+        new FilterRootFields(operation => false)
+      ]),
+      typeExtensions
+    ],
     resolvers
   })
   return newSchema
