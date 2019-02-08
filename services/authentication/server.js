@@ -158,7 +158,10 @@ const extendSchema = async () => {
 const startServer = async () => {
   const schema = await extendSchema()
   const server = new ApolloServer({
-    schema
+    schema,
+    context: ({ req }) => ({
+      ...req
+    })
   })
   // const server = new ApolloServer({
   //   typeDefs,
