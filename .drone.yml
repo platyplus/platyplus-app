@@ -25,6 +25,7 @@ steps:
     image: plugins/docker
     settings:
       context: services/authentication
+      dockerfile: services/authentication/Dockerfile
       repo: platyplus/authentication
       tags: latest
       username:
