@@ -8,8 +8,8 @@ set -e
 file_env() {
   var=$1
   file_var="${var}_FILE"
-  var_value=$(printenv $var || true)
-  file_var_value=$(printenv $file_var || true)
+  var_value=$(printenv $var)
+  file_var_value=$(printenv $file_var)
   default_value=$2
 
   if [ -n "$var_value" -a -n "$file_var_value" ]; then
@@ -17,7 +17,7 @@ file_env() {
     exit 1
   fi
 
-  if [ -n "${var_value}" ]; then
+  if [ -z "${var_value}" ]; then
     if [ -z "${file_var_value}" ]; then
       export "${var}"="${default_value}"
     else
