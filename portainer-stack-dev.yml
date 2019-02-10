@@ -59,7 +59,7 @@ services:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - traefik.port=8080
     depends_on:
-      postgres:
+      - postgres: null
         condition: service_healthy
     environment:
       HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
