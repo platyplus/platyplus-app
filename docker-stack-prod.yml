@@ -21,6 +21,21 @@ services:
   authentication:
     environment:
       NODE_ENV: production
-      HASURA_URL: 'https://graphql.${DOMAIN}/v1alpha1/graphql'
+      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
+      PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
+    secrets:
+      - hasura_secret_key
+      - authentication_public_key
+      - authentication_private_key
+    deploy:
+      replicas: 2
 volumes:
   acme:
+secrets:
+  hasura_secret_key:
+    external: true
+  authentication_public_key:
+    external: true
+  authentication_private_key:
+    external: true

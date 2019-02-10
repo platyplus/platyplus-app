@@ -1,0 +1,74 @@
+version: '3.1'
+services:
+  reverse-proxy:
+    image: traefik
+    restart: always
+    command:
+      - '--api'
+      - '--docker'
+    ports:
+      - '8080:8080'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+  postgres:
+    image: 'mdillon/postgis:11-alpine'
+    restart: always
+    volumes:
+      - 'db_data:/var/lib/postgresql/data'
+    ports:
+      - '55432:5432'
+  authentication:
+    image: platyplus/authentication
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      ALGORITHM: RS256
+      HASURA_URL: 'http://graphql-engine:8080/v1alpha1/graphql'
+      NODE_ENV: development
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      PUBLIC_KEY: '${PUBLIC_KEY}'
+      PRIVATE_KEY: '${PRIVATE_KEY}'
+    build:
+      context: .
+      args:
+        - NODE_ENV=development
+    command: '../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./bin/www'
+    ports:
+      - '9229:9229'
+      - '9230:9230'
+    volumes:
+      - '.:/opt/app:delegated'
+      - './package.json:/opt/package.json'
+      - './package-lock.json:/opt/package-lock.json'
+      - 'notused:/opt/app/node_modules'
+    healthcheck:
+      disable: true
+  graphql-engine:
+    image: 'hasura/graphql-engine:v1.0.0-alpha37'
+    restart: always
+    labels:
+      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+      - traefik.port=8080
+    depends_on:
+      - postgres
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
+      HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE}'
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256", "key":"${PUBLIC_KEY}"}'
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+  app:
+    image: platyplus/platyplus
+    restart: always
+    labels:
+      - 'traefik.frontend.rule=Host:app.${DOMAIN}'
+      - traefik.port=80
+    depends_on:
+      - authentication
+      - graphql-engine
+    environment:
+      API: 'graphql.${DOMAIN}/v1alpha1/graphql'
+volumes:
+  db_data: null
+  notused: null

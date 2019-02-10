@@ -21,10 +21,7 @@ services:
     depends_on:
       - 'postgres'
     environment:
-      PUBLIC_KEY: '${PUBLIC_KEY}'
-      PRIVATE_KEY: '${PRIVATE_KEY}'
       ALGORITHM: 'RS256'
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
       HASURA_URL: 'http://graphql-engine:8080/v1alpha1/graphql'
   graphql-engine:
     image: hasura/graphql-engine:v1.0.0-alpha37
