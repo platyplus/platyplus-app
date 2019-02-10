@@ -32,6 +32,17 @@ steps:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
+  - name: build-graphql-service
+    image: plugins/docker
+    settings:
+      context: services/graphql-engine
+      dockerfile: services/graphql-engine/Dockerfile
+      repo: platyplus/graphql-engine
+      tags: latest
+      username:
+        from_secret: DH_USER
+      password:
+        from_secret: DH_PASSWORD
   - name: build-app
     image: plugins/docker
     settings:

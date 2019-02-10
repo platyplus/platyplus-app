@@ -16,10 +16,9 @@ services:
     deploy:
       replicas: 2
   graphql-engine:
-    entrypoint:
-      - sh
-      - -c
-      - export HASURA_GRAPHQL_ACCESS_KEY="$$(< /run/secrets/hasura_secret_key)" ; export HASURA_GRAPHQL_JWT_SECRET="{\"type\":\"RS256\", \"key\":\"$$(</run/secrets/authentication_public_key)\"}" ; exec "$$@"
+    environment:
+      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
     depends_on:
       - 'authentication' # TODO: https://github.com/jwilder/dockerize -wait
     secrets:

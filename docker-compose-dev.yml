@@ -40,7 +40,7 @@ services:
     environment:
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
       HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
-      AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
+      AUTH_PUBLIC_KEY: '$PUBLIC_KEY'
   postgres:
     restart: always
     ports:

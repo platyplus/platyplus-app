@@ -9,12 +9,9 @@ const PORT = process.env.PORT || 8080
 // to prevent non-root permission problems with 80. Dockerfile is set to make this 80
 // because containers don't have that issue :)
 
-// var server = app.listen(PORT, function () {
-//   console.log(`Webserver is ready and listening on port ${PORT}`)
-// })
-var server = app.listen({ port: PORT }).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`)
-})
+var server = app.listen({ port: PORT }, () =>
+  console.log(`🚀 Server ready and listening on port ${PORT}`)
+)
 //
 // need this in docker container to properly exit since node doesn't handle SIGINT/SIGTERM
 // this also won't work on using npm start since:
