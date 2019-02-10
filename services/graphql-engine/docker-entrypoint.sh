@@ -31,5 +31,8 @@ file_env() {
 file_env 'HASURA_GRAPHQL_ACCESS_KEY'
 file_env 'AUTH_PUBLIC_KEY'
 export "HASURA_GRAPHQL_JWT_SECRET"="{\"type\":\"${AUTH_ALGORITHM}\", \"key\":\"${AUTH_PUBLIC_KEY}\"}"
+# TODO: debug
+echo "${HASURA_GRAPHQL_JWT_SECRET}"
+ENV
 
 exec "$@"
