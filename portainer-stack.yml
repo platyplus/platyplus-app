@@ -54,6 +54,8 @@ services:
     secrets:
       - hasura_secret_key
       - authentication_public_key
+    deploy:
+      replicas: 2
   app:
     image: platyplus/platyplus
     labels:

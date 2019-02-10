@@ -24,6 +24,8 @@ services:
     secrets:
       - hasura_secret_key
       - authentication_public_key
+    deploy:
+      replicas: 2
 secrets:
   hasura_secret_key:
     external: true

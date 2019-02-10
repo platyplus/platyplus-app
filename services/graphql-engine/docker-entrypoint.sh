@@ -12,6 +12,7 @@ file_env() {
   file_var_value=$(printenv $file_var || true)
   default_value=$2
 
+  echo "${val}"
   if [ -n "$var_value" -a -n "$file_var_value" ]; then
     echo >&2 "error: both $var and $file_var are set (but are exclusive)"
     exit 1
@@ -19,8 +20,11 @@ file_env() {
 
   if [ -z "${var_value}" ]; then
     if [ -z "${file_var_value}" ]; then
+	  echo "default value"
       export "${var}"="${default_value}"
     else
+	  echo "${file_var_value}"
+	  echo "$(< "${file_var_value}")"
       export "${var}"="$(< "${file_var_value}")"
     fi
   fi
