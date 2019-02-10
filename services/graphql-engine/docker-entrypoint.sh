@@ -8,8 +8,8 @@ set -e
 file_env() {
   var=$1
   file_var="${var}_FILE"
-  var_value=$(printenv $var)
-  file_var_value=$(printenv $file_var)
+  var_value=$(printenv $var || true)
+  file_var_value=$(printenv $file_var || true)
   default_value=$2
 
   if [ -n "$var_value" -a -n "$file_var_value" ]; then
@@ -28,6 +28,7 @@ file_env() {
   unset "$file_var"
 }
 
+echo "TEST - TEST - TEST"
 file_env 'HASURA_GRAPHQL_ACCESS_KEY'
 echo "${HASURA_GRAPHQL_ACCESS_KEY}"
 file_env 'AUTH_PUBLIC_KEY'
