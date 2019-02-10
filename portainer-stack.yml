@@ -50,7 +50,7 @@ services:
       HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256", "key":"$AUTH_PUBLIC_KEY"}'
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
     entrypoint:
-      - bash
+      - sh
       - '-c'
       - >-
         export HASURA_GRAPHQL_ACCESS_KEY="$$(< /run/secrets/hasura_secret_key)"

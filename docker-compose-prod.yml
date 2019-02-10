@@ -17,7 +17,7 @@ services:
       replicas: 2
   graphql-engine:
     entrypoint:
-      - bash
+      - sh
       - -c
       - export HASURA_GRAPHQL_ACCESS_KEY="$$(< /run/secrets/hasura_secret_key)" ; export HASURA_GRAPHQL_JWT_SECRET={\"type\":\"RS256\", \"key\":\"$$(</run/secrets/authentication_public_key)\"} ; exec "$$@"
     depends_on:
