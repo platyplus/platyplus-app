@@ -1,4 +1,5 @@
-const { ApolloServer, gql } = require('apollo-server')
+const express = require('express')
+const { ApolloServer, gql } = require('apollo-server-express')
 const { GraphQLClient } = require('graphql-request')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -135,13 +136,16 @@ const resolvers = {
   }
 }
 
-const app = new ApolloServer({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => ({
     ...req
   })
 })
+
+const app = express()
+server.applyMiddleware({ app })
 
 app.get('/healthz', function (req, res) {
   // do app logic here to determine if app is truly healthy
