@@ -30,6 +30,10 @@ services:
       - authentication_private_key
     deploy:
       replicas: 2
+  graphql-engine:
+    depends_on:
+      authentication:
+        condition: service_healthy
 volumes:
   acme:
 secrets:

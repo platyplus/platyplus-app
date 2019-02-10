@@ -23,13 +23,21 @@ services:
   postgres:
     image: 'mdillon/postgis:11-alpine'
     restart: always
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - 'db_data:/var/lib/postgresql/data'
   authentication:
     image: platyplus/authentication
     restart: always
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       ALGORITHM: RS256
       HASURA_URL: 'http://graphql-engine:8080/v1alpha1/graphql'
@@ -50,7 +58,10 @@ services:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - traefik.port=8080
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      authentication:
+        condition: service_healthy
     environment:
       HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
       HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE}'
