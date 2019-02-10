@@ -22,8 +22,6 @@ Docker
 
 ### Install the stack
 
-In developpment mode:
-
 ```
-docker stack deploy --compose-file docker-compose.yml --compose-file docker-compose-dev.yml platyplus
+docker stack deploy -c docker-compose.yml -c docker-compose-prod.yml platyplus
 ```
