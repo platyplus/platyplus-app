@@ -7,4 +7,4 @@ COPY docker-entrypoint.sh /bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-CMD ["ENV", ";", "graphql-engine", "serve"]
+CMD ["graphql-engine", "serve"]
