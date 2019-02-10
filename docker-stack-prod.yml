@@ -32,8 +32,7 @@ services:
       replicas: 2
   graphql-engine:
     depends_on:
-      - authentication:
-        condition: service_healthy
+      - 'authentication'
 volumes:
   acme:
 secrets:
