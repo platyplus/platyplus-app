@@ -17,8 +17,10 @@ steps:
       branch: master
 
 ---
-pipeline:
-  build-auth-service:
+kind: pipeline
+name: application-stack
+steps:
+  - name: build-auth-service
     group: build
     image: plugins/docker
     settings:
@@ -30,7 +32,7 @@ pipeline:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
-  build-graphql-service:
+  - name: build-graphql-service
     image: plugins/docker
     group: build
     settings:
@@ -42,7 +44,7 @@ pipeline:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
-  build-application:
+  - name: build-application
     image: plugins/docker
     group: build
     settings:
