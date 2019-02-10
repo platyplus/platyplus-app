@@ -19,7 +19,7 @@ services:
     entrypoint:
       - sh
       - -c
-      - export HASURA_GRAPHQL_ACCESS_KEY="$$(< /run/secrets/hasura_secret_key)" ; export HASURA_GRAPHQL_JWT_SECRET={\"type\":\"RS256\", \"key\":\"$$(</run/secrets/authentication_public_key)\"} ; exec "$$@"
+      - export HASURA_GRAPHQL_ACCESS_KEY="$$(< /run/secrets/hasura_secret_key)" ; export HASURA_GRAPHQL_JWT_SECRET="{\"type\":\"RS256\", \"key\":\"$$(</run/secrets/authentication_public_key)\"}" ; exec "$$@"
     depends_on:
       - 'authentication' # TODO: https://github.com/jwilder/dockerize -wait
     secrets:
