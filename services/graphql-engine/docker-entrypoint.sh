@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-
+echo "LETS GO!!!"
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
 # (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
@@ -13,7 +13,7 @@ file_env() {
   default_value=$2
 
   echo "${val}"
-  cat "${val}"
+  cat "${file_var_value}"
   if [ -n "$var_value" -a -n "$file_var_value" ]; then
     echo >&2 "error: both $var and $file_var are set (but are exclusive)"
     exit 1
