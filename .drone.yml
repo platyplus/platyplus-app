@@ -18,7 +18,7 @@ steps:
 
 ---
 kind: pipeline
-name: application-stack
+name: authentication-build
 steps:
   - name: build-auth-service
     group: build
@@ -32,6 +32,11 @@ steps:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
+
+---
+kind: pipeline
+name: graphql-engine-build
+steps:
   - name: build-graphql-service
     image: plugins/docker
     group: build
@@ -44,6 +49,11 @@ steps:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
+
+---
+kind: pipeline
+name: application-build
+steps:
   - name: build-application
     image: plugins/docker
     group: build
