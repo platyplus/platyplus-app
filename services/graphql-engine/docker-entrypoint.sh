@@ -13,6 +13,7 @@ file_env() {
   default_value=$2
 
   echo "${val}"
+  cat "${val}"
   if [ -n "$var_value" -a -n "$file_var_value" ]; then
     echo >&2 "error: both $var and $file_var are set (but are exclusive)"
     exit 1
@@ -23,9 +24,18 @@ file_env() {
 	  echo "default value"
       export "${var}"="${default_value}"
     else
+	  echo "ici"
 	  echo "${file_var_value}"
+	  echo "ici2"
 	  echo "$(< "${file_var_value}")"
+	  echo "ici3"
+	  echo "$(cat "${file_var_value}")"
+	  echo "ici4"
+	  echo "$(cat ${file_var_value})"
+	  echo "ici4"
       export "${var}"="$(< "${file_var_value}")"
+	  echo "$(printenv ${var})"
+      export "${var}"="$(cat ${file_var_value})"
     fi
   fi
 
