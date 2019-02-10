@@ -28,8 +28,12 @@ file_env() {
   unset "$file_var"
 }
 
+#TODO: debug
+echo $AUTH_PUBLIC_KEY
+echo $AUTH_PUBLIC_KEY_FILE
+ls /run/secrets
+
 file_env 'HASURA_GRAPHQL_ACCESS_KEY'
 file_env 'AUTH_PUBLIC_KEY'
 export HASURA_GRAPHQL_JWT_SECRET="{\"type\":\"$AUTH_ALGORITHM\", \"key\":\"$AUTH_PUBLIC_KEY\"}"
-
 exec "$@"
