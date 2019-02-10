@@ -17,7 +17,7 @@ file_env() {
     exit 1
   fi
 
-  if [ -z "${var_value}" ]; then
+  if [ -n "${var_value}" ]; then
     if [ -z "${file_var_value}" ]; then
       export "${var}"="${default_value}"
     else
