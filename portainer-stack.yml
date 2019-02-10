@@ -2,7 +2,6 @@ version: '3.1'
 services:
   reverse-proxy:
     image: traefik
-    restart: always
     command:
       - '--docker.watch'
       - '--docker'
@@ -12,7 +11,6 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
   postgres:
     image: 'mdillon/postgis:11-alpine'
-    restart: always
     healthcheck:
       test:
         - CMD-SHELL
@@ -24,7 +22,6 @@ services:
       - 'db_data:/var/lib/postgresql/data'
   authentication:
     image: platyplus/authentication
-    restart: always
     depends_on:
       - postgres
     environment:
@@ -42,7 +39,6 @@ services:
       replicas: 2
   graphql-engine:
     image: 'hasura/graphql-engine:v1.0.0-alpha37'
-    restart: always
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - traefik.port=8080
@@ -50,13 +46,21 @@ services:
       - authentication
     environment:
       HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
-      HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE}'
-      HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256", "key":"${PUBLIC_KEY}"}'
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE:-true}'
+      HASURA_GRAPHQL_JWT_SECRET: '{"type":"RS256", "key":"$AUTH_PUBLIC_KEY"}'
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+    entrypoint:
+      - bash
+      - '-c'
+      - >-
+        export HASURA_GRAPHQL_ACCESS_KEY="$$(< /run/secrets/hasura_secret_key)"
+        ; export HASURA_GRAPHQL_JWT_SECRET={\"type\":\"RS256\",
+        \"key\":\"$$(</run/secrets/authentication_public_key)\"} ; exec "$$@"
+    secrets:
+      - hasura_secret_key
+      - authentication_public_key
   app:
     image: platyplus/platyplus
-    restart: always
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - traefik.port=80

@@ -1,6 +1,7 @@
 version: '3.1'
 services:
   reverse-proxy:
+    restart: always
     ports:
       - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
   authentication:
@@ -9,6 +10,7 @@ services:
       args:
         - NODE_ENV=development
     command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./bin/www
+    restart: always
     ports:
       - '9229:9229' # TODO: map with traefik
       - '9230:9230' # TODO: map with traefik
@@ -33,9 +35,18 @@ services:
       PRIVATE_KEY: '${PRIVATE_KEY}'
     healthcheck:
       disable: true
+  graphql-engine:
+    restart: always
+    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
   postgres:
+    restart: always
     ports:
       - '55432:5432'
+  app:
+    restart: always
 volumes:
   notused:
 # TODO: add custom docker build for the frontend service
