@@ -58,6 +58,7 @@ steps:
     image: plugins/docker
     group: build
     settings:
+      dockerfile: services/application/Dockerfile
       repo: platyplus/platyplus
       target: production-stage
       tags: latest

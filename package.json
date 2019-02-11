@@ -35,7 +35,6 @@
     "vue-moment": "^4.0.0"
   },
   "devDependencies": {
-    "@godaddy/terminus": "^4.1.0",
     "@babel/core": "7.2.0",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/runtime": "7.2.0",
