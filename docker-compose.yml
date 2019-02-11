@@ -5,16 +5,15 @@ services:
     command:
       - '--api'
       - '--docker'
-      - '--ping'
+      - '--web'
     ports:
       - '80:80' # The HTTP port
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     healthcheck:
-      test: ['CMD', 'traefik', healthcheck']
+      test: ['CMD', '/traefik', 'healthcheck', '--ping']
       interval: 30s
       timeout: 5s
-      retries: 5
   postgres:
     image: mdillon/postgis:11-alpine
     volumes:
@@ -23,7 +22,6 @@ services:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 30s
       timeout: 5s
-      retries: 5
   authentication:
     image: platyplus/authentication
     depends_on:

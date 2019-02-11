@@ -21,11 +21,11 @@ services:
     healthcheck:
       test:
         - CMD
-        - traefik
-        - healthcheck'
+        - /traefik
+        - healthcheck
+        - '--ping'
       interval: 30s
       timeout: 5s
-      retries: 5
   postgres:
     image: 'mdillon/postgis:11-alpine'
     volumes:
@@ -36,7 +36,6 @@ services:
         - pg_isready -U postgres
       interval: 30s
       timeout: 5s
-      retries: 5
   authentication:
     image: platyplus/authentication
     depends_on:
