@@ -14,7 +14,6 @@
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
-    "@godaddy/terminus": "^4.1.0",
     "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
     "apollo-link": "^1.2.4",
@@ -36,6 +35,7 @@
     "vue-moment": "^4.0.0"
   },
   "devDependencies": {
+    "@godaddy/terminus": "^4.1.0",
     "@babel/core": "7.2.0",
     "@babel/plugin-proposal-optional-chaining": "^7.2.0",
     "@babel/runtime": "7.2.0",

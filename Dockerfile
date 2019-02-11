@@ -9,7 +9,8 @@ RUN $(npm bin)/quasar build -m pwa -t mat
 FROM node:10.15.1-alpine as production-stage
 WORKDIR /app
 COPY --from=build-stage /app/dist /app/server.js ./
-RUN yarn add express serve-static connect-history-api-fallback compression
+# TODO: lock javascript libraries
+RUN yarn add express serve-static connect-history-api-fallback compression @godaddy/terminus
 EXPOSE 80
 
 # check every 30s to ensure this service returns HTTP 200
