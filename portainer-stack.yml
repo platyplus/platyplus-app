@@ -5,21 +5,30 @@ services:
     command:
       - '--docker.watch'
       - '--docker'
+      - '--ping'
     ports:
       - '80:80'
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    healthcheck:
+      test:
+        - CMD
+        - traefik
+        - healthcheck'
+      interval: 30s
+      timeout: 5s
+      retries: 5
   postgres:
     image: 'mdillon/postgis:11-alpine'
+    volumes:
+      - 'db_data:/var/lib/postgresql/data'
     healthcheck:
       test:
         - CMD-SHELL
         - pg_isready -U postgres
-      interval: 10s
+      interval: 30s
       timeout: 5s
       retries: 5
-    volumes:
-      - 'db_data:/var/lib/postgresql/data'
   authentication:
     image: platyplus/authentication
     depends_on:
