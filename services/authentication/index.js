@@ -146,7 +146,7 @@ const server = new ApolloServer({
 })
 
 const app = express()
-server.applyMiddleware({ path: '/', app })
+server.applyMiddleware({ path: '/graphql', app })
 console.log(`GraphQL endpoint will be: ${server.graphqlPath}`)
 
 app.get('/healthz', function (req, res) {
