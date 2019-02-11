@@ -4,7 +4,8 @@ var options = {
   timeout: 2000,
   host: 'localhost',
   port: process.env.PORT || 8080,
-  path: '/.well-known/apollo/server-health' // must be the same as HEALTHCHECK in Dockerfile
+  path: '/.well-known/apollo/server-health'
+  // TODO: https://www.apollographql.com/docs/apollo-server/whats-new.html#Health-checks
 }
 
 var request = http.request(options, res => {
