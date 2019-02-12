@@ -36,6 +36,7 @@ services:
       - 'traefik.port=8080'
     depends_on:
       - 'postgres' # TODO: https://github.com/jwilder/dockerize -wait
+      - 'authentication'
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@postgres:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE:-true}'
@@ -47,9 +48,12 @@ services:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - 'traefik.port=80'
     depends_on:
-      - 'authentication'
       - 'graphql-engine'
     environment:
       API: 'graphql.${DOMAIN}/v1alpha1/graphql'
+  synchronization-hook:
+    image: platyplus/synchronization-hook
+    depends_on:
+      - 'graphql-engine' # TODO: https://github.com/jwilder/dockerize -wait
 volumes:
   db_data:

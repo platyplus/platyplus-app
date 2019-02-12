@@ -1,28 +1,21 @@
-const path = require('path'),
-  express = require('express'),
-  serveStatic = require('serve-static'),
-  history = require('connect-history-api-fallback'),
-  compression = require('compression'),
-  port = process.env.PORT || 80,
+#!/usr/bin/env node
+
+const app = require('../index'),
+  PORT = process.env.PORT || 8080,
   http = require('http'),
   { createTerminus } = require('@godaddy/terminus')
 
-const app = express()
-
-app.get('/config', function (req, res) {
-  res.send({
-    API: process.env.API
-  })
+var server = http.createServer(app)
+server.listen(PORT, () => {
+  console.log(`🚀 Server ready and listening on port ${PORT}`)
 })
-app.use(history())
-app.use(compression())
-app.use(serveStatic(path.join(__dirname, '/pwa-mat')))
-const server = http.createServer(app)
-server.listen(port)
 
 // Health check
 function onSignal () {
-  console.info('server is starting cleanup')
+  console.info(
+    'Got SIGINT (aka ctrl-c in docker). Graceful shutdown ',
+    new Date().toISOString()
+  )
 }
 function onShutdown () {
   console.info('cleanup finished, server is shutting down')
@@ -40,4 +33,3 @@ const terminusOptions = {
   onShutdown // [optional] called right before exiting
 }
 createTerminus(server, terminusOptions)
-console.log(`Server running on port ${port}`)

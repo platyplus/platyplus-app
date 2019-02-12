@@ -66,3 +66,20 @@ steps:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
+
+---
+kind: pipeline
+name: synchronization-hook-build
+steps:
+  - name: build-application
+    image: plugins/docker
+    group: build
+    settings:
+      context: services/synchronization-hook
+      dockerfile: services/synchronization-hook/Dockerfile
+      repo: platyplus/synchronization-hook
+      tags: latest
+      username:
+        from_secret: DH_USER
+      password:
+        from_secret: DH_PASSWORD

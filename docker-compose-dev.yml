@@ -5,6 +5,9 @@ services:
     ports:
       - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
   authentication:
+    labels:
+      - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
+      - 'traefik.port=8080'
     build:
       context: ./services/authentication
       args:
@@ -16,18 +19,9 @@ services:
       - '9230:9230' # TODO: map with traefik
     volumes:
       - ./services/authentication:/opt/app:delegated
-      # bind-mounting these two files in will let you add packages during development without rebuilding
-      # for example, to add bower to your app while developing, just install it inside the container
-      # and then nodemon will restart. Your changes will last until you "docker-compose down" and will
-      # be saved on host for next build
-      # docker-compose exec node npm install --save bower
       - ./services/authentication/package.json:/opt/package.json
       - ./services/authentication/package-lock.json:/opt/package-lock.json
-      # this is a workaround to prevent host node_modules from accidently getting mounted in container
-      # in case you want to use node/npm both outside container for test/lint etc. and also inside container
-      # this will overwrite the default node_modules dir in container so it won't conflict with our
-      # /opt/node_modules location. Thanks to PR from @brnluiz
-      - notused:/opt/app/node_modules
+      - notused_auth:/opt/app/node_modules
     environment:
       NODE_ENV: development
       HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
@@ -36,6 +30,9 @@ services:
     healthcheck:
       disable: true
   graphql-engine:
+    labels:
+      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+      - 'traefik.port=8080'
     restart: always
     environment:
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
@@ -47,8 +44,32 @@ services:
       - '55432:5432'
   app:
     restart: always
+  synchronization-hook:
+    labels:
+      - 'traefik.frontend.rule=Host:sync-hook.${DOMAIN}'
+      - 'traefik.port=8080'
+    build:
+      context: ./services/synchronization-hook
+      args:
+        - NODE_ENV=development
+    command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./bin/www
+    restart: always
+    ports:
+      - '9229:9229' # TODO: map with traefik
+      - '9230:9230' # TODO: map with traefik
+    volumes:
+      - ./services/authentication:/opt/app:delegated
+      - ./services/authentication/package.json:/opt/package.json
+      - ./services/authentication/package-lock.json:/opt/package-lock.json
+      - notused_sync:/opt/app/node_modules
+    environment:
+      NODE_ENV: development
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+    healthcheck:
+      disable: true
 volumes:
-  notused:
+  notused_auth:
+  notused_sync:
 # TODO: add custom docker build for the frontend service
 # TODO: build, with context and dockerfile
 # TODO: create volumes linked to the source code
