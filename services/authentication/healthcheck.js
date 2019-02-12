@@ -3,7 +3,7 @@ var http = require('http')
 var options = {
   timeout: 2000,
   host: 'localhost',
-  port: process.env.PORT || 8080,
+  port: process.env.PORT || 3000,
   path: '/.well-known/apollo/server-health'
 }
 

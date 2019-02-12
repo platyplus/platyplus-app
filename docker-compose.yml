@@ -27,11 +27,13 @@ services:
     depends_on:
       - 'postgres' # TODO: https://github.com/jwilder/dockerize -wait
     environment:
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
       ALGORITHM: 'RS256'
   graphql-engine:
     image: platyplus/graphql-engine
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+      - 'traefik.port=3000'
     depends_on:
       - 'postgres' # TODO: https://github.com/jwilder/dockerize -wait
       - 'authentication'
@@ -44,7 +46,7 @@ services:
     image: platyplus/platyplus
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
-      - 'traefik.port=80'
+      - 'traefik.port=3000'
     depends_on:
       - 'graphql-engine'
     environment:

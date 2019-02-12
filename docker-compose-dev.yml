@@ -7,7 +7,7 @@ services:
   authentication:
     labels:
       - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
-      - 'traefik.port=8080'
+      - 'traefik.port=3000'
     build:
       context: ./services/authentication
       args:
@@ -23,7 +23,6 @@ services:
       - ./services/authentication/package-lock.json:/opt/package-lock.json
       - notused_auth:/opt/app/node_modules
     environment:
-      HASURA_URL: 'http://graphql-engine:8080/v1alpha1/graphql'
       NODE_ENV: development
       HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
@@ -31,8 +30,6 @@ services:
     healthcheck:
       disable: true
   graphql-engine:
-    labels:
-      - 'traefik.port=8080'
     restart: always
     environment:
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
@@ -47,7 +44,7 @@ services:
   synchronization-hook:
     labels:
       - 'traefik.frontend.rule=Host:sync-hook.${DOMAIN}'
-      - 'traefik.port=8080'
+      - 'traefik.port=3000'
     build:
       context: ./services/synchronization-hook
       args:

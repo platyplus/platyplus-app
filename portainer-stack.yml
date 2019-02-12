@@ -33,10 +33,9 @@ services:
     depends_on:
       - postgres
     environment:
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
       ALGORITHM: RS256
-      HASURA_URL: 'http://graphql-engine:80/v1alpha1/graphql'
       NODE_ENV: production
-      PORT: 80
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
       PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
       PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
@@ -49,7 +48,8 @@ services:
   graphql-engine:
     image: platyplus/graphql-engine
     labels:
-      - traefik.port=80
+      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+      - traefik.port=3000
     depends_on:
       - postgres
       - authentication
@@ -58,7 +58,6 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE:-true}'
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
       AUTH_ALGORITHM: RS256
-      HASURA_GRAPHQL_SERVER_PORT: 80
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
       AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
     secrets:
@@ -70,7 +69,7 @@ services:
     image: platyplus/platyplus
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
-      - traefik.port=80
+      - traefik.port=3000
     depends_on:
       - graphql-engine
     environment:
@@ -81,7 +80,6 @@ services:
       - graphql-engine
     environment:
       NODE_ENV: production
-      PORT: 80
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
     secrets:
       - hasura_secret_key
