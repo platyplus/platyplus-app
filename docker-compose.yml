@@ -28,7 +28,6 @@ services:
       - 'postgres' # TODO: https://github.com/jwilder/dockerize -wait
     environment:
       ALGORITHM: 'RS256'
-      HASURA_URL: 'http://graphql-engine:8080/v1alpha1/graphql'
   graphql-engine:
     image: platyplus/graphql-engine
     labels:

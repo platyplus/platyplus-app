@@ -42,7 +42,7 @@ services:
       - postgres
     environment:
       ALGORITHM: RS256
-      HASURA_URL: 'http://graphql-engine:8080/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:80/v1alpha1/graphql'
       NODE_ENV: production
       PORT: 80
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key

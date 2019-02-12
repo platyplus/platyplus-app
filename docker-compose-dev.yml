@@ -23,6 +23,7 @@ services:
       - ./services/authentication/package-lock.json:/opt/package-lock.json
       - notused_auth:/opt/app/node_modules
     environment:
+      HASURA_URL: 'http://graphql-engine:8080/v1alpha1/graphql'
       NODE_ENV: development
       HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
