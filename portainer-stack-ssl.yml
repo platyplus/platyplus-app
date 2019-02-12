@@ -57,8 +57,7 @@ services:
   graphql-engine:
     image: platyplus/graphql-engine
     labels:
-      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
-      - traefik.port=8080
+      - traefik.port=80
     depends_on:
       - authentication
       - authentication
