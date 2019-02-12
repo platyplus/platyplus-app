@@ -77,7 +77,7 @@ services:
     image: platyplus/platyplus
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
-      - traefik.port=3000
+      - traefik.port=80
     depends_on:
       - graphql-engine
     environment:
