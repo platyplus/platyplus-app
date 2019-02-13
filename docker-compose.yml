@@ -27,7 +27,7 @@ services:
       AUTH_ALGORITHM: RS256
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: 'anonymous'
       HASURA_GRAPHQL_MIGRATIONS_DIR: migrations
-      HASURA_GRAPHQL_ENABLE_CONSOLE: false
+      HASURA_GRAPHQL_ENABLE_CONSOLE: 'false'
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - 'traefik.port=3000'

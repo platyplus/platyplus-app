@@ -41,7 +41,6 @@ steps:
     image: alpine
     group: prepare-build
     commands:
-      - cp config.yaml.template services/graphql-engine/
       - cp -R migrations services/graphql-engine/
   - name: build-graphql-service
     image: plugins/docker
