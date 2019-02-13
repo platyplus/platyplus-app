@@ -1,0 +1,3 @@
+- args:
+    name: authentication
+  type: remove_remote_schema
