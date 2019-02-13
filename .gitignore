@@ -22,3 +22,5 @@ yarn-error.log*
 private.pem
 public.pem
 secret.key
+backup
+config.yaml

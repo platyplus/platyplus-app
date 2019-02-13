@@ -2,3 +2,6 @@ dist
 node_modules
 .quasar
 .vscode
+backup
+services
+docs

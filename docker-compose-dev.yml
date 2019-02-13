@@ -1,78 +1,69 @@
 version: '3.1'
 services:
-  reverse-proxy:
+  app:
     restart: always
-    ports:
-      - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
+    # TODO: add custom dev docker for the frontend service
   authentication:
-    labels:
-      - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
-      - 'traefik.port=3000'
     build:
       context: ./services/authentication
       args:
         - NODE_ENV=development
     command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./bin/www
-    restart: always
+    environment:
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      NODE_ENV: development
+      PRIVATE_KEY: '${PRIVATE_KEY}'
+      PUBLIC_KEY: '${PUBLIC_KEY}'
+    healthcheck:
+      disable: true
+    labels:
+      - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
+      - 'traefik.port=3000'
     ports:
       - '9229:9229' # TODO: map with traefik
       - '9230:9230' # TODO: map with traefik
+    restart: always
     volumes:
       - ./services/authentication:/opt/app:delegated
       - ./services/authentication/package.json:/opt/package.json
       - ./services/authentication/package-lock.json:/opt/package-lock.json
       - notused_auth:/opt/app/node_modules
-    environment:
-      NODE_ENV: development
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
-      PUBLIC_KEY: '${PUBLIC_KEY}'
-      PRIVATE_KEY: '${PRIVATE_KEY}'
-    healthcheck:
-      disable: true
   graphql-engine:
-    restart: always
     environment:
-      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
       AUTH_PUBLIC_KEY: '$PUBLIC_KEY'
-  postgres:
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
     restart: always
+  postgres:
     ports:
       - '55432:5432'
-  app:
+    restart: always
+  reverse-proxy:
+    ports:
+      - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
     restart: always
   synchronization-hook:
-    labels:
-      - 'traefik.frontend.rule=Host:sync-hook.${DOMAIN}'
-      - 'traefik.port=3000'
     build:
       context: ./services/synchronization-hook
       args:
         - NODE_ENV=development
     command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./bin/www
-    restart: always
+    environment:
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      NODE_ENV: development
+    healthcheck:
+      disable: true
+    labels:
+      - 'traefik.frontend.rule=Host:sync-hook.${DOMAIN}'
+      - 'traefik.port=3000'
     ports:
       - '9229:9229' # TODO: map with traefik
       - '9230:9230' # TODO: map with traefik
+    restart: always
     volumes:
-      - ./services/authentication:/opt/app:delegated
-      - ./services/authentication/package.json:/opt/package.json
-      - ./services/authentication/package-lock.json:/opt/package-lock.json
+      - ./services/synchronization-hook:/opt/app:delegated
+      - ./services/synchronization-hook/package.json:/opt/package.json
+      - ./services/synchronization-hook/package-lock.json:/opt/package-lock.json
       - notused_sync:/opt/app/node_modules
-    environment:
-      NODE_ENV: development
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
-    healthcheck:
-      disable: true
 volumes:
   notused_auth:
   notused_sync:
-# TODO: add custom docker build for the frontend service
-# TODO: build, with context and dockerfile
-# TODO: create volumes linked to the source code
-# TODO: frontend: quasar dev
-# TODO: auth service: nodemon
-# TODO: check how node_modules are monitored (crashes happened in the past in quasar dev)
-# TODO: console log
-# TODO: nodemon debugging
-# TODO: singe Dockerfile with prod and dev stages?

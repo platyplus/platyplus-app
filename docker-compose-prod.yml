@@ -1,41 +1,41 @@
 version: '3.1'
 services:
+  authentication:
+    deploy:
+      replicas: 1
+    environment:
+      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      NODE_ENV: production
+      PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
+      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
+    secrets:
+      - authentication_private_key
+      - authentication_public_key
+      - hasura_secret_key
+  graphql-engine:
+    deploy:
+      replicas: 1
+    environment:
+      AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
+      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+    secrets:
+      - authentication_public_key
+      - hasura_secret_key
   reverse-proxy:
     command:
       - '--docker.watch'
-  authentication:
-    environment:
-      NODE_ENV: production
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
-      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
-      PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
-    secrets:
-      - hasura_secret_key
-      - authentication_public_key
-      - authentication_private_key
-    deploy:
-      replicas: 1
-  graphql-engine:
-    environment:
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
-      AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
-    secrets:
-      - hasura_secret_key
-      - authentication_public_key
-    deploy:
-      replicas: 1
   synchronization-hook:
-    environment:
-      NODE_ENV: production
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
-    secrets:
-      - hasura_secret_key
     deploy:
       replicas: 1
+    environment:
+      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      NODE_ENV: production
+    secrets:
+      - hasura_secret_key
 secrets:
-  hasura_secret_key:
+  authentication_private_key:
     external: true
   authentication_public_key:
     external: true
-  authentication_private_key:
+  hasura_secret_key:
     external: true

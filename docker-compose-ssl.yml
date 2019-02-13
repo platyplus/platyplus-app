@@ -1,5 +1,8 @@
 version: '3.1'
 services:
+  graphql-engine:
+    depends_on:
+      - 'authentication' # TODO: https://github.com/jwilder/dockerize -wait
   reverse-proxy:
     command:
       - '--entrypoints=Name:http Address::80 Redirect.EntryPoint:https'
@@ -17,8 +20,5 @@ services:
       - '443:443'
     volumes:
       - acme:/etc/traefik/acme
-  graphql-engine:
-    depends_on:
-      - 'authentication' # TODO: https://github.com/jwilder/dockerize -wait
 volumes:
   acme:

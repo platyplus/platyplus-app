@@ -1,5 +1,63 @@
 version: '3.1'
 services:
+  app:
+    image: platyplus/platyplus
+    depends_on:
+      - graphql-engine
+    environment:
+      API: 'graphql.${DOMAIN}/v1alpha1/graphql'
+    labels:
+      - 'traefik.frontend.rule=Host:app.${DOMAIN}'
+      - traefik.port=80
+  authentication:
+    image: platyplus/authentication
+    depends_on:
+      - postgres
+    environment:
+      ALGORITHM: RS256
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      NODE_ENV: production
+      PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
+      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
+    deploy:
+      replicas: 1
+    secrets:
+      - authentication_private_key
+      - authentication_public_key
+      - hasura_secret_key
+  graphql-engine:
+    image: platyplus/graphql-engine
+    depends_on:
+      - authentication
+      - postgres
+    environment:
+      HASURA_GRAPHQL_SERVER_PORT: 3000
+      HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
+      AUTH_ALGORITHM: RS256
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      HASURA_GRAPHQL_MIGRATIONS_DIR: migrations
+      HASURA_GRAPHQL_ENABLE_CONSOLE: false
+      AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
+      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+    labels:
+      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+      - traefik.port=3000
+    deploy:
+      replicas: 1
+    secrets:
+      - authentication_public_key
+      - hasura_secret_key
+  postgres:
+    image: 'mdillon/postgis:11-alpine'
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres
+      interval: 30s
+      timeout: 5s
+    volumes:
+      - 'db_data:/var/lib/postgresql/data'
   reverse-proxy:
     image: traefik
     command:
@@ -14,10 +72,6 @@ services:
       - '--acme.onDemand=false'
       - '--acme.email=admin@platy.plus'
       - '--acme.domains=${DOMAIN}'
-    ports:
-      - '443:443'
-    volumes:
-      - 'acme:/etc/traefik/acme'
     healthcheck:
       test:
         - CMD
@@ -26,81 +80,29 @@ services:
         - '--ping'
       interval: 30s
       timeout: 5s
-  postgres:
-    image: 'mdillon/postgis:11-alpine'
+    ports:
+      - '443:443'
     volumes:
-      - 'db_data:/var/lib/postgresql/data'
-    healthcheck:
-      test:
-        - CMD-SHELL
-        - pg_isready -U postgres
-      interval: 30s
-      timeout: 5s
-  authentication:
-    image: platyplus/authentication
-    depends_on:
-      - postgres
-    environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-      ALGORITHM: RS256
-      NODE_ENV: production
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
-      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
-      PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
-    secrets:
-      - hasura_secret_key
-      - authentication_public_key
-      - authentication_private_key
-    deploy:
-      replicas: 1
-  graphql-engine:
-    image: platyplus/graphql-engine
-    labels:
-      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
-      - traefik.port=3000
-    depends_on:
-      - authentication
-      - authentication
-    environment:
-      HASURA_GRAPHQL_SERVER_PORT: 3000
-      HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
-      HASURA_GRAPHQL_ENABLE_CONSOLE: '${HASURA_ENABLE_CONSOLE:-true}'
-      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
-      AUTH_ALGORITHM: RS256
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
-      AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
-    secrets:
-      - hasura_secret_key
-      - authentication_public_key
-    deploy:
-      replicas: 1
-  app:
-    image: platyplus/platyplus
-    labels:
-      - 'traefik.frontend.rule=Host:app.${DOMAIN}'
-      - traefik.port=80
-    depends_on:
-      - graphql-engine
-    environment:
-      API: 'graphql.${DOMAIN}/v1alpha1/graphql'
+      - 'acme:/etc/traefik/acme'
   synchronization-hook:
     image: platyplus/synchronization-hook
     depends_on:
       - graphql-engine
     environment:
-      NODE_ENV: production
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
-    secrets:
-      - hasura_secret_key
+      NODE_ENV: production
     deploy:
       replicas: 1
+    secrets:
+      - hasura_secret_key
 volumes:
   db_data: null
   acme: null
 secrets:
-  hasura_secret_key:
+  authentication_private_key:
     external: true
   authentication_public_key:
     external: true
-  authentication_private_key:
+  hasura_secret_key:
     external: true
