@@ -21,7 +21,6 @@ kind: pipeline
 name: authentication-build
 steps:
   - name: build-auth-service
-    group: build
     image: plugins/docker
     settings:
       context: services/authentication
@@ -39,12 +38,10 @@ name: graphql-engine-build
 steps:
   - name: pre-build-graphql-service
     image: alpine
-    group: prepare-build
     commands:
       - cp -R migrations services/graphql-engine/
   - name: build-graphql-service
     image: plugins/docker
-    group: build
     settings:
       context: services/graphql-engine
       dockerfile: services/graphql-engine/Dockerfile
@@ -59,10 +56,15 @@ steps:
 kind: pipeline
 name: application-build
 steps:
+  - name: pre-build-application
+    image: alpine
+    commands:
+      - mkdir -p services/application/client
+      - cp -R {*.js,*.json,src*,.eslintignore,yarn.lock} services/application/client/
   - name: build-application
     image: plugins/docker
-    group: build
     settings:
+      context: services/application
       dockerfile: services/application/Dockerfile
       repo: platyplus/platyplus
       target: production-stage
@@ -78,7 +80,6 @@ name: synchronization-hook-build
 steps:
   - name: build-sync-hook
     image: plugins/docker
-    group: build
     settings:
       context: services/synchronization-hook
       dockerfile: services/synchronization-hook/Dockerfile
