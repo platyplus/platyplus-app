@@ -36,10 +36,6 @@ steps:
 kind: pipeline
 name: graphql-engine-build
 steps:
-  - name: pre-build-graphql-service
-    image: alpine
-    commands: # TODO: set the migrations in the services/graphql-engine directory, an update the script/location of the hasura project
-      - cp -R migrations services/graphql-engine/
   - name: build-graphql-service
     image: plugins/docker
     settings:
