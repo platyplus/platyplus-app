@@ -76,7 +76,7 @@ steps:
 kind: pipeline
 name: synchronization-hook-build
 steps:
-  - name: build-application
+  - name: build-sync-hook
     image: plugins/docker
     group: build
     settings:
