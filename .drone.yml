@@ -60,7 +60,11 @@ steps:
     image: alpine
     commands:
       - mkdir -p services/application/client
-      - cp -R {*.js,*.json,src*,.eslintignore,yarn.lock} services/application/client/
+      - cp -R *.js services/application/client/
+      - cp -R *.json services/application/client/
+      - cp -R src* services/application/client/
+      - cp eslintignore services/application/client/
+      - cp yarn.lock services/application/client/
   - name: build-application
     image: plugins/docker
     settings:
