@@ -38,6 +38,12 @@ kind: pipeline
 name: graphql-engine-build
 steps:
   - name: build-graphql-service
+    image: alpine
+    group: prepare-build
+    commands:
+      - cp config.yaml.template services/graphql-engine/
+      - cp -R migrations services/graphql-engine/
+  - name: build-graphql-service
     image: plugins/docker
     group: build
     settings:
