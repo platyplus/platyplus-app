@@ -17,6 +17,6 @@ EXPOSE 80
 HEALTHCHECK --interval=30s CMD node healthcheck.js
 RUN ls
 COPY . .
-RUN LS
+RUN ls
 
 CMD ["node", "server.js"]
