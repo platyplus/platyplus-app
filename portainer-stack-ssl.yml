@@ -37,7 +37,6 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
       AUTH_ALGORITHM: RS256
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
-      HASURA_GRAPHQL_MIGRATIONS_DIR: migrations
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'false'
       AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key

@@ -3,9 +3,9 @@ FROM hasura/graphql-engine:v1.0.0-alpha37.cli-migrations
 COPY docker-entrypoint.sh /bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-# WORKDIR /opt
-COPY migrations ./
-
+# WORKDIR /opt/migrations
+COPY migrations .
+ENV HASURA_GRAPHQL_MIGRATIONS_DIR /migrations
 HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT:-8080}/v1/version || exit 1
 
 CMD ["graphql-engine", "serve"]
