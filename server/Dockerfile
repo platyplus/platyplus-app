@@ -1,17 +1,16 @@
 # Build stage
-FROM node:10.15.1-alpine as build-stage
+FROM node:10.15.1-alpine as build-app-stage
 WORKDIR /app
-COPY client/package.json client/yarn.lock ./
+COPY package.json yarn.lock ./
 RUN yarn
-COPY client ./
+COPY . ./
 RUN $(npm bin)/quasar build -m pwa -t mat
 
 FROM node:10.15.1-alpine as production-stage
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY --from=build-app-stage /app/dist ./
+COPY server ./
 RUN yarn
-COPY --from=build-stage /app/dist ./
-COPY server.js healthcheck.js ./
 
 EXPOSE 80
 # check every 30s to ensure this service returns HTTP 200

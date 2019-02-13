@@ -38,7 +38,7 @@ name: graphql-engine-build
 steps:
   - name: pre-build-graphql-service
     image: alpine
-    commands:
+    commands: # TODO: set the migrations in the services/graphql-engine directory, an update the script/location of the hasura project
       - cp -R migrations services/graphql-engine/
   - name: build-graphql-service
     image: plugins/docker
@@ -56,20 +56,10 @@ steps:
 kind: pipeline
 name: application-build
 steps:
-  - name: pre-build-application
-    image: alpine
-    commands:
-      - mkdir -p services/application/client
-      - cp -R *.js services/application/client/
-      - cp -R *.json services/application/client/
-      - cp -R src* services/application/client/
-      - cp eslintignore services/application/client/
-      - cp yarn.lock services/application/client/
   - name: build-application
     image: plugins/docker
     settings:
-      context: services/application
-      dockerfile: services/application/Dockerfile
+      dockerfile: server/Dockerfile
       repo: platyplus/platyplus
       target: production-stage
       tags: latest
