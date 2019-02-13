@@ -37,7 +37,7 @@ steps:
 kind: pipeline
 name: graphql-engine-build
 steps:
-  - name: build-graphql-service
+  - name: pre-build-graphql-service
     image: alpine
     group: prepare-build
     commands:
