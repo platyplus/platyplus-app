@@ -15,5 +15,6 @@ EXPOSE 80
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s CMD node healthcheck.js
+RUN ls
 
 CMD ["node", "server.js"]
