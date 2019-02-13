@@ -1,4 +1,9 @@
 --
+-- DO NOT CREATE THE public SCHEMA! IT IS ALREADY CREATED BY HASURA
+-- CREATE THE LTREE EXTENSION!!!
+create extension ltree;
+-- AND NOW WE CAN START!
+--
 -- PostgreSQL database dump
 --
 
