@@ -8,7 +8,7 @@ RUN $(npm bin)/quasar build -m pwa -t mat
 
 FROM node:10.15.1-alpine as production-stage
 WORKDIR /app
-COPY --from=build-stage /app/dist /app/services/application/ ./
+COPY --from=build-stage /app/dist /app/services/application ./
 RUN yarn
 EXPOSE 80
 
