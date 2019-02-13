@@ -21,6 +21,7 @@ services:
     depends_on:
       - 'authentication'
       - 'postgres'
+      - 'synchronization-hook'
     environment:
       HASURA_GRAPHQL_SERVER_PORT: 3000
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@postgres:5432/postgres
@@ -55,8 +56,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
   synchronization-hook:
     image: platyplus/synchronization-hook
-    depends_on:
-      - 'graphql-engine' # TODO: https://github.com/jwilder/dockerize -wait
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
 volumes:

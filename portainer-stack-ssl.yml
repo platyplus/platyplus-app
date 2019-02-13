@@ -31,6 +31,7 @@ services:
     depends_on:
       - authentication
       - postgres
+      - synchronization-hook
     environment:
       HASURA_GRAPHQL_SERVER_PORT: 3000
       HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
@@ -86,8 +87,6 @@ services:
       - 'acme:/etc/traefik/acme'
   synchronization-hook:
     image: platyplus/synchronization-hook
-    depends_on:
-      - graphql-engine
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
