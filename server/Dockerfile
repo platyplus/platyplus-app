@@ -6,14 +6,16 @@ RUN yarn
 COPY . ./
 RUN $(npm bin)/quasar build -m pwa -t mat
 
-FROM node:10.15.1-alpine as production-stage
-WORKDIR /app
-COPY --from=build-app-stage /app/dist ./
-COPY server ./
+FROM platyplus/service-template as production-stage
+WORKDIR /opt
+COPY server/package.json server/yarn.lock ./
 RUN yarn
+ENV PATH /opt/node_modules/.bin:$PATH
 
-EXPOSE 80
-# check every 30s to ensure this service returns HTTP 200
-HEALTHCHECK --interval=30s CMD node healthcheck.js
+WORKDIR /opt/app
+COPY --from=build-app-stage /app/dist ./
+COPY server/index.js ./
 
-CMD ["node", "server.js"]
+USER node
+
+CMD [ "node", "./bin/www" ]
