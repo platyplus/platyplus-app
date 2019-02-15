@@ -20,6 +20,7 @@
   "author": "Pierre-Louis Mercereau",
   "license": "MIT",
   "dependencies": {
+    "@godaddy/terminus": "^4.1.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "graphql-request": "^1.8.2"

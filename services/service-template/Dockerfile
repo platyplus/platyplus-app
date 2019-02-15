@@ -14,7 +14,7 @@ EXPOSE $PORT 9229 9230
 
 # you'll likely want the latest npm, regardless of node version, for speed and fixes
 # but pin this version for the best stability
-RUN npm i npm@latest @godaddy/terminus@^4.1.0 -g
+RUN npm i npm@latest -g
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s CMD node healthcheck.js
