@@ -1,5 +1,8 @@
 FROM platyplus/service-template
 
+ARG ALGORITHM=RS256
+ENV ALGORITHM $ALGORITHM
+
 # install dependencies first, in a different location for easier app bind mounting for local development
 WORKDIR /opt
 COPY package.json package-lock.json* ./
