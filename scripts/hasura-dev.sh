@@ -1,7 +1,5 @@
 #!/bin/bash
-# if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
-export DOMAIN=localhost
-export HASURA_ACCESS_KEY=$(cat secret.key)
+. ./scripts/load-dev-env.sh
 envsubst < config.yaml.template > services/graphql-engine/config.yaml
 hasura console --project services/graphql-engine
 # TODO: change the script into start-stack $1 dev, prod, ssl...

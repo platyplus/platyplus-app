@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n')
 const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n')
-const algorithm = process.env.ALGORITHM
+const algorithm = process.env.ALGORITHM || 'RS256'
 
 const graphql = new GraphQLClient(process.env.HASURA_URL, {
   headers: {
@@ -83,6 +83,7 @@ const resolvers = {
     }
   },
   Mutation: {
+    // TODO: secure the endpoint!!!
     signup: async (_, { username, password }) => {
       const hashedPassword = await bcrypt.hash(password, 10)
       const user = await graphql

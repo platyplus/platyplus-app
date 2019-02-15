@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.4'
 services:
   app:
     image: platyplus/platyplus
@@ -35,17 +35,6 @@ services:
       - authentication_private_key
       - authentication_public_key
       - hasura_secret_key
-  configuration:
-    image: couchdb
-    environment:
-      NODENAME: node-name
-      ERL_FLAGS: '-setcookie "brumbrum"'
-      COUCHDB_USER: admin
-      COUCHDB_PASSWORD: admin
-      COUCHDB_SECRET: admin
-    labels:
-      - 'traefik.frontend.rule=Host:config-db.${DOMAIN}'
-      - traefik.port=5984
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
@@ -67,14 +56,14 @@ services:
       - hasura_secret_key
   postgres:
     image: 'mdillon/postgis:11-alpine'
+    volumes:
+      - 'db_data:/var/lib/postgresql/data'
     healthcheck:
       test:
         - CMD-SHELL
         - pg_isready -U postgres
       interval: 30s
       timeout: 5s
-    volumes:
-      - 'db_data:/var/lib/postgresql/data'
   reverse-proxy:
     image: traefik
     command:

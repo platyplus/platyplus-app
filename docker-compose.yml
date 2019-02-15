@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.4'
 services:
   app:
     image: platyplus/platyplus
@@ -17,19 +17,19 @@ services:
     image: platyplus/authentication
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-  configuration: # TODO: volume to store the data and config, and secure/encrypt
-    image: couchdb # TODO: tag
-    environment: # TODO: script to init the cluster - part of the application? Init the DB and replication in the application
-      NODENAME: 'node-name' # TODO: check documentation
-      ERL_FLAGS: -setcookie "brumbrum" # TODO: check documentation
-      COUCHDB_USER: admin
-      COUCHDB_PASSWORD: admin
-      COUCHDB_SECRET: admin # TODO: secret
-    labels:
-      - 'traefik.frontend.rule=Host:config-db.${DOMAIN}'
-      - 'traefik.port=5984'
-    # volumes:
-    # - /var/run/docker.sock:/var/run/docker.sock
+  # configuration: # TODO: volume to store the data and config, and secure/encrypt
+  #   image: couchdb # TODO: tag
+  #   environment: # TODO: script to init the cluster - part of the application? Init the DB and replication in the application
+  #     NODENAME: 'node-name' # TODO: check documentation
+  #     ERL_FLAGS: -setcookie "brumbrum" # TODO: check documentation
+  #     COUCHDB_USER: admin
+  #     COUCHDB_PASSWORD: admin
+  #     COUCHDB_SECRET: admin # TODO: secret
+  #   labels:
+  #     - 'traefik.frontend.rule=Host:config-db.${DOMAIN}'
+  #     - 'traefik.port=5984'
+  # volumes:
+  # - /var/run/docker.sock:/var/run/docker.sock
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
@@ -44,10 +44,6 @@ services:
       - 'traefik.port=3000'
   postgres:
     image: mdillon/postgis:11-alpine
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
-      interval: 30s
-      timeout: 5s
     volumes:
       - db_data:/var/lib/postgresql/data
   reverse-proxy:

@@ -1,6 +1,8 @@
 FROM platyplus/service-template
 
-ARG ALGORITHM=RS256
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
+
 ENV ALGORITHM $ALGORITHM
 
 WORKDIR /opt
@@ -12,5 +14,6 @@ WORKDIR /opt/app
 COPY . /opt/app
 
 USER node
+RUN echo $NODE_ENV
 
 CMD [ "node", "./bin/www" ]

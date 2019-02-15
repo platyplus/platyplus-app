@@ -1,13 +1,16 @@
 FROM platyplus/service-template
 
-ARG ALGORITHM=RS256
-ENV ALGORITHM $ALGORITHM
+# set our node environment, either development or production
+# defaults to production, compose overrides this to development on build and run
+#TODO: remove
+RUN printenv
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
 
 # install dependencies first, in a different location for easier app bind mounting for local development
 WORKDIR /opt
 COPY package.json package-lock.json* ./
 RUN npm install --no-optional && npm cache clean --force
-ENV PATH /opt/node_modules/.bin:$PATH
 
 # copy in our source code last, as it changes the most
 WORKDIR /opt/app
@@ -21,4 +24,8 @@ USER node
 # so that signals are passed properly. Note the code in index.js is needed to catch Docker signals
 # using node here is still more graceful stopping then npm with --init afaik
 # I still can't come up with a good production way to run with npm and graceful shutdown
+ENV PATH /opt/node_modules/.bin:$PATH
+ENV ALGORITHM $ALGORITHM
+#TODO: remove
+RUN printenv
 CMD [ "node", "./bin/www" ]
