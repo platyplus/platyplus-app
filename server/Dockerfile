@@ -1,10 +1,8 @@
 # Build stage
 FROM node:10.15.1-alpine as prepare-deps-stage
-ARG NODE_ENV=production
-ENV NODE_ENV $NODE_ENV
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn --ignore-optional
+RUN NODE_ENV=development yarn --ignore-optional
 COPY . ./
 
 FROM prepare-deps-stage as build-app-stage
