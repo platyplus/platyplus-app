@@ -16,6 +16,12 @@ EXPOSE $PORT 9229 9230
 # but pin this version for the best stability
 RUN npm i npm@latest -g
 
+# install dependencies first, in a different location for easier app bind mounting for local development
+WORKDIR /opt
+COPY package.json package-lock.json* ./
+RUN npm install --no-optional && npm cache clean --force
+ENV PATH /opt/node_modules/.bin:$PATH
+
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s CMD node healthcheck.js
 

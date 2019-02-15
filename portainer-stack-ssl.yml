@@ -12,7 +12,7 @@ services:
   authentication:
     image: platyplus/authentication
     environment:
-      HASURA_URL: 'http://graphql-engine:3000'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
       PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
@@ -37,7 +37,7 @@ services:
   administration:
     image: platyplus/administration
     environment:
-      HASURA_URL: 'http://graphql-engine:3000'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
       PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
@@ -61,7 +61,6 @@ services:
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
-      - 'traefik.frontend.rule=AddPrefix:/v1alpha1/graphql'
       - traefik.port=3000
     deploy:
       replicas: 1
@@ -107,7 +106,7 @@ services:
   synchronization-hook:
     image: platyplus/synchronization-hook
     environment:
-      HASURA_URL: 'http://graphql-engine:3000'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
     deploy:

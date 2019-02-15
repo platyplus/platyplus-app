@@ -4,7 +4,7 @@ var options = {
   timeout: 2000,
   host: 'localhost',
   port: process.env.PORT || 3000,
-  path: '/.well-known/apollo/server-health'
+  path: '/healthcheck'
 }
 
 var request = http.request(options, res => {

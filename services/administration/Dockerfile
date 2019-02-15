@@ -1,11 +1,9 @@
-# if you're doing anything beyond your local machine, please pin this to a specific version at https://hub.docker.com/_/node/
 FROM platyplus/service-template
 
 # install dependencies first, in a different location for easier app bind mounting for local development
 WORKDIR /opt
 COPY package.json package-lock.json* ./
-RUN npm install --no-optional && npm cache clean --force
-ENV PATH /opt/node_modules/.bin:$PATH
+RUN npm install --no-optional
 
 # copy in our source code last, as it changes the most
 WORKDIR /opt/app

@@ -12,7 +12,7 @@ services:
   authentication:
     image: platyplus/authentication
     environment:
-      HASURA_URL: 'http://graphql-engine:3000'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
   configuration: # TODO: volume to store the data and config, and secure/encrypt
     image: couchdb # TODO: tag
     environment: # TODO: script to init the cluster - part of the application? Init the DB and replication in the application
@@ -29,7 +29,7 @@ services:
   administration:
     image: platyplus/administration
     environment:
-      HASURA_URL: 'http://graphql-engine:3000'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
@@ -41,7 +41,6 @@ services:
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: 'anonymous'
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
-      - 'traefik.frontend.rule=AddPrefix:/v1alpha1/graphql'
       - 'traefik.port=3000'
   postgres:
     image: mdillon/postgis:11-alpine
@@ -68,6 +67,6 @@ services:
   synchronization-hook:
     image: platyplus/synchronization-hook
     environment:
-      HASURA_URL: 'http://graphql-engine:3000'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
 volumes:
   db_data:

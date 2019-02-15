@@ -47,6 +47,8 @@ steps:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
+depends_on:
+  - service-template-build
 
 ---
 kind: pipeline
@@ -113,3 +115,5 @@ steps:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
+depends_on:
+  - service-template-build
