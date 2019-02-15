@@ -1,4 +1,4 @@
-FROM hasura/graphql-engine:v1.0.0-alpha37.cli-migrations
+FROM hasura/graphql-engine:v1.0.0-alpha38.cli-migrations
 
 ARG AUTH_ALGORITHM=RS256
 ENV AUTH_ALGORITHM $AUTH_ALGORITHM
