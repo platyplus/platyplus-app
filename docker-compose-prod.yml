@@ -28,6 +28,7 @@ services:
     environment:
       AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
+      HASURA_GRAPHQL_MIGRATIONS_DIR: /opt/hasura-migrations
     secrets:
       - authentication_public_key
       - hasura_secret_key

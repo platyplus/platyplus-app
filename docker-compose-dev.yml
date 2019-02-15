@@ -87,7 +87,6 @@ services:
     environment:
       AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
-      HASURA_GRAPHQL_MIGRATIONS_DIR: 'none'
     healthcheck:
       disable: true
     restart: always

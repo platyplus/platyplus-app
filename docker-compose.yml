@@ -37,6 +37,7 @@ services:
       - 'postgres'
       - 'synchronization-hook'
     environment:
+      AUTH_ALGORITHM: RS256
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@postgres:5432/postgres
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: 'anonymous'
     labels:
