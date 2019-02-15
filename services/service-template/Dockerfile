@@ -14,13 +14,7 @@ EXPOSE $PORT 9229 9230
 
 # you'll likely want the latest npm, regardless of node version, for speed and fixes
 # but pin this version for the best stability
-RUN npm i npm@latest -g
-
-# install dependencies first, in a different location for easier app bind mounting for local development
-WORKDIR /opt/shared
-COPY package.json package-lock.json* ./
-RUN npm install --no-optional && npm cache clean --force
-ENV PATH /opt/shared/node_modules/.bin:$PATH
+RUN npm i npm@latest @godaddy/terminus@^4.1.0 -g
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s CMD node healthcheck.js
