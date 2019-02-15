@@ -12,7 +12,6 @@ FROM platyplus/service-template as production-stage
 WORKDIR /opt
 COPY server/package.json server/yarn.lock ./
 RUN yarn
-ENV PATH /opt/node_modules/.bin:$PATH
 
 WORKDIR /opt/app
 COPY --from=build-app-stage /app/dist ./
@@ -20,4 +19,4 @@ COPY server/index.js ./
 
 USER node
 
-CMD [ "node", "./bin/www" ]
+CMD [ "node", "/opt/start" ]

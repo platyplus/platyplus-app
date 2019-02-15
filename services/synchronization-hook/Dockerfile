@@ -7,7 +7,6 @@ ENV NODE_ENV $NODE_ENV
 WORKDIR /opt
 COPY package.json package-lock.json* ./
 RUN npm install --no-optional && npm cache clean --force
-ENV PATH /opt/node_modules/.bin:$PATH
 
 # copy in our source code last, as it changes the most
 WORKDIR /opt/app
@@ -21,4 +20,4 @@ USER node
 # so that signals are passed properly. Note the code in index.js is needed to catch Docker signals
 # using node here is still more graceful stopping then npm with --init afaik
 # I still can't come up with a good production way to run with npm and graceful shutdown
-CMD [ "node", "./bin/www" ]
+CMD [ "node", "/opt/start" ]
