@@ -89,9 +89,12 @@ services:
       - '55432:5432'
     restart: always
   reverse-proxy:
-    ports:
-      - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
+    # ports:
+    # - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
     restart: always
+    labels:
+      - 'traefik.frontend.rule=Host:traefik.${DOMAIN}'
+      - 'traefik.port=8080'
   synchronization-hook:
     build:
       context: ./services/synchronization-hook

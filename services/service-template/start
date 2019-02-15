@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const app = require('../app/index'),
+const app = require('/opt/app/index'),
   PORT = process.env.PORT || 3000,
   http = require('http'),
   { createTerminus } = require('@godaddy/terminus')
