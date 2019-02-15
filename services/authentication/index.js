@@ -9,7 +9,7 @@ const algorithm = process.env.ALGORITHM || 'RS256'
 
 const graphql = new GraphQLClient(process.env.HASURA_URL, {
   headers: {
-    'X-Hasura-Access-Key': process.env.HASURA_GRAPHQL_ACCESS_KEY
+    'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET
   }
 })
 

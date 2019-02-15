@@ -1,13 +1,14 @@
 version: '3.4'
 services:
   administration:
+    # container_name: administration
     build:
       context: ./services/administration
       args:
         NODE_ENV: development
     command: nodemon --inspect=0.0.0.0:9229 /opt/start
     environment:
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
       NODE_ENV: development
       PUBLIC_KEY: '${PUBLIC_KEY}'
     healthcheck:
@@ -29,13 +30,14 @@ services:
       - ./services/administration/package-lock.json:/opt/package-lock.json
       - notused_admin:/opt/app/node_modules
   app:
+    # container_name: app
     build:
       context: .
       dockerfile: server/Dockerfile
       target: prepare-deps-stage
     command: ['./node_modules/.bin/quasar', 'dev']
     environment:
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
       NODE_ENV: development
       PRIVATE_KEY: '${PRIVATE_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
@@ -51,13 +53,14 @@ services:
       - ./server/package-lock.json:/opt/package-lock.json
       - notused_app:/opt/app/node_modules
   authentication:
+    # container_name: authentication
     build:
       context: ./services/authentication
       args:
         NODE_ENV: development
     command: nodemon --inspect=0.0.0.0:9229 /opt/start
     environment:
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
       NODE_ENV: development
       PRIVATE_KEY: '${PRIVATE_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
@@ -80,29 +83,34 @@ services:
       - ./services/authentication/package-lock.json:/opt/package-lock.json
       - notused_auth:/opt/app/node_modules
   graphql-engine:
+    # container_name: graphql-engine
     environment:
-      AUTH_PUBLIC_KEY: '$PUBLIC_KEY'
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_MIGRATIONS_DIR: 'none'
+    healthcheck:
+      disable: true
     restart: always
+    volumes: # TODO: Utile? En tout cas ça ne regle pas le probleme
+      - ./services/graphql-engine/migrations:/services/graphql-engine/migrations
   postgres:
+    # container_name: postgres
     ports:
-      - '55432:5432'
+      - '5432:5432'
     restart: always
   reverse-proxy:
-    # ports:
-    # - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
+    ports:
+      - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
     restart: always
-    labels:
-      - 'traefik.frontend.rule=Host:traefik.${DOMAIN}'
-      - 'traefik.port=8080'
   synchronization-hook:
+    # container_name: synchronization-hook
     build:
       context: ./services/synchronization-hook
       args:
         NODE_ENV: development
     command: nodemon --inspect=0.0.0.0:9229 /opt/start
     environment:
-      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
       NODE_ENV: development
     healthcheck:
       disable: true

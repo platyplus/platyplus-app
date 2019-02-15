@@ -13,7 +13,7 @@ services:
     image: platyplus/administration
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
       PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
     deploy:
@@ -25,7 +25,7 @@ services:
     image: platyplus/authentication
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
       PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
       PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
@@ -45,7 +45,7 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
       AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - traefik.port=3000
@@ -70,6 +70,10 @@ services:
       - '--docker.watch'
       - '--docker'
       - '--web'
+    ports:
+      - '80:80'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
     healthcheck:
       test:
         - CMD
@@ -78,15 +82,11 @@ services:
         - '--ping'
       interval: 30s
       timeout: 5s
-    ports:
-      - '80:80'
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
   synchronization-hook:
     image: platyplus/synchronization-hook
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
     deploy:
       replicas: 1

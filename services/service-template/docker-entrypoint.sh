@@ -24,7 +24,7 @@ file_env() {
 }
 
 # TODO: map all _FILE environment variables
-file_env 'HASURA_GRAPHQL_ACCESS_KEY'
+file_env 'HASURA_GRAPHQL_ADMIN_SECRET'
 file_env 'PUBLIC_KEY'
 file_env 'PRIVATE_KEY'
 
