@@ -18,6 +18,22 @@ steps:
 
 ---
 kind: pipeline
+name: service-template-build
+steps:
+  - name: build-service-template
+    image: plugins/docker
+    settings:
+      context: services/service-template
+      dockerfile: services/service-template/Dockerfile
+      repo: platyplus/service-template
+      tags: latest
+      username:
+        from_secret: DH_USER
+      password:
+        from_secret: DH_PASSWORD
+
+---
+kind: pipeline
 name: authentication-build
 steps:
   - name: build-auth-service
@@ -31,6 +47,24 @@ steps:
         from_secret: DH_USER
       password:
         from_secret: DH_PASSWORD
+
+---
+kind: pipeline
+name: administration-build
+steps:
+  - name: build-admin-service
+    image: plugins/docker
+    settings:
+      context: services/administration
+      dockerfile: services/administration/Dockerfile
+      repo: platyplus/administration
+      tags: latest
+      username:
+        from_secret: DH_USER
+      password:
+        from_secret: DH_PASSWORD
+depends_on:
+  - service-template-build
 
 ---
 kind: pipeline

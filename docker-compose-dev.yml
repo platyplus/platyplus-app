@@ -17,7 +17,7 @@ services:
     healthcheck:
       disable: true
     labels:
-      - 'traefik.frontend.rule=Host:auth.${DOMAIN}'
+      - 'traefik.frontend.rule=Host:auth-service.${DOMAIN}'
       - 'traefik.port=3000'
     ports:
       - '9229:9229' # TODO: map with traefik
@@ -28,6 +28,31 @@ services:
       - ./services/authentication/package.json:/opt/package.json
       - ./services/authentication/package-lock.json:/opt/package-lock.json
       - notused_auth:/opt/app/node_modules
+  administration:
+    build:
+      context: ./services/administration
+      args:
+        - NODE_ENV=development
+    command: ../node_modules/.bin/nodemon --inspect=0.0.0.0:9229 ./bin/www
+    environment:
+      HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
+      NODE_ENV: development
+      PRIVATE_KEY: '${PRIVATE_KEY}'
+      PUBLIC_KEY: '${PUBLIC_KEY}'
+    healthcheck:
+      disable: true
+    labels:
+      - 'traefik.frontend.rule=Host:admin-service.${DOMAIN}'
+      - 'traefik.port=3000'
+    ports:
+      - '9229:9229' # TODO: map with traefik
+      - '9230:9230' # TODO: map with traefik
+    restart: always
+    volumes:
+      - ./services/administration:/opt/app:delegated
+      - ./services/administration/package.json:/opt/package.json
+      - ./services/administration/package-lock.json:/opt/package-lock.json
+      - notused_admin:/opt/app/node_modules
   graphql-engine:
     environment:
       AUTH_PUBLIC_KEY: '$PUBLIC_KEY'

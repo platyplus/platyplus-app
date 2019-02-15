@@ -146,7 +146,7 @@ const server = new ApolloServer({
 })
 
 const app = express()
-server.applyMiddleware({ path: '/', app })
+server.applyMiddleware({ path: '/', app }) // TODO: forget about / and use the default /graphql so we can allow other routes (and standardize healthcheck)
 console.log(`GraphQL endpoint will be: ${server.graphqlPath}`)
 
 module.exports = app

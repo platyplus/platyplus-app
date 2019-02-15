@@ -5,17 +5,39 @@ services:
     depends_on:
       - graphql-engine
     environment:
-      API: 'graphql.${DOMAIN}/v1alpha1/graphql'
+      API: 'graphql.${DOMAIN}'
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - traefik.port=80
   authentication:
     image: platyplus/authentication
-    depends_on:
-      - postgres
     environment:
-      ALGORITHM: RS256
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000'
+      HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
+      NODE_ENV: production
+      PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
+      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
+    deploy:
+      replicas: 1
+    secrets:
+      - authentication_private_key
+      - authentication_public_key
+      - hasura_secret_key
+  configuration:
+    image: couchdb
+    environment:
+      NODENAME: node-name
+      ERL_FLAGS: '-setcookie "brumbrum"'
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: admin
+      COUCHDB_SECRET: admin
+    labels:
+      - 'traefik.frontend.rule=Host:config-db.${DOMAIN}'
+      - traefik.port=5984
+  administration:
+    image: platyplus/administration
+    environment:
+      HASURA_URL: 'http://graphql-engine:3000'
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
       PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
@@ -33,15 +55,13 @@ services:
       - postgres
       - synchronization-hook
     environment:
-      HASURA_GRAPHQL_SERVER_PORT: 3000
       HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
-      AUTH_ALGORITHM: RS256
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
-      HASURA_GRAPHQL_ENABLE_CONSOLE: 'false'
       AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+      - 'traefik.frontend.rule=AddPrefix:/v1alpha1/graphql'
       - traefik.port=3000
     deploy:
       replicas: 1
@@ -87,7 +107,7 @@ services:
   synchronization-hook:
     image: platyplus/synchronization-hook
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000'
       HASURA_GRAPHQL_ACCESS_KEY_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
     deploy:
