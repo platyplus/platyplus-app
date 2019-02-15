@@ -37,7 +37,6 @@ services:
     environment:
       HASURA_GRAPHQL_ACCESS_KEY: '${HASURA_ACCESS_KEY}'
       NODE_ENV: development
-      PRIVATE_KEY: '${PRIVATE_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
     healthcheck:
       disable: true

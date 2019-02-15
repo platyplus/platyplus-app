@@ -18,9 +18,9 @@ const typeDefs = gql`
     currentCluster: Cluster!
   }
   type Mutation {
-    signup(username: String, password: String): AuthPayload!
+    testAdmin(username: String, password: String): TestPayload!
   }
-  type AuthPayload {
+  type TestPayload {
     id: ID
     token: String
   }
@@ -51,7 +51,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    signup: async (_, { username, password }) => {
+    testAdmin: async (_, { username, password }) => {
       const user = {}
 
       return { id: user.id }

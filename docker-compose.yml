@@ -8,7 +8,11 @@ services:
       API: 'graphql.${DOMAIN}'
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
-      - 'traefik.port=80' # TODO: revoir le dockerfile pour pouvoir utiliser le port 3000 par défaut
+      - 'traefik.port=3000'
+  administration:
+    image: platyplus/administration
+    environment:
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
   authentication:
     image: platyplus/authentication
     environment:
@@ -26,10 +30,6 @@ services:
       - 'traefik.port=5984'
     # volumes:
     # - /var/run/docker.sock:/var/run/docker.sock
-  administration:
-    image: platyplus/administration
-    environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
