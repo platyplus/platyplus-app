@@ -37,6 +37,7 @@ services:
       target: prepare-deps-stage
     command: ['./node_modules/.bin/quasar', 'dev']
     environment:
+      HASURA_GRAPHQL_MIGRATIONS_DIR: /opt/hasura-migrations
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
       NODE_ENV: development
       PRIVATE_KEY: '${PRIVATE_KEY}'
@@ -84,14 +85,16 @@ services:
       - notused_auth:/opt/app/node_modules
   graphql-engine:
     # container_name: graphql-engine
+    build:
+      context: ./services/graphql-engine
     environment:
       AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
     healthcheck:
       disable: true
     restart: always
-    volumes: # TODO: Utile? En tout cas ça ne regle pas le probleme
-      - ./services/graphql-engine/migrations:/services/graphql-engine/migrations
+    volumes:
+      - ./services/graphql-engine/migrations:/opt/hasura-migrations
   postgres:
     # container_name: postgres
     ports:
