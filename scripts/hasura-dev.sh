@@ -10,13 +10,14 @@ function ctrl_c() {
     docker-compose -f docker-compose.yml -f docker-compose-dev.yml down
     exit
 }
-
+echo -n "Waiting for the services to be ready"
 envsubst < config.yaml.template > services/graphql-engine/config.yaml
 while ! curl -sf http://graphql.localhost/v1/version -o /dev/null
 do
     echo -n .
     sleep 1
 done
+echo
 hasura console --project services/graphql-engine
 
 # TODO: enhance the script into start-stack $1 dev, prod, ssl...
