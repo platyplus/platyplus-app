@@ -1,7 +1,6 @@
 version: '3.4'
 services:
   administration:
-    # container_name: administration
     build:
       context: ./services/administration
       args:
@@ -30,7 +29,6 @@ services:
       - ./services/administration/package-lock.json:/opt/package-lock.json
       - notused_admin:/opt/app/node_modules
   app:
-    # container_name: app
     build:
       context: .
       dockerfile: server/Dockerfile
@@ -54,7 +52,6 @@ services:
       - ./server/package-lock.json:/opt/package-lock.json
       - notused_app:/opt/app/node_modules
   authentication:
-    # container_name: authentication
     build:
       context: ./services/authentication
       args:
@@ -84,8 +81,7 @@ services:
       - ./services/authentication/package-lock.json:/opt/package-lock.json
       - notused_auth:/opt/app/node_modules
   graphql-engine:
-    # container_name: graphql-engine
-    build:
+    build: #TODO: no need to build
       context: ./services/graphql-engine
     environment:
       AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
@@ -95,8 +91,19 @@ services:
     restart: always
     volumes:
       - ./services/graphql-engine/migrations:/opt/hasura-migrations
+  graphql-console: #TODO: no need to build
+    build:
+      context: ./services/graphql-console
+    depends_on:
+      - 'graphql-engine'
+    environment:
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
+    ports:
+      - 3000:3000 # TODO: https://github.com/containous/traefik/issues/3780
+    restart: always
+    volumes:
+      - ./services/graphql-engine/migrations:/opt/migrations
   postgres:
-    # container_name: postgres
     ports:
       - '5432:5432'
     restart: always
@@ -105,7 +112,6 @@ services:
       - '8080:8080' # The Web UI (enabled by --api) # TODO: map with traefik
     restart: always
   synchronization-hook:
-    # container_name: synchronization-hook
     build:
       context: ./services/synchronization-hook
       args:
