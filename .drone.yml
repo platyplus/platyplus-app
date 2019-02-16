@@ -2,26 +2,11 @@ kind: pipeline
 name: documentation
 steps:
   - name: build-docs
-    image: plugins/docker
-    settings:
-      context: services/graphql-console
-      dockerfile: services/graphql-console/Dockerfile
-      repo: platyplus/graphql-console
-      tags: latest
-      username:
-        from_secret: DH_USER
-      password:
-        from_secret: DH_PASSWORD
-
----
-kind: pipeline
-name: graphql-console
-steps:
-  - name: build-graphql-console
     image: node:alpine
     commands:
       - apk add --no-cache git
-      - ./scripts/set-github-ci.sh
+      - git config --global user.email "no-reply@platy.plus"
+      - git config --global user.name "Drone.io CI"
       - ./scripts/deploy-documentation.sh
     environment:
       GH_TOKEN:
