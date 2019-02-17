@@ -8,7 +8,7 @@ RUN mkdir /user && \
     echo 'nobody:x:65534:' > /user/group
 # Install the Certificate-Authority certificates for the app to be able to make
 # calls to HTTPS endpoints.
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates git
 # Set the environment variables for the go command:
 # * CGO_ENABLED=0 to build a statically-linked executable
 # * GOFLAGS=-mod=vendor to force `go build` to look into the `/vendor` folder.
