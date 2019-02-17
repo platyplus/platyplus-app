@@ -23,19 +23,13 @@ name: git-sync-build
 #   base: /go
 #   path: src/github.com/kubernetes/git-sync
 steps:
-  - name: clone-git-sync
-    image: docker:git
-    commands:
-      - git clone https://github.com/kubernetes/git-sync.git
   - name: build-git-sync
-    image: golang:1.11-alpine
-    commands:
-      - apk add docker make git
-      - cd git-sync
-      - docker login --username $username --password $password
-      - make container
-      - ls
-    environment:
+    image: plugins/docker
+    settings:
+      context: services/git-sync
+      dockerfile: services/git-sync/Dockerfile
+      repo: platyplus/git-sync
+      tags: latest
       username:
         from_secret: DH_USER
       password:
