@@ -17,8 +17,6 @@ ENV CGO_ENABLED=0 GOFLAGS=-mod=vendor
 WORKDIR /src
 # Import the code from the context.
 COPY ./ ./
-# Install dependencies
-RUN go mod download
 # Build the executable to `/app`. Mark the build as statically linked.
 RUN go build \
     -installsuffix 'static' \
