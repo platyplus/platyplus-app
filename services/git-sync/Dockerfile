@@ -17,13 +17,8 @@ ENV CGO_ENABLED=0 GOFLAGS=-mod=vendor
 WORKDIR /src
 # Import the code from the context.
 COPY ./ ./
-RUN go get package \
-    github.com/prometheus/client_golang/prometheus \
-    github.com/prometheus/client_golang/prometheus/promhttp \
-    github.com/thockin/glogr \
-    github.com/thockin/logr
 # Build the executable to `/app`. Mark the build as statically linked.
-RUN go build \
+RUN GOPATH=/app go build \
     -installsuffix 'static' \
     -o /app .
 
