@@ -30,7 +30,7 @@ steps:
   - name: build-git-sync
     image: golang:1.11-alpine
     commands:
-      - apk add docker make
+      - apk add docker make git
       - cd git-sync
       - make container
       - ls
