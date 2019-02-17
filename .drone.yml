@@ -32,8 +32,14 @@ steps:
     commands:
       - apk add docker make git
       - cd git-sync
+      - docker login --username $username --password $password
       - make container
       - ls
+    environment:
+      username:
+        from_secret: DH_USER
+      password:
+        from_secret: DH_PASSWORD
 
 ---
 kind: pipeline
