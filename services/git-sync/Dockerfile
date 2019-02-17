@@ -14,9 +14,12 @@ RUN apk add --no-cache ca-certificates
 # * GOFLAGS=-mod=vendor to force `go build` to look into the `/vendor` folder.
 ENV CGO_ENABLED=0 GOFLAGS=-mod=vendor
 # Set the working directory outside $GOPATH to enable the support for modules.
-WORKDIR /src
-# Import the code from the context.
-COPY ./ ./
+ENV SERVICE_NAME git-sync
+ENV APP /src/${NAMESPACE}/${SERVICE_NAME}/
+ENV WORKDIR ${GOPATH}${APP}
+
+WORKDIR $WORKDIR
+ADD . $WORKDIR
 # Build the executable to `/app`. Mark the build as statically linked.
 RUN go build \
     -installsuffix 'static' \
