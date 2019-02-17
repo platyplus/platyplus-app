@@ -19,15 +19,17 @@ steps:
 ---
 kind: pipeline
 name: git-sync-build
-steps:
-  - name: clone-git-sync
-    image: docker:git
-    commands:
-      - git clone https://github.com/kubernetes/git-sync.git
+workspace:
+  base: /go
+  path: src/github.com/kubernetes/git-sync
+# steps:
+#   - name: clone-git-sync
+#     image: docker:git
+#     commands:
+#       - git clone https://github.com/kubernetes/git-sync.git
   - name: build-git-sync
     image: goland
     commands:
-      - cd git-sync
       - make container
       - ls
 
