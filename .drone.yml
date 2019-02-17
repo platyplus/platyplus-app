@@ -22,11 +22,11 @@ name: git-sync-build
 workspace:
   base: /go
   path: src/github.com/kubernetes/git-sync
-# steps:
-#   - name: clone-git-sync
-#     image: docker:git
-#     commands:
-#       - git clone https://github.com/kubernetes/git-sync.git
+steps:
+  #   - name: clone-git-sync
+  #     image: docker:git
+  #     commands:
+  #       - git clone https://github.com/kubernetes/git-sync.git
   - name: build-git-sync
     image: goland
     commands:
