@@ -26,6 +26,7 @@ Docker
 # Generate a hasura secret
 LC_ALL=C tr -dc 'A-Za-z0-9_!@#$%^&*()\-+=' < /dev/urandom | head -c 128
 
+# TODO: how to generate those keys escaped with \n directly... or test without escapted in hasura
 # Generate the RSA keys
 openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -pubout > public.pem

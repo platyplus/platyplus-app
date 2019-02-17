@@ -7,6 +7,10 @@ const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n')
 const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n')
 const algorithm = process.env.ALGORITHM || 'RS256'
 
+// TODO: if roles change, the JWT shoud be regerated! How to do it in the most seamless way?
+// We could invalidate it?
+// https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens
+
 const graphql = new GraphQLClient(process.env.HASURA_URL, {
   headers: {
     'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET

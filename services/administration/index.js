@@ -35,19 +35,22 @@ const resolvers = {
     currentCluster: async (_, args, req) => {
       const Authorization = req.headers.authorization
       if (Authorization) {
-        // TODO: only for admins
         const token = Authorization.replace('Bearer ', '')
         const verifiedToken = jwt.verify(token, publicKey, {
           algorithms: [algorithm]
         })
         console.log(verifiedToken)
-        return {
-          id: 'TODO:',
-          name: 'TODO:'
-        }
-      } else {
-        throw new Error('Not logged in.')
-      }
+        const claims = verifiedToken['https://hasura.io/jwt/claims']
+        const roles = claims['x-hasura-allowed-roles']
+        console.log(roles)
+        if (roles.includes('admin')) {
+          console.log('TODO: admin')
+          return {
+            id: 'TODO:',
+            name: 'TODO:'
+          }
+        } else throw new Error('Not an admin.')
+      } else throw new Error('Not logged in.')
     }
   },
   Mutation: {
