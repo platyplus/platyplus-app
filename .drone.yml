@@ -28,8 +28,9 @@ steps:
     commands:
       - git clone https://github.com/kubernetes/git-sync.git
   - name: build-git-sync
-    image: golang:1.11
+    image: golang:1.11-alpine
     commands:
+      - apk add docker
       - cd git-sync
       - make container
       - ls
