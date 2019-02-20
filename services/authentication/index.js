@@ -1,11 +1,13 @@
-const express = require('express')
-const { ApolloServer, gql } = require('apollo-server-express')
-const { GraphQLClient } = require('graphql-request')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n')
-const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n')
-const algorithm = process.env.ALGORITHM || 'RS256'
+const express = require('express'),
+  // rsaPemToJwk = require('rsa-pem-to-jwk'),
+  { ApolloServer, gql } = require('apollo-server-express'),
+  { GraphQLClient } = require('graphql-request'),
+  bcrypt = require('bcryptjs'),
+  jwt = require('jsonwebtoken'),
+  rasha = require('rasha'),
+  PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+  PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+  ALGORITHM = process.env.ALGORITHM || 'RS256'
 
 // TODO: if roles change, the JWT shoud be regerated! How to do it in the most seamless way?
 // We could invalidate it?
@@ -74,8 +76,8 @@ const resolvers = {
       const Authorization = req.headers.authorization
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '')
-        const verifiedToken = jwt.verify(token, publicKey, {
-          algorithms: [algorithm]
+        const verifiedToken = jwt.verify(token, PUBLIC_KEY, {
+          algorithms: [ALGORITHM]
         })
         const user = await graphql
           .request(ME, { id: verifiedToken.userId })
@@ -103,8 +105,8 @@ const resolvers = {
             'x-hasura-user-id': user.id
           }
         },
-        privateKey,
-        { algorithm }
+        PRIVATE_KEY,
+        { algorithm: ALGORITHM }
       )
 
       return { id: user.id, token }
@@ -130,8 +132,8 @@ const resolvers = {
               'x-hasura-user-id': user.id
             }
           },
-          privateKey,
-          { algorithm }
+          PRIVATE_KEY,
+          { algorithm: ALGORITHM }
         )
         return { id: user.id, token }
       } else {
@@ -151,6 +153,21 @@ const server = new ApolloServer({
 })
 
 const app = express()
+
+app.get('/jwks', function (req, res, next) {
+  let jwk = {
+    ...rasha.importSync({ pem: PUBLIC_KEY }),
+    alg: ALGORITHM,
+    use: 'sig',
+    kid: '97fcbca368fe77808830c8100121ec7bde22cf0e'
+  }
+  const jwks = {
+    keys: [jwk]
+  }
+  res.setHeader('Content-Type', 'application/json')
+  res.send(JSON.stringify(jwks, null, 2) + '\n')
+})
+
 server.applyMiddleware({ app })
 console.log(`GraphQL endpoint will be: ${server.graphqlPath}`)
 

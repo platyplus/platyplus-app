@@ -26,7 +26,8 @@
     "express": "^4.16.4",
     "graphql": "^14.1.1",
     "graphql-request": "^1.8.2",
-    "jsonwebtoken": "^8.4.0"
+    "jsonwebtoken": "^8.4.0",
+    "rasha": "^1.2.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",

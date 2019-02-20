@@ -24,6 +24,7 @@ services:
     #   - '9230:9230' # TODO: map with traefik
     restart: always
     volumes:
+      - configuration:/opt/git-sync
       - ./services/administration:/opt/app:delegated
       - ./services/administration/package.json:/opt/package.json
       - ./services/administration/package-lock.json:/opt/package-lock.json
@@ -76,15 +77,26 @@ services:
     #   - '9230:9230' # TODO: map with traefik
     restart: always
     volumes:
+      # - configuration:/opt/git-sync
       - ./services/authentication:/opt/app:delegated
       - ./services/authentication/package.json:/opt/package.json
       - ./services/authentication/package-lock.json:/opt/package-lock.json
       - notused_auth:/opt/app/node_modules
+  configuration:
+    image: k8s.gcr.io/git-sync:v3.1.1
+    environment: # See https://github.com/kubernetes/git-sync/blob/master/cmd/git-sync/main.go
+      GIT_SYNC_REPO: https://github.com/platyplus/configuration
+      GIT_SYNC_ROOT: /git
+    user: root
+    healthcheck:
+      disable: true
+    restart: always
+    volumes:
+      - configuration:/git
   graphql-engine:
     build:
       context: ./services/graphql-engine
     environment:
-      AUTH_PUBLIC_KEY: '${PUBLIC_KEY}'
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
     healthcheck:
       disable: true
@@ -127,6 +139,7 @@ services:
       - ./services/synchronization-hook/package-lock.json:/opt/package-lock.json
       - notused_sync:/opt/app/node_modules
 volumes:
+  configuration:
   notused_admin:
   notused_app:
   notused_auth:

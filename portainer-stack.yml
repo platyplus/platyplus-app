@@ -41,18 +41,13 @@ services:
       - authentication
       - postgres
       - synchronization-hook
-    environment:
-      AUTH_ALGORITHM: RS256
-      HASURA_GRAPHQL_DATABASE_URL: 'postgres://postgres:@postgres:5432/postgres'
-      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
-      AUTH_PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
-      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
-      HASURA_GRAPHQL_MIGRATIONS_DIR: /opt/hasura-migrations
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - traefik.port=3000
     deploy:
       replicas: 1
+    environment:
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
     secrets:
       - authentication_public_key
       - hasura_secret_key

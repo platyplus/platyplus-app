@@ -28,10 +28,6 @@ file_env() {
 }
 
 file_env 'HASURA_GRAPHQL_ADMIN_SECRET'
-file_env 'AUTH_PUBLIC_KEY'
-export "HASURA_GRAPHQL_JWT_SECRET"="{\"type\":\"${AUTH_ALGORITHM}\", \"key\":\"${AUTH_PUBLIC_KEY}\"}"
 export "HASURA_GRAPHQL_MIGRATIONS_DIR"="/opt/hasura-migrations"
-unset AUTH_PUBLIC_KEY
-unset AUTH_ALGORITHM
 docker-entrypoint.sh
 exec "$@"

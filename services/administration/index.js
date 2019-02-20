@@ -1,17 +1,32 @@
 const express = require('express'),
   { ApolloServer, gql } = require('apollo-server-express'),
-  // { GraphQLClient } = require('graphql-request')
-  // bcrypt = require('bcryptjs'),
   jwt = require('jsonwebtoken'),
-  publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
-  // privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-  algorithm = process.env.ALGORITHM || 'RS256'
+  path = require('path'),
+  fs = require('fs'),
+  yaml = require('js-yaml'),
+  // { GraphQLClient } = require('graphql-request')
+  PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
+  ALGORITHM = process.env.ALGORITHM || 'RS256',
+  CONFIG_DIR = '/opt/git-sync/configuration',
+  CLUSTER_CONFIG_FILE = 'cluster.yml'
 
 // const graphql = new GraphQLClient(process.env.HASURA_URL, {
 //   headers: {
 //     'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET
 //   }
 // })
+
+const getClusterConfig = () => {
+  try {
+    return yaml.safeLoad(
+      fs.readFileSync(path.join(CONFIG_DIR, CLUSTER_CONFIG_FILE), 'utf8')
+    )
+  } catch (err) {
+    throw err
+  }
+}
+
+console.log(getClusterConfig())
 
 const typeDefs = gql`
   type Query {
@@ -36,8 +51,8 @@ const resolvers = {
       const Authorization = req.headers.authorization
       if (Authorization) {
         const token = Authorization.replace('Bearer ', '')
-        const verifiedToken = jwt.verify(token, publicKey, {
-          algorithms: [algorithm]
+        const verifiedToken = jwt.verify(token, PUBLIC_KEY, {
+          algorithms: [ALGORITHM]
         })
         console.log(verifiedToken)
         const claims = verifiedToken['https://hasura.io/jwt/claims']

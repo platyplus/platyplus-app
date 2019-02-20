@@ -18,25 +18,6 @@ steps:
 
 ---
 kind: pipeline
-name: git-sync-build
-# workspace:
-#   base: /go
-#   path: src/github.com/kubernetes/git-sync
-steps:
-  - name: build-git-sync
-    image: plugins/docker
-    settings:
-      context: services/git-sync
-      dockerfile: services/git-sync/Dockerfile
-      repo: platyplus/git-sync
-      tags: latest
-      username:
-        from_secret: DH_USER
-      password:
-        from_secret: DH_PASSWORD
-
----
-kind: pipeline
 name: service-template-build
 steps:
   - name: build-service-template
