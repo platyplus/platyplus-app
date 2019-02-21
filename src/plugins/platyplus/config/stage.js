@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import * as encounterType from './encounterType'
 
 export const settings = {
   options: {
@@ -56,6 +57,14 @@ export const fragments = {
     fragment stage_base on stage {
       ...stage_minimal
       workflow_id
+      encounter_types {
+        stage {
+          ...stage_minimal
+        }
+        encounter_type {
+          ...encounter_type_base
+        }
+      }
       workflow {
         id
         name
@@ -72,6 +81,7 @@ export const fragments = {
       }
     }
     ${minimal}
+    ${encounterType.fragments.base}
   `
 }
 

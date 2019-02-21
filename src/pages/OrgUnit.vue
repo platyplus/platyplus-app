@@ -29,6 +29,17 @@
             :to="'/org-unit/'+item.id+'/attribution/'+role.id"
             :key="role.id") {{ role.user.username }} as {{ role.role.name }}
         q-btn(label="Create role attribution" :to="'/org-unit/'+item.id+'/attribution/create'")
+      q-field(
+        icon="fas fa-route"
+        label="Available workflows"
+        helper="")
+        q-select(
+          :readonly="reading"
+          filter
+          multiple
+          chips
+          v-model="relations.workflows"
+          :options="options('workflows')")
     q-list(v-else-if="children.length" highlight)
       q-item(v-for="item in children" :to="'/org-unit/'+item.id" :key="item.id") {{ item.name }}
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")

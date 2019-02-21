@@ -1,0 +1,8 @@
+- args:
+    name: org_unit
+    table:
+      name: encounter
+      schema: public
+    using:
+      foreign_key_constraint_on: org_unit_id
+  type: create_object_relationship

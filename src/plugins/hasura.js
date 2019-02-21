@@ -149,15 +149,13 @@ const upsertRelations = async (
 }
 
 export const save = async (
-  { apollo, table, oldValues, newValues, relations },
+  { apollo, table, oldValues = {}, newValues, relations },
   options = {}
 ) => {
   options = {
-    ...{
-      fragment: 'base',
-      relations: {},
-      beforeSave: p => p
-    },
+    fragment: 'base',
+    relations: {},
+    beforeSave: p => p,
     ...settings[table],
     ...options
   }

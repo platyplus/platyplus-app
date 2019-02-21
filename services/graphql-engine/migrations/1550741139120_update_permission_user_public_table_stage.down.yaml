@@ -1,0 +1,22 @@
+- args:
+    role: user
+    table:
+      name: stage
+      schema: public
+  type: drop_update_permission
+- args:
+    permission:
+      columns:
+      - name
+      - workflow_id
+      filter: {}
+      isSetConfigChecked: true
+      localSet:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: stage
+      schema: public
+  type: create_update_permission

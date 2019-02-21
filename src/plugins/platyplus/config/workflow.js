@@ -2,6 +2,22 @@ import gql from 'graphql-tag'
 import * as stage from './stage'
 
 export const settings = {
+  options: {
+    org_units: {
+      table: 'org_unit',
+      where: {},
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
+    }
+  },
+  relations: {
+    org_units: {
+      table: 'org_unit_workflow',
+      to: 'org_unit'
+    }
+  },
   orderBy: { name: 'asc' }
 }
 
@@ -17,11 +33,18 @@ export const fragments = {
     fragment workflow_base on workflow {
       ...workflow_minimal
       stages(order_by: { name: asc }) {
-        ...stage_minimal
+        ...stage_base
+      }
+      org_units(order_by: { org_unit: { name: asc } }) {
+        id
+        org_unit {
+          id
+          name
+        }
       }
     }
     ${minimal}
-    ${stage.fragments.minimal}
+    ${stage.fragments.base}
   `
 }
 

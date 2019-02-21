@@ -1,7 +1,7 @@
 #!/bin/bash
 . ./scripts/load-dev-env.sh
 # TODO: option --build
-docker-compose -f docker-compose.yml -f docker-compose-dev.yml up --force-recreate -d
+docker-compose -f docker-compose.yml -f docker-compose-dev.yml up --force-recreate --build -d
 
 # trap ctrl-c and call ctrl_c()
 trap ctrl_c INT

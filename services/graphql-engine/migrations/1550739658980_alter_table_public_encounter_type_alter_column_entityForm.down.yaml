@@ -1,0 +1,7 @@
+- args:
+    sql: ALTER TABLE ONLY "public"."encounter_type" ALTER COLUMN "entityForm" SET
+      DEFAULT '{}'::jsonb;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."encounter_type"."entityForm" IS 'undefined'
+  type: run_sql

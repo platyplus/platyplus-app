@@ -1,0 +1,24 @@
+- args:
+    role: user
+    table:
+      name: encounter
+      schema: public
+  type: drop_update_permission
+- args:
+    permission:
+      columns:
+      - entity_id
+      - id
+      - org_unit_id
+      - provider_id
+      - type_id
+      filter: {}
+      localSet:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: encounter
+      schema: public
+  type: create_update_permission

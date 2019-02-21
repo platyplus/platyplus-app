@@ -1,0 +1,18 @@
+- args:
+    role: user
+    table:
+      name: stage
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check: {}
+      columns:
+      - name
+      - workflow_id
+      set: {}
+    role: user
+    table:
+      name: stage
+      schema: public
+  type: create_insert_permission

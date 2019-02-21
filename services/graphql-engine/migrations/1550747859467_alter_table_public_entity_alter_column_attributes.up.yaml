@@ -1,0 +1,7 @@
+- args:
+    sql: ALTER TABLE ONLY "public"."entity" ALTER COLUMN "attributes" SET DEFAULT
+      '{}';
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."entity"."attributes" IS ''
+  type: run_sql

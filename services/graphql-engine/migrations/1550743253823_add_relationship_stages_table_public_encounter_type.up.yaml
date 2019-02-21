@@ -1,0 +1,12 @@
+- args:
+    name: stages
+    table:
+      name: encounter_type
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: encounter_type_id
+        table:
+          name: encounter_type_stage
+          schema: public
+  type: create_array_relationship

@@ -9,6 +9,19 @@ export const settings = {
         value: item.id,
         label: item.name
       })
+    },
+    stages: {
+      table: 'stage',
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
+    }
+  },
+  relations: {
+    stages: {
+      table: 'encounter_type_stage',
+      to: 'stage'
     }
   },
   orderBy: { name: 'asc' }
@@ -27,9 +40,16 @@ export const fragments = {
     fragment encounter_type_base on encounter_type {
       ...encounter_type_minimal
       form
+      entityForm
       entity_type_id
       entity_type {
         ...entity_type_minimal
+      }
+      stages {
+        stage {
+          id
+          name
+        }
       }
     }
     ${minimal}
@@ -44,12 +64,18 @@ export const mutations = {
     mutation update_encounter_type(
       $id: ID!
       $form: jsonb
+      $entityForm: jsonb
       $name: String
       $entity_type_id: ID
     ) {
       update_encounter_type(
         where: { id: { _eq: $id } }
-        _set: { name: $name, entity_type_id: $entity_type_id, form: $form }
+        _set: {
+          name: $name
+          entity_type_id: $entity_type_id
+          form: $form
+          entityForm: $entityForm
+        }
       ) {
         affected_rows
         returning {

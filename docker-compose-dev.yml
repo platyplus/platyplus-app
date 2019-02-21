@@ -48,10 +48,15 @@ services:
       - 'traefik.port=8080'
     restart: always
     volumes:
-      - ./server:/opt/app:delegated
-      - ./server/package.json:/opt/package.json
-      - ./server/package-lock.json:/opt/package-lock.json
-      - notused_app:/opt/app/node_modules
+      - ./src:/app/src:delegated
+      - ./src-pwa:/app/src-pwa:delegated
+      - ./package.json:/app/package.json
+      - ./yarn.lock:/app/yarn.lock
+      - ./quasar.conf.js:/app/quasar.conf.js
+      - ./.quasar:/app/.quasar
+      - ./.babelrc:/app/.babelrc
+      - ./.eslintrc:/app/.eslintrc
+      - ./.postcssrc:/app/.postcssrc
   authentication:
     build:
       context: ./services/authentication
@@ -98,6 +103,7 @@ services:
       context: ./services/graphql-engine
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
+      # HASURA_GRAPHQL_CORS_DOMAIN: '*'
     healthcheck:
       disable: true
     restart: always

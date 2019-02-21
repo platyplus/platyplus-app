@@ -110,7 +110,11 @@ export const fragments = {
     fragment user_full on user {
       ...user_base
       created_at
+      preferred_org_unit {
+        ...org_unit_full
+      }
     }
+    ${orgUnit.fragments.full}
     ${base}
   `
 }

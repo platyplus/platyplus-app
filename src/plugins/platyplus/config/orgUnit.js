@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import * as orgUnitType from '../metadata/orgUnitType'
+import * as workflow from './workflow'
 
 export const settings = {
   options: {
@@ -30,6 +31,20 @@ export const settings = {
         value: item.id,
         label: item.name
       })
+    },
+    workflows: {
+      table: 'workflow',
+      where: {},
+      map: item => ({
+        value: item.id,
+        label: item.name
+      })
+    }
+  },
+  relations: {
+    workflows: {
+      table: 'org_unit_workflow',
+      to: 'workflow'
     }
   },
   orderBy: { name: 'asc' }
@@ -41,39 +56,53 @@ const minimal = gql`
     name
   }
 `
-export const fragments = {
-  minimal,
-  base: gql`
-    fragment org_unit_base on org_unit {
+const base = gql`
+  fragment org_unit_base on org_unit {
+    ...org_unit_minimal
+    parent_id
+    parent {
       ...org_unit_minimal
-      parent_id
-      parent {
-        ...org_unit_minimal
-        type {
-          ...org_unit_type_base
-        }
-      }
-      children(order_by: { name: asc }) {
-        ...org_unit_minimal
-      }
-      type_id
       type {
         ...org_unit_type_base
       }
-      role_attributions {
+    }
+    children(order_by: { name: asc }) {
+      ...org_unit_minimal
+    }
+    type_id
+    type {
+      ...org_unit_type_base
+    }
+    role_attributions {
+      id
+      user {
         id
-        user {
-          id
-          username
-        }
-        role {
-          id
-          name
-        }
+        username
+      }
+      role {
+        id
+        name
       }
     }
-    ${minimal}
-    ${orgUnitType.fragments.base}
+    workflows {
+      id
+      workflow {
+        ...workflow_minimal
+      }
+    }
+  }
+  ${minimal}
+  ${orgUnitType.fragments.base}
+  ${workflow.fragments.minimal}
+`
+export const fragments = {
+  minimal,
+  base,
+  full: gql`
+    fragment org_unit_full on org_unit {
+      ...org_unit_base
+    }
+    ${base}
   `
 }
 
