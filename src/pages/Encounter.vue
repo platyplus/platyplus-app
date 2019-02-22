@@ -23,7 +23,7 @@
 <script>
 import { mixin } from 'plugins/form'
 import { save, queryHelper } from 'plugins/hasura'
-import { makeReadOnly } from 'plugins/formGenerator'
+import { makeReadOnly, prepareForm } from 'plugins/formGenerator'
 
 export default {
   name: 'PageEncounter',
@@ -81,10 +81,16 @@ export default {
     }
   },
   watch: {
+    /**
+     * Prepares the several forms.
+     * Triggerred when the encounter type is available
+     */
     encounter_type (newValue) {
       if (newValue) {
         this.roSchema = makeReadOnly(newValue.form)
         this.roEntitySchema = makeReadOnly(newValue.entityForm)
+        prepareForm(this.encounter_type.entityForm, this.form.entity.attributes)
+        prepareForm(this.encounter_type.form, this.item.data)
       }
     }
   },
