@@ -5,7 +5,10 @@ import * as entity from './entity'
 
 export const settings = {
   defaultValues: {
-    data: {}
+    data: {},
+    entity: {
+      attributes: {}
+    }
   }
 }
 
@@ -20,12 +23,15 @@ export const fragments = {
   base: gql`
     fragment encounter_base on encounter {
       ...encounter_minimal
+      type_id
       type {
         ...encounter_type_base
       }
+      entity_id
       entity {
         ...entity_base
       }
+      org_unit_id
       org_unit {
         ...org_unit_base
       }

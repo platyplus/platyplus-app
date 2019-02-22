@@ -2,9 +2,10 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       div(v-if="reading")
-        div {{entity.attributes}}
+        vue-form-generator(:schema="roEntitySchema" :model="form.entity.attributes" :options="formOptions")
         vue-form-generator(:schema="roSchema" :model="item.data" :options="formOptions")
       div(v-else-if="encounter_type")
+        vue-form-generator(:schema="encounter_type.entityForm" :model="form.entity.attributes" :options="formOptions")
         vue-form-generator(:schema="encounter_type.form" :model="form.data" :options="formOptions")
     q-list(
       v-else-if="list && list.length"
@@ -22,9 +23,7 @@
 <script>
 import { mixin } from 'plugins/form'
 import { save, queryHelper } from 'plugins/hasura'
-import { settings } from 'plugins/platyplus'
 import { makeReadOnly } from 'plugins/formGenerator'
-import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   name: 'PageEncounter',
@@ -36,7 +35,8 @@ export default {
       validateAfterChanged: true,
       validateAsync: true
     },
-    roSchema: {}
+    roSchema: {},
+    roEntitySchema: {}
   }),
   props: ['org_unit_id', 'type_id', 'stage_id', 'entity_id'],
   computed: {
@@ -47,23 +47,18 @@ export default {
      */
     encounter_type () {
       return this.item.type || this._encounter_type
-    },
-    entity () {
-      return this.item.entity || cloneDeep(settings.entity.defaultValues) // bof
     }
   },
   methods: {
     async save () {
-      let attributes = {
-        // TODO: mock attributes - replace by the real stuff
-        first_name: 'Roger',
-        last_name: 'Spok'
-      }
       const entity = await save({
         apollo: this.$apollo,
         table: 'entity',
         // TODO: send attributes data & check it does not erase the previous entire JSONB
-        newValues: { id: this.item.entity_id, attributes }
+        newValues: {
+          id: this.item.entity_id,
+          attributes: this.form.entity.attributes
+        }
       })
       if (!this.form.entity_id) this.form.entity_id = entity.id
       await this._preSave()
@@ -87,7 +82,10 @@ export default {
   },
   watch: {
     encounter_type (newValue) {
-      if (newValue) this.roSchema = makeReadOnly(newValue.form)
+      if (newValue) {
+        this.roSchema = makeReadOnly(newValue.form)
+        this.roEntitySchema = makeReadOnly(newValue.entityForm)
+      }
     }
   },
   apollo: {
