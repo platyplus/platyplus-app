@@ -229,7 +229,7 @@ export default ({ app, router, Vue }) => {
     classes: false,
     delay: 0,
     dictionary: null,
-    errorBagName: 'errors', // change if property conflicts
+    errorBagName: 'vErrors', // change if property conflicts
     events: 'input|blur',
     fieldsBagName: 'fields',
     i18n: null, // TODO: the vue-i18n plugin instance

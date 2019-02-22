@@ -1,6 +1,10 @@
 import gql from 'graphql-tag'
 
-export const settings = {}
+export const settings = {
+  defaultValues: {
+    attributes: {}
+  }
+}
 
 const minimal = gql`
   fragment entity_minimal on entity {
@@ -13,6 +17,7 @@ export const fragments = {
   base: gql`
     fragment entity_base on entity {
       ...entity_minimal
+      attributes
     }
     ${minimal}
   `

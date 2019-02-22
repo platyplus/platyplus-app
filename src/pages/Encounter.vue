@@ -1,13 +1,11 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-field(
-        label="Name")
-        q-input(
-          :readonly="reading"
-          v-model="form.id"
-          ref="firstInput"
-          @keyup.enter="save")
+      div(v-if="reading")
+        div {{entity.attributes}}
+        vue-form-generator(:schema="roSchema" :model="item.data" :options="formOptions")
+      div(v-else-if="encounter_type")
+        vue-form-generator(:schema="encounter_type.form" :model="form.data" :options="formOptions")
     q-list(
       v-else-if="list && list.length"
       highlight)
@@ -18,24 +16,46 @@
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
 </template>
 
-<style>
+<style scoped>
 </style>
 
 <script>
 import { mixin } from 'plugins/form'
-import { save } from 'plugins/hasura'
+import { save, queryHelper } from 'plugins/hasura'
+import { settings } from 'plugins/platyplus'
+import { makeReadOnly } from 'plugins/formGenerator'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default {
   name: 'PageEncounter',
   mixins: [mixin('encounter')],
   data: () => ({
-    // jsonForm: {}
+    formOptions: {
+      // TODO: dig into that
+      validateAfterLoad: true,
+      validateAfterChanged: true,
+      validateAsync: true
+    },
+    roSchema: {}
   }),
   props: ['org_unit_id', 'type_id', 'stage_id', 'entity_id'],
+  computed: {
+    /**
+     * Returns the encounter type, either from the encounter
+     * (when the encounter exists, i.e. not when creating one)
+     * or from Apollo through the path props
+     */
+    encounter_type () {
+      return this.item.type || this._encounter_type
+    },
+    entity () {
+      return this.item.entity || cloneDeep(settings.entity.defaultValues) // bof
+    }
+  },
   methods: {
     async save () {
       let attributes = {
-        // TODO: mock attributes
+        // TODO: mock attributes - replace by the real stuff
         first_name: 'Roger',
         last_name: 'Spok'
       }
@@ -43,15 +63,9 @@ export default {
         apollo: this.$apollo,
         table: 'entity',
         // TODO: send attributes data & check it does not erase the previous entire JSONB
-        // TODO: entity type (type_id) from encounter_type.entity_type.id
         newValues: { id: this.item.entity_id, attributes }
       })
-      let data = {
-        // TODO: mock data
-        blood_pressure: 200
-      }
-      this.form.id = entity.id
-      this.form.data = data
+      if (!this.form.entity_id) this.form.entity_id = entity.id
       await this._preSave()
       this._postSave() // TODO: route back to where it should go
     },
@@ -70,8 +84,31 @@ export default {
       if (this.org_unit_id) this.item.org_unit_id = this.org_unit_id
       this._resetForm()
     }
-    // onChange (newJson) {
-    //   this.jsonForm = newJson
+  },
+  watch: {
+    encounter_type (newValue) {
+      if (newValue) this.roSchema = makeReadOnly(newValue.form)
+    }
+  },
+  apollo: {
+    /**
+     * Loads the encounter type from the path, but don't load if not present
+     */
+    _encounter_type: {
+      query: queryHelper({
+        table: 'encounter_type',
+        fragment: 'base'
+      }),
+      variables () {
+        return {
+          where: { id: { _eq: this.type_id } }
+        }
+      },
+      skip () {
+        return !this.type_id
+      },
+      update: data => data[Object.keys(data)[0]][0]
+    }
   }
 }
 </script>

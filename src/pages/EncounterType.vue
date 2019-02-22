@@ -9,6 +9,12 @@
           ref="firstInput"
           @keyup.enter="save")
       q-field(
+        label="Creation title")
+        q-input(
+          :readonly="reading"
+          v-model="form.title_create"
+          ref="firstInput")
+      q-field(
         label="Entity form")
         json-editor(
           :readonly="reading"

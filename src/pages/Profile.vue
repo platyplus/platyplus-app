@@ -12,8 +12,8 @@
     q-field(
       icon="fas fa-user"
       :label="$t('user.labels.attributes.first_name')"
-      :error="errors.has('attributes.first_name')"
-      :error-label="errors.first('attributes.first_name')")
+      :error="vErrors.has('attributes.first_name')"
+      :error-label="vErrors.first('attributes.first_name')")
       q-input(
         :readonly="reading"
         v-model="form.attributes.first_name"
@@ -81,7 +81,7 @@
     button-bar(
       :reading="reading"
       :details="details"
-      :disableSave="errors.count()"
+      :disableSave="vErrors.count()"
       @edit="edit"
       @save="save"
       @reset="reset"

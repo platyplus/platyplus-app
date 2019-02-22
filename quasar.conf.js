@@ -13,7 +13,8 @@ module.exports = function (ctx) {
       'hasura',
       'platyplus',
       'moment',
-      'form'
+      'form',
+      'formGenerator'
     ],
     css: ['app.styl'],
     extras: [

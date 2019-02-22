@@ -128,7 +128,7 @@ const resolvers = {
             userId: user.id,
             'https://hasura.io/jwt/claims': {
               'x-hasura-allowed-roles': roles,
-              'x-hasura-default-role': 'admin', // TODO: return highest role leve
+              'x-hasura-default-role': 'admin', // TODO: return highest role level
               'x-hasura-user-id': user.id
             }
           },

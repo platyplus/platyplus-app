@@ -31,6 +31,7 @@ const minimal = gql`
   fragment encounter_type_minimal on encounter_type {
     id
     name
+    title_create
   }
 `
 
@@ -66,12 +67,14 @@ export const mutations = {
       $form: jsonb
       $entityForm: jsonb
       $name: String
+      $title_create: String
       $entity_type_id: ID
     ) {
       update_encounter_type(
         where: { id: { _eq: $id } }
         _set: {
           name: $name
+          title_create: $title_create
           entity_type_id: $entity_type_id
           form: $form
           entityForm: $entityForm

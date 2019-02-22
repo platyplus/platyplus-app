@@ -1,17 +1,12 @@
 import gql from 'graphql-tag'
-// import * as entityType from '../metadata/entityType'
+import * as encounterType from '../config/encounterType'
+import * as orgUnit from '../config/orgUnit'
+import * as entity from './entity'
 
 export const settings = {
-  // options: {
-  //   entity_type: {
-  //     table: 'entity_type',
-  //     map: item => ({
-  //       value: item.id,
-  //       label: item.name
-  //     })
-  //   }
-  // },
-  // orderBy: { name: 'asc' }
+  defaultValues: {
+    data: {}
+  }
 }
 
 const minimal = gql`
@@ -25,7 +20,20 @@ export const fragments = {
   base: gql`
     fragment encounter_base on encounter {
       ...encounter_minimal
+      type {
+        ...encounter_type_base
+      }
+      entity {
+        ...entity_base
+      }
+      org_unit {
+        ...org_unit_base
+      }
+      data
     }
+    ${entity.fragments.base}
+    ${encounterType.fragments.base}
+    ${orgUnit.fragments.base}
     ${minimal}
   `
 }
