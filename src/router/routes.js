@@ -84,7 +84,7 @@ const routes = [
       ...crudRoutes('org-unit/:org_unit_id/workflow', 'Workflow'),
       ...crudRoutes(
         'org-unit/:org_unit_id/workflow/:workflow_id/stage/:stage_id/encounter-type/:type_id',
-        'Encounter'
+        'EncounterState'
       ),
       ...crudRoutes('org-unit-type', 'OrgUnitType'),
       ...crudRoutes('entity-type', 'EntityType'),
@@ -99,7 +99,7 @@ const routes = [
       ...crudRoutes('user/:user_id/attribution', 'RoleAttribution'),
       ...crudRoutes('role', 'Role'),
       ...crudRoutes('role/:role_id/attribution', 'RoleAttribution'),
-      ...crudRoutes('encounter', 'Encounter')
+      ...crudRoutes('encounter-state', 'EncounterState')
     ]
   },
   {

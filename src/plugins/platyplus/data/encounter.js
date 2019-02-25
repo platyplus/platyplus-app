@@ -4,6 +4,7 @@ import * as orgUnit from '../config/orgUnit'
 import * as entity from './entity'
 
 export const settings = {
+  // TODO: not correct anymore, remove the entire file?
   defaultValues: {
     data: {},
     entity: {
@@ -27,9 +28,12 @@ export const fragments = {
       type {
         ...encounter_type_base
       }
-      entity_id
-      entity {
-        ...entity_base
+      states {
+        state {
+          entity {
+            ...entity_base
+          }
+        }
       }
       org_unit_id
       org_unit {
@@ -48,8 +52,8 @@ export const queries = {}
 
 export const mutations = {
   update: gql`
-    mutation update_encounter($id: ID!, $data: jsonb) {
-      update_encounter(where: { id: { _eq: $id } }, _set: { data: $data }) {
+    mutation update_encounter($id: uuid!, $data: jsonb) {
+      update_encounter(where: { id: { _eq: $id } }, _append: { data: $data }) {
         affected_rows
         returning {
           ...encounter_base

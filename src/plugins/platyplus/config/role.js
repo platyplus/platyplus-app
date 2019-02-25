@@ -37,7 +37,7 @@ export const queries = {}
 
 export const mutations = {
   update: gql`
-    mutation update_role($id: ID!, $name: String, $global: Boolean) {
+    mutation update_role($id: uuid!, $name: String, $global: Boolean) {
       update_role(
         where: { id: { _eq: $id } }
         _set: { name: $name, global: $global }

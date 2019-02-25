@@ -1,0 +1,12 @@
+- args:
+    name: states
+    table:
+      name: entity
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: entity_id
+        table:
+          name: state
+          schema: public
+  type: create_array_relationship

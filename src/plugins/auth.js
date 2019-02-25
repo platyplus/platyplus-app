@@ -4,7 +4,7 @@ import { queryHelper } from 'plugins/hasura'
 export const signin = async (username, password) => {
   const { data } = await apolloClient.mutate({
     mutation: gql`
-      mutation($username: String!, $password: String!) {
+      mutation user_login($username: String!, $password: String!) {
         login(username: $username, password: $password) {
           id
           token

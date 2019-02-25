@@ -52,7 +52,7 @@ export const queries = {}
 
 export const mutations = {
   update: gql`
-    mutation update_workflow($id: ID!, $name: String) {
+    mutation update_workflow($id: uuid!, $name: String) {
       update_workflow(where: { id: { _eq: $id } }, _set: { name: $name }) {
         affected_rows
         returning {

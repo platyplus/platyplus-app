@@ -111,10 +111,10 @@ export const queries = {}
 export const mutations = {
   update: gql`
     mutation update_org_unit(
-      $id: ID!
+      $id: uuid!
       $name: String
-      $type_id: ID
-      $parent_id: ID
+      $type_id: uuid
+      $parent_id: uuid
     ) {
       update_org_unit(
         where: { id: { _eq: $id } }

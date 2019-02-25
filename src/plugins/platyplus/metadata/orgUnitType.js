@@ -73,7 +73,7 @@ export const mutations = {
   //   ${fragments.base}
   // `,
   update: gql`
-    mutation update_org_unit_type($id: ID!, $name: String) {
+    mutation update_org_unit_type($id: uuid!, $name: String) {
       update_org_unit_type(where: { id: { _eq: $id } }, _set: { name: $name }) {
         affected_rows
         returning {

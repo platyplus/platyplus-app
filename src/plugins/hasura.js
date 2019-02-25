@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import { fragments, mutations, settings } from 'plugins/platyplus'
-
+// TODO:TODO:TODO: revoir toute la logique pour bien séparer le graphql du js
 export const upsertMutation = async ({
   apollo,
   table,
@@ -45,6 +45,7 @@ export const insertMutation = async ({
   fragment = 'base'
 }) => {
   const objects = Array.isArray(data) ? data : [data]
+  // TODO: ecrire en dur chaque mutation insert, et envoyer les variables en params
   const mutation = gql`
     mutation insert_${table}($objects: [${table}_insert_input!]!) {
       insert_${table}(objects: $objects) {
@@ -64,6 +65,7 @@ export const deleteMutation = ({ apollo, table, key, data }) => {
   const field = !key || key === 'id' ? 'id' : `${key}_id`
   const ids = Array.isArray(data) ? data : [data]
   if (ids.length) {
+    // TODO: écrire en dur chaque mutation delete
     return apollo.mutate({
       mutation: gql`
       mutation delete_${table}($ids: [ID!]!) {
@@ -81,6 +83,7 @@ export const deleteMutation = ({ apollo, table, key, data }) => {
 
 export const queryHelper = ({ table, fragment = 'base', subscription }) => {
   // TODO: split arguments into 'table' and 'options'
+  // TODO: écrire chaque query en dur
   const type = subscription ? 'subscription' : 'query'
   return gql`
     ${type} ${table} ($where: ${table}_bool_exp, $orderBy:[${table}_order_by]) {

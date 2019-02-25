@@ -124,9 +124,9 @@ export const queries = {}
 export const mutations = {
   update: gql`
     mutation update_user(
-      $id: ID!
+      $id: uuid!
       $attributes: jsonb
-      $preferred_org_unit_id: ID
+      $preferred_org_unit_id: uuid
       $locale: String
     ) {
       update_user(
@@ -143,7 +143,10 @@ export const mutations = {
     ${fragments.full}
   `,
   update_preferred_org_unit: gql`
-    mutation update_preferred_org_unit($id: ID!, $preferred_org_unit_id: ID) {
+    mutation update_preferred_org_unit(
+      $id: uuid!
+      $preferred_org_unit_id: uuid
+    ) {
       update_user(
         where: { id: { _eq: $id } }
         _set: { preferred_org_unit_id: $preferred_org_unit_id }

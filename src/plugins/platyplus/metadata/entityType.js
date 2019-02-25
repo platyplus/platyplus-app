@@ -39,7 +39,7 @@ export const mutations = {
   //   ${fragments.base}
   // `,
   update: gql`
-    mutation update_entity_type($id: ID!, $name: String) {
+    mutation update_entity_type($id: uuid!, $name: String) {
       update_entity_type(where: { id: { _eq: $id } }, _set: { name: $name }) {
         affected_rows
         returning {

@@ -63,12 +63,12 @@ export const queries = {}
 export const mutations = {
   update: gql`
     mutation update_encounter_type(
-      $id: ID!
+      $id: uuid!
       $form: jsonb
       $entityForm: jsonb
       $name: String
       $title_create: String
-      $entity_type_id: ID
+      $entity_type_id: uuid
     ) {
       update_encounter_type(
         where: { id: { _eq: $id } }

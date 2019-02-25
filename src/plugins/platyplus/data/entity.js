@@ -27,10 +27,10 @@ export const queries = {}
 
 export const mutations = {
   update: gql`
-    mutation update_entity($id: ID!, $attributes: jsonb) {
+    mutation update_entity($id: uuid!, $attributes: jsonb) {
       update_entity(
         where: { id: { _eq: $id } }
-        _set: { attributes: $attributes }
+        _append: { attributes: $attributes }
       ) {
         affected_rows
         returning {

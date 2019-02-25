@@ -2,17 +2,17 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       div(v-if="reading")
-        vue-form-generator(:schema="roEntitySchema" :model="form.entity.attributes" :options="formOptions")
-        vue-form-generator(:schema="roSchema" :model="item.data" :options="formOptions")
+        vue-form-generator(:schema="roEntitySchema" :model="item.state.entity.attributes" :options="formOptions")
+        vue-form-generator(:schema="roSchema" :model="item.encounter.data" :options="formOptions")
       div(v-else-if="encounter_type")
-        vue-form-generator(:schema="encounter_type.entityForm" :model="form.entity.attributes" :options="formOptions")
-        vue-form-generator(:schema="encounter_type.form" :model="form.data" :options="formOptions")
+        vue-form-generator(:schema="encounter_type.entityForm" :model="form.state.entity.attributes" :options="formOptions")
+        vue-form-generator(:schema="encounter_type.form" :model="form.encounter.data" :options="formOptions")
     q-list(
       v-else-if="list && list.length"
       highlight)
       q-item(
         v-for="item in list"
-        :to="'/encounter/'+item.id"
+        :to="'/encounter-state/'+item.id"
         :key="item.id") {{ item.id }}
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
 </template>
@@ -22,12 +22,12 @@
 
 <script>
 import { mixin } from 'plugins/form'
-import { save, queryHelper } from 'plugins/hasura'
+import { queryHelper } from 'plugins/hasura'
 import { makeReadOnly, prepareForm } from 'plugins/formGenerator'
-
+import { mutations } from 'plugins/platyplus/data/encounterState'
 export default {
   name: 'PageEncounter',
-  mixins: [mixin('encounter')],
+  mixins: [mixin('encounter_state')],
   data: () => ({
     formOptions: {
       // TODO: dig into that
@@ -38,7 +38,7 @@ export default {
     roSchema: {},
     roEntitySchema: {}
   }),
-  props: ['org_unit_id', 'type_id', 'stage_id', 'entity_id'],
+  props: ['org_unit_id', 'type_id', 'stage_id'],
   computed: {
     /**
      * Returns the encounter type, either from the encounter
@@ -46,23 +46,45 @@ export default {
      * or from Apollo through the path props
      */
     encounter_type () {
-      return this.item.type || this._encounter_type
+      return this.item.encounter.type || this._encounter_type
     }
   },
   methods: {
+    // TODO: delete: un peu plus compliqué que d'habitude
     async save () {
-      const entity = await save({
-        apollo: this.$apollo,
-        table: 'entity',
-        // TODO: send attributes data & check it does not erase the previous entire JSONB
-        newValues: {
-          id: this.item.entity_id,
-          attributes: this.form.entity.attributes
+      const mutation = this.id
+        ? {
+          mutation: mutations.updateEntityAndEncounter,
+          variables: {
+            data: this.form.encounter.data,
+            attributes: this.form.state.entity.attributes,
+            encounter_state_id: this.id
+          },
+          update: data => {
+            // TODO: update cache
+          }
         }
-      })
-      if (!this.form.entity_id) this.form.entity_id = entity.id
-      await this._preSave()
-      this._postSave() // TODO: route back to where it should go
+        : {
+          mutation: mutations.insertEntityAndEncounter,
+          variables: {
+            data: this.form.encounter.data,
+            attributes: this.form.state.entity.attributes,
+            encounter_type_id: this.type_id,
+            entity_type_id: this.encounter_type.entity_type_id,
+            stage_id: this.stage_id,
+            org_unit_id: this.org_unit_id
+          },
+          update: data => {
+            // TODO: update cache
+          }
+        }
+      const result = await this.$apollo.mutate(mutation).then(
+        ({ data }) =>
+          data.insert_encounter_state
+            ? data.insert_encounter_state.returning[0]
+            : data.update_encounter.returning[0] // TODO: wrong object returned
+      )
+      this._postSave(result) // TODO: route back to where it should go
     },
     // cancel () {
     //   this.$router.replace(
@@ -75,7 +97,6 @@ export default {
     reset () {
       this._resetItem()
       if (this.type_id) this.item.type_id = this.type_id
-      if (this.entity_id) this.item.entity_id = this.entity_id
       if (this.org_unit_id) this.item.org_unit_id = this.org_unit_id
       this._resetForm()
     }
@@ -89,8 +110,11 @@ export default {
       if (newValue) {
         this.roSchema = makeReadOnly(newValue.form)
         this.roEntitySchema = makeReadOnly(newValue.entityForm)
-        prepareForm(this.encounter_type.entityForm, this.form.entity.attributes)
-        prepareForm(this.encounter_type.form, this.item.data)
+        prepareForm(
+          this.encounter_type.entityForm,
+          this.form.state.entity.attributes
+        )
+        prepareForm(this.encounter_type.form, this.item.encounter.data)
       }
     }
   },

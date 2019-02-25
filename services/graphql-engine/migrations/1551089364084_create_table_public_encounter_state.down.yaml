@@ -1,0 +1,3 @@
+- args:
+    sql: DROP TABLE "public"."encounter_state"
+  type: run_sql
