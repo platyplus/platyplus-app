@@ -51,6 +51,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_encounter($where: encounter_bool_exp!) {
+      delete_encounter(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   update: gql`
     mutation update_encounter($id: uuid!, $data: jsonb) {
       update_encounter(where: { id: { _eq: $id } }, _append: { data: $data }) {

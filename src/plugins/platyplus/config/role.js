@@ -36,6 +36,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_role($where: role_bool_exp!) {
+      delete_role(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   update: gql`
     mutation update_role($id: uuid!, $name: String, $global: Boolean) {
       update_role(

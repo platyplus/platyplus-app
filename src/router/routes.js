@@ -83,7 +83,7 @@ const routes = [
       ...crudRoutes('org-unit/:org_unit_id/attribution', 'RoleAttribution'),
       ...crudRoutes('org-unit/:org_unit_id/workflow', 'Workflow'),
       ...crudRoutes(
-        'org-unit/:org_unit_id/workflow/:workflow_id/stage/:stage_id/encounter-type/:type_id',
+        'org-unit/:org_unit_id/stage/:stage_id/encounter-type/:type_id',
         'EncounterState'
       ),
       ...crudRoutes('org-unit-type', 'OrgUnitType'),

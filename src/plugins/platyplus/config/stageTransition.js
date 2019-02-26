@@ -15,6 +15,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_stage_transition($where: stage_transition_bool_exp!) {
+      delete_stage_transition(where: $where) {
+        affected_rows
+      }
+    }
+  `
   // insert: gql`
   //   mutation insert_stage_transition(
   //     $objects: [stage_transition_insert_input!]!

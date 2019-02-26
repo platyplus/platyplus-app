@@ -28,6 +28,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_entity_type($where: entity_type_bool_exp!) {
+      delete_entity_type(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   // insert: gql`
   //   mutation insert_entity_type($objects: [entity_type_insert_input!]!) {
   //     insert_entity_type(objects: $objects) {

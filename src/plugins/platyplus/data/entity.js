@@ -26,6 +26,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_entity($where: entity_bool_exp!) {
+      delete_entity(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   update: gql`
     mutation update_entity($id: uuid!, $attributes: jsonb) {
       update_entity(

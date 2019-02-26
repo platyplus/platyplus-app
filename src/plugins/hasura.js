@@ -65,17 +65,14 @@ export const deleteMutation = ({ apollo, table, key, data }) => {
   const field = !key || key === 'id' ? 'id' : `${key}_id`
   const ids = Array.isArray(data) ? data : [data]
   if (ids.length) {
-    // TODO: écrire en dur chaque mutation delete
-    return apollo.mutate({
-      mutation: gql`
-      mutation delete_${table}($ids: [ID!]!) {
-        delete_${table}(where: { ${field}: { _in: $ids } }) {
-          affected_rows
-        }
-      }
-    `,
-      variables: { ids }
-    })
+    const mutation = mutations[table].delete
+    if (mutation) {
+      const where = { [field]: { _in: ids } }
+      console.log(where)
+      return apollo.mutate({ mutation, variables: { where } })
+    } else {
+      throw Error(`No delete mutation found in the ${table} configuration`)
+    }
   } else {
     throw Error(`Nothing to delete on ${table}`)
   }

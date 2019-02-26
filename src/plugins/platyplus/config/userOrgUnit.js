@@ -12,4 +12,12 @@ export const fragments = {
 
 export const queries = {}
 
-export const mutations = {}
+export const mutations = {
+  delete: gql`
+    mutation delete_user_org_unit($where: user_org_unit_bool_exp!) {
+      delete_user_org_unit(where: $where) {
+        affected_rows
+      }
+    }
+  `
+}

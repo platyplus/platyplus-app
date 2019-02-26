@@ -109,6 +109,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_org_unit($where: org_unit_bool_exp!) {
+      delete_org_unit(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   update: gql`
     mutation update_org_unit(
       $id: uuid!

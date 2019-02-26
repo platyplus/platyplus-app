@@ -62,4 +62,12 @@ export const fragments = {
 
 export const queries = {}
 
-export const mutations = {}
+export const mutations = {
+  delete: gql`
+    mutation delete_role_attribution($where: role_attribution_bool_exp!) {
+      delete_role_attribution(where: $where) {
+        affected_rows
+      }
+    }
+  `
+}

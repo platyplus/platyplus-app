@@ -51,6 +51,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_workflow($where: workflow_bool_exp!) {
+      delete_workflow(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   update: gql`
     mutation update_workflow($id: uuid!, $name: String) {
       update_workflow(where: { id: { _eq: $id } }, _set: { name: $name }) {

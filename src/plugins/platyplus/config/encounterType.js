@@ -61,6 +61,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_encounter_type($where: encounter_type_bool_exp!) {
+      delete_encounter_type(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   update: gql`
     mutation update_encounter_type(
       $id: uuid!

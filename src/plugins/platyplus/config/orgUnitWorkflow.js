@@ -12,4 +12,12 @@ export const fragments = {
 
 export const queries = {}
 
-export const mutations = {}
+export const mutations = {
+  delete: gql`
+    mutation delete_org_unit_workflow($where: org_unit_workflow_bool_exp!) {
+      delete_org_unit_workflow(where: $where) {
+        affected_rows
+      }
+    }
+  `
+}

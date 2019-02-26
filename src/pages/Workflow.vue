@@ -6,7 +6,7 @@
       q-list
         div(v-for="stage in initialStages" :key="stage.id")
           q-list-header(v-if="initialStages.length>1") {{stage.name}}
-          q-item(v-for="node in stage.encounter_types" :key="node.id" :to="'/org-unit/'+org_unit_id+'/workflow/'+item.id+'/stage/'+stage.id+'/encounter-type/'+node.encounter_type.id+'/create'") {{node.encounter_type.title_create}}
+          q-item(v-for="node in stage.encounter_types" :key="node.id" :to="'/org-unit/'+org_unit_id+'/stage/'+stage.id+'/encounter-type/'+node.encounter_type.id+'/create'") {{node.encounter_type.title_create}}
     div(v-else)
       div(v-if="details")
         q-field(

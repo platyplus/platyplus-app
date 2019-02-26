@@ -122,6 +122,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_user($where: user_bool_exp!) {
+      delete_user(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   update: gql`
     mutation update_user(
       $id: uuid!

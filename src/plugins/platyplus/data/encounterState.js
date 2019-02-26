@@ -5,6 +5,7 @@ import * as entity from './entity'
 import * as encounter from './encounter'
 // TODO: check the fragments
 // TODO: de manière générale, définir une convention: pas de fragments sur les tables intermédiaires?
+// le plus sûr: pas de sous-fragments...
 export const settings = {
   defaultValues: {
     encounter: {
@@ -60,6 +61,13 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  delete: gql`
+    mutation delete_encounter_state($where: encounter_state_bool_exp!) {
+      delete_encounter_state(where: $where) {
+        affected_rows
+      }
+    }
+  `,
   // update: gql`
   //   mutation update_encounter_state($id: uuid!, $data: jsonb) {
   //     update_encounter_state(
