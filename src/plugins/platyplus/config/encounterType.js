@@ -58,7 +58,17 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query encounter_type($where: encounter_type_bool_exp) {
+      encounter_type(where: $where) {
+        # TODO: default order to be hardcoded
+        ...encounter_type_base
+      }
+    }
+    ${fragments.base}
+  `
+}
 
 export const mutations = {
   delete: gql`

@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import { apolloClient } from 'plugins/apollo'
-import { queryHelper } from 'plugins/hasura'
+import { queries } from 'plugins/platyplus/config/user'
+
 export const signin = async (username, password) => {
   const { data } = await apolloClient.mutate({
     mutation: gql`
@@ -37,7 +38,7 @@ export const getUser = () => {
   if (!getUserToken()) return null
   else {
     return apolloClient.readQuery({
-      query: queryHelper({ table: 'user', fragment: 'full' }),
+      query: queries.profile,
       variables: {
         where: { id: { _eq: getUserId() } }
       }
@@ -49,7 +50,7 @@ export const loadUser = async () => {
   if (!getUserToken()) return null
   else {
     const { data } = await apolloClient.query({
-      query: queryHelper({ table: 'user', fragment: 'full' }),
+      query: queries.profile,
       variables: {
         where: { id: { _eq: getUserId() } }
       }

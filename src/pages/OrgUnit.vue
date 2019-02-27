@@ -60,8 +60,7 @@ export default {
     orgUnits: []
   }),
   methods: {
-    async save () {
-      const { id } = await this._preSave()
+    fallback (id) {
       if (this.parent_id) {
         this.$router.replace(
           this.$route.path.replace(`${this.parent_id}/create`, id)
@@ -69,6 +68,10 @@ export default {
       } else {
         this._postSave()
       }
+    },
+    async save () {
+      const { id } = await this._save()
+      this.fallback(id)
     },
     reset () {
       this._resetItem()

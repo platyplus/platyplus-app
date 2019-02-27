@@ -119,7 +119,32 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query user($where: user_bool_exp) {
+      user(where: $where, order_by: [{ username: asc }]) {
+        ...user_base
+      }
+    }
+    ${fragments.base}
+  `,
+  profile: gql`
+    query user_profile($where: user_bool_exp) {
+      user(where: $where) {
+        ...user_full
+      }
+    }
+    ${fragments.full}
+  `,
+  option: gql`
+    query user_option($where: user_bool_exp) {
+      result: user(where: $where, order_by: [{ username: asc }]) {
+        id
+        username
+      }
+    }
+  `
+}
 
 export const mutations = {
   delete: gql`
@@ -129,14 +154,14 @@ export const mutations = {
       }
     }
   `,
-  update: gql`
-    mutation update_user(
+  update_profile: gql`
+    mutation update_profile(
       $id: uuid!
       $attributes: jsonb
       $preferred_org_unit_id: uuid
       $locale: String
     ) {
-      update_user(
+      result: update_user(
         where: { id: { _eq: $id } }
         _append: { attributes: $attributes }
         _set: { preferred_org_unit_id: $preferred_org_unit_id, locale: $locale }
@@ -149,12 +174,87 @@ export const mutations = {
     }
     ${fragments.full}
   `,
+  update: gql`
+    mutation update_user(
+      $id: uuid!
+      $username: String
+      $org_unit_memberships_add: [user_org_unit_insert_input!]!
+      $org_unit_memberships_remove: [uuid]!
+      $roles_add: [user_role_insert_input!]!
+      $roles_remove: [uuid]!
+      $preferred_org_unit_id: uuid
+      $locale: String
+    ) {
+      org_unit_memberships_add: insert_user_org_unit(
+        objects: $org_unit_memberships_add
+      ) {
+        affected_rows
+      }
+      org_unit_memberships_remove: delete_user_org_unit(
+        where: {
+          _and: { org_unit_id: { _in: $org_unit_memberships_remove } }
+          user_id: { _eq: $id }
+        }
+      ) {
+        affected_rows
+      }
+      roles_add: insert_user_role(objects: $roles_add) {
+        affected_rows
+      }
+      roles_remove: delete_user_role(
+        where: {
+          _and: { role_id: { _in: $roles_remove } }
+          user_id: { _eq: $id }
+        }
+      ) {
+        affected_rows
+      }
+      result: update_user(
+        where: { id: { _eq: $id } }
+        _set: {
+          preferred_org_unit_id: $preferred_org_unit_id
+          username: $username
+          locale: $locale
+        }
+      ) {
+        affected_rows
+        returning {
+          ...user_full
+        }
+      }
+    }
+    ${fragments.full}
+  `,
+  insert: gql`
+    mutation insert_user(
+      $username: String
+      $attributes: jsonb
+      $preferred_org_unit_id: uuid
+      $locale: String
+    ) {
+      result: insert_user(
+        objects: [
+          {
+            username: $username
+            attributes: $attributes
+            preferred_org_unit_id: $preferred_org_unit_id
+            locale: $locale
+          }
+        ]
+      ) {
+        returning {
+          ...user_base
+        }
+      }
+    }
+    ${fragments.base}
+  `,
   update_preferred_org_unit: gql`
     mutation update_preferred_org_unit(
       $id: uuid!
       $preferred_org_unit_id: uuid
     ) {
-      update_user(
+      result: update_user(
         where: { id: { _eq: $id } }
         _set: { preferred_org_unit_id: $preferred_org_unit_id }
       ) {

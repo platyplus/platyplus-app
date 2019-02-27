@@ -1,38 +1,53 @@
-import gql from 'graphql-tag'
-import { fragments, mutations, settings } from 'plugins/platyplus'
-// TODO:TODO:TODO: revoir toute la logique pour bien séparer le graphql du js
+import { mutations, settings } from 'plugins/platyplus'
+
+const variableValues = (mutation, data) =>
+  mutation.definitions
+    .find(item => item.kind === 'OperationDefinition')
+    .variableDefinitions.map(item => item.variable.name.value)
+    .reduce((aggr, key) => {
+      aggr[key] = data[key]
+      return aggr
+    }, {})
+
+// TODO: merge the three functions below
 export const upsertMutation = async ({
   apollo,
   table,
   data,
-  fragment = 'base'
+  insert = 'insert',
+  update = 'update'
 }) => {
-  const update = Boolean(Array.isArray(data) ? data[0].id : data.id)
-  return update
-    ? updateMutation({ apollo, table, data, fragment })
-    : insertMutation({ apollo, table, data, fragment })
+  const isUpdate = Boolean(Array.isArray(data) ? data[0].id : data.id)
+  return isUpdate
+    ? updateMutation({ apollo, table, data, mutation: update })
+    : insertMutation({ apollo, table, data, mutation: insert })
 }
 
 export const updateMutation = async ({
   apollo,
   table,
   data,
-  fragment = 'base',
   mutation = 'update'
 }) => {
+  const mutationName = mutation
   mutation = mutations[table][mutation]
+  if (!mutation) {
+    throw Error(
+      `The '${mutationName}' mutation has to be implemented for the table '${table}'.`
+    )
+  }
   const objects = Array.isArray(data) ? data : [data]
   const theloop = objects.map(item => {
-    const params = mutation.definitions
-      .find(item => item.kind === 'OperationDefinition')
-      .variableDefinitions.map(item => item.variable.name.value)
-      .reduce((aggr, key) => {
-        aggr[key] = data[key]
-        return aggr
-      }, {})
-    return apollo
-      .mutate({ mutation, variables: { ...params, id: item.id } })
-      .then(({ data }) => data[Object.keys(data)[0]].returning[0])
+    const variables = variableValues(mutation, data)
+    variables.id = item.id
+    return apollo.mutate({ mutation, variables }).then(({ data }) => {
+      if (!data.result) {
+        throw Error(
+          `The mutation '${mutationName}' on the table '${table}' has no sub-mutation or sub-query alias as 'result'. Alias one of the sub-mutation with the prefix 'result: '.`
+        )
+      }
+      return data.result.returning[0]
+    })
   })
   const res = await Promise.all(theloop)
   return Array.isArray(data) ? res : res[0]
@@ -42,23 +57,21 @@ export const insertMutation = async ({
   apollo,
   table,
   data,
-  fragment = 'base'
+  mutation = 'insert'
 }) => {
-  const objects = Array.isArray(data) ? data : [data]
-  // TODO: ecrire en dur chaque mutation insert, et envoyer les variables en params
-  const mutation = gql`
-    mutation insert_${table}($objects: [${table}_insert_input!]!) {
-      insert_${table}(objects: $objects) {
-        returning {
-          ...${table}_${fragment}
-        }
-      }
-    }
-    ${fragments[table][fragment]}
-  `
+  if (Array.isArray(data)) {
+    throw Error('insertMutation is not fit for multiple insert anymore!!!')
+  }
+  if (!mutations[table].insert) {
+    throw Error(
+      `The '${mutation}' mutation has to be implemented for the table '${table}'`
+    )
+  }
+  mutation = mutations[table][mutation]
+  const variables = variableValues(mutation, data)
   return apollo
-    .mutate({ mutation, variables: { objects } })
-    .then(({ data }) => data[Object.keys(data)[0]].returning[0])
+    .mutate({ mutation, variables })
+    .then(({ data }) => data[Object.keys(data)[0]].returning[0]) // TODO: meh: depend de la mutation
 }
 
 export const deleteMutation = ({ apollo, table, key, data }) => {
@@ -66,138 +79,92 @@ export const deleteMutation = ({ apollo, table, key, data }) => {
   const ids = Array.isArray(data) ? data : [data]
   if (ids.length) {
     const mutation = mutations[table].delete
-    if (mutation) {
-      const where = { [field]: { _in: ids } }
-      console.log(where)
-      return apollo.mutate({ mutation, variables: { where } })
-    } else {
-      throw Error(`No delete mutation found in the ${table} configuration`)
+    if (!mutation) {
+      throw Error(
+        `The 'delete' mutation has to be implemented for the table '${table}'`
+      )
     }
-  } else {
-    throw Error(`Nothing to delete on ${table}`)
+    return apollo.mutate({
+      mutation,
+      variables: { where: { [field]: { _in: ids } } }
+    })
   }
 }
 
-export const queryHelper = ({ table, fragment = 'base', subscription }) => {
-  // TODO: split arguments into 'table' and 'options'
-  // TODO: écrire chaque query en dur
-  const type = subscription ? 'subscription' : 'query'
-  return gql`
-    ${type} ${table} ($where: ${table}_bool_exp, $orderBy:[${table}_order_by]) {
-      ${table}(where: $where, order_by:$orderBy) {
-        ...${table}_${fragment}
-      }
-    }
-    ${fragments[table][fragment]}
-  `
-}
-
-export const smartQueryHelper = ({ table, fragment, where, orderBy }) => ({
-  // TODO: split arguments into 'table' and 'options'
-  query: queryHelper({ table, fragment }),
-  update: data => data[Object.keys(data)[0]],
-  variables: {
-    where: where || settings[table].where || {},
-    orderBy: orderBy || settings[table].orderBy || []
-  },
-  subscribeToMore: {
-    document: queryHelper({ table, fragment, subscription: true }),
-    updateQuery: (previousResult, { subscriptionData }) =>
-      subscriptionData.data,
-    variables: {
-      where: where || settings[table].where || {},
-      orderBy: orderBy || settings[table].orderBy || []
-    }
-  }
-})
-
-const upsertRelations = async (
-  apollo,
+export const addedRelations = (
   table,
-  record,
-  relationsSettings,
-  relationsData
+  selfId,
+  relation,
+  before = [],
+  afterIds
 ) => {
-  for await (const name of Object.keys(relationsSettings)) {
-    let relation = relationsSettings[name]
-    let data = relationsData[name]
-    let initialData = record[name].map(item => item[relation.to].id)
-    const newData = data
-      .filter(item => !initialData.includes(item))
-      .map(item => ({
-        [`${relation.from || table}_id`]: record.id,
-        [`${relation.to}_id`]: item
-      }))
-    if (newData.length > 0) {
-      await insertMutation({
-        apollo,
-        table: relation.table,
-        fragment: 'minimal',
-        data: newData
-      })
-    }
-    const deletedData = initialData.filter(item => !data.includes(item))
-    if (deletedData.length > 0) {
-      await deleteMutation({
-        apollo,
-        table: relation.table,
-        key: relation.to,
-        data: deletedData
-      })
-    }
-  }
+  const beforeIds = before.map(item => item[relation.to].id)
+  return afterIds
+    .filter(item => !beforeIds.includes(item))
+    .map(item => {
+      let res = { [`${relation.to}_id`]: item }
+      if (selfId) res[`${relation.from || table}_id`] = selfId
+      return res
+    })
 }
+
+export const removedRelations = (relation, before = [], afterIds) =>
+  before
+    .map(item => item[relation.to].id)
+    .filter(item => !afterIds.includes(item))
 
 export const save = async (
-  { apollo, table, oldValues = {}, newValues, relations },
+  {
+    apollo,
+    table,
+    oldValues = {},
+    newValues,
+    relations,
+    insert = 'insert',
+    update = 'update'
+  }, // TODO: define relations as part of newValues?
   options = {}
 ) => {
-  options = {
-    fragment: 'base',
-    relations: {},
-    beforeSave: p => p,
-    ...settings[table],
-    ...options
-  }
-  let next = options.beforeSave({
+  options = Object.assign(
+    {
+      // TODO: default update and insert mutations?
+      relations: {},
+      beforeSave: p => p
+    },
+    settings[table],
+    options
+  )
+  newValues = options.beforeSave({
     newValues,
     oldValues,
     relations
   }).newValues
-  // Remove the option values put in the form so we don't send them to the server
   // TODO: options stored somewhere else than the form value?
-  // TODO: put the below loop in the form plugin instead?
   // TODO: -> make a distring 'cleanForm' function to make it clear no matter where it is called
-  if (options.options) {
-    Object.keys(options.options).map(name => {
-      delete next[name]
-    })
-  }
-  if (oldValues.id) {
-    await upsertRelations(
-      apollo,
-      table,
-      oldValues,
-      options.relations,
-      relations
-    )
-    return upsertMutation({
-      apollo,
-      table,
-      fragment: options.fragment,
-      data: next
-    })
-  } else {
-    const result = await upsertMutation({
-      apollo,
-      table,
-      data: next
-    })
-    // TODO: test upsert relations in this case (insert new record)
-    await upsertRelations(apollo, table, result, options.relations, relations)
-    // TODO: test return value: are the relations already in the cache,
-    // or shall we query the server again and return the result?
-    return result
-  }
+  const relationsVariables = Object.keys(options.relations).reduce(
+    (aggr, relation) => {
+      aggr[`${relation}_add`] = addedRelations(
+        table,
+        oldValues.id,
+        options.relations[relation],
+        oldValues[relation],
+        relations[relation]
+      )
+      aggr[`${relation}_remove`] = removedRelations(
+        options.relations[relation],
+        oldValues[relation],
+        relations[relation]
+      )
+      return aggr
+    },
+    {}
+  )
+  return upsertMutation({
+    apollo,
+    table,
+    insert,
+    update,
+    data: Object.assign(newValues, relationsVariables)
+  })
 }
 export default ({ app, router, Vue }) => {}

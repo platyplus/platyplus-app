@@ -59,7 +59,31 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query org_unit_type($where: org_unit_type_bool_exp) {
+      org_unit_type(where: $where) {
+        # TODO: default order to be hardcoded
+        ...org_unit_type_base
+      }
+    }
+    ${fragments.base}
+  `,
+  option: gql`
+    query org_unit_type($where: org_unit_type_bool_exp) {
+      org_unit_type(where: $where) {
+        # TODO: default order to be hardcoded
+        id
+        name
+        from {
+          from {
+            id
+          }
+        }
+      }
+    }
+  `
+}
 
 export const mutations = {
   delete: gql`
@@ -69,19 +93,53 @@ export const mutations = {
       }
     }
   `,
-  // insert: gql`
-  //   mutation insert_org_unit_type($objects: [org_unit_type_insert_input!]!) {
-  //     insert_org_unit_type(objects: $objects) {
-  //       returning {
-  //         ...org_unit_type_base
-  //       }
-  //     }
-  //   }
-  //   ${fragments.base}
-  // `,
+  insert: gql`
+    mutation insert_org_unit_type(
+      $name: String
+      $from_add: [org_unit_type_mapping_insert_input!]!
+      $to_add: [org_unit_type_mapping_insert_input!]!
+    ) {
+      result: insert_org_unit_type(
+        objects: [
+          { name: $name, from: { data: $from_add }, to: { data: $to_add } }
+        ]
+      ) {
+        returning {
+          ...org_unit_type_base
+        }
+      }
+    }
+    ${fragments.base}
+  `,
   update: gql`
-    mutation update_org_unit_type($id: uuid!, $name: String) {
-      update_org_unit_type(where: { id: { _eq: $id } }, _set: { name: $name }) {
+    mutation update_org_unit_type(
+      $id: uuid!
+      $name: String
+      $from_add: [org_unit_type_mapping_insert_input!]!
+      $from_remove: [uuid]!
+      $to_add: [org_unit_type_mapping_insert_input!]!
+      $to_remove: [uuid]!
+    ) {
+      from_add: insert_org_unit_type_mapping(objects: $from_add) {
+        affected_rows
+      }
+      from_remove: delete_org_unit_type_mapping(
+        where: { _and: { from_id: { _in: $from_remove }, to_id: { _eq: $id } } }
+      ) {
+        affected_rows
+      }
+      to_add: insert_org_unit_type_mapping(objects: $to_add) {
+        affected_rows
+      }
+      to_remove: delete_org_unit_type_mapping(
+        where: { _and: { to_id: { _in: $to_remove }, from_id: { _eq: $id } } }
+      ) {
+        affected_rows
+      }
+      result: update_org_unit_type(
+        where: { id: { _eq: $id } }
+        _set: { name: $name }
+      ) {
         affected_rows
         returning {
           ...org_unit_type_base

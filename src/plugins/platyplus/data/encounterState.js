@@ -61,6 +61,7 @@ export const fragments = {
 export const queries = {}
 
 export const mutations = {
+  // TODO: cascade deletion?
   delete: gql`
     mutation delete_encounter_state($where: encounter_state_bool_exp!) {
       delete_encounter_state(where: $where) {
@@ -68,26 +69,7 @@ export const mutations = {
       }
     }
   `,
-  // update: gql`
-  //   mutation update_encounter_state($id: uuid!, $data: jsonb) {
-  //     update_encounter_state(
-  //       where: { id: { _eq: $id } }
-  //       _append: { data: $data }
-  //     ) {
-  //       affected_rows
-  //       returning {
-  //         ...encounter_state_base
-  //       }
-  //     }
-  //   }
-  //   ${fragments.base}
-  // `,
-  /**
-   * Updates an existing encounter and its entity. If nothing to change,
-   * Set the encounter data or the entity attributes to {} (JSON append mode)
-   * TODO: set the data/attributes to remove?
-   */
-  updateEntityAndEncounter: gql`
+  update: gql`
     mutation update_entity_and_encounter(
       $encounter_state_id: uuid # ID of the encounter_state
       $data: jsonb # new encounter data
@@ -127,7 +109,7 @@ export const mutations = {
   /**
    * Creates a new encounter and a new entity, in a new state from the stage in params
    */
-  insertEntityAndEncounter: gql`
+  insert: gql`
     mutation insert_entity_and_encounter(
       $encounter_type_id: uuid
       $entity_type_id: uuid # entity type. Should be deducted from stage.workflow.entity_type

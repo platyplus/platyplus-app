@@ -97,13 +97,14 @@ export default {
   name: 'PageProfile',
   mixins: [
     mixin('user', {
-      fragment: 'full',
-      unique: true
+      query: 'profile',
+      update: 'update_profile',
+      list: false
     })
   ],
   methods: {
     async save (e) {
-      const user = await this._preSave()
+      const user = await this._save()
       if (user) {
         if (user.locale) this.$locale = user.locale
         this._postSave()

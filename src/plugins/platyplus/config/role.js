@@ -33,7 +33,26 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query role($where: role_bool_exp) {
+      role(where: $where, order_by: [{ name: asc }]) {
+        ...role_base
+      }
+    }
+    ${fragments.base}
+  `,
+  option: gql`
+    query role($where: role_bool_exp) {
+      role(where: $where) {
+        # TODO: default order to be hardcoded
+        id
+        name
+      }
+    }
+    ${fragments.base}
+  `
+}
 
 export const mutations = {
   delete: gql`
@@ -45,7 +64,7 @@ export const mutations = {
   `,
   update: gql`
     mutation update_role($id: uuid!, $name: String, $global: Boolean) {
-      update_role(
+      result: update_role(
         where: { id: { _eq: $id } }
         _set: { name: $name, global: $global }
       ) {

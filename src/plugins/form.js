@@ -1,25 +1,19 @@
 import VeeValidate from 'vee-validate'
-import {
-  save,
-  smartQueryHelper,
-  queryHelper,
-  deleteMutation
-} from 'plugins/hasura'
-import { settings as globalSettings } from 'plugins/platyplus'
+import { save, deleteMutation } from 'plugins/hasura'
+import * as config from 'plugins/platyplus'
 import cloneDeep from 'lodash/cloneDeep'
 import ButtonBar from 'components/ButtonBar.vue'
 
 export const mixin = (table, settings = {}) => {
-  settings = {
-    ...{
-      fragment: 'base',
-      unique: false,
-      validations: {},
-      defaultValues: {}
-    },
-    ...globalSettings[table],
-    ...settings
-  }
+  settings = Object.assign({
+    query: 'form', // Graphql query index
+    insert: 'insert', // Grqphql insert mutation index
+    update: 'update', // Graphql update mutation index
+    list: true, // Whether the component also manages a list, or an unique item
+    validations: {},
+    defaultValues: {}
+  }, config.settings[table], settings)
+  if (!config.queries[table][settings.query]) throw Error(`The '${settings.query}' query has to be implemented for the table '${table}'`)
   return {
     props: ['id', 'createFlag', 'editFlag'],
     data () {
@@ -41,7 +35,7 @@ export const mixin = (table, settings = {}) => {
       },
       async save (e) {
         // Customize the save method in the component if needed
-        const save = await this._preSave()
+        const save = await this._save()
         if (save) this._postSave(save)
       },
       edit () {
@@ -107,13 +101,15 @@ export const mixin = (table, settings = {}) => {
           this.$router.go(-1)
         } catch (error) {}
       },
-      async _preSave () {
+      async _save () {
         // this.submitted = true TODO: loading button
         if (await this.$validator.validateAll()) {
           return save(
             {
               apollo: this.$apollo,
               table,
+              insert: settings.insert,
+              update: settings.update,
               oldValues: this.item,
               newValues: this.form,
               relations: this.relations
@@ -161,17 +157,17 @@ export const mixin = (table, settings = {}) => {
       }
     },
     apollo: {
-      ...(settings.unique
-        ? {}
-        : {
-          list: smartQueryHelper({ table, where: settings.where })
-        }),
+      list: {
+        query: config.queries[table][settings.query],
+        variables: {
+          where: settings.where
+        },
+        skip: !settings.list,
+        update: data => data[Object.keys(data)[0]] // TODO: change to 'result?'
+      },
       item: {
         // TODO: code the subscription as well => make it generic in the hasura plugin?
-        query: queryHelper({
-          table,
-          fragment: settings.fragment
-        }),
+        query: config.queries[table][settings.query],
         variables () {
           return {
             where: { id: { _eq: this.id } }
@@ -186,10 +182,14 @@ export const mixin = (table, settings = {}) => {
         ? Object.keys(settings.options)
           .filter(name => settings.options[name].table)
           .reduce((aggr, name) => {
-            aggr[`${name}_options`] = smartQueryHelper({
-              table: settings.options[name].table,
-              where: settings.options[name].where || {}
-            })
+            if (!config.queries[settings.options[name].table]['option']) throw Error(`The 'option' query has to be implemented for the table '${settings.options[name].table}'`)
+            aggr[`${name}_options`] = {
+              query: config.queries[settings.options[name].table]['option'],
+              update: data => data[Object.keys(data)[0]],
+              variables: {
+                where: settings.options[name].where || {}
+              }
+            }
             return aggr
           }, {})
         : {})
@@ -222,6 +222,7 @@ export const mixin = (table, settings = {}) => {
     }
   }
 }
+
 export default ({ app, router, Vue }) => {
   const config = {
     aria: true,

@@ -33,8 +33,7 @@ export default {
           data: {
             id: this.user.id,
             preferred_org_unit_id: this.selection
-          },
-          fragment: 'full'
+          }
         })
         this.$store.dispatch('navigation/route', {
           path: this.$from ? this.$from.path : '/profile/current-org-unit'

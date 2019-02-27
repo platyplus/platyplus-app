@@ -16,16 +16,14 @@ export const settings = {
     },
     type: {
       table: 'org_unit_type',
+      /** Shows only the available types according to the parent's type, or all root types if no parents */
       filter: (item, data, settings) => {
-        // Shows only the available types according to the parent's type
-        // TODO: transpose this server-side :D
-        if (data.item.parent) {
-          if (data.item.parent.type) {
-            if (data.item.parent.type.to) {
-              return data.item.parent.type.to.some(i => item.id === i.to.id)
-            } else return false
-          } else return false
-        } else return item.from.length === 0
+        // TODO: transpose this server-side, or at least secure the insert/update
+        if (data.item.parent?.id) {
+          return data.item.parent.type?.to?.some(i => item.id === i.to.id)
+        } else {
+          return item.from.length === 0
+        }
       },
       map: item => ({
         value: item.id,
@@ -106,7 +104,27 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query org_unit($where: org_unit_bool_exp) {
+      org_unit(where: $where) {
+        # TODO: default order to be hardcoded
+        ...org_unit_base
+      }
+    }
+    ${fragments.base}
+  `,
+  option: gql`
+    query org_unit($where: org_unit_bool_exp) {
+      org_unit(where: $where) {
+        # TODO: default order to be hardcoded
+        id
+        name
+      }
+    }
+    ${minimal}
+  `
+}
 
 export const mutations = {
   delete: gql`
@@ -116,6 +134,18 @@ export const mutations = {
       }
     }
   `,
+  insert: gql`
+    mutation insert_org_unit($name: String, $type_id: uuid, $parent_id: uuid) {
+      result: insert_org_unit(
+        objects: [{ name: $name, type_id: $type_id, parent_id: $parent_id }]
+      ) {
+        returning {
+          ...org_unit_base
+        }
+      }
+    }
+    ${fragments.base}
+  `,
   update: gql`
     mutation update_org_unit(
       $id: uuid!
@@ -123,11 +153,10 @@ export const mutations = {
       $type_id: uuid
       $parent_id: uuid
     ) {
-      update_org_unit(
+      result: update_org_unit(
         where: { id: { _eq: $id } }
         _set: { name: $name, type_id: $type_id, parent_id: $parent_id }
       ) {
-        affected_rows
         returning {
           ...org_unit_base
         }

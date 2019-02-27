@@ -48,7 +48,24 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query workflow($where: workflow_bool_exp) {
+      workflow(where: $where, order_by: [{ name: asc }]) {
+        ...workflow_base
+      }
+    }
+    ${fragments.base}
+  `,
+  option: gql`
+    query workflow($where: workflow_bool_exp) {
+      workflow(where: $where, order_by: [{ name: asc }]) {
+        id
+        name
+      }
+    }
+  `
+}
 
 export const mutations = {
   delete: gql`
@@ -60,8 +77,20 @@ export const mutations = {
   `,
   update: gql`
     mutation update_workflow($id: uuid!, $name: String) {
-      update_workflow(where: { id: { _eq: $id } }, _set: { name: $name }) {
-        affected_rows
+      result: update_workflow(
+        where: { id: { _eq: $id } }
+        _set: { name: $name }
+      ) {
+        returning {
+          ...workflow_base
+        }
+      }
+    }
+    ${fragments.base}
+  `,
+  insert: gql`
+    mutation insert_workflow($name: String) {
+      result: insert_workflow(objects: [{ name: $name }]) {
         returning {
           ...workflow_base
         }

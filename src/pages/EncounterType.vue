@@ -77,7 +77,7 @@ export default {
     async save () {
       this.form.form = this.jsonForm
       this.form.entityForm = this.jsonEntityForm
-      await this._preSave()
+      await this._save()
       this._postSave()
     },
     cancel () {

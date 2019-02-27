@@ -22,9 +22,8 @@
 
 <script>
 import { mixin } from 'plugins/form'
-import { queryHelper } from 'plugins/hasura'
 import { makeReadOnly, prepareForm } from 'plugins/formGenerator'
-import { mutations } from 'plugins/platyplus/data/encounterState'
+import { mutations, queries } from 'plugins/platyplus/data/encounterState'
 export default {
   name: 'PageEncounter',
   mixins: [mixin('encounter_state')],
@@ -50,42 +49,43 @@ export default {
     }
   },
   methods: {
-    // TODO: delete: un peu plus compliqué que d'habitude
     async save () {
-      const mutation = this.id
-        ? {
-          mutation: mutations.updateEntityAndEncounter,
-          variables: {
-            data: this.form.encounter.data,
-            attributes: this.form.state.entity.attributes,
-            encounter_state_id: this.id
-          },
-          update: data => {
-            // TODO: update cache
-          }
-        }
-        : {
-          mutation: mutations.insertEntityAndEncounter,
-          variables: {
-            data: this.form.encounter.data,
-            attributes: this.form.state.entity.attributes,
-            encounter_type_id: this.type_id,
-            entity_type_id: this.encounter_type.entity_type_id,
-            stage_id: this.stage_id,
-            org_unit_id: this.org_unit_id
-          },
-          update: data => {
-            // TODO: update cache
-          }
-        }
-      const result = await this.$apollo.mutate(mutation).then(
-        ({ data }) =>
-          data.insert_encounter_state
-            ? data.insert_encounter_state.returning[0]
-            : data.update_encounter.returning[0] // TODO: wrong object returned
-      )
-      this._postSave(result) // TODO: route back to where it should go
+      if (this.id) {
+        const result = await this.$apollo
+          .mutate({
+            mutation: mutations.update,
+            variables: {
+              data: this.form.encounter.data,
+              attributes: this.form.state.entity.attributes,
+              encounter_state_id: this.id
+            },
+            update: data => {
+              // TODO: update cache
+            }
+          })
+          .then(({ data }) => data.update_encounter.returning[0])
+        this._postSave(result) // TODO:route back to where it should go
+      } else {
+        const result = await this.$apollo
+          .mutate({
+            mutation: mutations.insert,
+            variables: {
+              data: this.form.encounter.data,
+              attributes: this.form.state.entity.attributes,
+              encounter_type_id: this.type_id,
+              entity_type_id: this.encounter_type.entity_type_id,
+              stage_id: this.stage_id,
+              org_unit_id: this.org_unit_id
+            },
+            update: data => {
+              // TODO: update cache
+            }
+          })
+          .then(({ data }) => data.insert_encounter_state.returning[0]) // TODO: wrong object returned
+        this._postSave(result) // TODO: route back to where it should go
+      }
     },
+    // TODO: delete: un peu plus compliqué que d'habitude
     // cancel () {
     //   this.$router.replace(
     //     this.$route.path.replace(
@@ -123,10 +123,7 @@ export default {
      * Loads the encounter type from the path, but don't load if not present
      */
     _encounter_type: {
-      query: queryHelper({
-        table: 'encounter_type',
-        fragment: 'base'
-      }),
+      query: queries.form,
       variables () {
         return {
           where: { id: { _eq: this.type_id } }

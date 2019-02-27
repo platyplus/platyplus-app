@@ -7,7 +7,7 @@ export const settings = {
   ...config.settings,
   ...data.settings
 }
-
+// TODO: stop exporting fragments?
 export const fragments = {
   ...metadata.fragments,
   ...config.fragments,

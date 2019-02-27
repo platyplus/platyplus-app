@@ -60,7 +60,16 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query role_attribution($where: role_attribution_bool_exp) {
+      role_attribution(where: $where, order_by: [{ role: { name: asc } }]) {
+        ...role_attribution_base
+      }
+    }
+    ${fragments.base}
+  `
+}
 
 export const mutations = {
   delete: gql`
@@ -69,5 +78,23 @@ export const mutations = {
         affected_rows
       }
     }
+  `,
+  insert: gql`
+    mutation insert_role_attribution(
+      $user_id: uuid
+      $role_id: uuid
+      $org_unit_id: uuid
+    ) {
+      result: insert_role_attribution(
+        objects: [
+          { user_id: $user_id, role_id: $role_id, org_unit_id: $org_unit_id }
+        ]
+      ) {
+        returning {
+          ...role_attribution_base
+        }
+      }
+    }
+    ${fragments.base}
   `
 }
