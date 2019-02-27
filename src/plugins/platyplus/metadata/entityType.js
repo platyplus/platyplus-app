@@ -25,7 +25,17 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  option: gql`
+    query entity_type_options($where: entity_type_bool_exp) {
+      entity_type(where: $where) {
+        # TODO: default order to be hardcoded
+        id
+        name
+      }
+    }
+  `
+}
 
 export const mutations = {
   delete: gql`
@@ -47,7 +57,10 @@ export const mutations = {
   // `,
   update: gql`
     mutation update_entity_type($id: uuid!, $name: String) {
-      update_entity_type(where: { id: { _eq: $id } }, _set: { name: $name }) {
+      result: update_entity_type(
+        where: { id: { _eq: $id } }
+        _set: { name: $name }
+      ) {
         affected_rows
         returning {
           ...entity_type_base

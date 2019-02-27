@@ -85,7 +85,17 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  option: gql`
+    query stage_options($where: stage_bool_exp) {
+      stage(where: $where) {
+        # TODO: default order to be hardcoded
+        id
+        name
+      }
+    }
+  `
+}
 
 export const mutations = {
   delete: gql`

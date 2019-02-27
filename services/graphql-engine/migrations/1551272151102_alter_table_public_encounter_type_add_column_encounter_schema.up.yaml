@@ -1,0 +1,4 @@
+- args:
+    sql: ALTER TABLE "public"."encounter_type" ADD COLUMN "encounter_schema" jsonb
+      NULL DEFAULT '{}'
+  type: run_sql

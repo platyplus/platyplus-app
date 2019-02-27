@@ -1,0 +1,17 @@
+- args:
+    permission:
+      allow_upsert: true
+      check: {}
+      columns:
+      - encounter_schema
+      - entity_schema
+      - entity_type_id
+      - name
+      - state_schema
+      - title_create
+      set: {}
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: create_insert_permission

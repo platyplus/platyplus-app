@@ -1,0 +1,23 @@
+- args:
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check: {}
+      columns:
+      - entityForm
+      - entity_type_id
+      - form
+      - name
+      localSet:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: create_insert_permission

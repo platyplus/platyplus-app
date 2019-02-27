@@ -40,8 +40,9 @@ export const fragments = {
   base: gql`
     fragment encounter_type_base on encounter_type {
       ...encounter_type_minimal
-      form
-      entityForm
+      entity_schema
+      state_schema
+      encounter_schema
       entity_type_id
       entity_type {
         ...entity_type_minimal
@@ -81,20 +82,22 @@ export const mutations = {
   update: gql`
     mutation update_encounter_type(
       $id: uuid!
-      $form: jsonb
-      $entityForm: jsonb
+      $entity_schema: jsonb
+      $state_schema: jsonb
+      $encounter_schema: jsonb
       $name: String
       $title_create: String
       $entity_type_id: uuid
     ) {
-      update_encounter_type(
+      result: update_encounter_type(
         where: { id: { _eq: $id } }
         _set: {
           name: $name
           title_create: $title_create
           entity_type_id: $entity_type_id
-          form: $form
-          entityForm: $entityForm
+          entity_schema: $entity_schema
+          state_schema: $state_schema
+          encounter_schema: $encounter_schema
         }
       ) {
         affected_rows

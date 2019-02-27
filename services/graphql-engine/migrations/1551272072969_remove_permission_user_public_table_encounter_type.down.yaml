@@ -1,0 +1,57 @@
+- args:
+    permission:
+      filter: {}
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: create_delete_permission
+- args:
+    permission:
+      check: {}
+      columns:
+      - encounterSchema
+      - entitySchema
+      - entity_type_id
+      - name
+      - stateSchema
+      - title_create
+      set: {}
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: create_insert_permission
+- args:
+    permission:
+      columns:
+      - encounterSchema
+      - entitySchema
+      - entity_type_id
+      - name
+      - stateSchema
+      - title_create
+      filter: {}
+      set: {}
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - encounterSchema
+      - entitySchema
+      - entity_type_id
+      - id
+      - name
+      - stateSchema
+      - title_create
+      filter: {}
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: create_select_permission

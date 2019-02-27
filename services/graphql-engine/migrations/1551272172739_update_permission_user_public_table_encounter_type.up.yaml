@@ -1,0 +1,16 @@
+- args:
+    permission:
+      columns:
+      - encounter_schema
+      - entity_schema
+      - entity_type_id
+      - name
+      - state_schema
+      - title_create
+      filter: {}
+      set: {}
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: create_update_permission

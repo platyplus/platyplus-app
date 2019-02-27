@@ -15,17 +15,23 @@
           v-model="form.title_create"
           ref="firstInput")
       q-field(
-        label="Entity form")
+        label="Entity schema")
         json-editor(
           :readonly="reading"
-          :onChange="onEntityFormChange"
-          :json="form.entityForm")
+          :onChange="onEntitySchemaChange"
+          :json="form.entity_schema")
       q-field(
-        label="Encounter form")
+        label="State schema")
         json-editor(
           :readonly="reading"
-          :onChange="onFormChange "
-          :json="form.form")
+          :onChange="onStateSchemaChange"
+          :json="form.state_schema")
+      q-field(
+        label="Encounter schema")
+        json-editor(
+          :readonly="reading"
+          :onChange="onEncounterSchemaChange "
+          :json="form.encounterSchema")
       q-field(
         label="Available for stages"
         helper="")
@@ -60,8 +66,9 @@ export default {
   name: 'PageEncounterType',
   mixins: [mixin('encounter_type')],
   data: () => ({
-    jsonForm: {},
-    jsonEntityForm: {}
+    jsonEntityForm: {},
+    jsonStateForm: {},
+    jsonEncounterForm: {}
   }),
   props: ['entity_type_id'],
   computed: {
@@ -75,8 +82,9 @@ export default {
   },
   methods: {
     async save () {
-      this.form.form = this.jsonForm
-      this.form.entityForm = this.jsonEntityForm
+      this.form.entity_schema = this.jsonEntityForm
+      this.form.state_schema = this.jsonStateForm
+      this.form.encounter_schema = this.jsonEncounterForm
       await this._save()
       this._postSave()
     },
@@ -92,14 +100,18 @@ export default {
       this._resetItem()
       if (this.entity_type_id) this.item.entity_type_id = this.entity_type_id
       this._resetForm()
-      this.jsonForm = this.form.form
-      this.jsonEntityForm = this.form.entityForm
+      this.jsonEntityForm = this.form.entity_schema
+      this.jsonStateForm = this.form.state_schema
+      this.jsonEncounterForm = this.form.encounter_schema
     },
-    onFormChange (newJson) {
-      this.jsonForm = newJson
-    },
-    onEntityFormChange (newJson) {
+    onEntitySchemaChange (newJson) {
       this.jsonEntityForm = newJson
+    },
+    onStateSchemaChange (newJson) {
+      this.jsonStateForm = newJson
+    },
+    onEncounterSchemaChange (newJson) {
+      this.jsonEncounterForm = newJson
     }
   }
 }
