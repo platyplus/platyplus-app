@@ -1,5 +1,11 @@
 import { mutations, settings } from 'plugins/platyplus'
 
+/**
+ * Filters the atributes in the data according to the definitions of the mutation
+ * @param {GraphQL mutation} mutation the GraphQL mutation
+ * @param {Object} data The initial, unfiltered ata object
+ * @returns {Object} Object with only the right attributes and ready to be used as variables for the mutation
+ */
 const variableValues = (mutation, data) =>
   mutation.definitions
     .find(item => item.kind === 'OperationDefinition')
@@ -9,7 +15,6 @@ const variableValues = (mutation, data) =>
       return aggr
     }, {})
 
-// TODO: merge the three functions below
 export const upsertMutation = async ({
   apollo,
   table,
@@ -18,26 +23,15 @@ export const upsertMutation = async ({
   update = 'update'
 }) => {
   const isUpdate = Boolean(Array.isArray(data) ? data[0].id : data.id)
-  return isUpdate
-    ? updateMutation({ apollo, table, data, mutation: update })
-    : insertMutation({ apollo, table, data, mutation: insert })
-}
-
-export const updateMutation = async ({
-  apollo,
-  table,
-  data,
-  mutation = 'update'
-}) => {
-  const mutationName = mutation
-  mutation = mutations[table][mutation]
+  const mutationName = isUpdate ? update : insert
+  const mutation = mutations[table][mutationName]
   if (!mutation) {
     throw Error(
       `The '${mutationName}' mutation has to be implemented for the table '${table}'.`
     )
   }
   const objects = Array.isArray(data) ? data : [data]
-  const theloop = objects.map(item => {
+  const loop = objects.map(item => {
     const variables = variableValues(mutation, data)
     variables.id = item.id
     return apollo.mutate({ mutation, variables }).then(({ data }) => {
@@ -49,29 +43,8 @@ export const updateMutation = async ({
       return data.result.returning[0]
     })
   })
-  const res = await Promise.all(theloop)
+  const res = await Promise.all(loop)
   return Array.isArray(data) ? res : res[0]
-}
-
-export const insertMutation = async ({
-  apollo,
-  table,
-  data,
-  mutation = 'insert'
-}) => {
-  if (Array.isArray(data)) {
-    throw Error('insertMutation is not fit for multiple insert anymore!!!')
-  }
-  if (!mutations[table].insert) {
-    throw Error(
-      `The '${mutation}' mutation has to be implemented for the table '${table}'`
-    )
-  }
-  mutation = mutations[table][mutation]
-  const variables = variableValues(mutation, data)
-  return apollo
-    .mutate({ mutation, variables })
-    .then(({ data }) => data[Object.keys(data)[0]].returning[0]) // TODO: meh: depend de la mutation
 }
 
 export const deleteMutation = ({ apollo, table, key, data }) => {
@@ -91,6 +64,15 @@ export const deleteMutation = ({ apollo, table, key, data }) => {
   }
 }
 
+/**
+ * Looks for new relations that could have been added after a modification of a form
+ * @param {String} table Table name
+ * @param {String} selfId UUID of the object owning the relations
+ * @param {Object} relation Relations' settings
+ * @param {Array<Object>} before List of initial relations before modification
+ * @param {Array<String>} afterIds List of current IDs selected as the whole new set of relations
+ * @returns {Array<Object>} The new relations that were not part of the initial set and that should be added in the database
+ */
 export const addedRelations = (
   table,
   selfId,
@@ -107,7 +89,13 @@ export const addedRelations = (
       return res
     })
 }
-
+/**
+ * Looks for relations to be deleted after modifying a form
+ * @param {Object} relation Relations' settings
+ * @param {Array<Object>} before List of initial relations before modification
+ * @param {Array<String>} afterIds List of current IDs selected as the whole new set of relations
+ * @returns {Array<String>} The UUIDs of the relations to be removed from the database
+ */
 export const removedRelations = (relation, before = [], afterIds) =>
   before
     .map(item => item[relation.to].id)

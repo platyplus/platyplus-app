@@ -101,7 +101,7 @@ export const mixin = (table, settings = {}) => {
           this.$router.go(-1)
         } catch (error) {}
       },
-      async _save () {
+      async _save ({ oldValues = this.item, newValues = this.form, relations = this.relations } = {}) {
         // this.submitted = true TODO: loading button
         if (await this.$validator.validateAll()) {
           return save(
@@ -110,9 +110,9 @@ export const mixin = (table, settings = {}) => {
               table,
               insert: settings.insert,
               update: settings.update,
-              oldValues: this.item,
-              newValues: this.form,
-              relations: this.relations
+              oldValues: oldValues || this.item,
+              newValues: newValues || this.form,
+              relations: relations || this.relations
             },
             settings
           )

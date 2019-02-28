@@ -64,7 +64,6 @@
       :helper="$t('user.labels.preferred_org_unit')")
       q-select(
         :readonly="reading"
-        clearable
         v-model="form.preferred_org_unit_id"
         :options="preferredOrgUnitOptions")
     q-field(
