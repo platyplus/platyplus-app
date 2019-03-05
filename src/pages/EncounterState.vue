@@ -3,10 +3,10 @@
     div(v-if="details")
       div(v-if="reading")
         vue-form-generator(:schema="roEntitySchema" :model="item.state.entity.attributes" :options="formOptions")
-        vue-form-generator(:schema="roSchema" :model="item.encounter.data" :options="formOptions")
+        vue-form-generator(:schema="roEncounterSchema" :model="item.encounter.data" :options="formOptions")
       div(v-else-if="encounter_type")
-        vue-form-generator(:schema="encounter_type.entityForm" :model="form.state.entity.attributes" :options="formOptions")
-        vue-form-generator(:schema="encounter_type.form" :model="form.encounter.data" :options="formOptions")
+        vue-form-generator(:schema="encounter_type.entity_schema" :model="form.state.entity.attributes" :options="formOptions")
+        vue-form-generator(:schema="encounter_type.encounter_schema" :model="form.encounter.data" :options="formOptions")
     q-list(
       v-else-if="list && list.length"
       highlight)
@@ -23,7 +23,8 @@
 <script>
 import { mixin } from 'plugins/form'
 import { makeReadOnly, prepareForm } from 'plugins/formGenerator'
-import { mutations, queries } from 'plugins/platyplus/data/encounterState'
+import { queries } from 'plugins/platyplus/data/encounterState'
+
 export default {
   name: 'PageEncounter',
   mixins: [mixin('encounter_state')],
@@ -34,7 +35,7 @@ export default {
       validateAfterChanged: true,
       validateAsync: true
     },
-    roSchema: {},
+    roEncounterSchema: {},
     roEntitySchema: {}
   }),
   props: ['org_unit_id', 'type_id', 'stage_id'],
@@ -50,40 +51,51 @@ export default {
   },
   methods: {
     async save () {
-      if (this.id) {
-        const result = await this.$apollo
-          .mutate({
-            mutation: mutations.update,
-            variables: {
-              data: this.form.encounter.data,
-              attributes: this.form.state.entity.attributes,
-              encounter_state_id: this.id
-            },
-            update: data => {
-              // TODO: update cache
-            }
-          })
-          .then(({ data }) => data.update_encounter.returning[0])
-        this._postSave(result) // TODO:route back to where it should go
-      } else {
-        const result = await this.$apollo
-          .mutate({
-            mutation: mutations.insert,
-            variables: {
-              data: this.form.encounter.data,
-              attributes: this.form.state.entity.attributes,
-              encounter_type_id: this.type_id,
-              entity_type_id: this.encounter_type.entity_type_id,
-              stage_id: this.stage_id,
-              org_unit_id: this.org_unit_id
-            },
-            update: data => {
-              // TODO: update cache
-            }
-          })
-          .then(({ data }) => data.insert_encounter_state.returning[0]) // TODO: wrong object returned
-        this._postSave(result) // TODO: route back to where it should go
+      const newValues = {
+        id: this.id,
+        data: this.form.encounter.data,
+        attributes: this.form.state.entity.attributes,
+        encounter_type_id: this.type_id,
+        entity_type_id: this.encounter_type.entity_type_id,
+        stage_id: this.stage_id,
+        org_unit_id: this.org_unit_id
       }
+      const save = await this._save({ newValues })
+      if (save) this._postSave(save)
+      // if (this.id) {
+      //   const result = await this.$apollo
+      //     .mutate({
+      //       mutation: mutations.update,
+      //       variables: {
+      //         data: this.form.encounter.data,
+      //         attributes: this.form.state.entity.attributes,
+      //         encounter_state_id: this.id
+      //       },
+      //       update: data => {
+      //         // TODO: update cache
+      //       }
+      //     })
+      //     .then(({ data }) => data.update_encounter.returning[0])
+      //   this._postSave(result) // TODO:route back to where it should go
+      // } else {
+      //   const result = await this.$apollo
+      //     .mutate({
+      //       mutation: mutations.insert,
+      //       variables: {
+      //         data: this.form.encounter.data,
+      //         attributes: this.form.state.entity.attributes,
+      //         encounter_type_id: this.type_id,
+      //         entity_type_id: this.encounter_type.entity_type_id,
+      //         stage_id: this.stage_id,
+      //         org_unit_id: this.org_unit_id
+      //       },
+      //       update: data => {
+      //         // TODO: update cache
+      //       }
+      //     })
+      //     .then(({ data }) => data.insert_encounter_state.returning[0]) // TODO: wrong object returned
+      //   this._postSave(result) // TODO: route back to where it should go
+      // }
     },
     // TODO: delete: un peu plus compliqué que d'habitude
     // cancel () {
@@ -108,13 +120,16 @@ export default {
      */
     encounter_type (newValue) {
       if (newValue) {
-        this.roSchema = makeReadOnly(newValue.form)
-        this.roEntitySchema = makeReadOnly(newValue.entityForm)
+        this.roEncounterSchema = makeReadOnly(newValue.encounter_schema)
+        this.roEntitySchema = makeReadOnly(newValue.entity_schema)
         prepareForm(
-          this.encounter_type.entityForm,
+          this.encounter_type.entity_schema,
           this.form.state.entity.attributes
         )
-        prepareForm(this.encounter_type.form, this.item.encounter.data)
+        prepareForm(
+          this.encounter_type.encounter_schema,
+          this.item.encounter.data
+        )
       }
     }
   },

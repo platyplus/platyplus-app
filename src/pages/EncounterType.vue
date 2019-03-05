@@ -31,7 +31,7 @@
         json-editor(
           :readonly="reading"
           :onChange="onEncounterSchemaChange "
-          :json="form.encounterSchema")
+          :json="form.encounter_schema")
       q-field(
         label="Available for stages"
         helper="")
@@ -66,6 +66,7 @@ export default {
   name: 'PageEncounterType',
   mixins: [mixin('encounter_type')],
   data: () => ({
+    // TODO: use directly this.form instead of separate data values?
     jsonEntityForm: {},
     jsonStateForm: {},
     jsonEncounterForm: {}

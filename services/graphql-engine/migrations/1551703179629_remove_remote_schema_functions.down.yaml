@@ -1,0 +1,8 @@
+- args:
+    definition:
+      forward_client_headers: true
+      headers: []
+      url: http://functions:3000/graphql
+      url_from_env: null
+    name: functions
+  type: add_remote_schema

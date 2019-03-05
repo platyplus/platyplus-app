@@ -2,6 +2,11 @@ import gql from 'graphql-tag'
 import * as entityType from '../metadata/entityType'
 
 export const settings = {
+  defaultValues: {
+    entity_schema: {},
+    state_schema: {},
+    encounter_schema: {}
+  },
   options: {
     entity_type: {
       table: 'entity_type',

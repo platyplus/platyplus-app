@@ -5,7 +5,7 @@ services:
     depends_on:
       - graphql-engine
     environment:
-      API: 'graphql.${DOMAIN}'
+      API: 'api.${DOMAIN}'
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - traefik.port=3000
@@ -35,15 +35,43 @@ services:
       - authentication_private_key
       - authentication_public_key
       - hasura_secret_key
+  functions:
+    image: platyplus/functions
+    environment:
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      NODE_ENV: production
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
+      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
+    deploy:
+      replicas: 1
+    secrets:
+      - authentication_public_key
+      - hasura_secret_key
+  graphql-gateway:
+    image: platyplus/graphql-gateway
+    depends_on:
+      - authentication
+      - graphql-engine
+      - functions
+    environment:
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      AUTH_URL: 'http://authentication:3000/graphql'
+      FUNCTIONS_URL: 'http://functions:3000/graphql'
+      NODE_ENV: production
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
+    labels:
+      - 'traefik.frontend.rule=Host:api.${DOMAIN}'
+      - traefik.port=3000
+    deploy:
+      replicas: 1
+    secrets:
+      - hasura_secret_key
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
       - authentication
       - postgres
       - synchronization-hook
-    labels:
-      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
-      - traefik.port=3000
     deploy:
       replicas: 1
     environment:

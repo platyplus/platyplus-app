@@ -15,7 +15,7 @@
 </style>
 
 <script>
-import { updateMutation } from 'plugins/hasura'
+// import { updateMutation } from 'plugins/hasura'
 import { getUser } from 'plugins/auth'
 
 export default {
@@ -25,20 +25,21 @@ export default {
   }),
   methods: {
     async selectOrgUnit () {
-      if (this.selection !== '') {
-        await updateMutation({
-          apollo: this.$apollo,
-          table: 'user',
-          mutation: 'update_preferred_org_unit',
-          data: {
-            id: this.user.id,
-            preferred_org_unit_id: this.selection
-          }
-        })
-        this.$store.dispatch('navigation/route', {
-          path: this.$from ? this.$from.path : '/profile/current-org-unit'
-        })
-      }
+      // TODO: rewrite
+      // if (this.selection !== '') {
+      //   await updateMutation({
+      //     apollo: this.$apollo,
+      //     table: 'user',
+      //     mutation: 'update_preferred_org_unit',
+      //     data: {
+      //       id: this.user.id,
+      //       preferred_org_unit_id: this.selection
+      //     }
+      //   })
+      //   this.$store.dispatch('navigation/route', {
+      //     path: this.$from ? this.$from.path : '/profile/current-org-unit'
+      //   })
+      // }
     }
   },
   computed: {

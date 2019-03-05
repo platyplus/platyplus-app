@@ -1,0 +1,7 @@
+- args:
+    sql: ALTER TABLE "public"."encounter_type" ALTER COLUMN "entity_schema" SET NOT
+      NULL;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."encounter_type"."entity_schema" IS ''
+  type: run_sql

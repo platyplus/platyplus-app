@@ -1,0 +1,8 @@
+- args:
+    definition:
+      forward_client_headers: true
+      headers: []
+      url: http://administration:3000/graphql
+      url_from_env: null
+    name: administration
+  type: add_remote_schema

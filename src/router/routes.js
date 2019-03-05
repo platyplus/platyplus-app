@@ -71,6 +71,10 @@ const routes = [
           withoutPreferredOrgUnit: true
         }
       },
+      {
+        path: 'import-export',
+        component: () => import('pages/ImportExport.vue')
+      },
       ...crudRoutes('org-unit', 'OrgUnit'),
       {
         path: 'org-unit/:id/create',

@@ -1,0 +1,7 @@
+- args:
+    sql: ALTER TABLE "public"."encounter_type" ALTER COLUMN "state_schema" DROP NOT
+      NULL;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."encounter_type"."state_schema" IS 'undefined'
+  type: run_sql

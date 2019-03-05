@@ -50,7 +50,6 @@ export const queries = {
         name
       }
     }
-    ${fragments.base}
   `
 }
 

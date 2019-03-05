@@ -44,6 +44,7 @@ export const fragments = {
         states {
           state {
             id
+            data
           }
         }
         org_unit {
@@ -58,7 +59,17 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query encounter_state($where: encounter_state_bool_exp) {
+      encounter_state(where: $where) {
+        # TODO: order by
+        ...encounter_state_base
+      }
+    }
+    ${fragments.base}
+  `
+}
 
 export const mutations = {
   // TODO: cascade deletion?
@@ -71,20 +82,20 @@ export const mutations = {
   `,
   update: gql`
     mutation update_entity_and_encounter(
-      $encounter_state_id: uuid # ID of the encounter_state
+      $id: uuid # ID of the encounter_state
       $data: jsonb # new encounter data
       $attributes: jsonb # new entity attributes
     ) {
       update_entity(
-        where: { states: { encounters: { id: { _eq: $encounter_state_id } } } }
+        where: { states: { encounters: { id: { _eq: $id } } } }
         _append: { attributes: $attributes }
       ) {
         returning {
           ...entity_base
         }
       }
-      update_encounter(
-        where: { states: { id: { _eq: $encounter_state_id } } }
+      result: update_encounter(
+        where: { states: { id: { _eq: $id } } }
         _append: { data: $data }
       ) {
         returning {
@@ -118,7 +129,7 @@ export const mutations = {
       $data: jsonb # data of the encounter
       $attributes: jsonb # attributes of the entity
     ) {
-      insert_encounter_state(
+      result: insert_encounter_state(
         objects: [
           {
             encounter: {

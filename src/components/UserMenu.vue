@@ -35,6 +35,10 @@
       q-item(to="/entity-type")
         q-item-side(icon="fas fa-heartbeat")
         q-item-main(label="Entity Types")
+      q-list-header Administration
+      q-item(to="/import-export")
+        q-item-side(icon="fas fa-sync")
+        q-item-main(label="Import/Export")
 </template>
 
 <script>

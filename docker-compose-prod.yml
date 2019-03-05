@@ -22,6 +22,24 @@ services:
     secrets:
       - authentication_public_key
       - hasura_secret_key
+  functions:
+    deploy:
+      replicas: 1
+    environment:
+      NODE_ENV: production
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
+      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
+    secrets:
+      - authentication_public_key
+      - hasura_secret_key
+  graphql-gateway:
+    deploy:
+      replicas: 1
+    environment:
+      NODE_ENV: production
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
+    secrets:
+      - hasura_secret_key
   graphql-engine:
     deploy:
       replicas: 1
