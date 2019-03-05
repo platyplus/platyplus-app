@@ -18,6 +18,8 @@ export default {
   methods: {
     async importXlsForms (ev) {
       try {
+        const file = ev.target.files[0]
+        ev.target.value = ''
         const { data } = await this.$apollo.mutate({
           mutation: gql`
             mutation import($file: Upload!) {
@@ -28,10 +30,10 @@ export default {
             }
           `,
           variables: {
-            file: ev.target.files[0]
+            file
           }
         })
-        console.log(data.importXlsForms)
+        console.log(data.importXlsForms.message)
       } catch (e) {
         console.log(e)
       }
