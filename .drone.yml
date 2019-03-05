@@ -106,24 +106,6 @@ steps:
 
 ---
 kind: pipeline
-name: administration-build
-steps:
-  - name: build-admin-service
-    image: plugins/docker
-    settings:
-      context: services/administration
-      dockerfile: services/administration/Dockerfile
-      repo: platyplus/administration
-      tags: latest
-      username:
-        from_secret: DH_USER
-      password:
-        from_secret: DH_PASSWORD
-depends_on:
-  - service-template-build
-
----
-kind: pipeline
 name: graphql-engine-build
 steps:
   - name: build-graphql-service
