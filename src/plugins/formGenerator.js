@@ -1,7 +1,7 @@
 import VueFormGenerator from 'vue-form-generator'
 import cloneDeep from 'lodash/cloneDeep'
-import template from 'lodash/template'
 import 'vue-form-generator/dist/vfg.css'
+import jexl from 'jexl'
 
 /**
  * Converts a template-like string to an expression that can be evaluated by Jexl
@@ -56,37 +56,57 @@ export const makeReadOnly = schema => {
  * The 'computed' attribute should have a syntax such as 'Form filled by ${user}' where 'user' is another attribute of the model
  * @param {Schema that is sent to vue-form-builder} schema
  * @param {Model that is sent to vue-form-builder} model
- * TODO: number calculation by default, string computing are escaped e.g. computed = '"string ${fieldName}"'
  * TODO: the calculation of the computed files should be done/cross checked on the server side as well
  * TODO: prevent recursive templating e.g. '${sameField}' in the computed attribute of the 'sameField' field
- * TODO: transform visible attribute into a function
- * TODO: use https://github.com/TomFrost/Jexl - probably safer than lodash templates
  */
 export const prepareForm = (schema, model) => {
   if (!schema) return
   // Prepares one field marked as 'computed'
-  const prepareField = field => {
+  const prepareComputedField = field => {
     field.get = function (m) {
-      // TODO: replace by Jexl and templateStringToExpression
-      const value = template(field.computed)(m)
+      const strCondition = templateStringToExpression(field.computed)
+      let result = jexl.evalSync(strCondition, model)
       try {
-        m[field.model] = JSON.parse(value)
+        result = JSON.parse(result)
       } catch (e) {
-        m[field.model] = value
+        console.error(e)
       }
-      return value
+      m[field.model] = result
+      return result
     }
     field.readonly = true
-    model[field.model] = field.get(model)
+    model[field.model] = field.get(model) // loads the initial value
+  }
+  // Prepares one field visibility
+  const prepareFiedVisibility = field => {
+    let initial = field.visible
+    field.visible = function (m) {
+      try {
+        const strCondition = templateStringToExpression(initial)
+        return JSON.parse(jexl.evalSync(strCondition, m))
+      } catch (e) {
+        console.error(e)
+        return true
+      }
+    }
   }
   // Prepares a set of fields
-  const prepareFields = fields =>
-    fields &&
-    fields.filter(field => field.computed).map(field => prepareField(field))
-  // Maps the fields in the schema that are not part of any group
+  const prepareFields = fields => {
+    if (fields) {
+      for (let field of fields) {
+        field.computed && prepareComputedField(field)
+        typeof field.visible === 'string' && prepareFiedVisibility(field)
+      }
+    }
+  }
+  // Prepares the fields in the schema that are not part of any group
   prepareFields(schema.fields)
-  // Maps the fields of each group
-  schema.groups && schema.groups.map(group => prepareFields(group.fields))
+  if (schema.groups) {
+    // Prepares the fields of each group
+    for (let group of schema.groups) {
+      prepareFields(group.fields)
+    }
+  }
 }
 
 export default ({ app, router, Vue, store }) => {

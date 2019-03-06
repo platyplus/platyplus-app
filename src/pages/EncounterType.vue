@@ -16,22 +16,13 @@
           ref="firstInput")
       q-field(
         label="Entity schema")
-        json-editor(
-          :readonly="reading"
-          :onChange="onEntitySchemaChange"
-          :json="form.entity_schema")
+        codemirror(v-model="jsonEntityForm" :options="cmOptions")
       q-field(
         label="State schema")
-        json-editor(
-          :readonly="reading"
-          :onChange="onStateSchemaChange"
-          :json="form.state_schema")
+        codemirror(v-model="jsonStateForm" :options="cmOptions")
       q-field(
         label="Encounter schema")
-        json-editor(
-          :readonly="reading"
-          :onChange="onEncounterSchemaChange "
-          :json="form.encounter_schema")
+        codemirror(v-model="jsonEncounterForm" :options="cmOptions")
       q-field(
         label="Available for stages"
         helper="")
@@ -67,9 +58,9 @@ export default {
   mixins: [mixin('encounter_type')],
   data: () => ({
     // TODO: use directly this.form instead of separate data values?
-    jsonEntityForm: {},
-    jsonStateForm: {},
-    jsonEncounterForm: {}
+    jsonEntityForm: '',
+    jsonStateForm: '',
+    jsonEncounterForm: ''
   }),
   props: ['entity_type_id'],
   computed: {
@@ -79,13 +70,26 @@ export default {
         acc[curr.entity_type.name].push(curr)
         return acc
       }, {})
+    },
+    cmOptions () {
+      if (this.reading) {
+        return {
+          readOnly: 'nocursor',
+          styleActiveLine: false
+        }
+      } else {
+        return {
+          readOnly: false,
+          styleActiveLine: true
+        }
+      }
     }
   },
   methods: {
     async save () {
-      this.form.entity_schema = this.jsonEntityForm
-      this.form.state_schema = this.jsonStateForm
-      this.form.encounter_schema = this.jsonEncounterForm
+      this.form.entity_schema = JSON.parse(this.jsonEntityForm)
+      this.form.state_schema = JSON.parse(this.jsonStateForm)
+      this.form.encounter_schema = JSON.parse(this.jsonEncounterForm)
       await this._save()
       this._postSave()
     },
@@ -97,22 +101,16 @@ export default {
         )
       )
     },
-    reset () {
-      this._resetItem()
+    resetForm () {
       if (this.entity_type_id) this.item.entity_type_id = this.entity_type_id
+      this.jsonEntityForm = JSON.stringify(this.item.entity_schema, null, 2)
+      this.jsonStateForm = JSON.stringify(this.item.state_schema, null, 2)
+      this.jsonEncounterForm = JSON.stringify(
+        this.item.encounter_schema,
+        null,
+        2
+      )
       this._resetForm()
-      this.jsonEntityForm = this.form.entity_schema
-      this.jsonStateForm = this.form.state_schema
-      this.jsonEncounterForm = this.form.encounter_schema
-    },
-    onEntitySchemaChange (newJson) {
-      this.jsonEntityForm = newJson
-    },
-    onStateSchemaChange (newJson) {
-      this.jsonStateForm = newJson
-    },
-    onEncounterSchemaChange (newJson) {
-      this.jsonEncounterForm = newJson
     }
   }
 }

@@ -23,8 +23,8 @@
 <script>
 import { mixin } from 'plugins/form'
 import { makeReadOnly, prepareForm } from 'plugins/formGenerator'
-import { queries } from 'plugins/platyplus/data/encounterState'
-
+import { queries } from 'plugins/platyplus/config/encounterType'
+// TODO: on load, merge all data into one property, and then dispatch on save
 export default {
   name: 'PageEncounter',
   mixins: [mixin('encounter_state')],
@@ -122,6 +122,7 @@ export default {
       if (newValue) {
         this.roEncounterSchema = makeReadOnly(newValue.encounter_schema)
         this.roEntitySchema = makeReadOnly(newValue.entity_schema)
+        prepareForm(this.test, this.testModel)
         prepareForm(
           this.encounter_type.entity_schema,
           this.form.state.entity.attributes

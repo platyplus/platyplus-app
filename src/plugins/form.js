@@ -3,6 +3,17 @@ import { save, deleteMutation } from 'plugins/hasura'
 import * as config from 'plugins/platyplus'
 import cloneDeep from 'lodash/cloneDeep'
 import ButtonBar from 'components/ButtonBar.vue'
+// Code Mirror imports
+import VueCodemirror from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+window.jsonlint = require('jsonlint-mod')
+import 'codemirror/mode/javascript/javascript.js'
+import 'codemirror/addon/lint/lint.css'
+import 'codemirror/addon/lint/lint.js'
+import 'codemirror/addon/lint/json-lint.js'
+import 'codemirror/addon/selection/active-line.js'
+import 'codemirror/addon/scroll/annotatescrollbar.js'
+import 'codemirror/addon/edit/matchbrackets.js'
 
 export const mixin = (table, settings = {}) => {
   settings = Object.assign({
@@ -51,12 +62,15 @@ export const mixin = (table, settings = {}) => {
       },
       _reset (e) {
         this._resetItem()
-        this._resetForm()
+        this.resetForm()
       },
       _resetItem () {
         if (!this.id && !this.createFlag) {
           this.item = cloneDeep(settings.defaultValues)
         }
+      },
+      resetForm () {
+        this._resetForm()
       },
       _resetForm () {
         this.form = cloneDeep(this.item)
@@ -199,7 +213,7 @@ export const mixin = (table, settings = {}) => {
     },
     watch: {
       $route: 'reset',
-      item: '_resetForm',
+      item: 'resetForm',
       id: '_resetItem',
       ...(settings.options
         ? Object.keys(settings.options).reduce((aggr, curr) => {
@@ -223,22 +237,35 @@ export const mixin = (table, settings = {}) => {
   }
 }
 
+const cmOptions = {
+  tabSize: 2,
+  mode: 'application/json',
+  annotateScrollbar: true,
+  lint: true,
+  matchBrackets: true,
+  styleActiveLine: true,
+  lineWrapping: true,
+  gutters: ['CodeMirror-lint-markers']
+}
+
+const veeValidateConfig = {
+  aria: true,
+  classNames: {},
+  classes: false,
+  delay: 0,
+  dictionary: null,
+  errorBagName: 'vErrors', // change if property conflicts
+  events: 'input|blur',
+  fieldsBagName: 'fields',
+  i18n: null, // TODO: the vue-i18n plugin instance
+  i18nRootKey: 'validations', // the nested key under which the validation messages will be located
+  inject: true,
+  locale: 'en-uk',
+  validity: false
+}
+
 export default ({ app, router, Vue }) => {
-  const config = {
-    aria: true,
-    classNames: {},
-    classes: false,
-    delay: 0,
-    dictionary: null,
-    errorBagName: 'vErrors', // change if property conflicts
-    events: 'input|blur',
-    fieldsBagName: 'fields',
-    i18n: null, // TODO: the vue-i18n plugin instance
-    i18nRootKey: 'validations', // the nested key under which the validation messages will be located
-    inject: true,
-    locale: 'en-uk',
-    validity: false
-  }
-  Vue.use(VeeValidate, config)
+  Vue.use(VeeValidate, veeValidateConfig)
+  Vue.use(VueCodemirror, { options: cmOptions })
   Vue.component('button-bar', ButtonBar)
 }
