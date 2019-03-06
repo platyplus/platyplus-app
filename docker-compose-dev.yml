@@ -99,6 +99,7 @@ services:
     command: nodemon -e js --inspect=0.0.0.0:9229 index.js
     environment:
       NODE_ENV: development
+      PUBLIC_KEY: '${PUBLIC_KEY}' # TODO: only required because of the embedded functions
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
     healthcheck:
       disable: true

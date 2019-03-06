@@ -2,6 +2,25 @@ import VueFormGenerator from 'vue-form-generator'
 import cloneDeep from 'lodash/cloneDeep'
 import template from 'lodash/template'
 import 'vue-form-generator/dist/vfg.css'
+
+/**
+ * Converts a template-like string to an expression that can be evaluated by Jexl
+ * For instance:
+ * var mystring = '${name} is ${age+1} years old'
+ * templateStringToExpression(mystring) // returns '"" + (name) + " is " + (age+1) + " years old"'
+ * @param {String} string
+ */
+export const templateStringToExpression = string => {
+  var expressions = string.match(/\$\{(.*?)\}/g)
+  if (expressions) {
+    for (let expression of expressions) {
+      let value = expression.substring(2, expression.length - 1)
+      string = string.split(expression).join(`" + (${value}) + "`)
+    }
+  }
+  return `"${string}"`
+}
+
 /**
  * Generates a new schema that locks all the fields against modification
  * @param {the initial schema with the vue-form-builder syntax} schema
@@ -37,14 +56,18 @@ export const makeReadOnly = schema => {
  * The 'computed' attribute should have a syntax such as 'Form filled by ${user}' where 'user' is another attribute of the model
  * @param {Schema that is sent to vue-form-builder} schema
  * @param {Model that is sent to vue-form-builder} model
+ * TODO: number calculation by default, string computing are escaped e.g. computed = '"string ${fieldName}"'
  * TODO: the calculation of the computed files should be done/cross checked on the server side as well
  * TODO: prevent recursive templating e.g. '${sameField}' in the computed attribute of the 'sameField' field
+ * TODO: transform visible attribute into a function
+ * TODO: use https://github.com/TomFrost/Jexl - probably safer than lodash templates
  */
 export const prepareForm = (schema, model) => {
   if (!schema) return
   // Prepares one field marked as 'computed'
   const prepareField = field => {
     field.get = function (m) {
+      // TODO: replace by Jexl and templateStringToExpression
       const value = template(field.computed)(m)
       try {
         m[field.model] = JSON.parse(value)

@@ -25,5 +25,7 @@ file_env() {
 
 # TODO: map all _FILE environment variables
 file_env 'HASURA_GRAPHQL_ADMIN_SECRET'
+# TODO: only required because of the embedded functions
+file_env 'PUBLIC_KEY'
 
 exec "$@"

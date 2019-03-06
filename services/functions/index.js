@@ -46,6 +46,7 @@ const decodeJwt = req => {
 // `
 
 const typeDefs = gql`
+  scalar jsonb
   type Query {
     dummy: String!
   }
@@ -55,6 +56,7 @@ const typeDefs = gql`
   type ImportPayload {
     status: String!
     message: String!
+    content: jsonb!
   }
   type File {
     filename: String!

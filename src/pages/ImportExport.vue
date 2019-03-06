@@ -5,7 +5,7 @@
     class="justify-center")
     //- q-uploader(:url="url")
     input(type="file" @change="importXlsForms")
-
+    pre {{forms}}
 </template>
 
 <style>
@@ -15,6 +15,7 @@
 import gql from 'graphql-tag'
 export default {
   name: 'PageImportExport',
+  data: () => ({ forms: {} }),
   methods: {
     async importXlsForms (ev) {
       try {
@@ -26,6 +27,7 @@ export default {
               importXlsForms(file: $file) {
                 status
                 message
+                content
               }
             }
           `,
@@ -33,7 +35,7 @@ export default {
             file
           }
         })
-        console.log(data.importXlsForms.message)
+        this.forms = data.importXlsForms.content
       } catch (e) {
         console.log(e)
       }

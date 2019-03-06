@@ -38,7 +38,9 @@ services:
     environment:
       NODE_ENV: production
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
+      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key # TODO: only required because of the embedded functions
     secrets:
+      - authentication_public_key # TODO: only required because of the embedded functions
       - hasura_secret_key
   graphql-engine:
     deploy:

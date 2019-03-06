@@ -59,12 +59,14 @@ services:
       FUNCTIONS_URL: 'http://functions:3000/graphql'
       NODE_ENV: production
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
+      PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
     labels:
       - 'traefik.frontend.rule=Host:api.${DOMAIN}'
       - traefik.port=3000
     deploy:
       replicas: 1
     secrets:
+      - authentication_public_key
       - hasura_secret_key
   graphql-engine:
     image: platyplus/graphql-engine

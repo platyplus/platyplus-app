@@ -3,6 +3,9 @@ FROM node:11-alpine
 RUN apk add --no-cache bash
 
 RUN npm i npm@latest -g
+# TODO: only required because of the embedded functions
+ARG ALGORITHM=RS256
+ENV ALGORITHM $ALGORITHM
 
 ARG PORT=3000
 ENV PORT $PORT
