@@ -15,15 +15,6 @@
           v-model="form.title_create"
           ref="firstInput")
       q-field(
-        label="Entity schema")
-        codemirror(v-model="jsonEntityForm" :options="cmOptions")
-      q-field(
-        label="State schema")
-        codemirror(v-model="jsonStateForm" :options="cmOptions")
-      q-field(
-        label="Encounter schema")
-        codemirror(v-model="jsonEncounterForm" :options="cmOptions")
-      q-field(
         label="Available for stages"
         helper="")
         q-select(
@@ -35,6 +26,15 @@
           :options="options('stages')")
       q-field(label="Entity type" helper="Pick an entity type")
         q-select(:readonly="reading" clearable v-model="form.entity_type_id" :options="options('entity_type')")
+      q-field(
+        label="Entity schema")
+        codemirror(v-model="jsonEntityForm" :options="cmOptions")
+      q-field(
+        label="State schema")
+        codemirror(v-model="jsonStateForm" :options="cmOptions")
+      q-field(
+        label="Encounter schema")
+        codemirror(v-model="jsonEncounterForm" :options="cmOptions")
     q-list(
       v-else-if="list.length"
       highlight)
