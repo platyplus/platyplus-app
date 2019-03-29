@@ -85,6 +85,35 @@ export const mutations = {
       }
     }
   `,
+  /**
+   * Creates a new encounter and a new entity, in a new state from the stage in params
+   */
+  insert: gql`
+    mutation insert_encounter_type(
+      $name: String
+      $title_create: String
+      $entity_type_id: uuid
+      $isolated_uses_add: [org_unit_isolated_encounter_type_insert_input!]!
+      $encounter_schema: jsonb
+    ) {
+      result: insert_encounter_type(
+        objects: [
+          {
+            name: $name
+            title_create: $title_create
+            entity_type_id: $entity_type_id
+            encounter_schema: $encounter_schema
+            isolated_uses: { data: $isolated_uses_add }
+          }
+        ]
+      ) {
+        returning {
+          ...encounter_type_base
+        }
+      }
+    }
+    ${fragments.base}
+  `,
   update: gql`
     mutation update_encounter_type(
       $id: uuid!

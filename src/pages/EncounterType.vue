@@ -66,8 +66,9 @@ export default {
   computed: {
     listByType () {
       return this.list.reduce((acc, curr) => {
-        if (!acc[curr.entity_type.name]) acc[curr.entity_type.name] = []
-        acc[curr.entity_type.name].push(curr)
+        const name = (curr.entity_type && curr.entity_type.name) || 'None'
+        if (!acc[name]) acc[name] = []
+        acc[name].push(curr)
         return acc
       }, {})
     },
