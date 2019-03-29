@@ -63,9 +63,9 @@ export default {
       const newValues = {
         id: this.id,
         data: this.form.data,
-        encounter_type_id: this.type_id,
-        org_unit_id: this.org_unit_id,
-        entity_type_id: this.encounter_type.entity_type_id
+        type_id: this.type_id,
+        org_unit_id: this.org_unit_id
+        // entity_type_id: this.encounter_type.entity_type_id
       }
       const save = await this._save({ newValues })
       if (save) this._postSave(save)

@@ -65,9 +65,28 @@ export const mutations = {
       }
     }
   `,
+  insert: gql`
+    mutation insert_encounter(
+      $type_id: uuid
+      $org_unit_id: uuid
+      $data: jsonb
+    ) {
+      result: insert_encounter(
+        objects: [{ type_id: $type_id, org_unit_id: $org_unit_id, data: $data }]
+      ) {
+        returning {
+          ...encounter_base
+        }
+      }
+    }
+    ${fragments.base}
+  `,
   update: gql`
     mutation update_encounter($id: uuid!, $data: jsonb) {
-      update_encounter(where: { id: { _eq: $id } }, _append: { data: $data }) {
+      result: update_encounter(
+        where: { id: { _eq: $id } }
+        _append: { data: $data }
+      ) {
         affected_rows
         returning {
           ...encounter_base
