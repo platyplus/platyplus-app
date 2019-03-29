@@ -3,8 +3,6 @@ import * as entityType from '../metadata/entityType'
 
 export const settings = {
   defaultValues: {
-    entity_schema: {},
-    state_schema: {},
     encounter_schema: {}
   },
   options: {
@@ -15,8 +13,8 @@ export const settings = {
         label: item.name
       })
     },
-    stages: {
-      table: 'stage',
+    isolated_uses: {
+      table: 'org_unit',
       map: item => ({
         value: item.id,
         label: item.name
@@ -24,9 +22,9 @@ export const settings = {
     }
   },
   relations: {
-    stages: {
-      table: 'encounter_type_stage',
-      to: 'stage'
+    isolated_uses: {
+      table: 'org_unit_isolated_encounter_type',
+      to: 'org_unit'
     }
   },
   orderBy: { name: 'asc' }
@@ -45,15 +43,18 @@ export const fragments = {
   base: gql`
     fragment encounter_type_base on encounter_type {
       ...encounter_type_minimal
-      entity_schema
-      state_schema
       encounter_schema
       entity_type_id
       entity_type {
         ...entity_type_minimal
       }
-      stages {
-        stage {
+      actions {
+        id
+      }
+      isolated_uses {
+        id
+        org_unit_id
+        org_unit {
           id
           name
         }
@@ -87,21 +88,32 @@ export const mutations = {
   update: gql`
     mutation update_encounter_type(
       $id: uuid!
-      $entity_schema: jsonb
-      $state_schema: jsonb
+      $isolated_uses_add: [org_unit_isolated_encounter_type_insert_input!]!
+      $isolated_uses_remove: [uuid]!
       $encounter_schema: jsonb
       $name: String
       $title_create: String
       $entity_type_id: uuid
     ) {
+      isolated_uses_add: insert_org_unit_isolated_encounter_type(
+        objects: $isolated_uses_add
+      ) {
+        affected_rows
+      }
+      isolated_uses_remove: delete_org_unit_isolated_encounter_type(
+        where: {
+          _and: { org_unit_id: { _in: $isolated_uses_remove } }
+          encounter_type_id: { _eq: $id }
+        }
+      ) {
+        affected_rows
+      }
       result: update_encounter_type(
         where: { id: { _eq: $id } }
         _set: {
           name: $name
           title_create: $title_create
           entity_type_id: $entity_type_id
-          entity_schema: $entity_schema
-          state_schema: $state_schema
           encounter_schema: $encounter_schema
         }
       ) {
@@ -114,3 +126,5 @@ export const mutations = {
     ${fragments.base}
   `
 }
+
+export const resolvers = {}

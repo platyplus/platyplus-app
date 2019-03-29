@@ -1,0 +1,6 @@
+- args:
+    relationship: stage_transition
+    table:
+      name: encounter_type_action
+      schema: public
+  type: drop_relationship

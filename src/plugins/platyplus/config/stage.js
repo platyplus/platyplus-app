@@ -1,5 +1,4 @@
 import gql from 'graphql-tag'
-import * as encounterType from './encounterType'
 
 export const settings = {
   options: {
@@ -57,14 +56,6 @@ export const fragments = {
     fragment stage_base on stage {
       ...stage_minimal
       workflow_id
-      encounter_types {
-        stage {
-          ...stage_minimal
-        }
-        encounter_type {
-          ...encounter_type_base
-        }
-      }
       workflow {
         id
         name
@@ -81,7 +72,6 @@ export const fragments = {
       }
     }
     ${minimal}
-    ${encounterType.fragments.base}
   `
 }
 
@@ -90,10 +80,18 @@ export const queries = {
     query stage_options($where: stage_bool_exp) {
       stage(where: $where) {
         # TODO: default order to be hardcoded
-        id
-        name
+        ...stage_minimal
       }
     }
+    ${fragments.minimal}
+  `,
+  form: gql`
+    query stage($where: stage_bool_exp) {
+      stage(where: $where) {
+        ...stage_base
+      }
+    }
+    ${fragments.base}
   `
 }
 
@@ -120,3 +118,5 @@ export const mutations = {
     ${fragments.base}
   `
 }
+
+export const resolvers = {}

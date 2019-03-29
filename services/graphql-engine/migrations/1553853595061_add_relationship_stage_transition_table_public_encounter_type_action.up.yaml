@@ -1,0 +1,8 @@
+- args:
+    name: stage_transition
+    table:
+      name: encounter_type_action
+      schema: public
+    using:
+      foreign_key_constraint_on: stage_transition_id
+  type: create_object_relationship

@@ -1,0 +1,3 @@
+- args:
+    sql: ALTER TABLE "public"."encounter_type_action" ADD COLUMN "stage_id" uuid NULL
+  type: run_sql

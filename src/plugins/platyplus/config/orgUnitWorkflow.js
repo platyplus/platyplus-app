@@ -21,3 +21,5 @@ export const mutations = {
     }
   `
 }
+
+export const resolvers = {}

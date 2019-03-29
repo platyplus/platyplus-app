@@ -9,7 +9,6 @@ import * as workflow from './workflow'
 import * as stage from './stage'
 import * as stageTransition from './stageTransition'
 import * as encounterType from './encounterType'
-import * as encounterTypeStage from './encounterTypeStage'
 
 export const settings = {
   org_unit: orgUnit.settings,
@@ -22,8 +21,7 @@ export const settings = {
   workflow: workflow.settings,
   stage: stage.settings,
   stage_transition: stageTransition.settings,
-  encounter_type: encounterType.settings,
-  encounter_type_stage: encounterTypeStage.settings
+  encounter_type: encounterType.settings
 }
 
 export const fragments = {
@@ -37,8 +35,7 @@ export const fragments = {
   workflow: workflow.fragments,
   stage: stage.fragments,
   stage_transition: stageTransition.fragments,
-  encounter_type: encounterType.fragments,
-  encounter_type_stage: encounterTypeStage.fragments
+  encounter_type: encounterType.fragments
 }
 
 export const queries = {
@@ -52,8 +49,7 @@ export const queries = {
   workflow: workflow.queries,
   stage: stage.queries,
   stage_transition: stageTransition.queries,
-  encounter_type: encounterType.queries,
-  encounter_type_stage: encounterTypeStage.queries
+  encounter_type: encounterType.queries
 }
 
 export const mutations = {
@@ -67,6 +63,19 @@ export const mutations = {
   workflow: workflow.mutations,
   stage: stage.mutations,
   stage_transition: stageTransition.mutations,
-  encounter_type: encounterType.mutations,
-  encounter_type_stage: encounterTypeStage.mutations
+  encounter_type: encounterType.mutations
+}
+
+export const resolvers = {
+  org_unit: orgUnit.resolvers,
+  org_unit_workflow: orgUnitWorkflow.resolvers,
+  user: user.resolvers,
+  user_org_unit: userOrgUnit.resolvers,
+  role_attribution: roleAttribution.resolvers,
+  role: role.resolvers,
+  user_role: userRole.resolvers,
+  workflow: workflow.resolvers,
+  stage: stage.resolvers,
+  stage_transition: stageTransition.resolvers,
+  encounter_type: encounterType.resolvers
 }

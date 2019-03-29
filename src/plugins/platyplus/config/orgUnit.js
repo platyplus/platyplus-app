@@ -99,6 +99,13 @@ export const fragments = {
   full: gql`
     fragment org_unit_full on org_unit {
       ...org_unit_base
+      isolated_encounter_types {
+        id
+        encounter_type {
+          id
+          name
+        }
+      }
     }
     ${base}
   `
@@ -164,3 +171,5 @@ export const mutations = {
     ${fragments.base}
   `
 }
+
+export const resolvers = {}

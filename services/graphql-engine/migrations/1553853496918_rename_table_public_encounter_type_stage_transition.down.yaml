@@ -1,0 +1,3 @@
+- args:
+    sql: alter table "public"."encounter_type_action" rename to "encounter_type_stage_transition";
+  type: run_sql

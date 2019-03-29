@@ -37,3 +37,5 @@ export const mutations = {
   //   ${fragments.minimal}
   // `
 }
+
+export const resolvers = {}

@@ -1,0 +1,4 @@
+- args:
+    sql: ALTER TABLE "public"."org_unit_isolated_encounter_type" ADD COLUMN "org_unit_id"
+      uuid NOT NULL
+  type: run_sql

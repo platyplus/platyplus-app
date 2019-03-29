@@ -26,4 +26,10 @@ export const mutations = {
   ...data.mutations
 }
 
+export const resolvers = {
+  ...metadata.resolvers,
+  ...config.resolvers,
+  ...data.resolvers
+}
+
 export default ({ app, router, Vue, store }) => {}

@@ -149,3 +149,5 @@ export const mutations = {
     ${fragments.base}
   `
 }
+
+export const resolvers = {}

@@ -1,0 +1,6 @@
+- args:
+    relationship: actions
+    table:
+      name: encounter_type
+      schema: public
+  type: drop_relationship

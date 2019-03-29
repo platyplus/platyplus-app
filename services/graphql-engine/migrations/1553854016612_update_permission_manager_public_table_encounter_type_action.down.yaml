@@ -1,0 +1,6 @@
+- args:
+    role: manager
+    table:
+      name: encounter_type_action
+      schema: public
+  type: drop_delete_permission

@@ -207,3 +207,5 @@ export const mutations = {
     ${encounter.fragments.base}
   `
 }
+
+export const resolvers = {}

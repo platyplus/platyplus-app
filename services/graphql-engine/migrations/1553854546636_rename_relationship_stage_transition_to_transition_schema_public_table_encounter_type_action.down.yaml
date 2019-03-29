@@ -1,0 +1,5 @@
+- args:
+    name: transition
+    new_name: stage_transition
+    table: encounter_type_action
+  type: rename_relationship

@@ -291,3 +291,5 @@ export const mutations = {
   //   ${fragments.full}
   // `
 }
+
+export const resolvers = {}

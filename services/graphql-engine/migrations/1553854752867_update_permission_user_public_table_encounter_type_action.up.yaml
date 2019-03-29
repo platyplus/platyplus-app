@@ -1,0 +1,18 @@
+- args:
+    role: user
+    table:
+      name: encounter_type_action
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check: {}
+      columns:
+      - encounter_type_id
+      - stage_transition_id
+      set: {}
+    role: user
+    table:
+      name: encounter_type_action
+      schema: public
+  type: create_insert_permission

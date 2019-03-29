@@ -1,4 +1,6 @@
 import gql from 'graphql-tag'
+import jexl from 'jexl'
+import { templateStringToExpression } from 'plugins/formGenerator'
 import * as encounterType from '../config/encounterType'
 import * as orgUnit from '../config/orgUnit'
 import * as entity from './entity'
@@ -6,10 +8,7 @@ import * as entity from './entity'
 export const settings = {
   // TODO: not correct anymore, remove the entire file?
   defaultValues: {
-    data: {},
-    entity: {
-      attributes: {}
-    }
+    data: {}
   }
 }
 
@@ -28,18 +27,16 @@ export const fragments = {
       type {
         ...encounter_type_base
       }
-      states {
-        state {
-          entity {
-            ...entity_base
-          }
-        }
+      entity_id
+      entity {
+        ...entity_base
       }
       org_unit_id
       org_unit {
         ...org_unit_base
       }
       data
+      label @client
     }
     ${entity.fragments.base}
     ${encounterType.fragments.base}
@@ -48,7 +45,17 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+export const queries = {
+  form: gql`
+    query encounter($where: encounter_bool_exp) {
+      encounter(where: $where) {
+        # TODO: order by
+        ...encounter_base
+      }
+    }
+    ${fragments.base}
+  `
+}
 
 export const mutations = {
   delete: gql`
@@ -69,4 +76,18 @@ export const mutations = {
     }
     ${fragments.base}
   `
+}
+
+export const resolvers = {
+  label: (item, args, ctx) => {
+    try {
+      const expression = templateStringToExpression(
+        item.type.encounter_schema.label
+      )
+      return jexl.evalSync(expression, item.data)
+    } catch (e) {
+      console.warn(e)
+      return item.id
+    }
+  }
 }

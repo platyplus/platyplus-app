@@ -11,12 +11,15 @@ import { setContext } from 'apollo-link-context'
 import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
 import { getUserToken } from 'plugins/auth'
+import { resolvers as platyplusResolvers } from 'plugins/platyplus'
 import { getConfig } from '../helpers/config'
 
 const cache = new InMemoryCache()
 
 const config = getConfig()
 const resolvers = {
+  // TODO: move the definitions to the platyplus plugin and import here
+  ...platyplusResolvers,
   Mutation: {
     // updateProfile (_, { id, token }, { cache }) {
     //   const data = {

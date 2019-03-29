@@ -1,0 +1,23 @@
+- args:
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - encounter_schema
+      - entity_schema
+      - entity_type_id
+      - id
+      - name
+      - state_schema
+      - title_create
+      filter: {}
+    role: user
+    table:
+      name: encounter_type
+      schema: public
+  type: create_select_permission

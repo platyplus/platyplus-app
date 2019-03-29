@@ -2,7 +2,13 @@ import { getUserId } from '../plugins/auth'
 
 const crudRoutes = (path, page, id = 'id') => {
   return [
-    { path, component: () => import(`pages/${page}.vue`) },
+    {
+      path,
+      component: () => import(`pages/${page}.vue`),
+      props: route => ({
+        ...route.params
+      })
+    },
     {
       path: `${path}/create`,
       component: () => import(`pages/${page}.vue`),
@@ -103,7 +109,11 @@ const routes = [
       ...crudRoutes('user/:user_id/attribution', 'RoleAttribution'),
       ...crudRoutes('role', 'Role'),
       ...crudRoutes('role/:role_id/attribution', 'RoleAttribution'),
-      ...crudRoutes('encounter-state', 'EncounterState')
+      ...crudRoutes(
+        'org-unit/:org_unit_id/encounter-type/:type_id',
+        'Encounter'
+      ),
+      ...crudRoutes('encounter', 'Encounter')
     ]
   },
   {

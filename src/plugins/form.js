@@ -173,10 +173,12 @@ export const mixin = (table, settings = {}) => {
     apollo: {
       list: {
         query: config.queries[table][settings.query],
-        variables: {
-          where: settings.where
+        variables () {
+          return this.listVariables || { where: settings.where }
         },
-        skip: !settings.list,
+        skip () {
+          return !settings.list || (this.listSkip instanceof Object && this.listSkip)
+        },
         update: data => data[Object.keys(data)[0]] // TODO: change to 'result?'
       },
       item: {

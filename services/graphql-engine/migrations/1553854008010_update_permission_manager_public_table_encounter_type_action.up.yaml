@@ -1,0 +1,15 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - encounter_type_id
+      - id
+      - stage_id
+      - stage_transition_id
+      filter: {}
+      limit: null
+    role: manager
+    table:
+      name: encounter_type_action
+      schema: public
+  type: create_select_permission

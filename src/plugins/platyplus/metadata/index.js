@@ -13,13 +13,21 @@ export const fragments = {
   org_unit_type_mapping: orgUnitTypeMapping.fragments,
   entity_type: entityType.fragments
 }
+
 export const mutations = {
   org_unit_type: orgUnitType.mutations,
   org_unit_type_mapping: orgUnitTypeMapping.mutations,
   entity_type: entityType.mutations
 }
+
 export const queries = {
   org_unit_type: orgUnitType.queries,
   org_unit_type_mapping: orgUnitTypeMapping.queries,
   entity_type: entityType.queries
+}
+
+export const resolvers = {
+  org_unit_type: orgUnitType.resolvers,
+  org_unit_type_mapping: orgUnitTypeMapping.resolvers,
+  entity_type: entityType.resolvers
 }
