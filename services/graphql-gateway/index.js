@@ -4,9 +4,15 @@ const {
   introspectSchema,
   mergeSchemas
 } = require('apollo-server-fastify')
+// const { split } = require('apollo-link')
+const fetch = require('node-fetch')
+const { getMainDefinition } = require('apollo-utilities')
+const { RetryLink } = require('apollo-link-retry')
 const { HttpLink } = require('apollo-link-http')
 const { setContext } = require('apollo-link-context')
-const fetch = require('node-fetch')
+const { WebSocketLink } = require('apollo-link-ws')
+const { SubscriptionClient } = require('subscriptions-transport-ws')
+const WebSocket = require('ws')
 const sleep = require('util').promisify(setTimeout)
 
 const fastify = require('fastify')({
@@ -32,17 +38,69 @@ const setAuthContext = setContext((request, previousContext) => {
 })
 
 const createRemoteExecutableSchema = async uri => {
-  const link = setAuthContext.concat(
+  const httpLink = setAuthContext.concat(
     new HttpLink({
       uri,
       fetch
     })
   )
+  // const wsLink = new WebSocketLink({
+  //   uri: uri.replace('http', 'ws'),
+  //   options: {
+  //     reconnect: true
+  //   },
+  //   webSocketImpl: WebSocket
+  // })
+
+  const wsClient = new SubscriptionClient(
+    uri.replace('http', 'ws'),
+    {
+      reconnect: true // if connection is lost, retry
+    },
+    WebSocket
+  )
+  const wsLink = new WebSocketLink(wsClient)
+
+  // const link = split(
+  //   // split based on operation type
+  //   ({ query }) => {
+  //     const { kind, operation } = getMainDefinition(query)
+  //     return kind === 'OperationDefinition' && operation === 'subscription'
+  //   },
+  //   wsLink,
+  //   httpLink
+  // )
+
+  const link = new RetryLink({
+    // these are the defaults, change them as you will
+    delay: {
+      initial: 300, // The number of milliseconds to wait before attempting the first retry.
+      max: Infinity, // The maximum number of milliseconds that the link should wait for any retry
+      jitter: true // Whether delays between attempts should be randomized.
+    },
+    attempts: {
+      max: 5, // The max number of times to try a single operation before giving up.
+      retryIf: (error, _operation) => !!error // A predicate function that can determine whether a particular response should be retried.
+    }
+  }).split(
+    // using "Directional Composition" of links
+    ({ query }) => {
+      console.log('---------')
+      const { kind, operation } = getMainDefinition(query)
+      console.log(kind)
+      console.log(operation)
+      return kind === 'OperationDefinition' && operation === 'subscription'
+    },
+    wsLink,
+    httpLink
+  )
+
   const remoteSchema = await introspectSchema(link, {
     headers: {
       'x-hasura-admin-secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET
     }
   })
+  console.log('------remote ok')
   const remoteExecutableSchema = makeRemoteExecutableSchema({
     schema: remoteSchema,
     link

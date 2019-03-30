@@ -91,24 +91,24 @@ services:
     restart: always
     volumes:
       - configuration:/git
-  graphql-gateway:
-    build:
-      context: ./services/graphql-gateway
-      args:
-        NODE_ENV: development
-    command: nodemon -e js --inspect=0.0.0.0:9229 index.js
-    environment:
-      NODE_ENV: development
-      PUBLIC_KEY: '${PUBLIC_KEY}' # TODO: only required because of the embedded functions
-      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
-    healthcheck:
-      disable: true
-    restart: always
-    volumes:
-      - ./services/graphql-gateway:/opt/app:delegated
-      - ./services/graphql-gateway/package.json:/opt/package.json
-      - ./services/graphql-gateway/package-lock.json:/opt/package-lock.json
-      - notused_graphql_gateway:/opt/app/node_modules
+  # graphql-gateway:
+  #   build:
+  #     context: ./services/graphql-gateway
+  #     args:
+  #       NODE_ENV: development
+  #   command: nodemon -e js --inspect=0.0.0.0:9229 index.js
+  #   environment:
+  #     NODE_ENV: development
+  #     PUBLIC_KEY: '${PUBLIC_KEY}' # TODO: only required because of the embedded functions
+  #     HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
+  #   healthcheck:
+  #     disable: true
+  #   restart: always
+  #   volumes:
+  #     - ./services/graphql-gateway:/opt/app:delegated
+  #     - ./services/graphql-gateway/package.json:/opt/package.json
+  #     - ./services/graphql-gateway/package-lock.json:/opt/package-lock.json
+  #     - notused_graphql_gateway:/opt/app/node_modules
   graphql-engine:
     build:
       context: ./services/graphql-engine
@@ -119,9 +119,9 @@ services:
     restart: always
     volumes:
       - ./services/graphql-engine/migrations:/opt/hasura-migrations
-    labels:
-      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
-      - 'traefik.port=3000'
+    # labels:
+    # - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+    # - 'traefik.port=3000'
   functions:
     build:
       context: ./services/functions

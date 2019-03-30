@@ -5,6 +5,7 @@ import fetch from 'node-fetch'
 import { withClientState } from 'apollo-link-state'
 // import { createHttpLink } from 'apollo-link-http'
 import { createUploadLink } from 'apollo-upload-client'
+import cloneDeep from 'lodash/cloneDeep'
 
 import { WebSocketLink } from 'apollo-link-ws'
 import { setContext } from 'apollo-link-context'
@@ -46,10 +47,8 @@ const stateLink = withClientState({
   }
 })
 
-const httpLink = createUploadLink({
-  uri: `${window.location.protocol}//${config.API}`,
-  fetch: fetch
-})
+const uri = `${window.location.protocol}//${config.API}`
+const httpLink = createUploadLink({ uri, fetch })
 
 const authHeaders = () => {
   const token = getUserToken()
@@ -61,7 +60,7 @@ const authHeaders = () => {
 }
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://${config.API}`,
+  uri: uri.replace('http', 'ws'),
   options: {
     lazy: true,
     reconnect: true,
@@ -87,7 +86,7 @@ const link = split(
     const { kind, operation } = getMainDefinition(query)
     return kind === 'OperationDefinition' && operation === 'subscription'
   },
-  wsLink,
+  stateLink.concat(wsLink),
   authLink.concat(stateLink.concat(httpLink))
 )
 
@@ -115,6 +114,21 @@ export const apolloProvider = new VueApollo({
   }
 })
 
+export const queryToSubscription = query => {
+  // console.log(query)
+  let subscription = cloneDeep(query)
+  try {
+    const index = subscription.definitions.findIndex(el => {
+      return el.kind === 'OperationDefinition'
+    })
+    subscription.definitions[index].operation = 'subscription'
+    // console.log(print(subscription))
+    return subscription
+  } catch (e) {
+    console.log(e)
+    throw Error('Impossible to convert query to subscription')
+  }
+}
 export default ({ app, Vue }) => {
   Vue.use(VueApollo)
   app.apolloProvider = apolloProvider

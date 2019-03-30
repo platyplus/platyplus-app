@@ -5,7 +5,7 @@ services:
     depends_on:
       - 'graphql-engine'
     environment:
-      API: 'api.${DOMAIN}'
+      API: 'graphql.${DOMAIN}/v1alpha1/graphql'
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - 'traefik.port=3000'
@@ -34,25 +34,28 @@ services:
     image: platyplus/functions
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-  graphql-gateway:
-    image: platyplus/graphql-gateway
-    depends_on:
-      - 'authentication'
-      - 'graphql-engine'
-      - 'functions'
-    environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-      AUTH_URL: 'http://authentication:3000/graphql'
-      FUNCTIONS_URL: 'http://functions:3000/graphql'
-    labels:
-      - 'traefik.frontend.rule=Host:api.${DOMAIN}'
-      - 'traefik.port=3000'
+  # graphql-gateway:
+  #   image: platyplus/graphql-gateway
+  #   depends_on:
+  #     - 'authentication'
+  #     - 'graphql-engine'
+  #     - 'functions'
+  #   environment:
+  #     HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+  #     AUTH_URL: 'http://authentication:3000/graphql'
+  #     FUNCTIONS_URL: 'http://functions:3000/graphql'
+  #   labels:
+  #     - 'traefik.frontend.rule=Host:api.${DOMAIN}'
+  #     - 'traefik.port=3000'
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
       - 'authentication'
       - 'postgres'
       - 'synchronization-hook'
+    labels:
+      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+      - 'traefik.port=3000'
   postgres:
     image: mdillon/postgis:11-alpine
     volumes:
