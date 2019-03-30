@@ -1,0 +1,8 @@
+- args:
+    cascade: false
+    sql: |-
+      CREATE TRIGGER set_timestamp
+      BEFORE UPDATE ON encounter
+      FOR EACH ROW
+      EXECUTE PROCEDURE trigger_set_timestamp();
+  type: run_sql
