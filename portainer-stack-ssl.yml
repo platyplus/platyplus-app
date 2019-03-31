@@ -39,6 +39,7 @@ services:
     image: platyplus/functions
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      POSTGRES_URL: 'postgresql://postgres@postgres/postgres'
       NODE_ENV: production
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
       PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
@@ -53,13 +54,14 @@ services:
       - authentication
       - postgres
       - synchronization-hook
+    environment:
+      EVENTS_URL: 'http://functions:3000/events'
+      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - traefik.port=3000
     deploy:
       replicas: 1
-    environment:
-      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
     secrets:
       - authentication_public_key
       - hasura_secret_key

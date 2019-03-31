@@ -34,6 +34,7 @@ services:
     image: platyplus/functions
     environment:
       HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      POSTGRES_URL: 'postgresql://postgres@postgres/postgres'
   # graphql-gateway:
   #   image: platyplus/graphql-gateway
   #   depends_on:
@@ -53,6 +54,8 @@ services:
       - 'authentication'
       - 'postgres'
       - 'synchronization-hook'
+    environment:
+      EVENTS_URL: 'http://functions:3000/events'
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
       - 'traefik.port=3000'

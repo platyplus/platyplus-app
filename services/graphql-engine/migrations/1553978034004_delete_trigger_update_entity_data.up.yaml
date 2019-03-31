@@ -1,0 +1,3 @@
+- args:
+    name: update_entity_data
+  type: delete_event_trigger
