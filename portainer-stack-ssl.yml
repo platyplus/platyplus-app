@@ -38,7 +38,7 @@ services:
   functions:
     image: platyplus/functions
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000'
       POSTGRES_URL: 'postgresql://postgres@postgres/postgres'
       NODE_ENV: production
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key

@@ -5,18 +5,18 @@ services:
     depends_on:
       - 'graphql-engine'
     environment:
-      API: 'graphql.${DOMAIN}/v1alpha1/graphql'
+      API: 'graphql.${DOMAIN}/v1alpha1/graphql' # TODO: remove /v1alpha1/graphql from the compose file
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - 'traefik.port=3000'
   administration:
     image: platyplus/administration
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql' # TODO: remove /v1alpha1/graphql from the compose file
   authentication:
     image: platyplus/authentication
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql' # TODO: remove /v1alpha1/graphql from the compose file
   # configuration: # TODO: volume to store the data and config, and secure/encrypt
   #   image: couchdb # TODO: tag
   #   environment: # TODO: script to init the cluster - part of the application? Init the DB and replication in the application
@@ -33,7 +33,7 @@ services:
   functions:
     image: platyplus/functions
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000' # TODO: remove /v1alpha1/graphql everywhere in the compose files
       POSTGRES_URL: 'postgresql://postgres@postgres/postgres'
   # graphql-gateway:
   #   image: platyplus/graphql-gateway
@@ -76,6 +76,6 @@ services:
   synchronization-hook:
     image: platyplus/synchronization-hook
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql' # TODO: remove /v1alpha1/graphql from the compose file
 volumes:
   db_data:
