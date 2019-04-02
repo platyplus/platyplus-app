@@ -1,0 +1,3 @@
+- args:
+    sql: ALTER TABLE "public"."state" DROP COLUMN "date_end"
+  type: run_sql

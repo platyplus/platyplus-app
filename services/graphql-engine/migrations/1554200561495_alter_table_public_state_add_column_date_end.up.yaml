@@ -1,0 +1,4 @@
+- args:
+    sql: ALTER TABLE "public"."state" ADD COLUMN "date_end" timestamptz NOT NULL DEFAULT
+      'infinity'::timestamptz
+  type: run_sql

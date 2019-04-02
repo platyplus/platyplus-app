@@ -1,0 +1,7 @@
+- args:
+    sql: ALTER TABLE "public"."state" ALTER COLUMN "date_end" TYPE timestamp with
+      time zone;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."state"."date_end" IS 'undefined'
+  type: run_sql

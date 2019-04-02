@@ -1,0 +1,9 @@
+- args:
+    sql: ALTER TABLE "public"."state" ALTER COLUMN "date" TYPE timestamptz;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."state"."date" IS ''
+  type: run_sql
+- args:
+    sql: alter table "public"."state" rename column "date" to "date_start";
+  type: run_sql
