@@ -3,6 +3,8 @@ const { ALL } = require('./helpers'),
   sqlQueries = require('../sqlQueries'),
   { graphql, rest } = require('../clients')
 
+const AGGREGATORS = ['last'] // The default aggregation is the first value of the array
+
 /**
  * Updates the entity attributes from its encounters data
  * TODO: this function works but HAS TO BE TESTED EXTENSIVELY
@@ -31,8 +33,13 @@ const updateEntityAttributes = async ctx => {
     // Generates the aggregation rules from the schema
     const rules = []
     for (let x in schema) {
-      // TODO: check the aggregation type name, and guess the value type (below: always 'text')
-      rules.push(`'${x}', ${schema[x]}((data->>'${x}')::text)`)
+      // do not include if by any chance the field x equals false
+      if (schema[x]) {
+        const aggregator = AGGREGATORS.includes(schema[x])
+          ? schema[x]
+          : AGGREGATORS[0]
+        rules.push(`'${x}', ${aggregator}((data->>'${x}')::text)`)
+      }
     }
     // Calculates the entity data from the rules
     const {
