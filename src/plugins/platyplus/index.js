@@ -1,35 +1,16 @@
-import * as metadata from './metadata'
-import * as config from './config'
-import * as data from './data'
+import * as Tables from './tables'
 
-export const settings = {
-  ...metadata.settings,
-  ...config.settings,
-  ...data.settings
-}
-// TODO: stop exporting fragments?
-export const fragments = {
-  ...metadata.fragments,
-  ...config.fragments,
-  ...data.fragments
+const importProperty = prop => {
+  return Object.keys(Tables).reduce((prev, curr) => {
+    prev[curr] = Tables[curr][prop]
+    return prev
+  }, {})
 }
 
-export const queries = {
-  ...metadata.queries,
-  ...config.queries,
-  ...data.queries
-}
-
-export const mutations = {
-  ...metadata.mutations,
-  ...config.mutations,
-  ...data.mutations
-}
-
-export const resolvers = {
-  ...metadata.resolvers,
-  ...config.resolvers,
-  ...data.resolvers
-}
+export const settings = importProperty('settings')
+export const fragments = importProperty('fragments') // TODO: stop exporting fragments?
+export const queries = importProperty('queries')
+export const mutations = importProperty('mutations')
+export const resolvers = importProperty('resolvers')
 
 export default ({ app, router, Vue, store }) => {}

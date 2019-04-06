@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
-export const settings = {}
+const settings = {}
 
-export const fragments = {
+const fragments = {
   minimal: gql`
     fragment user_org_unit_minimal on user_org_unit {
       id
@@ -10,9 +10,9 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+const queries = {}
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_user_org_unit($where: user_org_unit_bool_exp!) {
       delete_user_org_unit(where: $where) {
@@ -22,4 +22,6 @@ export const mutations = {
   `
 }
 
-export const resolvers = {}
+const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }

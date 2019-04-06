@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-export const settings = {
+const settings = {
   orderBy: { name: 'asc' }
 }
 
@@ -10,7 +10,7 @@ const minimal = gql`
   }
 `
 
-export const fragments = {
+const fragments = {
   minimal,
   base: gql`
     fragment entity_type_base on entity_type {
@@ -25,7 +25,7 @@ export const fragments = {
   `
 }
 
-export const queries = {
+const queries = {
   option: gql`
     query entity_type_options($where: entity_type_bool_exp) {
       entity_type(where: $where) {
@@ -37,7 +37,7 @@ export const queries = {
   `
 }
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_entity_type($where: entity_type_bool_exp!) {
       delete_entity_type(where: $where) {
@@ -71,4 +71,6 @@ export const mutations = {
   `
 }
 
-export const resolvers = {}
+const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }

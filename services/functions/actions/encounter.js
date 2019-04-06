@@ -134,6 +134,7 @@ const updateStageData = async ctx => {
         derived: { date_end }
       } = state
       // TODO: abort if (although abnormal) there is no type or no schema
+      // TODO: get and merge the workflow schema
       const rules = generateRules(schema)
       // Selects and aggregates all the encounters of this entity that occurred during the state period
       const {
@@ -159,4 +160,5 @@ const updateStageData = async ctx => {
 module.exports = ALL(async ctx => {
   await updateEntityAttributes(ctx)
   await updateStageData(ctx)
+  // TODO: updateWorkflowData
 })

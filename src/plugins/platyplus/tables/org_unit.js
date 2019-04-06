@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import * as orgUnitType from '../metadata/orgUnitType'
-import * as workflow from './workflow'
+import orgUnitType from './org_unit_type'
+import workflow from './workflow'
 
-export const settings = {
+const settings = {
   options: {
     parent: {
       table: 'org_unit',
@@ -93,7 +93,7 @@ const base = gql`
   ${orgUnitType.fragments.base}
   ${workflow.fragments.minimal}
 `
-export const fragments = {
+const fragments = {
   minimal,
   base,
   full: gql`
@@ -111,7 +111,7 @@ export const fragments = {
   `
 }
 
-export const queries = {
+const queries = {
   form: gql`
     query org_unit($where: org_unit_bool_exp) {
       org_unit(where: $where) {
@@ -132,7 +132,7 @@ export const queries = {
   `
 }
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_org_unit($where: org_unit_bool_exp!) {
       delete_org_unit(where: $where) {
@@ -172,4 +172,6 @@ export const mutations = {
   `
 }
 
-export const resolvers = {}
+const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }

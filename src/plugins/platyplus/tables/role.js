@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const settings = {
+const settings = {
   orderBy: { name: 'asc' }
 }
 
@@ -12,7 +12,7 @@ const minimal = gql`
   }
 `
 
-export const fragments = {
+const fragments = {
   minimal,
   base: gql`
     fragment role_base on role {
@@ -33,7 +33,7 @@ export const fragments = {
   `
 }
 
-export const queries = {
+const queries = {
   form: gql`
     query role($where: role_bool_exp) {
       role(where: $where, order_by: [{ name: asc }]) {
@@ -53,7 +53,7 @@ export const queries = {
   `
 }
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_role($where: role_bool_exp!) {
       delete_role(where: $where) {
@@ -77,4 +77,6 @@ export const mutations = {
   `
 }
 
-export const resolvers = {}
+const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }

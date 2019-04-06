@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import * as stage from './stage'
+import stage from './stage'
 
-export const settings = {
+const settings = {
   options: {
     org_units: {
       table: 'org_unit',
@@ -27,7 +27,7 @@ const minimal = gql`
     name
   }
 `
-export const fragments = {
+const fragments = {
   minimal,
   base: gql`
     fragment workflow_base on workflow {
@@ -48,7 +48,7 @@ export const fragments = {
   `
 }
 
-export const queries = {
+const queries = {
   form: gql`
     query workflow($where: workflow_bool_exp) {
       workflow(where: $where, order_by: [{ name: asc }]) {
@@ -67,7 +67,7 @@ export const queries = {
   `
 }
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_workflow($where: workflow_bool_exp!) {
       delete_workflow(where: $where) {
@@ -100,4 +100,6 @@ export const mutations = {
   `
 }
 
-export const resolvers = {}
+const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }

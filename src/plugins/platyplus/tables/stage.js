@@ -120,3 +120,5 @@ export const mutations = {
 }
 
 export const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }

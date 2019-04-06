@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import * as entityType from '../metadata/entityType'
+import entityType from './entity_type'
 
-export const settings = {
+const settings = {
   defaultValues: {
     encounter_schema: {}
   },
@@ -38,7 +38,7 @@ const minimal = gql`
   }
 `
 
-export const fragments = {
+const fragments = {
   minimal,
   base: gql`
     fragment encounter_type_base on encounter_type {
@@ -65,7 +65,7 @@ export const fragments = {
   `
 }
 
-export const queries = {
+const queries = {
   form: gql`
     query encounter_type($where: encounter_type_bool_exp) {
       encounter_type(where: $where) {
@@ -77,7 +77,7 @@ export const queries = {
   `
 }
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_encounter_type($where: encounter_type_bool_exp!) {
       delete_encounter_type(where: $where) {
@@ -156,4 +156,6 @@ export const mutations = {
   `
 }
 
-export const resolvers = {}
+const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }

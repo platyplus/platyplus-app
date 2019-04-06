@@ -21,7 +21,7 @@
 <script>
 import { mixin } from 'plugins/form'
 import { makeReadOnly, prepareForm } from 'plugins/formGenerator'
-import { queries } from 'plugins/platyplus/config/encounterType'
+import { queries } from 'plugins/platyplus'
 // TODO: on load, merge all data into one property, and then dispatch on save
 export default {
   name: 'PageEncounter',
@@ -103,7 +103,7 @@ export default {
      * Loads the encounter type from the path, but don't load if not present
      */
     _encounter_type: {
-      query: queries.form,
+      query: queries.encounterType.form,
       variables () {
         return {
           where: { id: { _eq: this.type_id } }

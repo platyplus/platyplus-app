@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
 import jexl from 'jexl'
 import { templateStringToExpression } from 'plugins/formGenerator'
-import * as encounterType from '../config/encounterType'
-import * as orgUnit from '../config/orgUnit'
-import * as entity from './entity'
+import encounterType from './encounter_type'
+import orgUnit from './org_unit'
+import entity from './entity'
 
-export const settings = {
+const settings = {
   // TODO: not correct anymore, remove the entire file?
   defaultValues: {
     data: {}
@@ -18,7 +18,7 @@ const minimal = gql`
   }
 `
 
-export const fragments = {
+const fragments = {
   minimal,
   base: gql`
     fragment encounter_base on encounter {
@@ -45,7 +45,7 @@ export const fragments = {
   `
 }
 
-export const queries = {
+const queries = {
   form: gql`
     query encounter($where: encounter_bool_exp) {
       encounter(where: $where) {
@@ -57,7 +57,7 @@ export const queries = {
   `
 }
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_encounter($where: encounter_bool_exp!) {
       delete_encounter(where: $where) {
@@ -97,7 +97,7 @@ export const mutations = {
   `
 }
 
-export const resolvers = {
+const resolvers = {
   label: (item, args, ctx) => {
     try {
       const expression = templateStringToExpression(
@@ -110,3 +110,5 @@ export const resolvers = {
     }
   }
 }
+
+export default { settings, fragments, queries, mutations, resolvers }

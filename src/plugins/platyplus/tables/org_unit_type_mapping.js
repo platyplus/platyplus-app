@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const settings = {}
+const settings = {}
 
 const minimal = gql`
   fragment org_unit_type_mapping_minimal on org_unit_type_mapping {
@@ -8,13 +8,13 @@ const minimal = gql`
   }
 `
 
-export const fragments = {
+const fragments = {
   minimal
 }
 
-export const queries = {}
+const queries = {}
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_org_unit_type_mapping(
       $where: org_unit_type_mapping_bool_exp!
@@ -38,4 +38,6 @@ export const mutations = {
   // `
 }
 
-export const resolvers = {}
+const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }

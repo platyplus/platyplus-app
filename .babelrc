@@ -26,6 +26,13 @@
         "polyfill": false,
         "regenerator": false
       }
+    ],
+    [
+      "wildcard",
+      {
+        "exts": ["js", "es6", "es", "jsx", "javascript", "vue"],
+        "noModifyCase": true
+      }
     ]
   ],
   "comments": false

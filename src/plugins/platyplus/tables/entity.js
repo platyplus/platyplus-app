@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const settings = {
+const settings = {
   defaultValues: {
     attributes: {}
   }
@@ -12,7 +12,7 @@ const minimal = gql`
   }
 `
 
-export const fragments = {
+const fragments = {
   minimal,
   base: gql`
     fragment entity_base on entity {
@@ -23,9 +23,9 @@ export const fragments = {
   `
 }
 
-export const queries = {}
+const queries = {}
 
-export const mutations = {
+const mutations = {
   delete: gql`
     mutation delete_entity($where: entity_bool_exp!) {
       delete_entity(where: $where) {
@@ -49,4 +49,6 @@ export const mutations = {
   `
 }
 
-export const resolvers = {}
+const resolvers = {}
+
+export default { settings, fragments, queries, mutations, resolvers }
