@@ -3,17 +3,28 @@
 </template>
 
 <script>
+/**
+ * Input component to edit JSON with codemirror.
+ * v-model send the last valid JSON value entered by the user, or the initial one
+ * TODO: make if work as a form input i.e. implement validations
+ */
 import VueCodemirror from 'vue-codemirror'
 export default {
   extends: VueCodemirror,
   name: 'JsonInput',
   props: ['readonly', 'value'],
   data: function () {
-    return { initialValue: this.value }
+    return { lastValue: this.value }
   },
   methods: {
     onCmCodeChange (val) {
-      this.$emit('input', JSON.parse(val))
+      try {
+        const jsonVal = JSON.parse(val)
+        this.$emit('input', jsonVal)
+        this.lastValue = jsonVal
+      } catch (e) {
+        this.$emit('input', this.lastValue)
+      }
     }
   },
   computed: {
