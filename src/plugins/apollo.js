@@ -13,7 +13,7 @@ import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
 import { getUserToken } from 'plugins/auth'
 import { resolvers as platyplusResolvers } from 'plugins/platyplus'
-import { getConfig } from '../helpers/config'
+import { getConfig } from '../helpers'
 
 const cache = new InMemoryCache()
 

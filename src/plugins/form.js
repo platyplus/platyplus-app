@@ -4,6 +4,7 @@ import { queryToSubscription } from 'plugins/apollo'
 import * as config from 'plugins/platyplus'
 import cloneDeep from 'lodash/cloneDeep'
 import ButtonBar from 'components/ButtonBar.vue'
+import JsonInput from 'components/JsonInput.vue'
 // Code Mirror imports
 import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -282,4 +283,5 @@ export default ({ app, router, Vue }) => {
   Vue.use(VeeValidate, veeValidateConfig)
   Vue.use(VueCodemirror, { options: cmOptions })
   Vue.component('button-bar', ButtonBar)
+  Vue.component('json-input', JsonInput)
 }

@@ -26,6 +26,15 @@ const fragments = {
 }
 
 const queries = {
+  form: gql`
+    query entity_type($where: entity_type_bool_exp) {
+      entity_type(where: $where) {
+        # TODO: default order to be hardcoded
+        ...entity_type_base
+      }
+    }
+    ${fragments.base}
+  `,
   option: gql`
     query entity_type_options($where: entity_type_bool_exp) {
       entity_type(where: $where) {
