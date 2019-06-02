@@ -5,55 +5,28 @@ services:
     depends_on:
       - 'graphql-engine'
     environment:
-      API: 'graphql.${DOMAIN}/v1alpha1/graphql' # TODO: remove /v1alpha1/graphql from the compose file
+      API: 'graphql.${DOMAIN}/v1/graphql' # TODO: remove /v1/graphql from the compose file
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - 'traefik.port=3000'
   administration:
     image: platyplus/administration
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql' # TODO: remove /v1alpha1/graphql from the compose file
+      HASURA_URL: 'http://graphql-engine:3000/v1/graphql' # TODO: remove /v1/graphql from the compose file
   authentication:
     image: platyplus/authentication
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql' # TODO: remove /v1alpha1/graphql from the compose file
-  # configuration: # TODO: volume to store the data and config, and secure/encrypt
-  #   image: couchdb # TODO: tag
-  #   environment: # TODO: script to init the cluster - part of the application? Init the DB and replication in the application
-  #     NODENAME: 'node-name' # TODO: check documentation
-  #     ERL_FLAGS: -setcookie "brumbrum" # TODO: check documentation
-  #     COUCHDB_USER: admin
-  #     COUCHDB_PASSWORD: admin
-  #     COUCHDB_SECRET: admin # TODO: secret
-  #   labels:
-  #     - 'traefik.frontend.rule=Host:config-db.${DOMAIN}'
-  #     - 'traefik.port=5984'
-  # volumes:
-  # - /var/run/docker.sock:/var/run/docker.sock
+      HASURA_URL: 'http://graphql-engine:3000/v1/graphql' # TODO: remove /v1/graphql from the compose file
   functions:
     image: platyplus/functions
     environment:
-      HASURA_URL: 'http://graphql-engine:3000' # TODO: remove /v1alpha1/graphql everywhere in the compose files
+      HASURA_URL: 'http://graphql-engine:3000' # TODO: remove /v1/graphql everywhere in the compose files
       POSTGRES_URL: 'postgresql://postgres@postgres/postgres'
-  # graphql-gateway:
-  #   image: platyplus/graphql-gateway
-  #   depends_on:
-  #     - 'authentication'
-  #     - 'graphql-engine'
-  #     - 'functions'
-  #   environment:
-  #     HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-  #     AUTH_URL: 'http://authentication:3000/graphql'
-  #     FUNCTIONS_URL: 'http://functions:3000/graphql'
-  #   labels:
-  #     - 'traefik.frontend.rule=Host:api.${DOMAIN}'
-  #     - 'traefik.port=3000'
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
       - 'authentication'
       - 'postgres'
-      - 'synchronization-hook'
     environment:
       EVENTS_URL: 'http://functions:3000/events'
     labels:
@@ -73,9 +46,5 @@ services:
       - '80:80' # The HTTP port
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-  synchronization-hook:
-    image: platyplus/synchronization-hook
-    environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql' # TODO: remove /v1alpha1/graphql from the compose file
 volumes:
   db_data:

@@ -9,6 +9,7 @@ module.exports = function (ctx) {
       'router',
       'auth',
       'i18n',
+      'inputs',
       'apollo',
       'hasura',
       'platyplus',
@@ -29,10 +30,10 @@ module.exports = function (ctx) {
       scopeHoisting: true,
       env: ctx.dev
         ? {
-          API: JSON.stringify('graphql.localhost/v1alpha1/graphql')
+          API: JSON.stringify('graphql.localhost/v1/graphql')
         }
         : {
-          API: JSON.stringify('graphql.platyplus.io/v1alpha1/graphql')
+          API: JSON.stringify('graphql.platyplus.io/v1/graphql')
         },
       vueRouterMode: 'history',
       // vueCompiler: true,

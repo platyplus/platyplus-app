@@ -1,7 +1,10 @@
 # if you're doing anything beyond your local machine, please pin this to a specific version at https://hub.docker.com/_/node/
 FROM node:11-alpine
+# required for the entrypoint script
 RUN apk add --no-cache bash
 
+# update npm to the latest version 
+# TODO: not ideal as it should remain strictly the same no matter when the docker is built
 RUN npm i npm@latest -g
 # TODO: only required because of the embedded functions
 ARG ALGORITHM=RS256

@@ -1,5 +1,5 @@
 - args:
     cascade: false
     sql: |-
-      DROP view public.state_derived;
+      DROP FUNCTION public.trigger_set_entity_data;
   type: run_sql

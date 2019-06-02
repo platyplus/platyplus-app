@@ -2,8 +2,7 @@
     cascade: false
     sql: |-
       Create view state_derived as
-      select id, coalesce(lag(date_start, -1) over (order by date_start), 'infinity') as date_end from state
-      where entity_id='24793e2e-9de0-4b65-ac1e-f977f0ba77a9';
+      select id, coalesce(lag(date_start, -1) over (order by date_start), 'infinity') as date_end from state;
   type: run_sql
 - args:
     name: state_derived

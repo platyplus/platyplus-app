@@ -32,16 +32,6 @@ services:
     secrets:
       - authentication_public_key
       - hasura_secret_key
-  # graphql-gateway:
-  #   deploy:
-  #     replicas: 1
-  #   environment:
-  #     NODE_ENV: production
-  #     HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
-  #     PUBLIC_KEY_FILE: /run/secrets/authentication_public_key # TODO: only required because of the embedded functions
-  #   secrets:
-  #     - authentication_public_key # TODO: only required because of the embedded functions
-  #     - hasura_secret_key
   graphql-engine:
     deploy:
       replicas: 1
@@ -62,14 +52,6 @@ services:
       test: ['CMD', '/traefik', 'healthcheck', '--ping']
       interval: 30s
       timeout: 5s
-  synchronization-hook:
-    deploy:
-      replicas: 1
-    environment:
-      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
-      NODE_ENV: production
-    secrets:
-      - hasura_secret_key
 secrets:
   authentication_private_key:
     external: true

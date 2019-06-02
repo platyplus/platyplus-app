@@ -1,0 +1,3 @@
+- args:
+    sql: DROP VIEW "public"."state_derived"
+  type: run_sql

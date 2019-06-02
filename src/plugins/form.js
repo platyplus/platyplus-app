@@ -1,21 +1,12 @@
+/**
+ * Main mixin to handle Hasura GraphQL endpoints
+ */
 import VeeValidate from 'vee-validate'
 import { save, deleteMutation } from 'plugins/hasura'
 import { queryToSubscription } from 'plugins/apollo'
 import * as config from 'plugins/platyplus'
 import cloneDeep from 'lodash/cloneDeep'
 import ButtonBar from 'components/ButtonBar.vue'
-import JsonInput from 'components/JsonInput.vue'
-// Code Mirror imports
-import VueCodemirror from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
-window.jsonlint = require('jsonlint-mod')
-import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/addon/lint/lint.css'
-import 'codemirror/addon/lint/lint.js'
-import 'codemirror/addon/lint/json-lint.js'
-import 'codemirror/addon/selection/active-line.js'
-import 'codemirror/addon/scroll/annotatescrollbar.js'
-import 'codemirror/addon/edit/matchbrackets.js'
 
 export const mixin = (table, settings = {}) => {
   settings = Object.assign({
@@ -252,17 +243,6 @@ export const mixin = (table, settings = {}) => {
   }
 }
 
-const cmOptions = {
-  tabSize: 2,
-  mode: 'application/json',
-  annotateScrollbar: true,
-  lint: true,
-  matchBrackets: true,
-  styleActiveLine: true,
-  lineWrapping: true,
-  gutters: ['CodeMirror-lint-markers']
-}
-
 const veeValidateConfig = {
   aria: true,
   classNames: {},
@@ -281,7 +261,5 @@ const veeValidateConfig = {
 
 export default ({ app, router, Vue }) => {
   Vue.use(VeeValidate, veeValidateConfig)
-  Vue.use(VueCodemirror, { options: cmOptions })
   Vue.component('button-bar', ButtonBar)
-  Vue.component('json-input', JsonInput)
 }

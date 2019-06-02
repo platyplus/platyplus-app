@@ -5,14 +5,14 @@ services:
     depends_on:
       - graphql-engine
     environment:
-      API: 'graphql.${DOMAIN}/v1alpha1/graphql'
+      API: 'graphql.${DOMAIN}/v1/graphql'
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - traefik.port=3000
   administration:
     image: platyplus/administration
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000/v1/graphql'
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
       PUBLIC_KEY_FILE: /run/secrets/authentication_public_key
@@ -24,7 +24,7 @@ services:
   authentication:
     image: platyplus/authentication
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000/v1/graphql'
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
       PRIVATE_KEY_FILE: /run/secrets/authentication_private_key
@@ -53,7 +53,6 @@ services:
     depends_on:
       - authentication
       - postgres
-      - synchronization-hook
     environment:
       EVENTS_URL: 'http://functions:3000/events'
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
@@ -93,16 +92,6 @@ services:
         - '--ping'
       interval: 30s
       timeout: 5s
-  synchronization-hook:
-    image: platyplus/synchronization-hook
-    environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1alpha1/graphql'
-      HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
-      NODE_ENV: production
-    deploy:
-      replicas: 1
-    secrets:
-      - hasura_secret_key
 volumes:
   db_data: null
 secrets:

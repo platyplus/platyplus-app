@@ -1,0 +1,8 @@
+- args:
+    cascade: false
+    sql: |-
+      create
+          trigger set_entity_data before insert or update
+              on
+              public.encounter for each row execute procedure trigger_set_entity_data()
+  type: run_sql

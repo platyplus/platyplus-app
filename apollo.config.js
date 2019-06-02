@@ -2,7 +2,7 @@ const fs = require('fs')
 const ADMIN_SECRET =
   process.env.HASURA_ACCESS_KEY || fs.readFileSync('secret.key', 'utf-8') //, (_, data) => data)
 const HASURA_URL =
-  process.env.HASURA_URL || 'http://graphql.localhost/v1alpha1/graphql'
+  process.env.HASURA_URL || 'http://graphql.localhost/v1/graphql'
 module.exports = {
   client: {
     service: {

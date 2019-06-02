@@ -1,0 +1,8 @@
+- args:
+    cascade: false
+    sql: |-
+      drop trigger set_state_dates on public.state;
+      drop trigger after_set_state_dates on public.state;
+      drop FUNCTION trigger_after_set_state_dates();
+      drop FUNCTION trigger_set_state_dates();
+  type: run_sql

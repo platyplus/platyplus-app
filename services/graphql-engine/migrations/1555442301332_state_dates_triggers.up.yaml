@@ -1,0 +1,64 @@
+- args:
+    cascade: false
+    sql: |-
+      CREATE OR REPLACE FUNCTION public.trigger_set_state_dates()
+      RETURNS trigger
+      LANGUAGE plpgsql
+      AS $function$
+      begin
+        -- TODO: same workflow
+        if (tg_op = 'DELETE') then
+          update state
+            set date_end = old.date_end
+            from (select id
+              from state
+              where entity_id = old.entity_id
+              and date_start < old.date_start
+              order by date_start desc
+              limit 1) as last_state
+            where state.id = last_state.id;
+          RETURN OLD;
+        else
+          SELECT date_start into new.date_end
+              FROM state
+              WHERE entity_id = new.entity_id
+              and date_start > new.date_start
+              order by date_start asc
+              limit 1;
+            new.date_end = coalesce(new.date_end, 'infinity'::timestamptz);
+          RETURN NEW;
+        end if;
+      END;
+      $function$
+      ;
+      CREATE OR REPLACE FUNCTION public.trigger_after_set_state_dates()
+      RETURNS trigger
+      LANGUAGE plpgsql
+      AS $function$
+      begin
+        -- updates the end date of the previous state, if any
+        update state
+          set date_end = new.date_start
+          from (select id
+            from state
+            where entity_id = new.entity_id
+            and date_start < new.date_start
+            order by date_start desc
+            limit 1) as last_state
+          where state.id = last_state.id;
+        RETURN null;
+      END;
+      $function$
+      ;
+      create
+          trigger set_state_dates before insert
+              or delete
+                  or update
+                      of date_start on
+                      public.state for each row execute procedure trigger_set_state_dates();
+      create
+          trigger after_set_state_dates after insert
+              or update
+                  of date_start on
+                  public.state for each row execute procedure trigger_after_set_state_dates();
+  type: run_sql

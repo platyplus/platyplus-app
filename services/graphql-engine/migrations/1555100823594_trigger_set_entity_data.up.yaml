@@ -1,0 +1,37 @@
+- args:
+    cascade: false
+    sql: |-
+      CREATE OR REPLACE FUNCTION public.trigger_set_entity_data()
+      RETURNS trigger
+      LANGUAGE plpgsql
+      AS $function$
+      declare
+        entity_type_id uuid;
+        entity_type_schema jsonb;
+        curs text;
+        entity_data jsonb='{}';
+      begin
+        if new.entity_id is not null then -- Gets the schema of the entity type
+          select "schema" into entity_type_schema
+            from "entity_type", "entity"
+            where entity_type.id = entity.type_id and entity.id = new.entity_id;
+        else -- Creates the entity and gets its entity type schema
+          select entity_type.id, entity_type."schema"
+            into entity_type_id, entity_type_schema
+            from encounter_type, entity_type where encounter_type.id = new.encounter_type and encounter_type.entity_type_id = entity_type.id;
+          if entity_type_id is not null then
+            insert into entity (type_id) values (entity_type_id) returning id into new.entity_id;
+          end if;
+        end if;
+        if entity_type_schema is not null then
+          for curs in select * from jsonb_object_keys(entity_type_schema)
+          loop
+            entity_data = entity_data || jsonb_build_object(curs, new.data->curs);
+              new.data = new.data - curs;
+          end loop;
+          update entity set attributes = attributes || entity_data WHERE id = new.entity_id;
+        end if;
+        RETURN NEW;
+      END;
+      $function$
+  type: run_sql

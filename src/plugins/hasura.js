@@ -1,3 +1,6 @@
+/**
+ * Methods to manipulate data exposed through a Hasura GraphQL endpoint
+ */
 import { mutations, settings } from 'plugins/platyplus'
 
 /**

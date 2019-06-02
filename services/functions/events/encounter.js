@@ -5,6 +5,7 @@ const gql = require('graphql-tag'),
 
 const ENCOUTER_DATE_FIELD = 'created_at' // TODO: not the ideal field
 
+/*
 const ENTITY_TYPE_SCHEMA_FROM_ENTITY = print(gql`
   query entityTypeSchema($id: uuid!) {
     entity(where: { id: { _eq: $id } }) {
@@ -14,6 +15,7 @@ const ENTITY_TYPE_SCHEMA_FROM_ENTITY = print(gql`
     }
   }
 `)
+*/
 
 const STATES_FROM_ENTITY = print(gql`
   query entityStates($id: uuid!, $encounter_date: timestamptz!) {
@@ -22,7 +24,7 @@ const STATES_FROM_ENTITY = print(gql`
         where: {
           _and: [
             { date_start: { _lte: $encounter_date } }
-            { derived: { date_end: { _gt: $encounter_date } } }
+            { date_end: { _gt: $encounter_date } }
           ]
         }
       ) {
@@ -32,14 +34,13 @@ const STATES_FROM_ENTITY = print(gql`
           schema
         }
         date_start
-        derived {
-          date_end
-        }
+        date_end
       }
     }
   }
 `)
 
+/*
 const UPDATE_ENTITY_ATTRIBUTES = print(gql`
   mutation updateEntityAttributes($id: uuid!, $attributes: jsonb!) {
     update_entity(
@@ -50,6 +51,7 @@ const UPDATE_ENTITY_ATTRIBUTES = print(gql`
     }
   }
 `)
+*/
 
 const UPDATE_STATE_DATA = print(gql`
   mutation updateStateData($id: uuid!, $data: jsonb!) {
@@ -59,16 +61,20 @@ const UPDATE_STATE_DATA = print(gql`
   }
 `)
 
+/*
 const SQL_AGGREGATE_ENTITY_DATA = (id, rules) =>
   `select jsonb_build_object( ${rules} ) as data
   from (
     select entity_id, data
     from encounter
     where entity_id = '${id}'
-    order by ${ENCOUTER_DATE_FIELD} asc) as ordered_encounter  
+    order by ${ENCOUTER_DATE_FIELD} asc) as ordered_encounter
   group by entity_id
   `
+*/
 
+// TODO: code a SQL function, and expose through Hasura schema?
+// TODO: but then is it possible to map with the good rowtype?
 const SQL_AGGREGATE_STATE_DATA = (entityId, dateStart, dateEnd, rules) =>
   `select jsonb_build_object( ${rules} ) as data
   from (
@@ -82,6 +88,7 @@ const SQL_AGGREGATE_STATE_DATA = (entityId, dateStart, dateEnd, rules) =>
  * Updates the entity attributes from its encounters data
  * @param {*} ctx
  */
+/*
 const updateEntityAttributes = async ctx => {
   const {
     event: { data }
@@ -107,7 +114,7 @@ const updateEntityAttributes = async ctx => {
       attributes: JSON.parse(result[1][0])
     })
   }
-}
+} */
 
 /**
  * Updates the data of every state that includes the encounter (old and new date, old and new entity)
@@ -131,7 +138,7 @@ const updateStageData = async ctx => {
         id,
         stage: { schema }, // eslint-disable-next-line camelcase
         date_start, // eslint-disable-next-line camelcase
-        derived: { date_end }
+        date_end
       } = state
       // TODO: abort if (although abnormal) there is no type or no schema
       // TODO: get and merge the workflow schema
@@ -158,7 +165,7 @@ const updateStageData = async ctx => {
 // TODO: to consider: then for encounter: on create: check if one entity exists. if not, create one. It will then trigger an update
 // TODO: then on update and on delete, update the entity attributes (still check if entity_id exists)
 module.exports = ALL(async ctx => {
-  await updateEntityAttributes(ctx)
+  // await updateEntityAttributes(ctx)
   await updateStageData(ctx)
   // TODO: updateWorkflowData
 })
