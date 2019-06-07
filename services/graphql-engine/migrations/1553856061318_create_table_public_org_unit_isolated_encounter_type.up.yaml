@@ -2,8 +2,9 @@
     sql: CREATE EXTENSION IF NOT EXISTS pgcrypto;
   type: run_sql
 - args:
-    sql: CREATE TABLE "public"."org_unit_isolated_encounter_type"("id" uuid NOT NULL
-      DEFAULT gen_random_uuid(), PRIMARY KEY ("id") );
+    sql:
+      CREATE TABLE "public"."org_unit_isolated_encounter_type"("id" uuid NOT NULL
+      DEFAULT public.gen_random_uuid(), PRIMARY KEY ("id") );
   type: run_sql
 - args:
     name: org_unit_isolated_encounter_type

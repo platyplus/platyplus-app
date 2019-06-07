@@ -55,10 +55,10 @@
               or delete
                   or update
                       of date_start on
-                      public.state for each row execute procedure trigger_set_state_dates();
+                      public.state for each row execute procedure public.trigger_set_state_dates();
       create
           trigger after_set_state_dates after insert
               or update
                   of date_start on
-                  public.state for each row execute procedure trigger_after_set_state_dates();
+                  public.state for each row execute procedure public.trigger_after_set_state_dates();
   type: run_sql

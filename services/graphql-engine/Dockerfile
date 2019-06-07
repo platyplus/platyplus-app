@@ -1,11 +1,18 @@
 FROM hasura/graphql-engine:v1.0.0-beta.2.cli-migrations
 
+# Use the local console assets so console can work while offline
+ARG HASURA_GRAPHQL_CONSOLE_ASSETS_DIR=/srv/console-assets
+ENV HASURA_GRAPHQL_CONSOLE_ASSETS_DIR $HASURA_GRAPHQL_CONSOLE_ASSETS_DIR
+
 ARG AUTH_ALGORITHM=RS256
 ENV AUTH_ALGORITHM $AUTH_ALGORITHM
 
+# Disable the metrics sent to Hasura
 ARG HASURA_GRAPHQL_ENABLE_TELEMETRY=false
 ENV HASURA_GRAPHQL_ENABLE_TELEMETRY $HASURA_GRAPHQL_ENABLE_TELEMETRY
 
+# The console is not enabled as we keep track of the changes (esp. migration files) in running the console from the CLI
+# See /scripts/hasura-dev.sh
 ARG HASURA_GRAPHQL_ENABLE_CONSOLE=false
 ENV HASURA_GRAPHQL_ENABLE_CONSOLE $HASURA_GRAPHQL_ENABLE_CONSOLE
 
@@ -27,6 +34,6 @@ COPY migrations /opt/hasura-migrations
 COPY load-env-and-migrate.sh /bin/load-env-and-migrate.sh
 ENTRYPOINT ["load-env-and-migrate.sh"]
 
-HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT:-8080}/v1/version || exit 1
+HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT:-8080}/healthz || exit 1
 
 CMD ["graphql-engine", "serve"]

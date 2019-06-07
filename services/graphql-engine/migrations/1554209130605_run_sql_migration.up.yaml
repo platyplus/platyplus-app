@@ -1,8 +1,8 @@
 - args:
     cascade: false
     sql: |-
-      Create view state_derived as
-      select id, coalesce(lag(date_start, -1) over (order by date_start), 'infinity') as date_end from state;
+      Create view public.state_derived as
+      select id, coalesce(lag(date_start, -1) over (order by date_start), 'infinity') as date_end from public.state;
   type: run_sql
 - args:
     name: state_derived

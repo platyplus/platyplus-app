@@ -1,3 +1,4 @@
+// TODO: koa and godaddy
 const path = require('path'),
   express = require('express'),
   serveStatic = require('serve-static'),

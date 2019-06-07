@@ -12,7 +12,7 @@ function ctrl_c() {
 }
 echo -n "Waiting for the services to be ready"
 envsubst < config.yaml.template > services/graphql-engine/config.yaml
-while ! curl -sf http://graphql.localhost/v1/version -o /dev/null
+while ! curl -sf http://graphql.localhost/healthz -o /dev/null
 do
     echo -n .
     sleep 1
