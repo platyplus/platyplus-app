@@ -1,13 +1,14 @@
-const express = require('express'), // TODO: KOA!
-  // rsaPemToJwk = require('rsa-pem-to-jwk'),
-  { ApolloServer, gql } = require('apollo-server-express'),
-  { GraphQLClient } = require('graphql-request'),
-  bcrypt = require('bcryptjs'),
-  jwt = require('jsonwebtoken'),
-  rasha = require('rasha'),
-  PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n'),
-  PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
-  ALGORITHM = process.env.ALGORITHM || 'RS256'
+const Koa = require('koa')
+var Router = require('koa-router')
+// const rsaPemToJwk = require('rsa-pem-to-jwk'),
+const { ApolloServer, gql } = require('apollo-server-koa')
+const { GraphQLClient } = require('graphql-request')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const rasha = require('rasha')
+const PUBLIC_KEY = process.env.PUBLIC_KEY.replace(/\\n/g, '\n')
+const PRIVATE_KEY = process.env.PRIVATE_KEY.replace(/\\n/g, '\n')
+const ALGORITHM = process.env.ALGORITHM || 'RS256'
 
 // TODO: if roles change, the JWT shoud be regerated! How to do it in the most seamless way?
 // We could invalidate it?
@@ -152,9 +153,10 @@ const server = new ApolloServer({
   })
 })
 
-const app = express()
+const app = new Koa()
+let router = new Router()
 
-app.get('/jwks', function (req, res, next) {
+router.get('/jwks', (ctx, next) => {
   const jwk = {
     ...rasha.importSync({ pem: PUBLIC_KEY }),
     alg: ALGORITHM,
@@ -164,10 +166,11 @@ app.get('/jwks', function (req, res, next) {
   const jwks = {
     keys: [jwk]
   }
-  res.setHeader('Content-Type', 'application/json')
-  res.send(JSON.stringify(jwks, null, 2) + '\n')
+  ctx.set('Content-Type', 'application/json')
+  ctx.body = JSON.stringify(jwks, null, 2) + '\n'
 })
 
+app.use(router.routes()).use(router.allowedMethods())
 server.applyMiddleware({ app })
 console.log(`GraphQL endpoint will be: ${server.graphqlPath}`)
 

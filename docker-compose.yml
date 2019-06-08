@@ -9,10 +9,6 @@ services:
     labels:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - 'traefik.port=3000'
-  administration:
-    image: platyplus/administration
-    environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1/graphql' # TODO: remove /v1/graphql from the compose file
   authentication:
     image: platyplus/authentication
     environment:

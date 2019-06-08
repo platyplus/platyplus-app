@@ -32,7 +32,10 @@ export "HASURA_GRAPHQL_MIGRATIONS_DIR"="/opt/hasura-migrations"
 # Using a port that is not exposed to other services
 # We then can't mix the service as being ready e.g. wait-for-it or healthchecks
 prod_port=$HASURA_GRAPHQL_SERVER_PORT
-export "HASURA_GRAPHQL_SERVER_PORT"=9999
+echo $prod_port
+export "HASURA_GRAPHQL_SERVER_PORT"=8080
+echo $HASURA_GRAPHQL_SERVER_PORT
 docker-entrypoint.sh
 export "HASURA_GRAPHQL_SERVER_PORT"=$prod_port
+echo $HASURA_GRAPHQL_SERVER_PORT
 exec "$@"

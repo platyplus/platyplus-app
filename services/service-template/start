@@ -5,7 +5,9 @@ const app = require('/opt/app/index'),
   http = require('http'),
   { createTerminus } = require('@godaddy/terminus')
 
-var server = http.createServer(app)
+// Checks whether this is a Koa App or an Express app TODO: test
+const appKoaExpress = app.callback ? app.callback() : app
+var server = http.createServer(appKoaExpress)
 server.listen(PORT, () => {
   console.log(`🚀 Server ready and listening on port ${PORT}`)
 })

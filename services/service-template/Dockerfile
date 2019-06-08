@@ -5,12 +5,14 @@ RUN apk add --no-cache bash
 # you'll likely want the latest npm, regardless of node version, for speed and fixes
 # but pin this version for the best stability
 RUN npm i npm@latest -g
+WORKDIR /opt
+RUN npm install @godaddy/terminus
 
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s CMD node healthcheck.js
 
 WORKDIR /opt/app
-COPY ./start /opt/start
+# COPY ./start /opt/start
 COPY ./healthcheck.js /opt/app
 COPY docker-entrypoint.sh /usr/local/bin/
 

@@ -1,34 +1,5 @@
 version: '3.4'
 services:
-  administration:
-    build:
-      context: ./services/administration
-      args:
-        NODE_ENV: development
-    command: nodemon -e js --inspect=0.0.0.0:9229 /opt/start
-    environment:
-      NODE_ENV: development
-      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
-      PUBLIC_KEY: '${PUBLIC_KEY}'
-    healthcheck:
-      disable: true
-    labels:
-      - 'traefik.frontend.rule=Host:admin-service.${DOMAIN}'
-      - 'traefik.port=3000'
-      # - 'traefik.frontend.rule=Host:admin-service-inspect.${DOMAIN}'
-      # - 'traefik.port=9229'
-      # - 'traefik.frontend.rule=Host:admin-service-inspect2.${DOMAIN}'
-      # - 'traefik.port=9230'
-    # ports:
-    #   - '9229:9229' # TODO: map with traefik
-    #   - '9230:9230' # TODO: map with traefik
-    restart: always
-    volumes:
-      - configuration:/opt/git-sync
-      - ./services/administration:/opt/app:delegated
-      - ./services/administration/package.json:/opt/package.json
-      - ./services/administration/package-lock.json:/opt/package-lock.json
-      - notused_admin:/opt/app/node_modules
   app:
     build:
       context: .
