@@ -77,7 +77,7 @@ services:
       context: ./services/functions
       args:
         NODE_ENV: development
-    command: nodemon -e js --inspect=0.0.0.0:9229 index.js
+    command: nodemon -e js --inspect=0.0.0.0:9229 /opt/start
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
       # PUBLIC_KEY: '${PUBLIC_KEY}'

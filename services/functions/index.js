@@ -17,9 +17,6 @@ const router = new Router()
 app.use(bodyParser())
 
 router.post('/events', eventOptions)
-router.get('/healthcheck', ctx => {
-  ctx.body = 'ok'
-})
 app.use(router.routes()).use(router.allowedMethods())
 
-app.listen(process.env.PORT || 3000)
+module.exports = app
