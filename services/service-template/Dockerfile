@@ -19,3 +19,5 @@ ENV PORT $PORT
 EXPOSE $PORT 9229 9230
 
 ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD [ "node", "/opt/start" ]

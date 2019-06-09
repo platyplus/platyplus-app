@@ -10,7 +10,5 @@ ENV ALGORITHM $ALGORITHM
 
 COPY . /opt/app
 RUN install.sh
-# TODO: USER in the template?
+
 USER node
-# TODO: CMD in the template?
-CMD [ "node", "/opt/start" ]
