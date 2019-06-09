@@ -1,3 +1,0 @@
-- args:
-    sql: DROP TABLE "public"."org_unit_isolated_encounter_type"
-  type: run_sql

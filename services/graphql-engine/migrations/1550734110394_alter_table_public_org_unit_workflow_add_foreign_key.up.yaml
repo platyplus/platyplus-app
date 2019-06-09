@@ -1,4 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."org_unit_workflow" ADD FOREIGN KEY ("org_unit_id")
-      REFERENCES "public"."org_unit" ("id")
-  type: run_sql

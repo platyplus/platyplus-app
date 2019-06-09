@@ -1,6 +1,0 @@
-- args:
-    relationship: org_unit
-    table:
-      name: encounter
-      schema: public
-  type: drop_relationship

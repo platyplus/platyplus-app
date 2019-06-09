@@ -1,6 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."user" ALTER COLUMN "token" SET NOT NULL;
-  type: run_sql
-- args:
-    sql: COMMENT ON COLUMN "public"."user"."token" IS 'undefined'
-  type: run_sql

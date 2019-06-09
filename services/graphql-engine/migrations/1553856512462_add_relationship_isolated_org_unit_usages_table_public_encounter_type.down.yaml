@@ -1,6 +1,0 @@
-- args:
-    relationship: isolated_org_unit_usages
-    table:
-      name: encounter_type
-      schema: public
-  type: drop_relationship

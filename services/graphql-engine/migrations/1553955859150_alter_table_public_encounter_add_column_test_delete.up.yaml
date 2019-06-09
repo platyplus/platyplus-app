@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."encounter" ADD COLUMN "test_delete" integer NULL
-  type: run_sql

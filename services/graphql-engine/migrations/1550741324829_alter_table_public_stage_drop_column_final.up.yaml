@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."stage" DROP COLUMN "final"
-  type: run_sql

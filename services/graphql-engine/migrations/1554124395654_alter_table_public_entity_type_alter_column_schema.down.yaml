@@ -1,7 +1,0 @@
-- args:
-    sql: ALTER TABLE ONLY "public"."entity_type" ALTER COLUMN "schema" SET DEFAULT
-      '[]'::jsonb;
-  type: run_sql
-- args:
-    sql: COMMENT ON COLUMN "public"."entity_type"."schema" IS 'undefined'
-  type: run_sql

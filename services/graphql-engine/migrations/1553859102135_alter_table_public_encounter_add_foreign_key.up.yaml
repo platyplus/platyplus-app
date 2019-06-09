@@ -1,4 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."encounter" ADD FOREIGN KEY ("entity_id") REFERENCES
-      "public"."entity" ("id")
-  type: run_sql

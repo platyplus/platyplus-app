@@ -1,5 +1,0 @@
-- args:
-    name: isolated_org_unit_usages
-    new_name: isolated_uses
-    table: encounter_type
-  type: rename_relationship

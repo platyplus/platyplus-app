@@ -1,3 +1,0 @@
-- args:
-    sql: COMMENT ON COLUMN "public"."encounter_type"."entity_type_id" IS ''
-  type: run_sql

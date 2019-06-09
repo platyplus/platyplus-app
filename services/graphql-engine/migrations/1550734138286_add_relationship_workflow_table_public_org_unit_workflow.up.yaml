@@ -1,8 +1,0 @@
-- args:
-    name: workflow
-    table:
-      name: org_unit_workflow
-      schema: public
-    using:
-      foreign_key_constraint_on: workflow_id
-  type: create_object_relationship

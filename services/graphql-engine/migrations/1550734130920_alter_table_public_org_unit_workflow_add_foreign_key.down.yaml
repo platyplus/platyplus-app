@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."org_unit_workflow" DROP CONSTRAINT "org_unit_workflow_workflow_id_fkey"
-  type: run_sql

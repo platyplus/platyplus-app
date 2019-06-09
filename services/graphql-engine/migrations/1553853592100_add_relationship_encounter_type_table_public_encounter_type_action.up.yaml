@@ -1,8 +1,0 @@
-- args:
-    name: encounter_type
-    table:
-      name: encounter_type_action
-      schema: public
-    using:
-      foreign_key_constraint_on: encounter_type_id
-  type: create_object_relationship

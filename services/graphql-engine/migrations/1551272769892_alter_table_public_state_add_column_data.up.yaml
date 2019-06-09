@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."state" ADD COLUMN "data" jsonb NULL DEFAULT '{}'
-  type: run_sql

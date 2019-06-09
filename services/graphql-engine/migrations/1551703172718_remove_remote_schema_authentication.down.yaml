@@ -1,8 +1,0 @@
-- args:
-    definition:
-      forward_client_headers: true
-      headers: []
-      url: http://authentication:3000/graphql
-      url_from_env: null
-    name: authentication
-  type: add_remote_schema

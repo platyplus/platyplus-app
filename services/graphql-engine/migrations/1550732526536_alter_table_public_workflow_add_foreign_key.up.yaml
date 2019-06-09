@@ -1,4 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."workflow" ADD FOREIGN KEY ("entity_type_id") REFERENCES
-      "public"."entity_type" ("id")
-  type: run_sql

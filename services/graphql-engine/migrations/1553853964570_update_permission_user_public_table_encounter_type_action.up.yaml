@@ -1,8 +1,0 @@
-- args:
-    permission:
-      filter: {}
-    role: user
-    table:
-      name: encounter_type_action
-      schema: public
-  type: create_delete_permission

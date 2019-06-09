@@ -1,8 +1,0 @@
-- args:
-    cascade: false
-    sql: |-
-      CREATE TRIGGER set_timestamp
-      BEFORE UPDATE ON public.encounter
-      FOR EACH ROW
-      EXECUTE PROCEDURE public.trigger_set_timestamp();
-  type: run_sql

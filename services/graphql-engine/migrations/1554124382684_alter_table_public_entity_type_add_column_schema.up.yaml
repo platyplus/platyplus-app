@@ -1,4 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."entity_type" ADD COLUMN "schema" jsonb NOT NULL DEFAULT
-      '{}'
-  type: run_sql

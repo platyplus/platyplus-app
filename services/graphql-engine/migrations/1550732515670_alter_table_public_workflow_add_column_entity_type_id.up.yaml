@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."workflow" ADD COLUMN "entity_type_id" uuid NULL
-  type: run_sql

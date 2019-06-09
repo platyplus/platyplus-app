@@ -1,8 +1,0 @@
-- args:
-    name: org_unit
-    table:
-      name: state
-      schema: public
-    using:
-      foreign_key_constraint_on: org_unit_id
-  type: create_object_relationship

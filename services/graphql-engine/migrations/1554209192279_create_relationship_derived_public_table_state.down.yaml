@@ -1,6 +1,0 @@
-- args:
-    relationship: derived
-    table:
-      name: state
-      schema: public
-  type: drop_relationship

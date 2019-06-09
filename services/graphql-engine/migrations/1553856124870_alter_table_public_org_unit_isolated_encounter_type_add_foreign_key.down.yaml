@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."org_unit_isolated_encounter_type" DROP CONSTRAINT "org_unit_isolated_encounter_type_org_unit_id_fkey"
-  type: run_sql

@@ -1,5 +1,0 @@
-- args:
-    cascade: false
-    sql: |-
-      DROP view public.state_derived;
-  type: run_sql

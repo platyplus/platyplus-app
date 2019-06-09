@@ -1,7 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."state" ALTER COLUMN "date_end" TYPE timestamptz;
-  type: run_sql
-- args:
-    sql: COMMENT ON COLUMN "public"."state"."date_end" IS 'do not modify - calculated
-      value from a trigger'
-  type: run_sql

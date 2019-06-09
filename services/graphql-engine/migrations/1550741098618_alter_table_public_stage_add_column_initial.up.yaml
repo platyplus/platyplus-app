@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."stage" ADD COLUMN "initial" boolean NULL DEFAULT false
-  type: run_sql

@@ -1,6 +1,0 @@
-- args:
-    relationship: provider
-    table:
-      name: encounter
-      schema: public
-  type: drop_relationship

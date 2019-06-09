@@ -1,5 +1,0 @@
-- args:
-    cascade: false
-    sql: |-
-      drop trigger set_entity_data on public.encounter;
-  type: run_sql

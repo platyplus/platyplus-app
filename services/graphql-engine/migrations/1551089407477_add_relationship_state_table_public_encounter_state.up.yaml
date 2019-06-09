@@ -1,8 +1,0 @@
-- args:
-    name: state
-    table:
-      name: encounter_state
-      schema: public
-    using:
-      foreign_key_constraint_on: state_id
-  type: create_object_relationship

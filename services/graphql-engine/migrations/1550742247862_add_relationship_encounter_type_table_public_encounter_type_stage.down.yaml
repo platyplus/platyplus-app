@@ -1,6 +1,0 @@
-- args:
-    relationship: encounter_type
-    table:
-      name: encounter_type_stage
-      schema: public
-  type: drop_relationship

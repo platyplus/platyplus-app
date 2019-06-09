@@ -1,6 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."stage" ALTER COLUMN "schema" SET NOT NULL;
-  type: run_sql
-- args:
-    sql: COMMENT ON COLUMN "public"."stage"."schema" IS ''
-  type: run_sql
