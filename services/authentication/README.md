@@ -1,6 +1,6 @@
 # hasura-simple-auth
 
-TODO: document
+TODO: put in the documentation
 Simple Auth Server For Signup &amp; Login Mutation
 See [this](https://github.com/BretFisher/node-docker-good-defaults)
 **Setup**
