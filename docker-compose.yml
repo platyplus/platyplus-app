@@ -12,11 +12,11 @@ services:
   authentication:
     image: platyplus/authentication
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1/graphql' # TODO: remove /v1/graphql from the compose file
+      HASURA_URL: 'http://graphql-engine:3000'
   functions:
     image: platyplus/functions
     environment:
-      HASURA_URL: 'http://graphql-engine:3000' # TODO: remove /v1/graphql everywhere in the compose files
+      HASURA_URL: 'http://graphql-engine:3000'
       POSTGRES_URL: 'postgresql://postgres@postgres/postgres'
   graphql-engine:
     image: platyplus/graphql-engine

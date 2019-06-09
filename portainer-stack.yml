@@ -12,7 +12,7 @@ services:
   authentication:
     image: platyplus/authentication
     environment:
-      HASURA_URL: 'http://graphql-engine:3000/v1/graphql'
+      HASURA_URL: 'http://graphql-engine:3000'
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
       NODE_ENV: production
       PRIVATE_KEY_FILE: /run/secrets/authentication_private_key

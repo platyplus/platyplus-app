@@ -3,7 +3,6 @@ var Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
 // const rsaPemToJwk = require('rsa-pem-to-jwk'),
 const { ApolloServer, gql } = require('apollo-server-koa')
-const { GraphQLClient } = require('graphql-request')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const rasha = require('rasha')
@@ -15,11 +14,7 @@ const ALGORITHM = process.env.ALGORITHM || 'RS256'
 // We could invalidate it?
 // https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens
 
-const graphql = new GraphQLClient(process.env.HASURA_URL, {
-  headers: {
-    'X-Hasura-Admin-Secret': process.env.HASURA_GRAPHQL_ADMIN_SECRET
-  }
-})
+const { graphql } = require('@bit/platyplus.backend.hasura-client')
 
 const LOGIN = `
   query user($username: String) {

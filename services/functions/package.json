@@ -34,5 +34,10 @@
     "cross-env": "^5.1.4",
     "mocha": "^5.0.5",
     "nodemon": "^1.18.10"
+  },
+  "bit": {
+    "env": {},
+    "componentsDefaultDirectory": "components/{name}",
+    "packageManager": "npm"
   }
 }

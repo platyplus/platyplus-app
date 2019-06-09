@@ -12,6 +12,7 @@ docker
 npm i -g merge-yaml-cli
 hasura cli
 envsubst (brew install gettext)
+brew install bit
 
 2. Clone the repository
 3. Generate keys and secrets

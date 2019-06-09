@@ -20,10 +20,10 @@
   "author": "Pierre-Louis Mercereau",
   "license": "MIT",
   "dependencies": {
+    "@bit/platyplus.backend.hasura-client": "0.0.1",
     "apollo-server-koa": "^2.6.2",
     "bcryptjs": "^2.4.3",
     "graphql": "^14.1.1",
-    "graphql-request": "^1.8.2",
     "jsonwebtoken": "^8.4.0",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
