@@ -2,6 +2,7 @@
 FROM node:11-alpine
 RUN apk add --no-cache bash
 
+WORKDIR /opt/app
 # you'll likely want the latest npm, regardless of node version, for speed and fixes
 # but pin this version for the best stability
 RUN npm i npm@latest -g
