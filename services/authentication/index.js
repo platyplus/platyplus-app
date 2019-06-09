@@ -17,7 +17,7 @@ const ALGORITHM = process.env.ALGORITHM || 'RS256'
 const { graphql } = require('@bit/platyplus.backend.hasura-client')
 
 const LOGIN = `
-  query user($username: String) {
+  query login($username: String) {
     user(where: { username: { _eq: $username } }) {
       id
       password

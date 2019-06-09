@@ -20,7 +20,7 @@
   "author": "Pierre-Louis Mercereau",
   "license": "MIT",
   "dependencies": {
-    "@bit/platyplus.backend.hasura-client": "0.0.1",
+    "@bit/platyplus.backend.hasura-client": "0.0.2",
     "apollo-server-koa": "^2.6.2",
     "bcryptjs": "^2.4.3",
     "graphql": "^14.1.1",

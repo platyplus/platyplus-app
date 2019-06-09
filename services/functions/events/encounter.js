@@ -1,6 +1,6 @@
 const gql = require('graphql-tag'),
   { print } = require('graphql/language/printer'),
-  { graphql, rest } = require('../hasura-client'),
+  { graphql, rest } = require('@bit/platyplus.backend.hasura-client'),
   { getOldNew, generateRules, ALL } = require('./helpers')
 
 const ENCOUTER_DATE_FIELD = 'created_at' // TODO: not the ideal field
