@@ -1,5 +1,6 @@
 #!/bin/bash
 . ./scripts/load-dev-env.sh
+docker build -t platyplus/service-template:latest services/service-template
 # TODO: option --build
 docker-compose -f docker-compose.yml -f docker-compose-dev.yml up --force-recreate --build -d
 

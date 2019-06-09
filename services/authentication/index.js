@@ -1,5 +1,6 @@
 const Koa = require('koa')
 var Router = require('koa-router')
+const bodyParser = require('koa-bodyparser')
 // const rsaPemToJwk = require('rsa-pem-to-jwk'),
 const { ApolloServer, gql } = require('apollo-server-koa')
 const { GraphQLClient } = require('graphql-request')
@@ -155,6 +156,7 @@ const server = new ApolloServer({
 
 const app = new Koa()
 let router = new Router()
+app.use(bodyParser())
 
 router.get('/jwks', (ctx, next) => {
   const jwk = {
