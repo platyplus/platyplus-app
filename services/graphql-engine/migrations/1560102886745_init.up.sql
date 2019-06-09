@@ -1,3 +1,4 @@
+CREATE EXTENSION IF NOT EXISTS ltree;
 SET xmloption = content;
 CREATE FUNCTION public.first_agg(anyelement, anyelement) RETURNS anyelement
     LANGUAGE sql IMMUTABLE STRICT
