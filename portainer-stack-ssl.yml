@@ -43,6 +43,7 @@ services:
       - postgres
     environment:
       EVENTS_URL: 'http://functions:3000/events'
+      AUTH_URL: 'http://authentication:3000/graphql'
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
     labels:
       - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
