@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+// https://stackoverflow.com/questions/52438815/docker-automatically-rerun-npm-install-on-package-json-change
+'use strict'
+const { spawn } = require('child_process')
+
+/*
+ * Install dependencies every time package.json changes
+ */
+spawn(
+  'nodemon -w /opt/package.json --exec "cd /opt && npm install --no-optional . @godaddy/terminus"',
+  {
+    stdio: 'inherit',
+    shell: true
+  }
+)
+
+/*
+ * Restart node when a source file changes, plus:
+ * Restart when `npm install` ran based on `package-lock.json` changing.
+ */
+spawn(
+  'nodemon --inspect=0.0.0.0:9229 -e js,json -w /opt/package-lock.json -w /opt/app /opt/start',
+  {
+    stdio: 'inherit',
+    shell: true
+  }
+)

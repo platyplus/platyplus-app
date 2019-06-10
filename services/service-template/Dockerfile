@@ -10,7 +10,7 @@ RUN npm i npm@latest -g
 # check every 30s to ensure this service returns HTTP 200
 HEALTHCHECK --interval=30s CMD node healthcheck.js
 
-COPY ./start /opt/start
+COPY ./start ./start-dev /opt/
 COPY ./healthcheck.js /opt/app/
 COPY docker-entrypoint.sh install.sh /usr/local/bin/
 
