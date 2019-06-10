@@ -28,8 +28,7 @@ const settings = {
       from: 'from',
       to: 'to'
     }
-  },
-  orderBy: { name: 'asc' }
+  }
 }
 
 const minimal = gql`

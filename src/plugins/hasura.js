@@ -34,17 +34,21 @@ export const upsertMutation = async ({
     )
   }
   const objects = Array.isArray(data) ? data : [data]
-  const loop = objects.map(item => {
+  const loop = objects.map(async item => {
     const variables = variableValues(mutation, data)
     variables.id = item.id
-    return apollo.mutate({ mutation, variables }).then(({ data }) => {
-      if (!data.result) {
-        throw Error(
-          `The mutation '${mutationName}' on the table '${table}' has no sub-mutation or sub-query alias as 'result'. Alias one of the sub-mutation with the prefix 'result: '.`
-        )
-      }
-      return data.result.returning[0]
+    const {
+      data: { result }
+    } = await apollo.mutate({
+      mutation,
+      variables
     })
+    if (!result) {
+      throw Error(
+        `The mutation '${mutationName}' on the table '${table}' has no sub-mutation or sub-query alias as 'result'. Alias one of the sub-mutation with the prefix 'result: '.`
+      )
+    }
+    return result.returning[0]
   })
   const res = await Promise.all(loop)
   return Array.isArray(data) ? res : res[0]

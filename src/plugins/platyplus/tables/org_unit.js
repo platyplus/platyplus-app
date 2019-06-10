@@ -44,8 +44,7 @@ const settings = {
       table: 'org_unit_workflow',
       to: 'workflow'
     }
-  },
-  orderBy: { name: 'asc' }
+  }
 }
 
 const minimal = gql`
@@ -114,7 +113,7 @@ const fragments = {
 const queries = {
   form: gql`
     query org_unit($where: org_unit_bool_exp) {
-      org_unit(where: $where) {
+      org_unit(where: $where, order_by: { name: asc }) {
         # TODO: default order to be hardcoded
         ...org_unit_base
       }

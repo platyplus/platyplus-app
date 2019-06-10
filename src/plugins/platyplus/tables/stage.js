@@ -40,8 +40,7 @@ export const settings = {
       from: 'next',
       to: 'previous'
     }
-  },
-  orderBy: { name: 'asc' }
+  }
 }
 
 const minimal = gql`

@@ -165,7 +165,6 @@ export const mixin = (table, settings = {}) => {
     },
     apollo: {
       list: {
-        // TODO: code the subscription as well => make it generic in the hasura plugin?
         query: config.queries[table][settings.query],
         variables () {
           return this.listVariables || { where: settings.where }
@@ -173,15 +172,15 @@ export const mixin = (table, settings = {}) => {
         skip () {
           return !settings.list || (this.listSkip instanceof Object && this.listSkip)
         },
-        update: data => data[Object.keys(data)[0]], // TODO: change to 'result?'
+        update: data => data[table],
         subscribeToMore: {
           document: queryToSubscription(config.queries[table][settings.query]),
           variables () {
             return this.listVariables || { where: settings.where }
           },
           // Mutate the previous result
-          updateQuery: (previousResult, { subscriptionData }) => {
-            // TODO: Here, return the new result from the previous with the new data
+          updateQuery: (previousResult, { subscriptionData: { data } }) => {
+            return data
           }
         }
       },

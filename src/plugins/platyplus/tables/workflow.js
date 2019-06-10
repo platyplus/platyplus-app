@@ -17,8 +17,7 @@ const settings = {
       table: 'org_unit_workflow',
       to: 'org_unit'
     }
-  },
-  orderBy: { name: 'asc' }
+  }
 }
 
 const minimal = gql`

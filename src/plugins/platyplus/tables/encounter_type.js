@@ -26,8 +26,7 @@ const settings = {
       table: 'org_unit_isolated_encounter_type',
       to: 'org_unit'
     }
-  },
-  orderBy: { name: 'asc' }
+  }
 }
 
 const minimal = gql`

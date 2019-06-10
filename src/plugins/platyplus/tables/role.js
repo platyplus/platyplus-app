@@ -1,8 +1,6 @@
 import gql from 'graphql-tag'
 
-const settings = {
-  orderBy: { name: 'asc' }
-}
+const settings = {}
 
 const minimal = gql`
   fragment role_minimal on role {

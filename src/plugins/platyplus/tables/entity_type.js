@@ -1,7 +1,5 @@
 import gql from 'graphql-tag'
-const settings = {
-  orderBy: { name: 'asc' }
-}
+const settings = {}
 
 const minimal = gql`
   fragment entity_type_minimal on entity_type {
