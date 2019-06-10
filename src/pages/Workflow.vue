@@ -70,7 +70,6 @@ export default {
     },
     initialEncounterTypes () {
       // TODO: implement the filtering by org unit type?
-      // TODO:
       return this.initialStages.map(item => item.encounter_types)
     }
   },

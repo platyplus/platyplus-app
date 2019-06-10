@@ -20,7 +20,7 @@ export default {
       !currentRoute.meta.withoutPreferredOrgUnit
     ) {
       // TODO: vraiment utile
-      // TODO: nest routes, as this layer won't prefetch again when already loaded
+      // nest routes, as this layer won't prefetch again when already loaded
       store.dispatch('navigation/routeRequest', { path: currentRoute.path })
       redirect('/profile/current-org-unit')
     }

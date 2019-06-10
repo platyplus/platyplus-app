@@ -74,7 +74,7 @@ const SQL_AGGREGATE_ENTITY_DATA = (id, rules) =>
 */
 
 // TODO: code a SQL function, and expose through Hasura schema?
-// TODO: but then is it possible to map with the good rowtype?
+// but then is it possible to map with the good rowtype?
 const SQL_AGGREGATE_STATE_DATA = (entityId, dateStart, dateEnd, rules) =>
   `select jsonb_build_object( ${rules} ) as data
   from (
@@ -132,7 +132,7 @@ const updateStageData = async ctx => {
       encounter_date: data[oldNew][ENCOUTER_DATE_FIELD]
     })
     const states = entity[0].states
-    // TODO: reuse this loop for a trigger on state. BE THEN CAREFULL TO AN INFINITE LOOP!!!
+    // TODO reuse this loop for a trigger on state. BE THEN CAREFULL TO AN INFINITE LOOP!!!
     for (const state of states) {
       const {
         id,
@@ -140,8 +140,8 @@ const updateStageData = async ctx => {
         date_start, // eslint-disable-next-line camelcase
         date_end
       } = state
-      // TODO: abort if (although abnormal) there is no type or no schema
-      // TODO: get and merge the workflow schema
+      // TODO abort if (although abnormal) there is no type or no schema
+      // get and merge the workflow schema
       const rules = generateRules(schema)
       // Selects and aggregates all the encounters of this entity that occurred during the state period
       const {
@@ -162,8 +162,8 @@ const updateStageData = async ctx => {
 }
 
 // TODO: Avoid infinite loop => STRICT RULE NOT TO UPDATE THE RECORD OF THE EVENT (or find a workaround)
-// TODO: to consider: then for encounter: on create: check if one entity exists. if not, create one. It will then trigger an update
-// TODO: then on update and on delete, update the entity attributes (still check if entity_id exists)
+// to consider: then for encounter: on create: check if one entity exists. if not, create one. It will then trigger an update
+// then on update and on delete, update the entity attributes (still check if entity_id exists)
 module.exports = ALL(async ctx => {
   // await updateEntityAttributes(ctx)
   await updateStageData(ctx)

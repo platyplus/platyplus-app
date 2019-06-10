@@ -135,7 +135,7 @@ export const save = async (
     relations
   }).newValues
   // TODO: options stored somewhere else than the form value?
-  // TODO: -> make a distring 'cleanForm' function to make it clear no matter where it is called
+  // -> make a distring 'cleanForm' function to make it clear no matter where it is called
   const relationsVariables = Object.keys(options.relations).reduce(
     (aggr, relation) => {
       aggr[`${relation}_add`] = addedRelations(
