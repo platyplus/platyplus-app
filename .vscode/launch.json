@@ -23,6 +23,18 @@
             "localRoot": "${workspaceFolder}/services/functions",
             "remoteRoot": "/opt/app",
             "protocol": "inspector"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug Quasar",
+            "url": "http://app.localhost:80",
+            "webRoot": "${workspaceRoot}/src",
+            "sourceMaps": true,
+            "breakOnLoad": true,
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            }
         }
     ]
 }

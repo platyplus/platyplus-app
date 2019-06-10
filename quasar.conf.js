@@ -41,6 +41,7 @@ module.exports = function (ctx) {
       // analyze: true,
       // extractCSS: false,
       extendWebpack (cfg) {
+        cfg.devtool = 'inline-module-source-map'
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
