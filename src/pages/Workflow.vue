@@ -75,14 +75,6 @@ export default {
     }
   },
   methods: {
-    cancel () {
-      this.$router.replace(
-        this.$route.path.replace(
-          this.createFlag ? '/workflow/create' : '/edit',
-          ''
-        )
-      )
-    },
     reset () {
       this._resetItem()
       if (this.org_unit_id) this.item.org_unit_id = this.org_unit_id // TODO: any way to put such kind of line as part of the mixin?

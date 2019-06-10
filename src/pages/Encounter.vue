@@ -71,14 +71,6 @@ export default {
       if (save) this._postSave(save)
     },
     // TODO: delete: un peu plus compliqué que d'habitude
-    // cancel () {
-    //   this.$router.replace(
-    //     this.$route.path.replace(
-    //       this.createFlag ? '/encounter/create' : '/edit',
-    //       ''
-    //     )
-    //   )
-    // },
     reset () {
       this._resetItem()
       if (this.type_id) this.item.type_id = this.type_id
