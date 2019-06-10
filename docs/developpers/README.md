@@ -13,6 +13,8 @@ npm i -g merge-yaml-cli
 hasura cli
 envsubst (brew install gettext)
 brew install bit
+VS code extensions
+Chrome extensions
 
 2. Clone the repository
 3. Generate keys and secrets
