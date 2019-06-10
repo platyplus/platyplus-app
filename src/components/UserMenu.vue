@@ -8,8 +8,8 @@
       q-item(to="/profile")
         q-item-side(icon="fas fa-user-circle")
         q-item-main(label="Profile")
-      q-list-header {{ user.preferred_org_unit && user.preferred_org_unit.name }}
       template(v-if="user.preferred_org_unit")
+        q-list-header {{ user.preferred_org_unit && user.preferred_org_unit.name }}
         q-item(v-for="node in user.preferred_org_unit.workflows" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/workflow/' + node.workflow.id")
           q-item-side(icon="fas fa-route")
           q-item-main {{node.workflow.name}}
