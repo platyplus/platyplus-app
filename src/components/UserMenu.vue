@@ -9,12 +9,13 @@
         q-item-side(icon="fas fa-user-circle")
         q-item-main(label="Profile")
       q-list-header {{ user.preferred_org_unit && user.preferred_org_unit.name }}
-      q-item(v-for="node in user.preferred_org_unit.workflows" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/workflow/' + node.workflow.id")
-        q-item-side(icon="fas fa-route")
-        q-item-main {{node.workflow.name}}
-      q-item(v-for="node in user.preferred_org_unit.isolated_encounter_types" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/encounter-type/' + node.encounter_type.id")
-        q-item-side(icon="fas fa-table")
-        q-item-main {{node.encounter_type.name}}
+      template(v-if="user.preferred_org_unit")
+        q-item(v-for="node in user.preferred_org_unit.workflows" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/workflow/' + node.workflow.id")
+          q-item-side(icon="fas fa-route")
+          q-item-main {{node.workflow.name}}
+        q-item(v-for="node in user.preferred_org_unit.isolated_encounter_types" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/encounter-type/' + node.encounter_type.id")
+          q-item-side(icon="fas fa-table")
+          q-item-main {{node.encounter_type.name}}
       q-list-header Configuration
       q-item(to="/org-unit")
         q-item-side(icon="fas fa-sitemap")
