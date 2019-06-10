@@ -42,10 +42,10 @@ services:
     healthcheck:
       disable: true
     labels:
-      - 'traefik.service.frontend.rule=Host:auth-service.${DOMAIN}'
-      - 'traefik.service.port=3000'
-      - 'traefik.inspect.frontend.rule=Host:auth-service-inspect.${DOMAIN}'
-      - 'traefik.inspect.port=9229'
+      - 'traefik.frontend.rule=Host:auth-service.${DOMAIN}'
+      - 'traefik.port=3000'
+    ports:
+      - '9229:9229'
     restart: always
     volumes:
       - ./services/authentication:/opt/app:delegated
@@ -85,12 +85,10 @@ services:
     healthcheck:
       disable: true
     labels:
-      - 'traefik.service.frontend.rule=Host:functions.${DOMAIN}'
-      - 'traefik.service.port=3000'
-      - 'traefik.inspect.frontend.rule=Host:functions-inspect.${DOMAIN}'
-      - 'traefik.inspect.port=9229'
-      # - 'traefik.frontend.rule=Host:auth-service-inspect2.${DOMAIN}'
-      # - 'traefik.port=9230'
+      - 'traefik.frontend.rule=Host:functions.${DOMAIN}'
+      - 'traefik.port=3000'
+    ports:
+      - '9230:9229'
     restart: always
     volumes:
       - ./services/functions:/opt/app:delegated
