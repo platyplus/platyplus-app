@@ -17,7 +17,7 @@
 <script>
 // import { updateMutation } from 'plugins/hasura'
 import { getUser } from 'plugins/auth'
-
+import { upsertMutation } from 'plugins/hasura'
 export default {
   name: 'PageCurrentOrgUnit',
   data: () => ({
@@ -25,21 +25,20 @@ export default {
   }),
   methods: {
     async selectOrgUnit () {
-      // TODO: rewrite
-      // if (this.selection !== '') {
-      //   await updateMutation({
-      //     apollo: this.$apollo,
-      //     table: 'user',
-      //     mutation: 'update_preferred_org_unit',
-      //     data: {
-      //       id: this.user.id,
-      //       preferred_org_unit_id: this.selection
-      //     }
-      //   })
-      //   this.$store.dispatch('navigation/route', {
-      //     path: this.$from ? this.$from.path : '/profile/current-org-unit'
-      //   })
-      // }
+      if (this.selection !== '') {
+        await upsertMutation({
+          apollo: this.$apollo,
+          table: 'user',
+          update: 'update_preferred_org_unit',
+          data: {
+            id: this.user.id,
+            preferred_org_unit_id: this.selection
+          }
+        })
+        this.$store.dispatch('navigation/route', {
+          path: this.$from ? this.$from.path : '/profile/current-org-unit'
+        })
+      }
     }
   },
   computed: {
