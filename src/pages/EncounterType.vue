@@ -61,15 +61,8 @@ export default {
     }
   },
   methods: {
-    cancel () {
-      this.$router.replace(
-        this.$route.path.replace(
-          this.createFlag ? '/encounter-type/create' : '/edit',
-          ''
-        )
-      )
-    },
-    resetForm () {
+    reset () {
+      this._resetItem()
       if (this.entity_type_id) this.item.entity_type_id = this.entity_type_id
       this._resetForm()
     }
