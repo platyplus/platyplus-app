@@ -13,8 +13,8 @@ npm i -g merge-yaml-cli
 hasura cli
 envsubst (brew install gettext)
 brew install bit
-VS code extensions
-Chrome extensions
+VS code config and extensions: postgres, debugger for chrome, postgres, docker, vue...
+Chrome extensions: Vue, Apollo
 
 2. Clone the repository
 3. Generate keys and secrets
