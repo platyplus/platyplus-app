@@ -5,6 +5,7 @@ module.exports = function (ctx) {
     preFetch: true,
     // app plugins (/src/plugins)
     plugins: [
+      'abilities',
       'layout',
       'router',
       'auth',

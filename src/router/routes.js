@@ -1,13 +1,17 @@
 import { getUserId } from '../plugins/auth'
-
+import { snakeCase } from 'lodash'
 const crudRoutes = (path, page, id = 'id') => {
+  const resource = snakeCase(page)
   return [
     {
       path,
       component: () => import(`pages/${page}.vue`),
       props: route => ({
         ...route.params
-      })
+      }),
+      meta: {
+        resource
+      }
     },
     {
       path: `${path}/create`,
@@ -15,12 +19,20 @@ const crudRoutes = (path, page, id = 'id') => {
       props: route => ({
         ...route.params,
         createFlag: true
-      })
+      }),
+      meta: {
+        resource,
+        action: 'create'
+      }
     },
     {
       path: `${path}/:${id}`,
       component: () => import(`pages/${page}.vue`),
-      props: true
+      props: true,
+      meta: {
+        resource,
+        action: 'read'
+      }
     },
     {
       path: `${path}/:${id}/edit`,
@@ -28,7 +40,11 @@ const crudRoutes = (path, page, id = 'id') => {
       props: route => ({
         ...route.params,
         editFlag: true
-      })
+      }),
+      meta: {
+        resource,
+        action: 'edit'
+      }
     }
   ]
 }
@@ -36,17 +52,30 @@ const routes = [
   // { path: '/', redirect: '/en/' }, // TODO: locale from the client's browser
   {
     path: '/public',
-    component: () => import('layouts/AnonymousLayout.vue'),
+    component: () => import('layouts/DefaultLayout.vue'),
+    meta: {
+      resource: 'public'
+    },
     children: [
       {
         path: '',
         component: () => import('pages/PublicIndex.vue')
+      },
+      {
+        path: 'auth',
+        component: () => import('layouts/DefaultLayout.vue'),
+        children: [
+          {
+            path: 'signin',
+            component: () => import('pages/SignIn.vue')
+          }
+        ]
       }
     ]
   },
   {
     path: '/',
-    component: () => import('layouts/AuthenticatedLayout.vue'),
+    component: () => import('layouts/DefaultLayout.vue'),
     children: [
       {
         path: '',
@@ -114,16 +143,6 @@ const routes = [
         'Encounter'
       ),
       ...crudRoutes('encounter', 'Encounter')
-    ]
-  },
-  {
-    path: '/auth',
-    component: () => import('layouts/AnonymousLayout.vue'),
-    children: [
-      {
-        path: 'signin',
-        component: () => import('pages/SignIn.vue')
-      }
     ]
   }
 ]

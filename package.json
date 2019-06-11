@@ -14,6 +14,8 @@
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
+    "@casl/ability": "^3.0.2",
+    "@casl/vue": "^0.5.1",
     "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
     "apollo-link": "^1.2.4",

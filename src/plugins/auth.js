@@ -36,12 +36,16 @@ export function getUserId () {
 export const getUser = () => {
   if (!getUserToken()) return null
   else {
-    return apolloClient.readQuery({
-      query: queries.user.profile,
-      variables: {
-        where: { id: { _eq: getUserId() } }
-      }
-    }).user[0]
+    try {
+      return apolloClient.readQuery({
+        query: queries.user.profile,
+        variables: {
+          where: { id: { _eq: getUserId() } }
+        }
+      }).user[0]
+    } catch (e) {
+      return null
+    }
   }
 }
 
@@ -62,12 +66,14 @@ export default ({ app, router, store, Vue }) => {
   Vue.mixin({
     computed: {
       authenticated () {
+        // TODO make it reactive -> vuex?
         return Boolean(getUserToken())
       },
       anonymous () {
         return !this.authenticated
       },
       user () {
+        // TODO: make available through a custom mixin + reactive apollo
         return getUser()
       }
     }
