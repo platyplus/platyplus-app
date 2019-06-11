@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
-
+# Deploys the documentation in the github page.
+# Used in the CI pipeline
 # abort on errors
 set -e
 
