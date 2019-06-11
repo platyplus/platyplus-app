@@ -73,7 +73,7 @@ export default ({ app, router, store, Vue }) => {
         return !this.authenticated
       },
       user () {
-        // TODO: make available through a custom mixin + reactive apollo
+        // TODO: make it reactive - through a custom/this mixin + reactive apollo?
         return getUser()
       }
     }
