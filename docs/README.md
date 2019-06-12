@@ -26,3 +26,7 @@ meta:
 ---
 
 blahh
+
+<!--
+// TODO reviser le passage de vuepress beta à vuepress 1
+ -->
