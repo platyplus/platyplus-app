@@ -60,7 +60,7 @@
     "pug-plain-loader": "^1.0.0",
     "quasar-cli": "^0.17.23",
     "strip-ansi": "=3.0.1",
-    "vuepress": "^0.14.8"
+    "vuepress": "^1.0.1"
   },
   "engines": {
     "node": ">= 8.9.0",
