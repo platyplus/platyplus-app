@@ -114,7 +114,6 @@ const queries = {
   form: gql`
     query org_unit($where: org_unit_bool_exp) {
       org_unit(where: $where, order_by: { name: asc }) {
-        # TODO: default order to be hardcoded
         ...org_unit_base
       }
     }
@@ -122,8 +121,7 @@ const queries = {
   `,
   option: gql`
     query org_unit($where: org_unit_bool_exp) {
-      org_unit(where: $where) {
-        # TODO: default order to be hardcoded
+      org_unit(where: $where, order_by: { name: asc }) {
         id
         name
       }

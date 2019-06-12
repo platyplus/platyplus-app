@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { signout } from 'plugins/auth'
 export default {
   name: 'UserHeader',
   methods: {
@@ -29,7 +28,16 @@ export default {
           ok: this.$t('yes'),
           cancel: this.$t('no')
         })
-        await signout()
+        // TODO: workaround to WriteToStore: Missing field token in {}
+        // this.$apolloProvider.defaultClient.resetStore()
+        // Try to stop using token.id -> token.userId instead
+        this.$apolloProvider.defaultClient.cache.writeData({
+          data: {
+            __typename: 'token',
+            id: null,
+            decoded: null
+          }
+        })
         this.$router.replace('/public')
       } catch (error) {}
     }

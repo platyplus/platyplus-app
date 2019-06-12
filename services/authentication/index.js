@@ -95,7 +95,7 @@ const resolvers = {
 
       const token = jwt.sign(
         {
-          userId: user.id,
+          id: user.id,
           'https://hasura.io/jwt/claims': {
             'x-hasura-allowed-roles': ['user'],
             'x-hasura-default-role': 'user',
@@ -122,7 +122,7 @@ const resolvers = {
         const roles = user.roles.map(node => node.role.name).concat('user')
         const token = jwt.sign(
           {
-            userId: user.id,
+            id: user.id,
             'https://hasura.io/jwt/claims': {
               'x-hasura-allowed-roles': roles,
               'x-hasura-default-role': 'admin', // TODO: return highest role level

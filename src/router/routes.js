@@ -1,4 +1,4 @@
-import { getUserId } from '../plugins/auth'
+import { getUser } from '../plugins/auth'
 import { snakeCase } from 'lodash'
 const crudRoutes = (path, page, id = 'id') => {
   const resource = snakeCase(page)
@@ -85,7 +85,7 @@ const routes = [
         path: 'profile',
         component: () => import('pages/Profile.vue'),
         props: route => ({
-          id: getUserId()
+          id: getUser().id
         })
       },
       {
@@ -93,7 +93,7 @@ const routes = [
         component: () => import('pages/Profile.vue'),
         props: route => ({
           editFlag: true,
-          id: getUserId()
+          id: getUser().id
         }),
         meta: {
           withoutPreferredOrgUnit: true
