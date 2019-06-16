@@ -2,7 +2,7 @@
   q-page(padding class="justify-center")
     div(v-if="user.preferred_org_unit" v-t="{path: 'location.message', args: {location: user.preferred_org_unit.name}}")
     div(v-t="'location.select'")
-    q-list(link)
+    q-list(link v-if="authenticated")
       q-item(v-for="(item, key) in list" :key="key" tag="label")
         q-item-side
           q-radio(v-model="selection" :val="item.id")

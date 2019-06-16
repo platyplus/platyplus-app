@@ -74,28 +74,23 @@ export const isAuthenticated = () => {
 }
 
 export const getUser = () => {
+  const userId = getToken().id
+  if (!userId) return {}
   try {
-    const token = getToken()
-    const { user } = apolloClient.readQuery({
+    const data = apolloClient.readQuery({
       query: queries.user.profile,
-      variables: { where: { id: { _eq: token.id } } }
+      variables: { userId }
     })
-    return user[0]
+    return data.user[0]
   } catch (e) {
     return {}
   }
 }
 
 export const loadUser = async () => {
-  const user = getUser()
-  if (user.id) return user
-  const token = getToken()
-  if (!token.id) return {}
+  if (!getToken().id) return {}
   const { data } = await apolloClient.query({
-    query: queries.user.profile,
-    variables: {
-      where: { id: { _eq: user.id } }
-    }
+    query: queries.user.profile
   })
   return data.user[0]
 }
@@ -104,34 +99,22 @@ export default ({ app, router, store, Vue }) => {
   Vue.mixin({
     data () {
       return {
-        token: {},
         user: {}
       }
     },
     computed: {
       authenticated () {
-        return Boolean(this.user.id && this.token.id)
+        // TODO not working in the menu header
+        return Boolean(this.user.id)
       },
       anonymous () {
         return !this.authenticated
       }
     },
     apollo: {
-      token: {
-        query: TOKEN
-      },
       user: {
         query: queries.user.profile,
-        variables () {
-          return {
-            where: {
-              id: { _eq: this.token.id }
-            }
-          }
-        },
-        skip () {
-          return !this.token.id
-        },
+        skip: () => !getToken().id,
         update: data => data.user[0]
       }
     }

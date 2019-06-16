@@ -129,8 +129,11 @@ const queries = {
     ${fragments.base}
   `,
   profile: gql`
-    query user_profile($where: user_bool_exp) {
-      user(where: $where) {
+    query user_profile($userId: uuid) {
+      token @client {
+        id @export(as: "userId")
+      }
+      user(where: { id: { _eq: $userId } }) {
         ...user_full
       }
     }

@@ -49,7 +49,6 @@ function setDefaultState () {
       }
     }
   })
-  // console.log(cache)
 }
 setDefaultState()
 

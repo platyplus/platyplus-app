@@ -1,0 +1,15 @@
+- args:
+    cascade: false
+    sql: |
+      CREATE OR REPLACE VIEW public.hdb_permission_agg
+      AS SELECT hdb_permission.table_schema,
+          hdb_permission.table_name,
+          hdb_permission.role_name,
+          json_object_agg(hdb_permission.perm_type, hdb_permission.perm_def) AS permissions
+         FROM hdb_catalog.hdb_permission
+        GROUP BY hdb_permission.table_schema, hdb_permission.table_name, hdb_permission.role_name;
+  type: run_sql
+- args:
+    name: hdb_permission_agg
+    schema: public
+  type: add_existing_table_or_view

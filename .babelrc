@@ -7,30 +7,28 @@
         "loose": false,
         "useBuiltIns": "usage"
       }
-    ],
-    [
-      "@babel/preset-stage-2",
-      {
-        "modules": false,
-        "loose": false,
-        "useBuiltIns": true,
-        "decoratorsLegacy": true
-      }
     ]
   ],
   "plugins": [
     "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-syntax-dynamic-import",
     [
       "@babel/transform-runtime",
       {
-        "polyfill": false,
         "regenerator": false
       }
     ],
     [
       "wildcard",
       {
-        "exts": ["js", "es6", "es", "jsx", "javascript", "vue"],
+        "exts": [
+          "js",
+          "es6",
+          "es",
+          "jsx",
+          "javascript",
+          "vue"
+        ],
         "noModifyCase": true
       }
     ]
