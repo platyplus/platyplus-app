@@ -1,14 +1,17 @@
 <template lang="pug">
   q-page(v-if="authenticated" padding class="justify-center")
-    q-field(
+    q-input(
+      readonly
       icon="fas fa-user"
-      :label="$t('user.labels.username')")
-      div {{form.username}}
-    q-field(
+      :label="$t('user.labels.username')"
+      v-model="form.username")
+    q-input(
       v-if="reading"
-      icon="fas fa-calendar"
-      :label="$t('user.labels.created_at')")
-      div {{form.created_at | moment("DD/MM/YYYY HH:mm") }}
+      readonly
+      mask="date"
+      :label="$t('user.labels.created_at')"
+      v-model="form.created_at"
+      )
     q-input(
       icon="fas fa-user"
       :label="$t('user.labels.attributes.first_name')"
@@ -60,17 +63,15 @@
       :readonly="reading"
       v-model="form.preferred_org_unit_id"
       :options="preferredOrgUnitOptions")
-    q-field(
-      v-if="reading"
-      icon="fas fas fa-user-lock"
-      label="Role attributions")
-      q-list(
-        v-if="item.role_attributions.length"
-        highlight)
-        q-item(
-          v-for="role in item.role_attributions"
-          :to="'/user/'+item.id+'/attribution/'+role.id"
-          :key="role.id") {{ role.role.name }} in {{ role.org_unit.name }}
+      //- icon="fas fas fa-user-lock"
+      //- label="Role attributions"
+    q-list(
+      v-if="reading && item.role_attributions.length"
+      highlight)
+      q-item(
+        v-for="role in item.role_attributions"
+        :to="'/user/'+item.id+'/attribution/'+role.id"
+        :key="role.id") {{ role.role.name }} in {{ role.org_unit.name }}
     button-bar(
       :reading="reading"
       :details="details"
