@@ -9,7 +9,7 @@ module.exports = function (ctx) {
       'layout',
       'router',
       'auth',
-      // 'i18n',
+      'i18n',
       'inputs',
       'apollo',
       'hasura',
@@ -40,6 +40,7 @@ module.exports = function (ctx) {
         'QToolbar',
         'QToolbarTitle',
         'QBtn',
+        'QSelect',
         'QIcon',
         'QList',
         'QInput',
@@ -54,8 +55,8 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: ['Notify'],
 
-      iconSet: 'eva-icons'
-      // lang: 'en-uk' // Quasar language
+      iconSet: 'eva-icons',
+      lang: 'en-us' // Quasar language
     },
 
     supportIE: true,

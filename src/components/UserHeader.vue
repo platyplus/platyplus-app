@@ -1,15 +1,17 @@
 <template lang="pug">
   q-header
-      q-toolbar(color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'")
-        q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
-          q-icon(name="fas fa-bars")
-        q-toolbar-title PlatyPlus
-          div(slot="subtitle") TODO: CURRENT PAGE...
-        q-select(
-          hide-underline
-          :options="$locales"
-          v-model="$locale")
-        q-btn(v-if="authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
+    q-toolbar(color="primary")
+      q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
+        q-icon(name="fas fa-bars")
+      q-toolbar-title PlatyPlus
+        div(slot="subtitle") TODO: CURRENT PAGE...
+      q-select(
+        hide-underline
+        emit-value
+        map-options
+        :options="$locales"
+        v-model="$locale")
+      q-btn(v-if="authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
 </template>
 
 <script>

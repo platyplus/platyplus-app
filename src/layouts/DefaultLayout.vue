@@ -4,7 +4,7 @@
       user-header
       user-menu
     q-header(v-else)
-      q-toolbar(color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'")
+      q-toolbar(color="primary")
         q-toolbar-title Platyplus
     q-page-container
       router-view
@@ -15,7 +15,7 @@ export default {
   name: 'DefaultLayout',
   async created () {
     // TODO load local once authenticated / first arrival on the site?
-    if (this.user.id) this.$locale = this.user.locale
+    // if (this.user.id) this.$locale = this.user.locale
   },
   async destroy () {
     // TODO: remove the user-related apollo cache
