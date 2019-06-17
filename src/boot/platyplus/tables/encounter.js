@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import jexl from 'jexl'
-import { templateStringToExpression } from 'plugins/formGenerator'
+import { templateStringToExpression } from 'boot/formGenerator'
 import encounterType from './encounter_type'
 import orgUnit from './org_unit'
 import entity from './entity'

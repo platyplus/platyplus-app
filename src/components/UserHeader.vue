@@ -1,5 +1,5 @@
 <template lang="pug">
-  q-layout-header
+  q-header
       q-toolbar(color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'")
         q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
           q-icon(name="fas fa-bars")

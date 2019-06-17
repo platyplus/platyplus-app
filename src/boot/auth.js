@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
-import { apolloClient } from 'plugins/apollo'
-import { queries } from 'plugins/platyplus'
+import { apolloClient } from 'boot/apollo'
+import { queries } from 'boot/platyplus'
 import jwtDecode from 'jwt-decode'
 
 export const TOKEN = gql`
@@ -46,6 +46,7 @@ export const signin = async (username, password) => {
     }
   })
   await apolloClient.mutate({
+    // TODO return the user?
     mutation: gql`
       mutation updateProfile($token: String!) {
         updateToken(token: $token) @client

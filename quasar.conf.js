@@ -2,14 +2,14 @@
 
 module.exports = function (ctx) {
   return {
-    preFetch: true,
-    // app plugins (/src/plugins)
-    plugins: [
+    // app boot file (/src/boot)
+    // --> boot files are part of "main.js"
+    boot: [
       'abilities',
       'layout',
       'router',
       'auth',
-      'i18n',
+      // 'i18n',
       'inputs',
       'apollo',
       'hasura',
@@ -20,12 +20,44 @@ module.exports = function (ctx) {
     ],
     css: ['app.styl'],
     extras: [
-      ctx.theme.mat ? 'roboto-font' : null,
-      // 'material-icons' // optional, you are not bound to it
-      // 'ionicons',
-      // 'mdi',
-      'fontawesome'
+      'roboto-font',
+      'material-icons', // optional, you are not bound to it
+      // 'ionicons-v4',
+      // 'mdi-v3',
+      'fontawesome-v5'
+      // 'eva-icons'
     ],
+
+    framework: {
+      // all: true, // --- includes everything; for dev only!
+
+      components: [
+        'QLayout',
+        'QHeader',
+        'QDrawer',
+        'QPageContainer',
+        'QPage',
+        'QToolbar',
+        'QToolbarTitle',
+        'QBtn',
+        'QIcon',
+        'QList',
+        'QInput',
+        'QItem',
+        'QItemSection',
+        'QSeparator',
+        'QItemLabel'
+      ],
+
+      directives: ['Ripple'],
+
+      // Quasar plugins
+      plugins: ['Notify'],
+
+      iconSet: 'eva-icons'
+      // lang: 'en-uk' // Quasar language
+    },
+
     supportIE: true,
     build: {
       scopeHoisting: true,
@@ -53,65 +85,26 @@ module.exports = function (ctx) {
           test: /\.pug$/,
           loader: 'pug-plain-loader'
         })
-        cfg.module.rules.push({
-          test: /\.mjs$/,
-          include: /node_modules/,
-          type: 'javascript/auto'
-        })
       }
     },
+
     devServer: {
       public: '0.0.0.0:80',
       // https: true,
-      // port: 80,
+      // port: 8080,
       open: false // opens browser window automatically
     },
-    // framework: 'all' --- includes everything; for dev only!
-    framework: {
-      components: [
-        'QBtn',
-        'QDatetime',
-        'QField',
-        'QIcon',
-        'QInput',
-        'QItem',
-        'QItemMain',
-        'QItemSide',
-        'QItemTile',
-        'QLayout',
-        'QList',
-        'QListHeader',
-        'QLayoutHeader',
-        'QLayoutDrawer',
-        'QPageContainer',
-        'QPage',
-        'QRadio',
-        'QSelect',
-        'QTable',
-        'QTh',
-        'QTr',
-        'QTd',
-        'QTableColumns',
-        'QToolbar',
-        'QToggle',
-        'QToolbarTitle',
-        'QUploader'
-      ],
-      directives: ['Ripple'],
-      // Quasar plugins
-      plugins: ['Notify', 'Dialog', 'Cookies'],
-      // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-      iconSet: 'fontawesome',
-      i18n: 'en-uk' // Quasar language
-    },
-    // animations: 'all' --- includes all animations
+
+    // animations: 'all', // --- includes all animations
     animations: [],
+
     ssr: {
       pwa: false
     },
+
     pwa: {
       // workboxPluginMode: 'InjectManifest',
-      // workboxOptions: {},
+      // workboxOptions: {}, // only for NON InjectManifest
       manifest: {
         // name: 'Quasar App',
         // short_name: 'Quasar-PWA',
@@ -149,14 +142,20 @@ module.exports = function (ctx) {
         ]
       }
     },
+
     cordova: {
       // id: 'org.cordova.quasar.app'
+      // noIosLegacyBuildFlag: true // uncomment only if you know what you are doing
     },
+
     electron: {
       // bundler: 'builder', // or 'packager'
+
       extendWebpack (cfg) {
-        // do something with Electron process Webpack cfg
+        // do something with Electron main process Webpack cfg
+        // chainWebpack also available besides this extendWebpack
       },
+
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
         // OS X / Mac App Store
@@ -167,6 +166,7 @@ module.exports = function (ctx) {
         // Window only
         // win32metadata: { ... }
       },
+
       builder: {
         // https://www.electron.build/configuration/configuration
         // appId: 'quasar-app'

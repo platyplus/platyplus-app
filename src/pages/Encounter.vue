@@ -19,9 +19,9 @@
 </style>
 
 <script>
-import { mixin } from 'plugins/form'
-import { makeReadOnly, prepareForm } from 'plugins/formGenerator'
-import { queries } from 'plugins/platyplus'
+import { mixin } from 'boot/form'
+import { makeReadOnly, prepareForm } from 'boot/formGenerator'
+import { queries } from 'boot/platyplus'
 // TODO: on load, merge all data into one property, and then dispatch on save
 export default {
   name: 'PageEncounter',

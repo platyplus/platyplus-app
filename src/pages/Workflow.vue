@@ -9,14 +9,13 @@
           q-item(v-for="node in stage.encounter_types" :key="node.id" :to="'/org-unit/'+org_unit_id+'/stage/'+stage.id+'/encounter-type/'+node.encounter_type.id+'/create'") {{node.encounter_type.title_create}}
     div(v-else)
       div(v-if="details")
-        q-field(
+        q-input(
           icon="fas fa-tag"
-          label="Name")
-          q-input(
-            :readonly="reading"
-            v-model="form.name"
-            ref="firstInput"
-            @keyup.enter="save")
+          label="Name"
+          :readonly="reading"
+          v-model="form.name"
+          ref="firstInput"
+          @keyup.enter="save")
         q-field(
           v-if="reading"
           icon="fas fa-play"
@@ -29,17 +28,16 @@
               :to="'/workflow/'+item.id+'/stage/'+stage.id"
               :key="stage.id") {{ stage.name }}
           q-btn(label="Create stage" :to="'/workflow/'+item.id+'/stage/create'")
-        q-field(
+        q-select(
           icon="fas fa-sitemap"
           label="Available in"
-          helper="")
-          q-select(
-            :readonly="reading"
-            filter
-            multiple
-            chips
-            v-model="relations.org_units"
-            :options="options('org_units')")
+          helper=""
+          :readonly="reading"
+          filter
+          multiple
+          chips
+          v-model="relations.org_units"
+          :options="options('org_units')")
       q-list(
         v-else-if="list.length"
         highlight)
@@ -54,7 +52,7 @@
 </style>
 
 <script>
-import { mixin } from 'plugins/form'
+import { mixin } from 'boot/form'
 
 export default {
   name: 'PageWorkflow',

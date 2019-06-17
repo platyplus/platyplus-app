@@ -1,18 +1,12 @@
-<template lang="pug">
-  div(id="q-app")
-    router-view
+<template>
+  <div id="q-app">
+    <router-view />
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
-  async preFetch ({
-    store,
-    currentRoute,
-    previousRoute,
-    redirect,
-    ssrContext
-  }) {}
+  name: 'App'
 }
 </script>
 

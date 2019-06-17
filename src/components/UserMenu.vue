@@ -1,48 +1,64 @@
 <template lang="pug">
-  q-layout-drawer(v-model="drawer" :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null")
+  q-drawer(v-model="drawer" side="left" bordered)
     q-list(no-border link inset-delimiter)
-      q-list-header Main
+      q-item-label(header) Main
       q-item(to="/" :exact="true")
-        q-item-side(icon="fas fa-home")
-        q-item-main(label="Home")
+        q-item-section(avatar)
+          q-icon(name="fas fa-home")
+        q-item-section Home
       q-item(to="/profile")
-        q-item-side(icon="fas fa-user-circle")
-        q-item-main(label="Profile")
+        q-item-section(avatar)
+         q-icon(name="fas fa-user-circle")
+        q-item-section Profile
       template(v-if="user.preferred_org_unit")
-        q-list-header {{ user.preferred_org_unit && user.preferred_org_unit.name }}
+        q-separator(spaced)
+        q-item-label(header) {{ user.preferred_org_unit && user.preferred_org_unit.name }}
         q-item(v-for="node in user.preferred_org_unit.workflows" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/workflow/' + node.workflow.id")
-          q-item-side(icon="fas fa-route")
-          q-item-main {{node.workflow.name}}
+          q-item-section(avatar)
+           q-icon(name="fas fa-route")
+          q-item-section {{node.workflow.name}}
         q-item(v-for="node in user.preferred_org_unit.isolated_encounter_types" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/encounter-type/' + node.encounter_type.id")
-          q-item-side(icon="fas fa-table")
-          q-item-main {{node.encounter_type.name}}
-      q-list-header Configuration
+          q-item-section(avatar)
+           q-icon(name="fas fa-table")
+          q-item-section {{node.encounter_type.name}}
+      q-separator(spaced)
+      q-item-label(header) Configuration
       q-item(to="/org-unit")
-        q-item-side(icon="fas fa-sitemap")
-        q-item-main(label="Organisation")
+        q-item-section(avatar)
+          q-icon(name="fas fa-sitemap")
+        q-item-section Organisation
       q-item(to="/role")
-        q-item-side(icon="fas fa-user-lock")
-        q-item-main(label="Roles")
+        q-item-section(avatar)
+          q-icon(name="fas fa-user-lock")
+        q-item-section Roles
       q-item(to="/user")
-        q-item-side(icon="fas fa-users")
-        q-item-main(label="Users")
+        q-item-section(avatar)
+          q-icon(name="fas fa-users")
+        q-item-section Users
       q-item(to="/workflow")
-        q-item-side(icon="fas fa-route")
-        q-item-main(label="Workflows")
+        q-item-section(avatar)
+          q-icon(name="fas fa-route")
+        q-item-section Workflows
       q-item(to="/encounter-type")
-        q-item-side(icon="fas fa-comments")
-        q-item-main(label="Encounter Types")
-      q-list-header Metadata
+        q-item-section(avatar)
+          q-icon(name="fas fa-comments")
+        q-item-section Encounter Types
+      q-separator(spaced)
+      q-item-label(header) Metadata
       q-item(to="/org-unit-type")
-        q-item-side(icon="fas fa-sitemap")
-        q-item-main(label="Org Unit Types")
+        q-item-section(avatar)
+          q-icon(name="fas fa-sitemap")
+        q-item-section Org Unit Types
       q-item(to="/entity-type")
-        q-item-side(icon="fas fa-heartbeat")
-        q-item-main(label="Entity Types")
-      q-list-header Administration
+        q-item-section(avatar)
+          q-icon(name="fas fa-heartbeat")
+        q-item-section Entity Types
+      q-separator(spaced)
+      q-item-label(header) Administration
       q-item(to="/import-export")
-        q-item-side(icon="fas fa-sync")
-        q-item-main(label="Import/Export")
+        q-item-section(avatar)
+          q-icon(name="fas fas fa-sync")
+        q-item-section Import/Export
 </template>
 
 <script>

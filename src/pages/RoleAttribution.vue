@@ -1,30 +1,27 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-field(
-        label="User")
-        q-select(
-          :readonly="reading || Boolean(user_id)"
-          clearable
-          filter
-          v-model="form.user_id"
-          :options="options('user')")
-      q-field(
-        label="Role")
-        q-select(
-          :readonly="reading || Boolean(role_id)"
-          clearable
-          filter
-          v-model="form.role_id"
-          :options="options('role')")
-      q-field(
-        label="Org Unit")
-        q-select(
-          :readonly="reading || Boolean(org_unit_id)"
-          clearable
-          filter
-          v-model="form.org_unit_id"
-          :options="options('org_unit')")
+      q-select(
+        label="User"
+        :readonly="reading || Boolean(user_id)"
+        clearable
+        filter
+        v-model="form.user_id"
+        :options="options('user')")
+      q-select(
+        label="Role"
+        :readonly="reading || Boolean(role_id)"
+        clearable
+        filter
+        v-model="form.role_id"
+        :options="options('role')")
+      q-select(
+        label="Org Unit"
+        :readonly="reading || Boolean(org_unit_id)"
+        clearable
+        filter
+        v-model="form.org_unit_id"
+        :options="options('org_unit')")
     q-list(
       v-else-if="list.length"
       highlight)
@@ -39,7 +36,7 @@
 </style>
 
 <script>
-import { mixin } from 'plugins/form'
+import { mixin } from 'boot/form'
 
 export default {
   name: 'PageRoleAttribution',

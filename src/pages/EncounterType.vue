@@ -1,34 +1,28 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-field(
-        label="Name")
-        q-input(
-          :readonly="reading"
-          v-model="form.name"
-          ref="firstInput"
-          @keyup.enter="save")
-      q-field(
-        label="Creation title")
-        q-input(
-          :readonly="reading"
-          v-model="form.title_create"
-          ref="firstInput")
-      q-field(
+      q-input(
+        label="Name"
+        :readonly="reading"
+        v-model="form.name"
+        ref="firstInput"
+        @keyup.enter="save")
+      q-input(
+        label="Creation title"
+        :readonly="reading"
+        v-model="form.title_create"
+        ref="firstInput")
+      q-select(
         label="Isolated uses"
-        helper="")
-        q-select(
-          :readonly="reading"
-          filter
-          multiple
-          chips
-          v-model="relations.isolated_uses"
-          :options="options('isolated_uses')")
-      q-field(label="Entity type" helper="Pick an entity type")
-        q-select(:readonly="reading" clearable v-model="form.entity_type_id" :options="options('entity_type')")
-      q-field(
-        label="Encounter schema")
-        json-input(v-model="form.encounter_schema" :readonly="reading")
+        helper=""
+        :readonly="reading"
+        filter
+        multiple
+        chips
+        v-model="relations.isolated_uses"
+        :options="options('isolated_uses')")
+      q-select(label="Entity type" helper="Pick an entity type" :readonly="reading" clearable v-model="form.entity_type_id" :options="options('entity_type')")
+      json-input(label="Encounter schema" v-model="form.encounter_schema" :readonly="reading")
     q-list(
       v-else-if="list.length"
       highlight)
@@ -45,7 +39,7 @@
 </style>
 
 <script>
-import { mixin } from 'plugins/form'
+import { mixin } from 'boot/form'
 export default {
   name: 'PageEncounterType',
   mixins: [mixin('encounter_type')],

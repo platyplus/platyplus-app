@@ -1,33 +1,30 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-field(
-        label="Name")
-        q-input(
-          :readonly="reading"
-          v-model="form.name"
-          ref="firstInput"
-          @keyup.enter="save")
-      q-field(
+      q-input(
+        label="Name"
+        :readonly="reading"
+        v-model="form.name"
+        ref="firstInput"
+        @keyup.enter="save")
+      q-select(
         label="Possible direct parents"
-        helper="Pick org unit types")
-        q-select(
-          :readonly="reading"
-          filter
-          multiple
-          chips
-          v-model="relations.from"
-          :options="options('from')")
-      q-field(
+        helper="Pick org unit types"
+        :readonly="reading"
+        filter
+        multiple
+        chips
+        v-model="relations.from"
+        :options="options('from')")
+      q-select(
         label="Possible direct children"
-        helper="Pick org unit types")
-        q-select(
-          :readonly="reading"
-          filter
-          multiple
-          chips
-          v-model="relations.to"
-          :options="options('to')")
+        helper="Pick org unit types"
+        :readonly="reading"
+        filter
+        multiple
+        chips
+        v-model="relations.to"
+        :options="options('to')")
     q-list(
       v-else-if="list.length"
       highlight)
@@ -42,7 +39,7 @@
 </style>
 
 <script>
-import { mixin } from 'plugins/form'
+import { mixin } from 'boot/form'
 
 export default {
   name: 'PageOrgUnitType',

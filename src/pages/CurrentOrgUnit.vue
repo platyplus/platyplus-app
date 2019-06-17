@@ -6,7 +6,7 @@
       q-item(v-for="(item, key) in list" :key="key" tag="label")
         q-item-side
           q-radio(v-model="selection" :val="item.id")
-        q-item-main
+        q-item-section
           q-item-tile(label) {{item.name}}
     q-btn(@click='selectOrgUnit' v-t="'select'")
 </template>
@@ -15,8 +15,8 @@
 </style>
 
 <script>
-import { getUser } from 'plugins/auth'
-import { upsertMutation } from 'plugins/hasura'
+import { getUser } from 'boot/auth'
+import { upsertMutation } from 'boot/hasura'
 export default {
   name: 'PageCurrentOrgUnit',
   data: () => ({

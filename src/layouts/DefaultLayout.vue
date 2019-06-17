@@ -3,7 +3,7 @@
     template(v-if="authenticated")
       user-header
       user-menu
-    q-layout-header(v-else)
+    q-header(v-else)
       q-toolbar(color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'")
         q-toolbar-title Platyplus
     q-page-container

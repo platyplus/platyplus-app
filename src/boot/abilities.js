@@ -1,6 +1,6 @@
 import { abilitiesPlugin } from '@casl/vue'
 import { AbilityBuilder, Ability } from '@casl/ability'
-import { loadUser, isAuthenticated } from 'plugins/auth'
+import { loadUser, isAuthenticated } from 'boot/auth'
 
 export default async ({ app, router, store, Vue }) => {
   Vue.use(abilitiesPlugin)

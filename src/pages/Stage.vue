@@ -32,7 +32,7 @@
 </style>
 
 <script>
-import { mixin } from 'plugins/form'
+import { mixin } from 'boot/form'
 // TODO: next/previous: bug when removing reference to self
 export default {
   name: 'PageOrgUnit',

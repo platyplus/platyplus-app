@@ -1,4 +1,4 @@
-import { getUser } from '../plugins/auth'
+import { getUser } from '../boot/auth'
 import { snakeCase } from 'lodash'
 const crudRoutes = (path, page, id = 'id') => {
   const resource = snakeCase(page)

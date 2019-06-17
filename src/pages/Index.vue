@@ -8,8 +8,8 @@
       v-if="user.org_unit_memberships.length > 1"
       highlight)
       q-item(to="/profile/current-org-unit" :exact="true")
-        q-item-side(icon="fas fa-location-arrow")
-        q-item-main(v-t="'location.change'")
+        q-item-section(avatar icon="fas fa-location-arrow")
+        q-item-section(v-t="'location.change'")
 
 </template>
 

@@ -3,8 +3,7 @@
     div(v-if="details")
       q-field(label="Name")
         q-input(:readonly="reading" v-model="form.name" ref="firstInput" @keyup.enter="save")
-      q-field(label="Parent org unit" helper="Pick an org unit")
-        q-select(:readonly="reading || Boolean(parent_id)" clearable filter v-model="form.parent_id" :options="options('parent')")
+      q-select(label="Parent org unit" helper="Pick an org unit" :readonly="reading || Boolean(parent_id)" clearable filter v-model="form.parent_id" :options="options('parent')")
       q-field(
         v-if="reading && item.children"
         label="Children")
@@ -16,8 +15,7 @@
             :to="'/org-unit/'+item.id"
             :key="item.id") {{ item.name }}
         q-btn(label="Create child" :to="'/org-unit/'+item.id+'/create'")
-      q-field(label="Type" helper="Pick an org unit type")
-        q-select(:readonly="reading" clearable v-model="form.type_id" :options="options('type')")
+      q-select(label="Type" helper="Pick an org unit type" :readonly="reading" clearable v-model="form.type_id" :options="options('type')")
       q-field(
         v-if="reading"
         label="Role attributions")
@@ -29,17 +27,16 @@
             :to="'/org-unit/'+item.id+'/attribution/'+role.id"
             :key="role.id") {{ role.user.username }} as {{ role.role.name }}
         q-btn(label="Create role attribution" :to="'/org-unit/'+item.id+'/attribution/create'")
-      q-field(
+      q-select(
         icon="fas fa-route"
         label="Available workflows"
-        helper="")
-        q-select(
-          :readonly="reading"
-          filter
-          multiple
-          chips
-          v-model="relations.workflows"
-          :options="options('workflows')")
+        helper=""
+        :readonly="reading"
+        filter
+        multiple
+        chips
+        v-model="relations.workflows"
+        :options="options('workflows')")
     q-list(v-else-if="children.length" highlight)
       q-item(v-for="item in children" :to="'/org-unit/'+item.id" :key="item.id") {{ item.name }}
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
@@ -49,7 +46,7 @@
 </style>
 
 <script>
-import { mixin } from 'plugins/form'
+import { mixin } from 'boot/form'
 
 export default {
   name: 'PageOrgUnit',

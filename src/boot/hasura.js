@@ -1,7 +1,7 @@
 /**
  * Methods to manipulate data exposed through a Hasura GraphQL endpoint
  */
-import { mutations, settings } from 'plugins/platyplus'
+import { mutations, settings } from 'boot/platyplus'
 
 /**
  * Filters the atributes in the data according to the definitions of the mutation

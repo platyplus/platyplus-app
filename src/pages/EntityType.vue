@@ -1,13 +1,12 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-field(
-        label="Name")
-        q-input(
-          :readonly="reading"
-          v-model="form.name"
-          ref="firstInput"
-          @keyup.enter="save")
+      q-input(
+        label="Name"
+        :readonly="reading"
+        v-model="form.name"
+        ref="firstInput"
+        @keyup.enter="save")
       q-field(
         v-if="reading"
         label="Encounter types")
@@ -33,7 +32,7 @@
 </style>
 
 <script>
-import { mixin } from 'plugins/form'
+import { mixin } from 'boot/form'
 
 export default {
   name: 'PageEntityType',

@@ -25,9 +25,10 @@ services:
       - ./yarn.lock:/app/yarn.lock
       - ./quasar.conf.js:/app/quasar.conf.js
       - ./.quasar:/app/.quasar
-      - ./.babelrc:/app/.babelrc
+      - ./babel.config.js:/app/babel.config.js
       - ./.eslintrc:/app/.eslintrc
       - ./.postcssrc:/app/.postcssrc
+      - notused_app:/app/node_modules
   authentication:
     build:
       context: ./services/authentication
@@ -106,5 +107,6 @@ services:
     restart: always
 volumes:
   configuration:
+  notused_app:
   notused_auth:
   notused_functions:
