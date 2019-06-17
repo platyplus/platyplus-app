@@ -195,7 +195,7 @@ export const mixin = (table, settings = {}) => {
         skip () {
           return !this.id
         },
-        update: data => data[Object.keys(data)[0]]?.[0]
+        update: data => data[table][0]
       },
       ...(settings.options
         ? Object.keys(settings.options)
@@ -238,6 +238,9 @@ export const mixin = (table, settings = {}) => {
           return aggr
         }, {})
         : {})
+    },
+    $_veeValidate: { // TODO https://github.com/baianat/vee-validate/issues/1980
+      validator: 'new'
     }
   }
 }
@@ -253,7 +256,7 @@ const veeValidateConfig = {
   fieldsBagName: 'fields',
   i18n: null, // TODO: the vue-i18n plugin instance
   i18nRootKey: 'validations', // the nested key under which the validation messages will be located
-  inject: true,
+  inject: false, // TODO https://github.com/baianat/vee-validate/issues/1980
   locale: 'en-uk',
   validity: false
 }

@@ -15,7 +15,6 @@
 </style>
 
 <script>
-// import { updateMutation } from 'plugins/hasura'
 import { getUser } from 'plugins/auth'
 import { upsertMutation } from 'plugins/hasura'
 export default {

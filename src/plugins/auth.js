@@ -99,23 +99,26 @@ export default ({ app, router, store, Vue }) => {
   Vue.mixin({
     data () {
       return {
-        user: {}
+        user: {},
+        token: {}
       }
     },
     computed: {
       authenticated () {
-        // TODO not working in the menu header
         return Boolean(this.user.id)
-      },
-      anonymous () {
-        return !this.authenticated
       }
     },
     apollo: {
       user: {
         query: queries.user.profile,
-        skip: () => !getToken().id,
-        update: data => data.user[0]
+        skip () {
+          return !this.token.id
+        },
+        update: ({ user }) => user[0]
+      },
+      token: {
+        query: TOKEN,
+        update: ({ token }) => token
       }
     }
   })
