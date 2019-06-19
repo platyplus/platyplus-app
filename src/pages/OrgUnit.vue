@@ -58,7 +58,7 @@
         :readonly="reading"
         filter
         multiple
-        chips
+        use-chips
         v-model="relations.workflows"
         :options="options('workflows')")
     q-list(v-else-if="children.length" highlight)

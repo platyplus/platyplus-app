@@ -18,7 +18,7 @@
         :readonly="reading"
         filter
         multiple
-        chips
+        use-chips
         v-model="relations.isolated_uses"
         :options="options('isolated_uses')")
       q-select(label="Entity type" helper="Pick an entity type" :readonly="reading" clearable v-model="form.entity_type_id" :options="options('entity_type')")
@@ -26,8 +26,8 @@
     q-list(
       v-else-if="list.length"
       highlight)
-      div(v-for="category, label in listByType")
-        q-list-header {{label}}
+      template(v-for="category, label in listByType")
+        q-item-label(header) {{label}}
         q-item(
           v-for="item in category"
           :to="'/encounter-type/'+item.id"

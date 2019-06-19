@@ -35,6 +35,7 @@ module.exports = function (ctx) {
         'QAvatar',
         'QLayout',
         'QHeader',
+        'QChip',
         'QCard',
         'QCardActions',
         'QCardSection',
@@ -55,6 +56,7 @@ module.exports = function (ctx) {
         'QItem',
         'QItemSection',
         'QSeparator',
+        'QToggle',
         'QItemLabel'
       ],
 

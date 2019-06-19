@@ -13,7 +13,10 @@
         :readonly="reading"
         filter
         multiple
-        chips
+        use-chips
+        stack-label
+        emit-value
+        map-options
         v-model="relations.from"
         :options="options('from')")
       q-select(
@@ -22,7 +25,10 @@
         :readonly="reading"
         filter
         multiple
-        chips
+        use-chips
+        stack-label
+        emit-value
+        map-options
         v-model="relations.to"
         :options="options('to')")
     q-list(

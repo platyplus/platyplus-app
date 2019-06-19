@@ -13,34 +13,44 @@
       q-select(
         icon="fas fa-user-lock"
         label="Global roles"
+        stack-label
+        emit-value
+        map-options
         :readonly="reading"
         filter
         multiple
-        chips
+        use-chips
         v-model="relations.roles"
         :options="options('roles')")
       q-select(
         icon="fas fa-sitemap"
         :label="$t('user.labels.org_unit_memberships')"
         :helper="$t('user.helpers.org_unit_memberships')"
+        stack-label
+        emit-value
+        map-options
         :readonly="reading"
         filter
         multiple
-        chips
+        use-chips
         v-model="relations.org_unit_memberships"
         :options="options('org_unit_memberships')")
       q-field(
         v-if="reading"
-        icon="fas fa-user-lock"
-        label="Role attributions")
-        q-list(
-          v-if="item.role_attributions.length"
-          highlight)
-          q-item(
-            v-for="role in item.role_attributions"
-            :to="'/user/'+item.id+'/attribution/'+role.id"
-            :key="role.id") {{ role.role.name }} in {{ role.org_unit.name }}
-        q-btn(label="Create role attribution" :to="'/user/'+item.id+'/attribution/create'")
+        label="Role attributions"
+        stack-label)
+        template(v-slot:control)
+          q-list(
+            class="col-12"
+            highlight)
+            q-item(
+              v-for="role in item.role_attributions"
+              :to="'/user/'+item.id+'/attribution/'+role.id"
+              :key="role.id") {{ role.role.name }} in {{ role.org_unit.name }}
+            q-item(:to="'/user/'+item.id+'/attribution/create'")
+              q-item-section(avatar)
+                q-icon(name="fas fa-plus")
+              q-item-section Create role attribution
     q-list(
       v-else-if="list.length"
       highlight)

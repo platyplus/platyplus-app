@@ -9,7 +9,7 @@
         @keyup.enter="save")
       q-toggle(
         label="Global"
-        :readonly="reading"
+        :disable="reading"
         v-model="form.global")
       q-field(
         v-if="reading"

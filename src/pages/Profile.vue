@@ -36,7 +36,7 @@
       readonly
       filter
       multiple
-      chips
+      use-chips
       emit-value
       map-options
       v-model="relations.roles"
@@ -57,7 +57,7 @@
       readonly
       filter
       multiple
-      chips
+      use-chips
       emit-value
       map-options
       v-model="relations.org_unit_memberships"

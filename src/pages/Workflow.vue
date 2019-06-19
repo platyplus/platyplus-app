@@ -18,16 +18,20 @@
           @keyup.enter="save")
         q-field(
           v-if="reading"
-          icon="fas fa-play"
-          label="Stages")
-          q-list(
-            v-if="item.stages.length"
-            highlight)
-            q-item(
-              v-for="stage in item.stages"
-              :to="'/workflow/'+item.id+'/stage/'+stage.id"
-              :key="stage.id") {{ stage.name }}
-          q-btn(label="Create stage" :to="'/workflow/'+item.id+'/stage/create'")
+          label="Stages"
+          stack-label)
+          template(v-slot:control)
+            q-list(
+              class="col-12"
+              highlight)
+              q-item(
+                v-for="stage in item.stages"
+                :to="'/workflow/'+item.id+'/stage/'+stage.id"
+                :key="stage.id") {{ stage.name }}
+              q-item(:to="'/workflow/'+item.id+'/stage/create'")
+                q-item-section(avatar)
+                  q-icon(name="fas fa-plus")
+                q-item-section Create stage
         q-select(
           icon="fas fa-sitemap"
           label="Available in"
@@ -35,7 +39,7 @@
           :readonly="reading"
           filter
           multiple
-          chips
+          use-chips
           v-model="relations.org_units"
           :options="options('org_units')")
       q-list(
