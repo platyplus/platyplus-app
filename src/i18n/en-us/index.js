@@ -18,7 +18,6 @@ export default {
   },
   language: 'Language',
   logout: {
-    title: 'Signing out',
     message: 'Are you sure to want to sign out?'
   },
   user: {

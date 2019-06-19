@@ -121,6 +121,14 @@ export default ({ app, router, store, Vue }) => {
         query: TOKEN,
         update: ({ token }) => token
       }
+    },
+    watch: {
+      // TODO somehow the user is not updated when the cache is reset
+      token (newValue) {
+        if (newValue.id === null) {
+          this.user = {}
+        }
+      }
     }
   })
 }

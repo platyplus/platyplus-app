@@ -11,37 +11,37 @@
         map-options
         :options="$locales"
         v-model="$locale")
-      q-btn(v-if="authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
+      q-btn(v-if="authenticated" flat dense round icon="fas fa-sign-out-alt" @click="dialog = true")
+      q-dialog(v-model="dialog" persistent)
+        q-card
+          q-card-section(class="row items-center")
+            q-avatar(icon="signal_wifi_off" color="primary" text-color="white")
+            span(class="q-ml-sm") {{ $t('logout.message') }}
+          q-card-actions(align="right")
+            q-btn(flat :label="$t('no')" color="primary" v-close-popup)
+            q-btn(flat :label="$t('yes')" color="primary" @click="logout")
 </template>
 
 <script>
 export default {
   name: 'UserHeader',
+  data: function () {
+    return { dialog: false }
+  },
   methods: {
     toggleDrawer () {
       this.$store.dispatch('navigation/toggleDrawer')
     },
-    async logout (e) {
+    async logout () {
       try {
-        await this.$q.dialog({
-          title: this.$t('logout.title'),
-          message: this.$t('logout.message'),
-          // color: 'warning',
-          ok: this.$t('yes'),
-          cancel: this.$t('no')
-        })
-        // TODO: workaround to WriteToStore: Missing field token in {}
-        // this.$apolloProvider.defaultClient.resetStore()
-        // Try to stop using token.id -> token.userId instead
-        this.$apolloProvider.defaultClient.cache.writeData({
-          data: {
-            __typename: 'token',
-            id: null,
-            decoded: null
-          }
-        })
-        this.$router.replace('/public')
-      } catch (error) {}
+        await this.$apolloProvider.defaultClient.resetStore()
+      } catch (e) {
+        // TODO Error: Network error: Cannot read property 'token' of undefined
+        //  at new ApolloError (bundle.esm.js:63)
+        //  at bundle.esm.js:1155
+      }
+      this.dialog = false
+      this.$router.replace('/public')
     }
   }
 }

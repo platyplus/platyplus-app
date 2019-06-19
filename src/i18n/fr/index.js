@@ -18,7 +18,6 @@ export default {
   },
   language: 'Langue',
   logout: {
-    title: 'Déconnexion',
     message: 'Êtes-vous sûr de vouloir vous déconnecter?'
   },
   user: {
