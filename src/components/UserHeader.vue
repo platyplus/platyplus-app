@@ -4,7 +4,6 @@
       q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
         q-icon(name="fas fa-bars")
       q-toolbar-title PlatyPlus
-        div(slot="subtitle") TODO: CURRENT PAGE...
       q-select(
         hide-underline
         emit-value
