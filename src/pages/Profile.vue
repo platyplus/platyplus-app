@@ -37,6 +37,8 @@
       filter
       multiple
       chips
+      emit-value
+      map-options
       v-model="relations.roles"
       :options="options('roles')")
     q-select(
@@ -44,6 +46,8 @@
       :label="$t('language')"
       :readonly="reading"
       :options="$locales"
+      emit-value
+      map-options
       v-model="form.locale")
     q-select(
       v-if="reading"
@@ -54,6 +58,8 @@
       filter
       multiple
       chips
+      emit-value
+      map-options
       v-model="relations.org_unit_memberships"
       :options="options('org_unit_memberships')")
     q-select(
@@ -61,10 +67,10 @@
       :label="$t('user.labels.preferred_org_unit')"
       :helper="$t('user.labels.preferred_org_unit')"
       :readonly="reading"
+      emit-value
+      map-options
       v-model="form.preferred_org_unit_id"
       :options="preferredOrgUnitOptions")
-      //- icon="fas fas fa-user-lock"
-      //- label="Role attributions"
     q-list(
       v-if="reading && item.role_attributions.length"
       highlight)
