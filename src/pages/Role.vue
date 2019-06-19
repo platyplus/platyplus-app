@@ -13,15 +13,20 @@
         v-model="form.global")
       q-field(
         v-if="reading"
-        label="Role attributions")
-        q-list(
-          v-if="item.role_attributions.length"
-          highlight)
-          q-item(
-            v-for="role in item.role_attributions"
-            :to="'/role/'+item.id+'/attribution/'+role.id"
-            :key="role.id") {{ role.user.username }} in {{ role.org_unit.name }}
-        q-btn(label="Create role attribution" :to="'/role/'+item.id+'/attribution/create'")
+        label="Role attributions"
+        stack-label)
+        template(v-slot:control)
+          q-list(
+            class="col-12"
+            highlight)
+            q-item(
+              v-for="role in item.role_attributions"
+              :to="'/role/'+item.id+'/attribution/'+role.id"
+              :key="role.id") {{ role.user.username }} in {{ role.org_unit.name }}
+            q-item(:to="'/role/'+item.id+'/attribution/create'")
+              q-item-section(avatar)
+                q-icon(name="fas fa-plus")
+              q-item-section Create role attribution
     q-list(
       v-else-if="list.length"
       highlight)

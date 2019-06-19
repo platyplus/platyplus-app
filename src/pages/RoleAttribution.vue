@@ -3,6 +3,9 @@
     div(v-if="details")
       q-select(
         label="User"
+        stack-label
+        emit-value
+        map-options
         :readonly="reading || Boolean(user_id)"
         clearable
         filter
@@ -10,6 +13,9 @@
         :options="options('user')")
       q-select(
         label="Role"
+        stack-label
+        emit-value
+        map-options
         :readonly="reading || Boolean(role_id)"
         clearable
         filter
@@ -17,6 +23,9 @@
         :options="options('role')")
       q-select(
         label="Org Unit"
+        stack-label
+        emit-value
+        map-options
         :readonly="reading || Boolean(org_unit_id)"
         clearable
         filter
