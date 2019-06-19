@@ -7,7 +7,7 @@ set -e
 # change npm verbosity
 export npm_config_loglevel=error
 # Install depedencies
-npm install
+yarn
 
 # build the docs
 npm run docs:build
@@ -23,7 +23,7 @@ cp -r ../docs/.vuepress/dist/* ./
 git add .
 
 # Deploy to github pages
-git commit -m 'deploy'
+git commit -m 'deploy documentation'
 git push https://$GH_USER:$GH_TOKEN@github.com/platyplus/platyplus.github.io.git master
 cd -
 
