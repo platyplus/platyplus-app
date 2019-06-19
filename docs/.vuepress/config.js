@@ -55,9 +55,16 @@ module.exports = {
         sidebar: ['/fr/', '/fr/guide/', '/fr/developpers/']
       }
     }
+    // algolia: {
+    //   apiKey: '<API_KEY>',
+    //   indexName: '<INDEX_NAME>'
+    // }
   },
   plugins: [
     '@vuepress/pwa',
+    '@vuepress/active-header-links',
+    '@vuepress/back-to-top',
+    '@vuepress/nprogress',
     [
       '@vuepress/google-analytics',
       {

@@ -1086,11 +1086,23 @@
     markdown-it-table-of-contents "^0.4.0"
     prismjs "^1.13.0"
 
+"@vuepress/plugin-active-header-links@^1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@vuepress/plugin-active-header-links/-/plugin-active-header-links-1.0.0-rc.1.tgz#46dc6f2efe6aef10c36f870e02b6d7af473de0cc"
+  dependencies:
+    lodash.throttle "^4.1.1"
+
 "@vuepress/plugin-active-header-links@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-active-header-links/-/plugin-active-header-links-1.0.1.tgz#b4f75932620e3c043684c1af9dbb3d17eb76a2f4"
   dependencies:
     lodash.throttle "^4.1.1"
+
+"@vuepress/plugin-back-to-top@^1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@vuepress/plugin-back-to-top/-/plugin-back-to-top-1.0.0-rc.1.tgz#91fb693f3c7d7a9d8019842bb061ad756445e4ca"
+  dependencies:
+    lodash.debounce "^4.0.8"
 
 "@vuepress/plugin-google-analytics@^1.0.1":
   version "1.0.1"
@@ -1101,6 +1113,12 @@
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-last-updated/-/plugin-last-updated-1.0.1.tgz#227708b861939754d3c607d487dabc5b3d30a010"
   dependencies:
     cross-spawn "^6.0.5"
+
+"@vuepress/plugin-nprogress@^1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@vuepress/plugin-nprogress/-/plugin-nprogress-1.0.0-rc.1.tgz#1e5a07ce11d72d512afa2311f10043d1a0060f46"
+  dependencies:
+    nprogress "^0.2.0"
 
 "@vuepress/plugin-nprogress@^1.0.1":
   version "1.0.1"
@@ -4959,7 +4977,7 @@ lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
 
-lodash.debounce@4.0.8:
+lodash.debounce@4.0.8, lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
