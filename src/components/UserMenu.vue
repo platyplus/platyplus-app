@@ -9,7 +9,7 @@
       q-item(to="/profile")
         q-item-section(avatar)
          q-icon(name="fas fa-user-circle")
-        q-item-section Profile
+        q-item-section {{$t('user.profile.title')}}
       template(v-if="user.preferred_org_unit")
         q-separator(spaced)
         q-item-label(header) {{ user.preferred_org_unit && user.preferred_org_unit.name }}

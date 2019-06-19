@@ -35,6 +35,9 @@ export default {
     helpers: {
       org_unit_memberships: 'Choisir des emplacements',
       preferred_org_unit: 'Choisir un emplacement'
+    },
+    profile: {
+      title: 'Profil'
     }
   }
 }

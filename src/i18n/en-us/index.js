@@ -35,6 +35,9 @@ export default {
     helpers: {
       org_unit_memberships: 'Pick org units',
       preferred_org_unit: 'Pick an org unit'
+    },
+    profile: {
+      title: 'Profile'
     }
   }
 }
