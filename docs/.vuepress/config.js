@@ -55,5 +55,14 @@ module.exports = {
         sidebar: ['/fr/', '/fr/guide/', '/fr/developpers/']
       }
     }
-  }
+  },
+  plugins: [
+    '@vuepress/pwa',
+    [
+      '@vuepress/google-analytics',
+      {
+        ga: 'UA-142387636-1'
+      }
+    ]
+  ]
 }
