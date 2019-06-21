@@ -25,7 +25,7 @@
 <script>
 export default {
   name: 'ButtonBar',
-  props: ['details', 'reading', 'disableSave'],
+  props: ['details', 'reading', 'disableSave', 'deletionConfirmed'],
   data: function () {
     return { deleteDialog: false, deleteDialogOk: false }
   },
@@ -48,7 +48,6 @@ export default {
     remove () {
       this.$emit('remove')
       this.deleteDialog = false
-      this.deleteDialogOk = true // TODO will show 'confirmed' even if the deletion failed
     }
   },
   computed: {
@@ -72,6 +71,11 @@ export default {
     },
     isSaveDisabled () {
       return Boolean(this.disableSave)
+    }
+  },
+  watch: {
+    deletionConfirmed (newValue) {
+      this.deleteDialogOk = newValue
     }
   }
 }

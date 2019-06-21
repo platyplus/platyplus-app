@@ -40,7 +40,8 @@ export const mixin = (table, settings = {}) => {
           }, {})
           : {},
         list: [],
-        item: cloneDeep(settings.defaultValues)
+        item: cloneDeep(settings.defaultValues),
+        deletionConfirmed: false
       }
     },
     methods: {
@@ -95,13 +96,13 @@ export const mixin = (table, settings = {}) => {
         }
       },
       async remove () {
-        // TODO: i18n
         try {
           await deleteMutation({
             apollo: this.$apollo,
             table,
             data: this.id
           })
+          this.deletionConfirmed = true
           this.$router.go(-1)
         } catch (error) {
           console.log(error)

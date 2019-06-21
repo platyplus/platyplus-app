@@ -12,7 +12,7 @@
         v-for="item in list"
         :to="'/encounter/'+item.id"
         :key="item.id") {{item.label}}
-    button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
+    button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
 </template>
 
 <style scoped>
