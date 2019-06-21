@@ -160,15 +160,16 @@ export const mixin = (table, settings = {}) => {
           !options.some(option => this.form[`${field}_id`] === option.id) &&
           !settings.relations[field] // TODO make it work for array values as well
         ) {
-          console.log(field)
           this.form[`${field}_id`] = null
         }
         // Sets a default value to unique (not multiple) selection fields when there is only one available option
         // TODO apply this mechanism only when the field is required
-        if (!this.form[`${field}_id`] && !settings.relations[field]) {
-          if (options.length === 1) {
-            this.form[`${field}_id`] = options[0].id
-          }
+        if (
+          !this.form[`${field}_id`] &&
+          !settings.relations[field] &&
+          options.length === 1
+        ) {
+          this.form[`${field}_id`] = options[0].id
         }
         return options
       }
