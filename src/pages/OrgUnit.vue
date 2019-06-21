@@ -70,8 +70,12 @@
         use-chips
         v-model="relations.workflows"
         :options="options('workflows')")
-    q-list(v-else-if="children.length" highlight)
-      q-item(v-for="item in children" :to="'/org-unit/'+item.id" :key="item.id") {{ item.name }}
+    q-tree(v-else-if="children.length"
+      :nodes="children"
+      node-key="id"
+      label-key="name"
+      :selected.sync="selectedNode"
+      :expanded.sync="expandedNodes")
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
 </template>
 
@@ -87,7 +91,9 @@ export default {
   props: ['parent_id'],
   data: () => ({
     types: [],
-    orgUnits: []
+    orgUnits: [],
+    selectedNode: null,
+    expandedNodes: []
   }),
   methods: {
     async save () {
@@ -110,6 +116,16 @@ export default {
     children () {
       return this.item.children || this.list
     }
+  },
+  watch: {
+    selectedNode (newValue) {
+      if (newValue) {
+        this.$router.push('/org-unit/' + newValue)
+      }
+    }
+  },
+  updated () {
+    this.selectedNode = null // Unselect the node when we reload the component
   }
 }
 </script>

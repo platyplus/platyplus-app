@@ -64,8 +64,18 @@ const base = gql`
         ...org_unit_type_base
       }
     }
+    # TODO number of levels are limited that way...
     children(order_by: { name: asc }) {
       ...org_unit_minimal
+      children(order_by: { name: asc }) {
+        ...org_unit_minimal
+        children(order_by: { name: asc }) {
+          ...org_unit_minimal
+          children(order_by: { name: asc }) {
+            ...org_unit_minimal
+          }
+        }
+      }
     }
     type_id
     type {

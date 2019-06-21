@@ -14,7 +14,6 @@
       q-dialog(v-model="dialog" persistent)
         q-card
           q-card-section(class="row items-center")
-            q-avatar(icon="signal_wifi_off" color="primary" text-color="white")
             span(class="q-ml-sm") {{ $t('logout.message') }}
           q-card-actions(align="right")
             q-btn(flat :label="$t('no')" color="primary" v-close-popup)

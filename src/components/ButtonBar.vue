@@ -6,13 +6,29 @@
     q-btn(v-if="isSave && !reading" :disable="isSaveDisabled" v-t="'ok'" @click="save")
     q-btn(v-if="isReset && !reading" v-t="'reset'" @click="reset")
     q-btn(v-if="isCancel && !reading" v-t="'cancel'" @click="cancel")
-    q-btn(v-if="isRemove && reading && details" v-t="'remove'" @click="remove")
+    q-btn(v-if="isRemove && reading && details" v-t="'remove'" @click="deleteDialog = true")
+    q-dialog(v-model="deleteDialog" persistent)
+      q-card
+        q-card-section(class="row items-center")
+          span(class="q-ml-sm") Do you really want to delete this record?
+        q-card-actions(align="right")
+          q-btn(flat :label="$t('no')" color="primary" v-close-popup)
+          q-btn(flat :label="$t('yes')" color="primary" @click="remove")
+    q-dialog(v-model="deleteDialogOk" persistent)
+      q-card
+        q-card-section(class="row items-center")
+          span(class="q-ml-sm") Record deleted
+        q-card-actions(align="right")
+          q-btn(flat :label="$t('ok')" color="primary" v-close-popup)
 </template>
 
 <script>
 export default {
   name: 'ButtonBar',
   props: ['details', 'reading', 'disableSave'],
+  data: function () {
+    return { deleteDialog: false, deleteDialogOk: false }
+  },
   methods: {
     create () {
       this.$emit('create')
@@ -31,6 +47,8 @@ export default {
     },
     remove () {
       this.$emit('remove')
+      this.deleteDialog = false
+      this.deleteDialogOk = true // TODO will show 'confirmed' even if the deletion failed
     }
   },
   computed: {

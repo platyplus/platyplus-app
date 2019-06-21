@@ -55,10 +55,11 @@ module.exports = function (ctx) {
         'QList',
         'QInput',
         'QItem',
+        'QItemLabel',
         'QItemSection',
         'QSeparator',
         'QToggle',
-        'QItemLabel'
+        'QTree'
       ],
 
       directives: ['Ripple', 'ClosePopup'],

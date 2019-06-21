@@ -97,26 +97,15 @@ export const mixin = (table, settings = {}) => {
       async remove () {
         // TODO: i18n
         try {
-          await this.$q.dialog({
-            title: 'Warning',
-            message: 'Do you want to delete this record?',
-            color: 'warning',
-            ok: true, // takes i18n value, or String for "OK" button label
-            cancel: true // takes i18n value, or String for "Cancel" button label
-          })
           await deleteMutation({
             apollo: this.$apollo,
             table,
             data: this.id
           })
-          await this.$q.dialog({
-            title: 'Attention',
-            message: 'Record deleted',
-            color: 'primary',
-            ok: true
-          })
           this.$router.go(-1)
-        } catch (error) {}
+        } catch (error) {
+          console.log(error)
+        }
       },
       async _save ({
         oldValues = this.item,
