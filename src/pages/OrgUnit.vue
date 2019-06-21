@@ -6,14 +6,14 @@
       q-select(
         label="Parent org unit"
         helper="Pick an org unit"
-        stack-label
-        emit-value
-        map-options
         :readonly="reading || Boolean(parent_id)"
+        v-model="form.parent_id"
+        :options="options('parent')"
         clearable
         filter
-        v-model="form.parent_id"
-        :options="options('parent')")
+        stack-label
+        emit-value
+        map-options)
       q-separator
       q-field(
         v-if="reading"
@@ -31,7 +31,16 @@
               q-item-section(avatar)
                 q-icon(name="fas fa-plus")
               q-item-section Create child
-      q-select(label="Type" helper="Pick an org unit type" :readonly="reading" clearable v-model="form.type_id" :options="options('type')")
+      q-select(
+        label="Type"
+        helper="Pick an org unit type"
+        :readonly="reading"
+        v-model="form.type_id"
+        :options="options('type')"
+        clearable
+        stack-label
+        emit-value
+        map-options)
       q-field(
         v-if="reading"
         label="Role attributions"

@@ -206,8 +206,7 @@ const mutations = {
       }
       roles_remove: delete_user_role(
         where: {
-          _and: { role_id: { _in: $roles_remove } }
-          user_id: { _eq: $id }
+          _and: { role_id: { _in: $roles_remove }, user_id: { _eq: $id } }
         }
       ) {
         affected_rows

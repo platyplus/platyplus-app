@@ -8,6 +8,9 @@
       helper="Pick stages"
       v-if="details"
       :readonly="reading"
+      stack-label
+      emit-value
+      map-options
       filter
       multiple
       use-chips
@@ -18,11 +21,14 @@
       label="Possible next stages"
       helper="Pick stages"
       :readonly="reading"
+      v-model="relations.next"
+      :options="options('next')"
+      stack-label
+      emit-value
+      map-options
       filter
       multiple
-      use-chips
-      v-model="relations.next"
-      :options="options('next')")
+      use-chips)
     button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove")
 </template>
 

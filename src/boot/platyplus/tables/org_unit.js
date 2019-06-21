@@ -18,7 +18,8 @@ const settings = {
       table: 'org_unit_type',
       /** Shows only the available types according to the parent's type, or all root types if no parents */
       filter: (item, data, settings) => {
-        // TODO: transpose this server-side, or at least secure the insert/update
+        // TODO transpose this server-side, or at least secure the insert/update
+        // TODO filter options when the children's type doesn't allow to change the current type
         if (data.item.parent?.id) {
           return data.item.parent.type?.to?.some(i => item.id === i.to.id)
         } else {
@@ -138,7 +139,15 @@ const mutations = {
     }
   `,
   insert: gql`
-    mutation insert_org_unit($name: String, $type_id: uuid, $parent_id: uuid) {
+    mutation insert_org_unit(
+      $name: String
+      $type_id: uuid
+      $parent_id: uuid
+      $workflows_add: [org_unit_workflow_insert_input!]!
+    ) {
+      workflows_add: insert_org_unit_workflow(objects: $workflows_add) {
+        affected_rows
+      }
       result: insert_org_unit(
         objects: [{ name: $name, type_id: $type_id, parent_id: $parent_id }]
       ) {
@@ -155,7 +164,22 @@ const mutations = {
       $name: String
       $type_id: uuid
       $parent_id: uuid
+      $workflows_add: [org_unit_workflow_insert_input!]!
+      $workflows_remove: [uuid]!
     ) {
+      workflows_add: insert_org_unit_workflow(objects: $workflows_add) {
+        affected_rows
+      }
+      workflows_remove: delete_org_unit_workflow(
+        where: {
+          _and: {
+            workflow_id: { _in: $workflows_remove }
+            org_unit_id: { _eq: $id }
+          }
+        }
+      ) {
+        affected_rows
+      }
       result: update_org_unit(
         where: { id: { _eq: $id } }
         _set: { name: $name, type_id: $type_id, parent_id: $parent_id }
