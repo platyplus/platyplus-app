@@ -54,7 +54,7 @@ module.exports = {
         ],
         sidebar: ['/fr/', '/fr/guide/', '/fr/developpers/']
       }
-    }
+    },
     algolia: {
       apiKey: '53493c81f4ecb2981b1cf6a57f9d3988',
       indexName: 'platyplus'
