@@ -10,17 +10,19 @@
       q-input(
         label="Creation title"
         :readonly="reading"
-        v-model="form.title_create"
-        ref="firstInput")
+        v-model="form.title_create")
       q-select(
         label="Isolated uses"
         helper=""
         :readonly="reading"
+        v-model="relations.isolated_uses"
+        :options="options('isolated_uses')"
         filter
         multiple
         use-chips
-        v-model="relations.isolated_uses"
-        :options="options('isolated_uses')")
+        stack-label
+        emit-value
+        map-options)
       q-select(label="Entity type" helper="Pick an entity type" :readonly="reading" clearable v-model="form.entity_type_id" :options="options('entity_type')")
       json-input(label="Encounter schema" v-model="form.encounter_schema" :readonly="reading")
     q-list(

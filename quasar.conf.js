@@ -21,7 +21,7 @@ module.exports = function (ctx) {
     css: ['app.styl'],
     extras: [
       'roboto-font',
-      'material-icons', // optional, you are not bound to it
+      // 'material-icons', // optional, you are not bound to it
       // 'ionicons-v4',
       // 'mdi-v3',
       'fontawesome-v5'
@@ -45,6 +45,7 @@ module.exports = function (ctx) {
         'QField',
         'QPageContainer',
         'QPage',
+        'QPageSticky',
         'QToolbar',
         'QToolbarTitle',
         'QBtn',
@@ -65,7 +66,7 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: ['Notify'],
 
-      iconSet: 'eva-icons',
+      iconSet: 'fontawesome-v5',
       lang: 'en-us' // Quasar language
     },
 

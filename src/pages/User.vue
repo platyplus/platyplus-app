@@ -1,8 +1,6 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-field(
-        )
       q-input(
         icon="fas fa-user"
         label="User name"

@@ -1,6 +1,7 @@
 <template lang="pug">
   div
-    q-btn(v-if="isCreate && !details" v-t="'create'" @click="create")
+    q-page-sticky(position="bottom-right" :offset="[18, 18]")
+      q-btn(v-if="isCreate && !details" @click="create" fab icon="fas fa-plus" color="primary" )
     q-btn(v-if="isEdit && reading && details" v-t="'edit'" @click="edit")
     q-btn(v-if="isSave && !reading" :disable="isSaveDisabled" v-t="'ok'" @click="save")
     q-btn(v-if="isReset && !reading" v-t="'reset'" @click="reset")
