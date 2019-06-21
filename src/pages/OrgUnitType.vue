@@ -11,26 +11,30 @@
         label="Possible direct parents"
         helper="Pick org unit types"
         :readonly="reading"
+        v-model="relations.from"
+        :options="options('from')"
+        option-value="id"
+        option-label="name"
         filter
         multiple
         use-chips
         stack-label
         emit-value
-        map-options
-        v-model="relations.from"
-        :options="options('from')")
+        map-options)
       q-select(
         label="Possible direct children"
         helper="Pick org unit types"
         :readonly="reading"
+        v-model="relations.to"
+        :options="options('to')"
+        option-value="id"
+        option-label="name"
         filter
         multiple
         use-chips
         stack-label
         emit-value
-        map-options
-        v-model="relations.to"
-        :options="options('to')")
+        map-options)
     q-list(
       v-else-if="list.length"
       highlight)

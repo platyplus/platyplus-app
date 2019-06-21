@@ -39,6 +39,8 @@
           :readonly="reading"
           v-model="relations.org_units"
           :options="options('org_units')"
+          option-value="id"
+          option-label="name"
           filter
           multiple
           use-chips

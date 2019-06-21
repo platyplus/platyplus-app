@@ -1,21 +1,22 @@
 <template lang="pug">
   q-page(v-if="details" padding class="justify-center")
     router-link(v-if="item.workflow" :to="'/workflow/'+workflow_id") Back to {{item.workflow.name}}
-    q-field(label="Name")
-      q-input(:readonly="reading" v-model="form.name" ref="firstInput" @keyup.enter="save")
+    q-input(label="Name" :readonly="reading" v-model="form.name" ref="firstInput" @keyup.enter="save")
     q-select(
       label="Possible previous stages"
       helper="Pick stages"
       v-if="details"
       :readonly="reading"
+      v-model="relations.previous"
+      :options="options('previous')"
+      option-value="id"
+      option-label="name"
       stack-label
       emit-value
       map-options
       filter
       multiple
-      use-chips
-      v-model="relations.previous"
-      :options="options('previous')")
+      use-chips)
     q-select(
       v-if="details"
       label="Possible next stages"
@@ -23,6 +24,8 @@
       :readonly="reading"
       v-model="relations.next"
       :options="options('next')"
+      option-value="id"
+      option-label="name"
       stack-label
       emit-value
       map-options

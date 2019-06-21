@@ -21,6 +21,7 @@
       v-model="form.attributes.first_name"
       ref="firstInput"
       @keyup.enter="save"
+      key="attributes.first_name"
       v-validate="validate('attributes.first_name')"
       name="attributes.first_name")
     q-input(
@@ -33,44 +34,50 @@
       v-if="reading"
       icon="fas fa-user-lock"
       :label="$t('user.labels.roles')"
+      v-model="relations.roles"
+      :options="options('roles')"
+      option-value="id"
+      option-label="name"
       readonly
       filter
       multiple
       use-chips
       emit-value
-      map-options
-      v-model="relations.roles"
-      :options="options('roles')")
+      map-options)
     q-select(
       icon="fas fa-language"
       :label="$t('language')"
       :readonly="reading"
       :options="$locales"
+      v-model="form.locale"
       emit-value
-      map-options
-      v-model="form.locale")
+      map-options)
     q-select(
       v-if="reading"
       icon="fas fa-sitemap"
       :label="$t('user.labels.org_unit_memberships')"
       :helper="$t('user.helpers.org_unit_memberships')"
+      option-value="id"
+      option-label="name"
+      v-model="relations.org_unit_memberships"
+      :options="options('org_unit_memberships')"
       readonly
       filter
       multiple
       use-chips
       emit-value
-      map-options
-      v-model="relations.org_unit_memberships"
-      :options="options('org_unit_memberships')")
+      map-options)
     q-select(
       icon="fas fas fa-location-arrow"
       :label="$t('user.labels.preferred_org_unit')"
       :helper="$t('user.labels.preferred_org_unit')"
       :readonly="reading"
-      emit-value
-      map-options
       v-model="form.preferred_org_unit_id"
-      :options="preferredOrgUnitOptions")
+      :options="preferredOrgUnitOptions"
+      option-value="id"
+      option-label="name"
+      emit-value
+      map-options)
     q-list(
       v-if="reading && item.role_attributions.length"
       highlight)
@@ -114,7 +121,7 @@ export default {
   computed: {
     preferredOrgUnitOptions () {
       return this.options('org_unit_memberships').filter(item =>
-        this.relations.org_unit_memberships.includes(item.value)
+        this.relations.org_unit_memberships.includes(item.id)
       )
     }
   }

@@ -7,18 +7,10 @@ const settings = {
   },
   options: {
     entity_type: {
-      table: 'entity_type',
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      table: 'entity_type'
     },
     isolated_uses: {
-      table: 'org_unit',
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      table: 'org_unit'
     }
   },
   relations: {

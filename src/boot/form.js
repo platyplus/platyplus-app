@@ -141,22 +141,36 @@ export const mixin = (table, settings = {}) => {
       },
       options (field) {
         const optionSettings = settings.options?.[field]
+        let options = []
         if (optionSettings) {
           if (optionSettings.table && this[`${field}_options`]) {
-            const map = optionSettings.map || (p => p)
             const filter = optionSettings.filter || ((p, q) => true)
-            return this[`${field}_options`]
-              .filter(item =>
-                filter(
-                  item,
-                  { item: this.form, relations: this.relations },
-                  optionSettings
-                )
+            options = this[`${field}_options`].filter(item =>
+              filter(
+                item,
+                { item: this.form, relations: this.relations },
+                optionSettings
               )
-              .map(item => map(item))
-          } else if (Array.isArray(optionSettings)) return optionSettings
+            )
+          } else if (Array.isArray(optionSettings)) options = optionSettings
         }
-        return []
+        // Unsets the form value if it is not part of the options set
+        if (
+          this.form[`${field}_id`] &&
+          !options.some(option => this.form[`${field}_id`] === option.id) &&
+          !settings.relations[field] // TODO make it work for array values as well
+        ) {
+          console.log(field)
+          this.form[`${field}_id`] = null
+        }
+        // Sets a default value to unique (not multiple) selection fields when there is only one available option
+        // TODO apply this mechanism only when the field is required
+        if (!this.form[`${field}_id`] && !settings.relations[field]) {
+          if (options.length === 1) {
+            this.form[`${field}_id`] = options[0].id
+          }
+        }
+        return options
       }
     },
     computed: {

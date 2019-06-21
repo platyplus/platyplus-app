@@ -6,38 +6,23 @@ const settings = {
   options: {
     parent: {
       table: 'org_unit',
-      filter: (item, data, settings) => {
-        return data.item.id !== item.id
-      },
-      map: item => ({
-        value: item.id,
-        label: item.name
-      }) // TODO: put the basic transformation in the root settings of the table?
+      filter: (item, data, settings) => data.item.id !== item.id
     },
     type: {
       table: 'org_unit_type',
       /** Shows only the available types according to the parent's type, or all root types if no parents */
       filter: (item, data, settings) => {
         // TODO transpose this server-side, or at least secure the insert/update
-        // TODO filter options when the children's type doesn't allow to change the current type
         if (data.item.parent?.id) {
           return data.item.parent.type?.to?.some(i => item.id === i.to.id)
         } else {
           return item.from.length === 0
         }
-      },
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      }
     },
     workflows: {
       table: 'workflow',
-      where: {},
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      where: {}
     }
   },
   relations: {
@@ -52,7 +37,12 @@ const minimal = gql`
   fragment org_unit_minimal on org_unit {
     id
     name
+    type_id
+    type {
+      ...org_unit_type_base
+    }
   }
+  ${orgUnitType.fragments.base}
 `
 const base = gql`
   fragment org_unit_base on org_unit {
@@ -60,9 +50,6 @@ const base = gql`
     parent_id
     parent {
       ...org_unit_minimal
-      type {
-        ...org_unit_type_base
-      }
     }
     # TODO number of levels are limited that way...
     children(order_by: { name: asc }) {
@@ -76,10 +63,6 @@ const base = gql`
           }
         }
       }
-    }
-    type_id
-    type {
-      ...org_unit_type_base
     }
     role_attributions {
       id
@@ -100,7 +83,6 @@ const base = gql`
     }
   }
   ${minimal}
-  ${orgUnitType.fragments.base}
   ${workflow.fragments.minimal}
 `
 const fragments = {
@@ -133,10 +115,10 @@ const queries = {
   option: gql`
     query org_unit($where: org_unit_bool_exp) {
       org_unit(where: $where, order_by: { name: asc }) {
-        id
-        name
+        ...org_unit_minimal
       }
     }
+    ${fragments.minimal}
   `
 }
 

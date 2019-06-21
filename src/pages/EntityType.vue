@@ -9,15 +9,20 @@
         @keyup.enter="save")
       q-field(
         v-if="reading"
-        label="Encounter types")
-        q-list(
-          v-if="item.encounter_types.length"
-          highlight)
-          q-item(
-            v-for="encounterType in item.encounter_types"
-            :to="'/entity-type/'+item.id+'/encounter-type/'+encounterType.id"
-            :key="encounterType.id") {{ encounterType.name }}
-        q-btn(label="New encounter type" :to="'/entity-type/'+item.id+'/encounter-type/create'")
+        label="Encounter types"
+        stack-label)
+        template(v-slot:control)
+          q-list(
+            class="col-12"
+            highlight)
+            q-item(
+              v-for="encounterType in item.encounter_types"
+              :to="'/entity-type/'+item.id+'/encounter-type/'+encounterType.id"
+              :key="encounterType.id") {{ encounterType.name }}
+            q-item(:to="'/entity-type/'+item.id+'/encounter-type/create'")
+              q-item-section(avatar)
+                q-icon(name="fas fa-plus")
+              q-item-section New encounter type
     q-list(
       v-else-if="list.length"
       highlight)

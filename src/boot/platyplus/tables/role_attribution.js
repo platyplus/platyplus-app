@@ -4,27 +4,15 @@ const settings = {
   options: {
     user: {
       table: 'user',
-      where: {},
-      map: item => ({
-        value: item.id,
-        label: item.username
-      })
+      where: {}
     },
     role: {
       table: 'role',
-      where: {},
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      where: {}
     },
     org_unit: {
       table: 'org_unit',
-      where: {},
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      where: {}
     }
   }
 }

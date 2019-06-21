@@ -4,29 +4,17 @@ export const settings = {
   options: {
     workflow: {
       table: 'workflow',
-      filter: (item, data, settings) => data.item.id !== item.id,
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      filter: (item, data, settings) => data.item.id !== item.id
     },
     previous: {
       table: 'stage',
       filter: (item, data, settings) =>
-        item.workflow_id === data.item.workflow_id,
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+        item.workflow_id === data.item.workflow_id
     },
     next: {
       table: 'stage',
       filter: (item, data, settings) =>
-        item.workflow_id === data.item.workflow_id,
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+        item.workflow_id === data.item.workflow_id
     }
   },
   relations: {

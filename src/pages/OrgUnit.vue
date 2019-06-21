@@ -9,14 +9,15 @@
         :readonly="reading || Boolean(parent_id)"
         v-model="form.parent_id"
         :options="options('parent')"
+        option-value="id"
+        option-label="name"
         clearable
         filter
         stack-label
         emit-value
         map-options)
-      q-separator
       q-field(
-        v-if="reading"
+        v-if="reading && item.type.to.length > 0"
         label="Children"
         stack-label)
         template(v-slot:control)
@@ -37,7 +38,9 @@
         :readonly="reading"
         v-model="form.type_id"
         :options="options('type')"
-        clearable
+        option-value="id"
+        option-label="name"
+        fill-input
         stack-label
         emit-value
         map-options)
@@ -61,15 +64,18 @@
         icon="fas fa-route"
         label="Available workflows"
         helper=""
+        :readonly="reading"
+        v-model="relations.workflows"
+        :options="options('workflows')"
+        option-value="id"
+        option-label="name"
         stack-label
         emit-value
         map-options
-        :readonly="reading"
         filter
         multiple
         use-chips
-        v-model="relations.workflows"
-        :options="options('workflows')")
+        )
     q-tree(v-else-if="children.length"
       :nodes="children"
       node-key="id"

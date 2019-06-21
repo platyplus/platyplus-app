@@ -17,13 +17,23 @@
         :readonly="reading"
         v-model="relations.isolated_uses"
         :options="options('isolated_uses')"
+        option-value="id"
+        option-label="name"
         filter
         multiple
         use-chips
         stack-label
         emit-value
         map-options)
-      q-select(label="Entity type" helper="Pick an entity type" :readonly="reading" clearable v-model="form.entity_type_id" :options="options('entity_type')")
+      q-select(
+        label="Entity type"
+        helper="Pick an entity type"
+        :readonly="reading"
+        v-model="form.entity_type_id"
+        :options="options('entity_type')"
+        option-value="id"
+        option-label="name"
+        clearable)
       json-input(label="Encounter schema" v-model="form.encounter_schema" :readonly="reading")
     q-list(
       v-else-if="list.length"

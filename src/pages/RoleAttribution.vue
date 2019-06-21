@@ -7,30 +7,36 @@
         emit-value
         map-options
         :readonly="reading || Boolean(user_id)"
+        option-value="id"
+        option-label="name"
         clearable
         filter
         v-model="form.user_id"
         :options="options('user')")
       q-select(
         label="Role"
+        :readonly="reading || Boolean(role_id)"
+        v-model="form.role_id"
+        :options="options('role')"
+        option-value="id"
+        option-label="name"
         stack-label
         emit-value
         map-options
-        :readonly="reading || Boolean(role_id)"
         clearable
-        filter
-        v-model="form.role_id"
-        :options="options('role')")
+        filter)
       q-select(
         label="Org Unit"
+        :readonly="reading || Boolean(org_unit_id)"
+        v-model="form.org_unit_id"
+        :options="options('org_unit')"
+        option-value="id"
+        option-label="name"
         stack-label
         emit-value
         map-options
-        :readonly="reading || Boolean(org_unit_id)"
         clearable
-        filter
-        v-model="form.org_unit_id"
-        :options="options('org_unit')")
+        filter)
     q-list(
       v-else-if="list.length"
       highlight)

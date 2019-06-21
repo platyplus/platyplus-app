@@ -3,18 +3,10 @@ import gql from 'graphql-tag'
 const settings = {
   options: {
     from: {
-      table: 'org_unit_type',
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      table: 'org_unit_type'
     },
     to: {
-      table: 'org_unit_type',
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      table: 'org_unit_type'
     }
   },
   relations: {

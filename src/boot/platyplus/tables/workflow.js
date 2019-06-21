@@ -5,11 +5,7 @@ const settings = {
   options: {
     org_units: {
       table: 'org_unit',
-      where: {},
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      where: {}
     }
   },
   relations: {

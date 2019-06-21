@@ -11,28 +11,32 @@
       q-select(
         icon="fas fa-user-lock"
         label="Global roles"
+        :readonly="reading"
+        v-model="relations.roles"
+        :options="options('roles')"
+        option-value="id"
+        option-label="name"
         stack-label
         emit-value
         map-options
-        :readonly="reading"
         filter
         multiple
-        use-chips
-        v-model="relations.roles"
-        :options="options('roles')")
+        use-chips)
       q-select(
         icon="fas fa-sitemap"
         :label="$t('user.labels.org_unit_memberships')"
         :helper="$t('user.helpers.org_unit_memberships')"
+        :readonly="reading"
+        v-model="relations.org_unit_memberships"
+        :options="options('org_unit_memberships')"
+        option-value="id"
+        option-label="name"
         stack-label
         emit-value
         map-options
-        :readonly="reading"
         filter
         multiple
-        use-chips
-        v-model="relations.org_unit_memberships"
-        :options="options('org_unit_memberships')")
+        use-chips)
       q-field(
         v-if="reading"
         label="Role attributions"

@@ -20,19 +20,11 @@ const settings = {
   options: {
     org_unit_memberships: {
       table: 'org_unit',
-      where: {},
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      where: {}
     },
     roles: {
       table: 'role',
-      where: { global: { _eq: true } },
-      map: item => ({
-        value: item.id,
-        label: item.name
-      })
+      where: { global: { _eq: true } }
     }
   },
   relations: {
