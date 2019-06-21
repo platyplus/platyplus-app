@@ -8,6 +8,8 @@ set -e
 export npm_config_loglevel=error
 # Install depedencies
 yarn
+# TODO @quasar/app version ^1.0.0-rc.7 conflicts with vuepress 1.0.1
+yarn remove @quasar/app
 
 # build the docs
 npm run docs:build
