@@ -16,7 +16,9 @@ export const mixin = (table, settings = {}) => {
       update: 'update', // Graphql update mutation index
       list: true, // Whether the component also manages a list, or an unique item
       validations: {},
-      defaultValues: {}
+      defaultValues: {},
+      options: {},
+      relations: {}
     },
     config.settings[table],
     settings
@@ -32,24 +34,25 @@ export const mixin = (table, settings = {}) => {
     props: ['id', 'createFlag', 'editFlag'],
     data () {
       return {
-        form: cloneDeep(settings.defaultValues),
-        relations: settings.relations
-          ? Object.keys(settings.relations).reduce((aggr, curr) => {
-            aggr[curr] = settings.relations[curr].default || []
-            return aggr
-          }, {})
-          : {},
-        list: [],
         item: cloneDeep(settings.defaultValues),
+        form: cloneDeep(settings.defaultValues),
+        relations: Object.keys(settings.relations).reduce((aggr, curr) => {
+          aggr[curr] = []
+          return aggr
+        }, {}),
+        list: [],
         deletionConfirmed: false
       }
     },
     methods: {
+      /**
+       * The following methods may exist with their _ counterparts.
+       * They can be overriden in the components whereas the _ function should not.
+       */
       create () {
         this.$router.push(this.$route.path + '/create')
       },
       async save (e) {
-        // Customize the save method in the component if needed
         const save = await this._save()
         if (save) this._postSave(save)
       },
@@ -61,8 +64,24 @@ export const mixin = (table, settings = {}) => {
           this.$route.path.replace(this.createFlag ? '/create' : '/edit', '')
         )
       },
+      async remove () {
+        try {
+          await deleteMutation({
+            apollo: this.$apollo,
+            table,
+            data: this.id
+          })
+          this.deletionConfirmed = true
+          this.$router.go(-1)
+        } catch (error) {
+          console.log(error)
+        }
+      },
       reset (e) {
         this._reset()
+      },
+      resetForm () {
+        this._resetForm()
       },
       _reset (e) {
         this._resetItem()
@@ -72,9 +91,6 @@ export const mixin = (table, settings = {}) => {
         if (!this.id && !this.createFlag) {
           this.item = cloneDeep(settings.defaultValues)
         }
-      },
-      resetForm () {
-        this._resetForm()
       },
       _resetForm () {
         this.form = cloneDeep(this.item)
@@ -93,19 +109,6 @@ export const mixin = (table, settings = {}) => {
         // Focus on the input referenced as 'firstInput' in the template
         if (!this.reading) {
           this.$nextTick(() => this.$refs.firstInput?.focus())
-        }
-      },
-      async remove () {
-        try {
-          await deleteMutation({
-            apollo: this.$apollo,
-            table,
-            data: this.id
-          })
-          this.deletionConfirmed = true
-          this.$router.go(-1)
-        } catch (error) {
-          console.log(error)
         }
       },
       async _save ({
@@ -139,6 +142,10 @@ export const mixin = (table, settings = {}) => {
       validate (field) {
         return settings.validations?.[field]
       },
+      /**
+       * Calculates the options that can be picked for the given field
+       * @param {*} field the field of the form with options
+       */
       options (field) {
         const optionSettings = settings.options?.[field]
         let options = []
@@ -218,27 +225,25 @@ export const mixin = (table, settings = {}) => {
         },
         update: data => data[table][0]
       },
-      ...(settings.options
-        ? Object.keys(settings.options)
-          .filter(name => settings.options[name].table)
-          .reduce((aggr, name) => {
-            if (!config.queries[settings.options[name].table]['option']) {
-              throw Error(
-                `The 'option' query has to be implemented for the table '${
-                  settings.options[name].table
-                }'`
-              )
+      ...Object.keys(settings.options)
+        .filter(name => settings.options[name].table)
+        .reduce((aggr, name) => {
+          if (!config.queries[settings.options[name].table]['option']) {
+            throw Error(
+              `The 'option' query has to be implemented for the table '${
+                settings.options[name].table
+              }'`
+            )
+          }
+          aggr[`${name}_options`] = {
+            query: config.queries[settings.options[name].table]['option'],
+            update: data => data[Object.keys(data)[0]],
+            variables: {
+              where: settings.options[name].where || {}
             }
-            aggr[`${name}_options`] = {
-              query: config.queries[settings.options[name].table]['option'],
-              update: data => data[Object.keys(data)[0]],
-              variables: {
-                where: settings.options[name].where || {}
-              }
-            }
-            return aggr
-          }, {})
-        : {})
+          }
+          return aggr
+        }, {})
     },
     created () {
       this.reset()
@@ -247,24 +252,22 @@ export const mixin = (table, settings = {}) => {
       $route: 'reset',
       item: 'resetForm',
       id: '_resetItem',
-      ...(settings.options
-        ? Object.keys(settings.options).reduce((aggr, curr) => {
-          // Watches for id changes in the optionned fields
-          // If it changes, then it replaces the related object by the one found in the option list
-          aggr[`form.${curr}_id`] = {
-            handler (newValue) {
-              if (newValue && this[`${curr}_options`]) {
-                this.form[curr] = Object.assign(
-                  {},
-                  this.form[curr],
-                  this[`${curr}_options`].find(el => el.id === newValue)
-                )
-              } else this.form[curr] = {}
-            }
+      ...Object.keys(settings.options).reduce((aggr, curr) => {
+        // Watches for id changes in the optionned fields
+        // If it changes, then it replaces the related object by the one found in the option list
+        aggr[`form.${curr}_id`] = {
+          handler (newValue) {
+            if (newValue && this[`${curr}_options`]) {
+              this.form[curr] = Object.assign(
+                {},
+                this.form[curr],
+                this[`${curr}_options`].find(el => el.id === newValue)
+              )
+            } else this.form[curr] = {}
           }
-          return aggr
-        }, {})
-        : {})
+        }
+        return aggr
+      }, {})
     },
     $_veeValidate: {
       // TODO https://github.com/baianat/vee-validate/issues/1980

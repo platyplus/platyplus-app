@@ -10,13 +10,12 @@
       readonly
       mask="date"
       :label="$t('user.labels.created_at')"
-      v-model="form.created_at"
-      )
+      v-model="form.created_at")
     q-input(
-      icon="fas fa-user"
       :label="$t('user.labels.attributes.first_name')"
       :error="vErrors.has('attributes.first_name')"
-      :error-label="vErrors.first('attributes.first_name')"
+      :error-message="vErrors.first('attributes.first_name')"
+      bottom-slots
       :readonly="reading"
       v-model="form.attributes.first_name"
       ref="firstInput"
@@ -25,7 +24,6 @@
       v-validate="validate('attributes.first_name')"
       name="attributes.first_name")
     q-input(
-      icon="fas fa-user"
       :label="$t('user.labels.attributes.last_name')"
       :readonly="reading"
       v-model="form.attributes.last_name"
