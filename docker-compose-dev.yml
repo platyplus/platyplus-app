@@ -7,7 +7,6 @@ services:
       target: prepare-deps-stage
     command: ['./node_modules/.bin/quasar', 'dev']
     environment:
-      HASURA_GRAPHQL_MIGRATIONS_DIR: /opt/hasura-migrations
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
       NODE_ENV: development
       PRIVATE_KEY: '${PRIVATE_KEY}'
