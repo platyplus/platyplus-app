@@ -1,0 +1,33 @@
+- args:
+    role: manager
+    table:
+      name: concept
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check:
+        _and:
+        - encounter_type_concepts:
+            id:
+              _ne: X-Hasura-User-Id
+        - data_type_id:
+            _gte: X-Hasura-User-Id
+      columns:
+      - class_id
+      - data_type_id
+      localPresets:
+      - key: class_id
+        value: 2fwefew
+      - key: source_id
+        value: x-hasura-Role-Id
+      - key: ""
+        value: ""
+      set:
+        class_id: 2fwefew
+        source_id: x-hasura-Role-Id
+    role: manager
+    table:
+      name: concept
+      schema: public
+  type: create_insert_permission

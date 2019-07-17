@@ -1,0 +1,8 @@
+- args:
+    name: terminology_source
+    table:
+      name: concept
+      schema: public
+    using:
+      foreign_key_constraint_on: source_id
+  type: create_object_relationship

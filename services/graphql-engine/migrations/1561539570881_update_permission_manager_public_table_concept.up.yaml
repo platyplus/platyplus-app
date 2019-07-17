@@ -1,0 +1,22 @@
+- args:
+    permission:
+      columns:
+      - source_id
+      filter:
+        _and:
+        - id:
+            _nin: []
+        - data_type_id:
+            _gte: "12"
+      localPresets:
+      - key: id
+        value: dew
+      - key: ""
+        value: ""
+      set:
+        id: dew
+    role: manager
+    table:
+      name: concept
+      schema: public
+  type: create_update_permission

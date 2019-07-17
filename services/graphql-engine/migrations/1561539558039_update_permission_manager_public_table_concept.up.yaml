@@ -1,0 +1,17 @@
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - data_type_id
+      filter:
+        _and:
+        - id:
+            _nin: []
+        - data_type_id:
+            _gte: "12"
+      limit: null
+    role: manager
+    table:
+      name: concept
+      schema: public
+  type: create_select_permission

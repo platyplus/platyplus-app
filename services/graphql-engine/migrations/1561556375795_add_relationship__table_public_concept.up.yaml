@@ -1,0 +1,12 @@
+- args:
+    name: concept_aggregations
+    table:
+      name: concept
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: concept_id
+        table:
+          name: concept_aggregation
+          schema: public
+  type: create_array_relationship
