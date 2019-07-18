@@ -9,7 +9,7 @@
         multiple :options="options('isolated_uses')")
       p-select(v-model="form.entity_type_id" form="encounter_type" name="entity_type" :readonly="reading"
         :options="options('entity_type')")
-      json-input(label="Encounter schema" v-model="form.encounter_schema" :readonly="reading")
+      p-json-input(label="Encounter schema" v-model="form.encounter_schema" :readonly="reading")
     q-list(
       v-else-if="list.length"
       highlight)
@@ -19,7 +19,7 @@
           v-for="item in category"
           :to="'/encounter-type/'+item.id"
           :key="item.id") {{ item.name }}
-    button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
+    p-button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
 </template>
 
 <style>

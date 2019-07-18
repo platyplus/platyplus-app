@@ -25,7 +25,7 @@
         :path="'/user/'+item.id+'/attributions'"
         :item-label-template="'{{ role.name }} in {{ org_unit.name }}'"
         v-if="reading && item.role_attributions.length")
-    button-bar(
+    p-button-bar(
       :reading="reading"
       :details="details"
       :disableSave="vErrors.count()"

@@ -294,5 +294,5 @@ const veeValidateConfig = {
 
 export default ({ app, router, Vue }) => {
   Vue.use(VeeValidate, veeValidateConfig)
-  Vue.component('button-bar', ButtonBar)
+  Vue.component('p-button-bar', ButtonBar)
 }

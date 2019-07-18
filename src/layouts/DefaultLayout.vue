@@ -1,8 +1,8 @@
 <template lang="pug">
   q-layout(view="lHh Lpr lFf")
     template(v-if="authenticated")
-      user-header
-      user-menu
+      p-user-header
+      p-user-menu
     q-header(v-else)
       q-toolbar(color="primary")
         q-toolbar-title Platyplus

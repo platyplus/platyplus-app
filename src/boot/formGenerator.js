@@ -1,6 +1,7 @@
 import * as SurveyVue from 'survey-vue'
 import cloneDeep from 'lodash/cloneDeep'
 import jexl from 'jexl'
+import CustomForm from 'components/CustomForm.vue'
 
 /**
  * Converts a template-like string to an expression that can be evaluated by Jexl
@@ -114,4 +115,5 @@ export const prepareForm = (schema, model) => {
 
 export default ({ app, router, Vue, store }) => {
   Vue.use(SurveyVue)
+  Vue.component('p-custom-form', CustomForm)
 }

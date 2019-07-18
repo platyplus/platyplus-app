@@ -23,7 +23,7 @@
       label-key="name"
       :selected.sync="selectedNode"
       :expanded.sync="expandedNodes")
-    button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
+    p-button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
 </template>
 
 <style>

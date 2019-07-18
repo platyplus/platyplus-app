@@ -2,9 +2,9 @@
  * Plugin that includes all the custom form inputs
  */
 import JsonInput from 'components/JsonInput.vue'
-import PInput from 'components/PInput.vue'
-import PSelect from 'components/PSelect.vue'
-import PListField from 'components/PListField.vue'
+import Input from 'components/Input.vue'
+import Select from 'components/Select.vue'
+import ListField from 'components/ListField.vue'
 // Code Mirror imports
 import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -29,8 +29,8 @@ const cmOptions = {
 
 export default ({ app, router, Vue, store }) => {
   Vue.use(VueCodemirror, { options: cmOptions })
-  Vue.component('json-input', JsonInput)
-  Vue.component('p-input', PInput)
-  Vue.component('p-select', PSelect)
-  Vue.component('p-list-field', PListField)
+  Vue.component('p-json-input', JsonInput)
+  Vue.component('p-input', Input)
+  Vue.component('p-select', Select)
+  Vue.component('p-list-field', ListField)
 }

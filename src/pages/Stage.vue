@@ -8,7 +8,7 @@
       multiple :options="options('previous')")
     p-select(v-model="relations.next" form="stage" name="next" :readonly="reading"
       multiple :options="options('next')")
-    button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
+    p-button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
 </template>
 
 <style>

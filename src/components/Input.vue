@@ -19,6 +19,7 @@
 import { QInput } from 'quasar'
 import { icon, types } from './config'
 export default {
+  name: 'PInput',
   components: {
     QInput
   },

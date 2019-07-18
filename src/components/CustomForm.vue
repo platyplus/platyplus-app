@@ -24,7 +24,7 @@ const defaultOptions = {
   goNextPageAutomatic: true
 }
 export default {
-  name: 'FormGenerator',
+  name: 'PCustomForm',
   props: {
     schema: {},
     value: {}

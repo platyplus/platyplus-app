@@ -14,7 +14,7 @@
         v-for="item in list"
         :to="'/role-attribution/'+item.id"
         :key="item.id") {{ item.name }}
-    button-bar(:reading="reading" :details="details" @create="create" @save="save" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
+    p-button-bar(:reading="reading" :details="details" @create="create" @save="save" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
 </template>
 
 <style>
