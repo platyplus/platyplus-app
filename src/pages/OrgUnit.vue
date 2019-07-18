@@ -6,40 +6,15 @@
         :enter="save")
       p-select(v-model="form.parent_id" form="org_unit" name="parent" :readonly="reading || Boolean(parent_id)"
         :options="options('parent')")
-      q-field(
-        v-if="reading && item.type.to.length > 0"
-        label="Children"
-        stack-label)
-        template(v-slot:control)
-          q-list(
-            class="col-12"
-            highlight)
-            q-item(
-              v-for="item in children"
-              :to="'/org-unit/'+item.id"
-              :key="item.id") {{ item.name }}
-            q-item(:to="'/org-unit/'+item.id+'/create'")
-              q-item-section(avatar)
-                q-icon(name="fas fa-plus")
-              q-item-section Create child
+      p-list-field(v-model="children" form="org_unit" name="children"
+        path="/org-unit"
+        v-if="reading && item.type.to.length > 0")
       p-select(v-model="form.type_id" form="org_unit" name="type" :readonly="reading"
         :options="options('type')")
-      q-field(
-        v-if="reading"
-        label="Role attributions"
-        stack-label)
-        template(v-slot:control)
-          q-list(
-            class="col-12"
-            highlight)
-            q-item(
-              v-for="role in item.role_attributions"
-              :to="'/org-unit/'+item.id+'/attribution/'+role.id"
-              :key="role.id") {{ role.user.username }} as {{ role.role.name }}
-            q-item(:to="'/org-unit/'+item.id+'/attribution/create'")
-              q-item-section(avatar)
-                q-icon(name="fas fa-plus")
-              q-item-section Create role attribution
+      p-list-field(v-model="item.role_attributions" form="org_unit" name="role_attributions"
+        :path="'/org-unit/'+item.id+'/attribution'"
+        :item-label-template="'{{ user.username }} as {{ role.name }}'"
+        v-if="reading")
       p-select(v-model="relations.workflows" form="org_unit" name='workflow' :readonly="reading"
         multiple :options="options('workflows')")
     q-tree(v-else-if="children.length"

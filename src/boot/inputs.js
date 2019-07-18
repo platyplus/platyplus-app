@@ -4,6 +4,7 @@
 import JsonInput from 'components/JsonInput.vue'
 import PInput from 'components/PInput.vue'
 import PSelect from 'components/PSelect.vue'
+import PListField from 'components/PListField.vue'
 // Code Mirror imports
 import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -31,4 +32,5 @@ export default ({ app, router, Vue, store }) => {
   Vue.component('json-input', JsonInput)
   Vue.component('p-input', PInput)
   Vue.component('p-select', PSelect)
+  Vue.component('p-list-field', PListField)
 }

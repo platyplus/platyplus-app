@@ -6,8 +6,7 @@
         :enter="save")
       p-input(v-model="form.title_create" form="encounter_type" name="create" :readonly="reading")
       p-select(v-model="relations.isolated_uses" form="encounter_type" name="isolated_uses" :readonly="reading"
-        multiple
-        :options="options('isolated_uses')")
+        multiple :options="options('isolated_uses')")
       q-select(v-model="form.entity_type_id" form="encounter_type" name="entity_type" :readonly="reading"
         :options="options('entity_type')")
       json-input(label="Encounter schema" v-model="form.encounter_schema" :readonly="reading")

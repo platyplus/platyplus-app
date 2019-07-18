@@ -4,22 +4,9 @@
       p-input(v-model="form.name" form="entity_type" name="name" :readonly="reading"
         ref="firstInput"
         :enter="save")
-      q-field(
-        v-if="reading"
-        label="Encounter types"
-        stack-label)
-        template(v-slot:control)
-          q-list(
-            class="col-12"
-            highlight)
-            q-item(
-              v-for="encounterType in item.encounter_types"
-              :to="'/entity-type/'+item.id+'/encounter-type/'+encounterType.id"
-              :key="encounterType.id") {{ encounterType.name }}
-            q-item(:to="'/entity-type/'+item.id+'/encounter-type/create'")
-              q-item-section(avatar)
-                q-icon(name="fas fa-plus")
-              q-item-section New encounter type
+      p-list-field(v-model="item.encounter_types" form="entity_type" name="encounter_types"
+        :path="'/entity-type/'+item.id+'/encounter-type'"
+        v-if="reading")
     q-list(
       v-else-if="list.length"
       highlight)

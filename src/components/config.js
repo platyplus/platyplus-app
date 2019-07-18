@@ -1,5 +1,6 @@
 const icons = {
   preferred_org_unit: 'location-arrow',
+  created_at: 'clock',
   username: 'user',
   password: 'key',
   roles: 'user-lock',

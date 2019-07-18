@@ -10,44 +10,14 @@
           q-item(v-for="node in stage.encounter_types" :key="node.id" :to="'/org-unit/'+org_unit_id+'/stage/'+stage.id+'/encounter-type/'+node.encounter_type.id+'/create'") {{node.encounter_type.title_create}}
     div(v-else)
       div(v-if="details")
-        q-input(
-          icon="fas fa-tag"
-          label="Name"
-          :readonly="reading"
-          v-model="form.name"
+        p-input(v-model="form.name" form="workflow" name="stage" :readonly="reading"
           ref="firstInput"
-          @keyup.enter="save")
-        q-field(
-          v-if="reading"
-          label="Stages"
-          stack-label)
-          template(v-slot:control)
-            q-list(
-              class="col-12"
-              highlight)
-              q-item(
-                v-for="stage in item.stages"
-                :to="'/workflow/'+item.id+'/stage/'+stage.id"
-                :key="stage.id") {{ stage.name }}
-              q-item(:to="'/workflow/'+item.id+'/stage/create'")
-                q-item-section(avatar)
-                  q-icon(name="fas fa-plus")
-                q-item-section Create stage
-        q-select(
-          icon="fas fa-sitemap"
-          label="Available in"
-          helper=""
-          :readonly="reading"
-          v-model="relations.org_units"
-          :options="options('org_units')"
-          option-value="id"
-          option-label="name"
-          filter
-          multiple
-          use-chips
-          stack-label
-          emit-value
-          map-options)
+          :enter="save")
+        p-list-field(v-model="item.stages" form="workflow" name="stage"
+          :path="'/workflow/'+item.id+'/stage'"
+          v-if="reading")
+        p-select(v-model="relations.org_units" form="workflow" name="org_units" :readonly="reading"
+          multiple :options="options('org_units')")
       q-list(
         v-else-if="list.length"
         highlight)

@@ -1,15 +1,16 @@
 <template lang="pug">
   q-input(
     ref="input"
+    v-model="localValue"
     :type="inputType"
     :label="$t(form +'.labels.'+name)"
-    :hint="$t(form +'.helpers.'+name)"
-    :error-label="$t(form +'.errors.'+name)"
-    :value="value"
+    :hint="readonly? '': $t(form +'.helpers.'+name)"
+    :error-label="readonly? '': $t(form +'.errors.'+name)"
     :readonly="readonly"
     :mask="mask"
-    @input="handleChange"
     @keyup.enter="enter"
+    :key="name"
+    :name="name"
     hide-hint)
     template(v-if="icon" v-slot:prepend)
       q-icon(:name="'fas fa-'+icon")
@@ -18,15 +19,11 @@
 import { QInput } from 'quasar'
 import { icon, types } from './config'
 export default {
-  extends: QInput,
   components: {
     QInput
   },
-  props: ['enter', 'form', 'name'],
+  props: ['enter', 'form', 'name', 'mask', 'readonly', 'errorLabel', 'value'],
   methods: {
-    handleChange (newVal) {
-      this.$emit('input', newVal)
-    },
     focus () {
       this.$refs.input.focus()
     }
@@ -37,6 +34,14 @@ export default {
     },
     inputType () {
       return types[this.name] || 'text'
+    },
+    localValue: {
+      get () {
+        return this.value
+      },
+      set (localValue) {
+        this.$emit('input', localValue)
+      }
     }
   }
 }

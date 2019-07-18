@@ -22,7 +22,6 @@
 
 <script>
 import { mixin } from 'boot/form'
-
 export default {
   name: 'PageRoleAttribution',
   mixins: [mixin('role_attribution')],

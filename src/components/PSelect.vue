@@ -3,8 +3,8 @@
     :value="value"
     @input="handleChange"
     :label="$t(form +'.labels.'+name)"
-    :hint="$t(form +'.helpers.'+name)"
-    :error-label="$t(form +'.errors.'+name)"
+    :hint="readonly? '': $t(form +'.helpers.'+name)"
+    :error-label="readonly? '': $t(form +'.errors.'+name)"
     :readonly="readonly"
     :options="options"
 
@@ -23,7 +23,7 @@
 </template>
 <script>
 import { QSelect } from 'quasar'
-import { icon, types } from './config'
+import { icon } from './config'
 
 export default {
   extends: QSelect,
@@ -55,9 +55,6 @@ export default {
   computed: {
     icon () {
       return icon(this.form, this.name)
-    },
-    inputType () {
-      return types[this.name] || 'text'
     }
   }
 }

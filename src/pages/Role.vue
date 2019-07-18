@@ -8,22 +8,10 @@
         label="Global"
         :disable="reading"
         v-model="form.global")
-      q-field(
-        v-if="reading"
-        label="Role attributions"
-        stack-label)
-        template(v-slot:control)
-          q-list(
-            class="col-12"
-            highlight)
-            q-item(
-              v-for="role in item.role_attributions"
-              :to="'/role/'+item.id+'/attribution/'+role.id"
-              :key="role.id") {{ role.user.username }} in {{ role.org_unit.name }}
-            q-item(:to="'/role/'+item.id+'/attribution/create'")
-              q-item-section(avatar)
-                q-icon(name="fas fa-plus")
-              q-item-section Create role attribution
+      p-list-field(v-model="item.role_attributions" form="role" name="role_attributions"
+        :path="'/role/'+item.id+'/attribution'"
+        :item-label-template="'{{ user.username }} in {{ org_unit.name }}'"
+        v-if="reading")
     q-list(
       v-else-if="list.length"
       highlight)
