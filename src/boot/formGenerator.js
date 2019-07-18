@@ -1,6 +1,5 @@
-import VueFormGenerator from 'vue-form-generator'
+import * as SurveyVue from 'survey-vue'
 import cloneDeep from 'lodash/cloneDeep'
-import 'vue-form-generator/dist/vfg.css'
 import jexl from 'jexl'
 
 /**
@@ -10,6 +9,8 @@ import jexl from 'jexl'
  * templateStringToExpression(mystring) // returns '"" + (name) + " is " + (age+1) + " years old"'
  * @param {String} string
  */
+// TODO still usefull with surveyjs?
+// TODO use handlebars
 export const templateStringToExpression = string => {
   var expressions = string.match(/\$\{(.*?)\}/g)
   if (expressions) {
@@ -25,8 +26,9 @@ export const templateStringToExpression = string => {
  * Generates a new schema that locks all the fields against modification
  * @param {the initial schema with the vue-form-builder syntax} schema
  * @returns a clone of the initial schema with all fields marked as read-only
- * TODO: some fields are still not r/o
+ // TODO some fields are still not r/o
  */
+// TODO still usefull with surveyjs?
 export const makeReadOnly = schema => {
   if (!schema) return
   /** Small function that makes readonly each field of a field set.
@@ -56,9 +58,10 @@ export const makeReadOnly = schema => {
  * The 'computed' attribute should have a syntax such as 'Form filled by ${user}' where 'user' is another attribute of the model
  * @param {Schema that is sent to vue-form-builder} schema
  * @param {Model that is sent to vue-form-builder} model
- * TODO: the calculation of the computed files should be done/cross checked on the server side as well
- * TODO: prevent recursive templating e.g. '${sameField}' in the computed attribute of the 'sameField' field
  */
+// TODO still usefull with surveyjs? needs at least a revision
+// TODO: the calculation of the computed files should be done/cross checked on the server side as well
+// TODO: prevent recursive templating e.g. '${sameField}' in the computed attribute of the 'sameField' field
 export const prepareForm = (schema, model) => {
   if (!schema) return
   // Prepares one field marked as 'computed'
@@ -110,5 +113,5 @@ export const prepareForm = (schema, model) => {
 }
 
 export default ({ app, router, Vue, store }) => {
-  Vue.use(VueFormGenerator)
+  Vue.use(SurveyVue)
 }

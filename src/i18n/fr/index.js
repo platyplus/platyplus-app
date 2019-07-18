@@ -25,7 +25,7 @@ export default {
       username: "Nom d'utilisateur",
       created_at: 'Membre depuis',
       roles: 'Roles globaux',
-      org_unit_memberships: 'Membre des emplacements',
+      membership: 'Membre des emplacements',
       preferred_org_unit: 'Emplacement préféré',
       attributes: {
         first_name: 'Prénom',
@@ -33,7 +33,7 @@ export default {
       }
     },
     helpers: {
-      org_unit_memberships: 'Choisir des emplacements',
+      membership: 'Choisir des emplacements',
       preferred_org_unit: 'Choisir un emplacement'
     },
     profile: {

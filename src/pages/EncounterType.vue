@@ -1,39 +1,15 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-input(
-        label="Name"
-        :readonly="reading"
-        v-model="form.name"
+      p-input(v-model="form.name" form="encounter_type" name="name" :readonly="reading"
         ref="firstInput"
-        @keyup.enter="save")
-      q-input(
-        label="Creation title"
-        :readonly="reading"
-        v-model="form.title_create")
-      q-select(
-        label="Isolated uses"
-        helper=""
-        :readonly="reading"
-        v-model="relations.isolated_uses"
-        :options="options('isolated_uses')"
-        option-value="id"
-        option-label="name"
-        filter
+        :enter="save")
+      p-input(v-model="form.title_create" form="encounter_type" name="create" :readonly="reading")
+      p-select(v-model="relations.isolated_uses" form="encounter_type" name="isolated_uses" :readonly="reading"
         multiple
-        use-chips
-        stack-label
-        emit-value
-        map-options)
-      q-select(
-        label="Entity type"
-        helper="Pick an entity type"
-        :readonly="reading"
-        v-model="form.entity_type_id"
-        :options="options('entity_type')"
-        option-value="id"
-        option-label="name"
-        clearable)
+        :options="options('isolated_uses')")
+      q-select(v-model="form.entity_type_id" form="encounter_type" name="entity_type" :readonly="reading"
+        :options="options('entity_type')")
       json-input(label="Encounter schema" v-model="form.encounter_schema" :readonly="reading")
     q-list(
       v-else-if="list.length"

@@ -1,40 +1,13 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-input(
-        label="Name"
-        :readonly="reading"
-        v-model="form.name"
+      p-input(v-model="form.name" form="org_unit_type" name="name" :readonly="reading"
         ref="firstInput"
-        @keyup.enter="save")
-      q-select(
-        label="Possible direct parents"
-        helper="Pick org unit types"
-        :readonly="reading"
-        v-model="relations.from"
-        :options="options('from')"
-        option-value="id"
-        option-label="name"
-        filter
-        multiple
-        use-chips
-        stack-label
-        emit-value
-        map-options)
-      q-select(
-        label="Possible direct children"
-        helper="Pick org unit types"
-        :readonly="reading"
-        v-model="relations.to"
-        :options="options('to')"
-        option-value="id"
-        option-label="name"
-        filter
-        multiple
-        use-chips
-        stack-label
-        emit-value
-        map-options)
+        :enter="save")
+      p-select(v-model="relations.from" form="org_unit_type" name="from" :readonly="reading"
+        multiple :options="options('from')")
+      p-select(v-model="relations.to" form="org_unit_type" name="to" :readonly="reading"
+        multiple :options="options('to')")
     q-list(
       v-else-if="list.length"
       highlight)

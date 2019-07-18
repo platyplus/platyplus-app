@@ -157,7 +157,7 @@ const mutations = {
       $type_id: uuid
       $parent_id: uuid
       $workflows_add: [org_unit_workflow_insert_input!]!
-      $workflows_remove: [uuid]!
+      $workflows_remove: [uuid!]!
     ) {
       workflows_add: insert_org_unit_workflow(objects: $workflows_add) {
         affected_rows

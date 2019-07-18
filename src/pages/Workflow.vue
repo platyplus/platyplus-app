@@ -1,10 +1,11 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="entryMode")
-      q-field Search/List
-      q-field Available forms
-      q-list
-        template(v-for="stage in initialStages")
+      div Search/List
+      div Available forms
+      q-list(v-if="initialStages.length")
+        template(v-for="stage, numStage in initialStages")
+          q-separator(v-if="numStage")
           q-item-label(header) {{stage.name}}
           q-item(v-for="node in stage.encounter_types" :key="node.id" :to="'/org-unit/'+org_unit_id+'/stage/'+stage.id+'/encounter-type/'+node.encounter_type.id+'/create'") {{node.encounter_type.title_create}}
     div(v-else)
@@ -69,6 +70,7 @@ export default {
   props: ['org_unit_id'],
   computed: {
     entryMode () {
+      console.log(this.org_unit_id)
       return this.org_unit_id !== undefined
     },
     initialStages () {

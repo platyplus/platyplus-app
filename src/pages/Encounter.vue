@@ -2,9 +2,9 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       div(v-if="reading")
-        vue-form-generator(:schema="roEncounterSchema" :model="item.data" :options="formOptions")
+        vue-form-generator(:schema="roEncounterSchema" :model="item.data")
       div(v-else-if="encounter_type")
-        vue-form-generator(:schema="encounter_type.encounter_schema" :model="form.data" :options="formOptions")
+        vue-form-generator(:schema="encounter_type.encounter_schema" :model="form.data")
     q-list(
       v-else-if="list && list.length"
       highlight)
@@ -27,12 +27,6 @@ export default {
   name: 'PageEncounter',
   mixins: [mixin('encounter')],
   data: () => ({
-    formOptions: {
-      // TODO: dig into that
-      validateAfterLoad: true,
-      validateAfterChanged: true,
-      validateAsync: true
-    },
     roEncounterSchema: {}
   }),
   props: ['org_unit_id', 'type_id'],

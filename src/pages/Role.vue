@@ -1,12 +1,9 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-input(
-        label="Name"
-        :readonly="reading"
-        v-model="form.name"
+      p-input(v-model="form.name" form="role" name="name" :readonly="reading"
         ref="firstInput"
-        @keyup.enter="save")
+        :enter="save")
       q-toggle(
         label="Global"
         :disable="reading"

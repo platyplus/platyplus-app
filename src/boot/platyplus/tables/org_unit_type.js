@@ -107,9 +107,9 @@ const mutations = {
       $id: uuid!
       $name: String
       $from_add: [org_unit_type_mapping_insert_input!]!
-      $from_remove: [uuid]!
+      $from_remove: [uuid!]!
       $to_add: [org_unit_type_mapping_insert_input!]!
-      $to_remove: [uuid]!
+      $to_remove: [uuid!]!
     ) {
       from_add: insert_org_unit_type_mapping(objects: $from_add) {
         affected_rows

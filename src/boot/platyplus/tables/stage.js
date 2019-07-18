@@ -120,9 +120,9 @@ export const mutations = {
       $name: String
       $workflow_id: uuid
       $previous_add: [stage_transition_insert_input!]!
-      $previous_remove: [uuid]!
+      $previous_remove: [uuid!]!
       $next_add: [stage_transition_insert_input!]!
-      $next_remove: [uuid]!
+      $next_remove: [uuid!]!
     ) {
       previous_add: insert_stage_transition(objects: $previous_add) {
         affected_rows
@@ -142,10 +142,7 @@ export const mutations = {
       }
       next_remove: delete_stage_transition(
         where: {
-          _and: {
-            previous_id: { _in: $previous_remove }
-            next_id: { _eq: $id }
-          }
+          _and: { previous_id: { _in: $next_remove }, next_id: { _eq: $id } }
         }
       ) {
         affected_rows

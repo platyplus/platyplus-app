@@ -1,81 +1,29 @@
 <template lang="pug">
   q-page(v-if="authenticated" padding class="justify-center")
-    q-input(
-      readonly
-      icon="fas fa-user"
-      :label="$t('user.labels.username')"
-      v-model="form.username")
-    q-input(
+    p-input(v-model="form.username" form="user" name="username" readonly)
+    p-input(v-model="form.created_at" form="user" name="createdAt" readonly
       v-if="reading"
-      readonly
-      mask="date"
-      :label="$t('user.labels.created_at')"
-      v-model="form.created_at")
-    q-input(
-      :label="$t('user.labels.attributes.first_name')"
-      :error="vErrors.has('attributes.first_name')"
-      :error-message="vErrors.first('attributes.first_name')"
-      bottom-slots
-      :readonly="reading"
-      v-model="form.attributes.first_name"
+      mask="date")
+    p-input(v-model="form.attributes.first_name" form="user" name="first_name" :readonly="reading"
       ref="firstInput"
-      @keyup.enter="save"
-      key="attributes.first_name"
-      v-validate="validate('attributes.first_name')"
-      name="attributes.first_name")
-    q-input(
-      :label="$t('user.labels.attributes.last_name')"
-      :readonly="reading"
-      v-model="form.attributes.last_name"
-      @keyup.enter="save")
-    q-select(
+      :enter="save")
+      //- // TODO
+      //- bottom-slots
+      //- key="attributes.first_name"
+      //- v-validate="validate('attributes.first_name')"
+      //- name="attributes.first_name")
+    p-input(v-model="form.attributes.last_name" form="user" name="last_name" :readonly="reading"
+      :enter="save")
+    p-select(v-model="relations.roles" form="user" name="roles" readonly
       v-if="reading"
-      icon="fas fa-user-lock"
-      :label="$t('user.labels.roles')"
-      v-model="relations.roles"
-      :options="options('roles')"
-      option-value="id"
-      option-label="name"
-      readonly
-      filter
-      multiple
-      use-chips
-      emit-value
-      map-options)
-    q-select(
-      icon="fas fa-language"
-      :label="$t('language')"
-      :readonly="reading"
-      :options="$locales"
-      v-model="form.locale"
-      emit-value
-      map-options)
-    q-select(
+      multiple :options="options('roles')")
+    p-select(v-model="form.locale" form="user" name="language" :readonly="reading"
+      :options="$locales")
+    p-select(v-model="relations.org_unit_memberships" form="user" name="membership" readonly
       v-if="reading"
-      icon="fas fa-sitemap"
-      :label="$t('user.labels.org_unit_memberships')"
-      :helper="$t('user.helpers.org_unit_memberships')"
-      option-value="id"
-      option-label="name"
-      v-model="relations.org_unit_memberships"
-      :options="options('org_unit_memberships')"
-      readonly
-      filter
-      multiple
-      use-chips
-      emit-value
-      map-options)
-    q-select(
-      icon="fas fas fa-location-arrow"
-      :label="$t('user.labels.preferred_org_unit')"
-      :helper="$t('user.labels.preferred_org_unit')"
-      :readonly="reading"
-      v-model="form.preferred_org_unit_id"
-      :options="preferredOrgUnitOptions"
-      option-value="id"
-      option-label="name"
-      emit-value
-      map-options)
+      multiple :options="options('org_unit_memberships')")
+    p-select(v-model="form.preferred_org_unit_id" form="user" name="preferred_org_unit" :readonly="reading"
+      :options="preferredOrgUnitOptions")
     q-list(
       v-if="reading && item.role_attributions.length"
       highlight)

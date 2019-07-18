@@ -174,9 +174,9 @@ const mutations = {
       $id: uuid!
       $username: String
       $org_unit_memberships_add: [user_org_unit_insert_input!]!
-      $org_unit_memberships_remove: [uuid]!
+      $org_unit_memberships_remove: [uuid!]!
       $roles_add: [user_role_insert_input!]!
-      $roles_remove: [uuid]!
+      $roles_remove: [uuid!]!
       $preferred_org_unit_id: uuid
       $locale: String
     ) {

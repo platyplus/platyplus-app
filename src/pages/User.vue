@@ -1,42 +1,13 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-input(
-        icon="fas fa-user"
-        label="User name"
-        :readonly="reading"
-        v-model="form.username"
+      p-input(v-model="form.username" form="user" name="username" :readonly="reading"
         ref="firstInput"
-        @keyup.enter="save")
-      q-select(
-        icon="fas fa-user-lock"
-        label="Global roles"
-        :readonly="reading"
-        v-model="relations.roles"
-        :options="options('roles')"
-        option-value="id"
-        option-label="name"
-        stack-label
-        emit-value
-        map-options
-        filter
-        multiple
-        use-chips)
-      q-select(
-        icon="fas fa-sitemap"
-        :label="$t('user.labels.org_unit_memberships')"
-        :helper="$t('user.helpers.org_unit_memberships')"
-        :readonly="reading"
-        v-model="relations.org_unit_memberships"
-        :options="options('org_unit_memberships')"
-        option-value="id"
-        option-label="name"
-        stack-label
-        emit-value
-        map-options
-        filter
-        multiple
-        use-chips)
+        :enter="save")
+      p-select(v-model="relations.roles" form="user" name="roles" :readonly="reading"
+        multiple :options="options('roles')")
+      p-select(v-model="relations.org_unit_memberships" form="user" name="membership" :readonly="reading"
+        multiple :options="options('org_unit_memberships')")
       q-field(
         v-if="reading"
         label="Role attributions"

@@ -1,21 +1,11 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      q-input(label="Name" :readonly="reading" v-model="form.name" ref="firstInput" @keyup.enter="save")
-      q-separator
-      q-select(
-        label="Parent org unit"
-        helper="Pick an org unit"
-        :readonly="reading || Boolean(parent_id)"
-        v-model="form.parent_id"
-        :options="options('parent')"
-        option-value="id"
-        option-label="name"
-        clearable
-        filter
-        stack-label
-        emit-value
-        map-options)
+      p-input(v-model="form.name" form="org_unit" name="name" :readonly="reading"
+        ref="firstInput"
+        :enter="save")
+      p-select(v-model="form.parent_id" form="org_unit" name="parent" :readonly="reading || Boolean(parent_id)"
+        :options="options('parent')")
       q-field(
         v-if="reading && item.type.to.length > 0"
         label="Children"
@@ -32,18 +22,8 @@
               q-item-section(avatar)
                 q-icon(name="fas fa-plus")
               q-item-section Create child
-      q-select(
-        label="Type"
-        helper="Pick an org unit type"
-        :readonly="reading"
-        v-model="form.type_id"
-        :options="options('type')"
-        option-value="id"
-        option-label="name"
-        fill-input
-        stack-label
-        emit-value
-        map-options)
+      p-select(v-model="form.type_id" form="org_unit" name="type" :readonly="reading"
+        :options="options('type')")
       q-field(
         v-if="reading"
         label="Role attributions"
@@ -60,22 +40,8 @@
               q-item-section(avatar)
                 q-icon(name="fas fa-plus")
               q-item-section Create role attribution
-      q-select(
-        icon="fas fa-route"
-        label="Available workflows"
-        helper=""
-        :readonly="reading"
-        v-model="relations.workflows"
-        :options="options('workflows')"
-        option-value="id"
-        option-label="name"
-        stack-label
-        emit-value
-        map-options
-        filter
-        multiple
-        use-chips
-        )
+      p-select(v-model="relations.workflows" form="org_unit" name='workflow' :readonly="reading"
+        multiple :options="options('workflows')")
     q-tree(v-else-if="children.length"
       :nodes="children"
       node-key="id"

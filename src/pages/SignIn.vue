@@ -1,12 +1,12 @@
 <template lang="pug">
   q-page(padding class="justify-center")
-    q-input(icon="fas fa-user" label="Login" helper="Enter your user name" error-label="We need a valid user name" v-model="username" ref="username" @keyup.enter="login")
-    q-input(icon="fas fa-key" label="Password" helper="Enter your password" error-label="We need a valid password" type="password" v-model="password" @keyup.enter="login")
+    p-input(v-model="username" form="user" name="username"
+      ref="username"
+      :enter="login")
+    p-input(v-model="password" form="user" name="password"
+      :enter="login")
     q-btn(icon="fas fa-sign-in-alt" label="Sign in" @click="login")
 </template>
-
-<style>
-</style>
 
 <script>
 import { signin } from 'boot/auth'
@@ -35,3 +35,6 @@ export default {
   }
 }
 </script>
+
+<style>
+</style>

@@ -109,7 +109,7 @@ const mutations = {
     mutation update_encounter_type(
       $id: uuid!
       $isolated_uses_add: [org_unit_isolated_encounter_type_insert_input!]!
-      $isolated_uses_remove: [uuid]!
+      $isolated_uses_remove: [uuid!]!
       $encounter_schema: jsonb
       $name: String
       $title_create: String

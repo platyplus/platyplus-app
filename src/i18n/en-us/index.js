@@ -23,9 +23,10 @@ export default {
   user: {
     labels: {
       username: 'User name',
+      password: 'Password',
       created_at: 'Member since',
       roles: 'Global roles',
-      org_unit_memberships: 'Membership',
+      membership: 'Membership',
       preferred_org_unit: 'Preferred location',
       attributes: {
         first_name: 'First name',
@@ -33,8 +34,17 @@ export default {
       }
     },
     helpers: {
-      org_unit_memberships: 'Pick org units',
+      username: 'Enter your user name',
+      password: 'Enter your password',
+      roles: 'Select the global roles',
+      membership: 'Pick org units',
       preferred_org_unit: 'Pick an org unit'
+    },
+    errors: {
+      username: 'User name is required',
+      password: 'Password is required',
+      roles: '',
+      membership: ''
     },
     profile: {
       title: 'Profile'

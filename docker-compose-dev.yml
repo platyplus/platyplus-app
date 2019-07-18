@@ -27,7 +27,7 @@ services:
       - ./babel.config.js:/opt/build/babel.config.js
       - ./.eslintrc:/opt/build/.eslintrc
       - ./.postcssrc:/opt/build/.postcssrc
-      - notused_app:/opt/build/node_modules
+      - notused_app:/opt/build/node_modules # TODO revoir cette merde
   authentication:
     build:
       context: ./services/authentication

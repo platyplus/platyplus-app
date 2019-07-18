@@ -71,7 +71,25 @@ const mutations = {
     }
   `,
   update: gql`
-    mutation update_workflow($id: uuid!, $name: String) {
+    mutation update_workflow(
+      $id: uuid!
+      $name: String
+      $org_units_add: [org_unit_workflow_insert_input!]!
+      $org_units_remove: [uuid!]!
+    ) {
+      org_units_add: insert_org_unit_workflow(objects: $org_units_add) {
+        affected_rows
+      }
+      org_units_remove: delete_org_unit_workflow(
+        where: {
+          _and: {
+            org_unit_id: { _in: $org_units_remove }
+            workflow_id: { _eq: $id }
+          }
+        }
+      ) {
+        affected_rows
+      }
       result: update_workflow(
         where: { id: { _eq: $id } }
         _set: { name: $name }
@@ -84,8 +102,13 @@ const mutations = {
     ${fragments.base}
   `,
   insert: gql`
-    mutation insert_workflow($name: String) {
-      result: insert_workflow(objects: [{ name: $name }]) {
+    mutation insert_workflow(
+      $name: String
+      $org_units_add: [org_unit_workflow_insert_input!]!
+    ) {
+      result: insert_workflow(
+        objects: [{ name: $name, org_units: { data: $org_units_add } }]
+      ) {
         returning {
           ...workflow_base
         }
