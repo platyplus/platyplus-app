@@ -14,6 +14,7 @@
     stack-label
     emit-value
     map-options
+    :clearable="!required"
     filter)
     template(v-if="icon" v-slot:prepend)
       q-icon(:name="'fas fa-'+icon")
@@ -45,7 +46,11 @@ export default {
     optionLabel: {
       default: 'name'
     },
-    options: Array
+    options: Array,
+    required: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     handleChange (newVal) {
