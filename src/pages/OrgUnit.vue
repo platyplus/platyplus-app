@@ -4,11 +4,11 @@
       p-input(v-model="form.name" form="org_unit" name="name" :readonly="reading"
         ref="firstInput"
         :enter="save")
+      p-select(v-model="form.parent_id" form="org_unit" name="parent" :readonly="reading || Boolean(parent_id)"
+        :options="options('parent')")
       p-select(v-model="form.type_id" form="org_unit" name="type" :readonly="reading"
         required
         :options="options('type')")
-      p-select(v-model="form.parent_id" form="org_unit" name="parent" :readonly="reading || Boolean(parent_id)"
-        :options="options('parent')")
       p-list-field(v-model="children" form="org_unit" name="children"
         path="/org-unit"
         :create-suffix="item.id"

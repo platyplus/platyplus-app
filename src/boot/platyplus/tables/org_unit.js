@@ -6,17 +6,19 @@ const settings = {
   options: {
     parent: {
       table: 'org_unit',
-      filter: (item, data, settings) => data.item.id !== item.id
+      /** Hides the parents that have a type that does not allow children, and hide the current org unit */
+      filter: (cursor, data, settings) =>
+        cursor.type.to.length > 0 && data.item.id !== cursor.id
     },
     type: {
       table: 'org_unit_type',
       /** Shows only the available types according to the parent's type, or all root types if no parents */
-      filter: (item, data, settings) => {
+      filter: (cursor, data, settings) => {
         // TODO transpose this server-side, or at least secure the insert/update
         if (data.item.parent?.id) {
-          return data.item.parent.type?.to?.some(i => item.id === i.to.id)
+          return data.item.parent.type?.to?.some(i => cursor.id === i.to.id)
         } else {
-          return item.from.length === 0
+          return cursor.from.length === 0
         }
       }
     },

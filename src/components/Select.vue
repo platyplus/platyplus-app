@@ -2,13 +2,13 @@
   q-select(
     v-model="localValue"
     :label="$t(form +'.labels.'+name)"
-    :hint="readonly? '': $t(form +'.helpers.'+name)"
-    :error-label="readonly? '': $t(form +'.errors.'+name)"
-    :readonly="readonly"
+    :hint="isReadOnly? '': $t(form +'.helpers.'+name)"
+    :error-label="isReadOnly? '': $t(form +'.errors.'+name)"
+    :readonly="isReadOnly"
     :options="options"
     :multiple="multiple"
     hide-hint
-    :hide-dropdown-icon="readonly"
+    :hide-dropdown-icon="isReadOnly"
     :option-value="optionValue"
     :option-label="optionLabel"
     stack-label
@@ -21,7 +21,7 @@
     template(v-if="multiple" v-slot:selected-item="scope")
       q-chip(
         dense
-        :removable="!readonly"
+        :removable="!isReadOnly"
         @remove="scope.removeAtIndex(scope.index)"
         tabindex="scope.tabindex") {{ scope.opt[optionLabel] }}
 </template>
@@ -55,6 +55,11 @@ export default {
   methods: {
     handleChange (newVal) {
       this.$emit('input', newVal)
+    }
+  },
+  computed: {
+    isReadOnly () {
+      return this.readonly || (this.required && this.options.length === 1)
     }
   }
 }
