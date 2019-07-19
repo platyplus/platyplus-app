@@ -4,10 +4,10 @@
       p-select(v-model="form.user_id" form="role_attribution" name="user" :readonly="reading || Boolean(user_id)"
         required
         :options="options('user')" option-label="username")
-      p-select(v-model="form.role_id" form="role_attribution" name="role" :readonly="reading || Boolean(user_id)"
+      p-select(v-model="form.role_id" form="role_attribution" name="role" :readonly="reading || Boolean(role_id)"
         required
         :options="options('role')")
-      p-select(v-model="form.org_unit_id" form="role_attribution" name="org_unit" :readonly="reading || Boolean(user_id)"
+      p-select(v-model="form.org_unit_id" form="role_attribution" name="org_unit" :readonly="reading || Boolean(org_unit_id)"
         required
         :options="options('org_unit')")
     q-list(
