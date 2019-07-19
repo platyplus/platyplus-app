@@ -6,6 +6,7 @@
       q-icon(:name="'fas fa-'+icon")
     template(v-slot:control)
       q-list(
+        dense
         class="col-12"
         highlight)
         q-item(

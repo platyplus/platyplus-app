@@ -1,6 +1,3 @@
-// This is just an example,
-// so you can safely delete all default props below
-
 export default {
   yes: 'Yes',
   no: 'No',
@@ -21,13 +18,29 @@ export default {
     message: 'Are you sure to want to sign out?'
   },
   org_unit: {
+    label: 'Org Unit',
     labels: {
       name: 'Name',
       parent: 'Parent',
       children: 'Children',
-      type: 'Type',
-      role_attributions: 'Role attributions',
+      type: '@:org_unit_type.label',
+      role_attributions: '@:role_attribution.label_plural',
       workflows: '@:workflow.label_plural'
+    },
+    helper: 'Choose an org unit',
+    helpers: {
+      name: 'Enter the name of the org unit',
+      type: 'Select the type of the org unit',
+      parent:
+        "Select the org unit's parent. Choose none if this is a root org unit",
+      workflows: 'Select the available workflows for this org unit'
+    },
+    error: 'Invalid org unit',
+    errors: {
+      name: 'Invalid name',
+      type: 'Invalid type',
+      parent: 'Invalid parent',
+      workflows: 'Invalid workflows selection'
     },
     actions: {
       children: {
@@ -42,13 +55,49 @@ export default {
     label: 'Type',
     label_plural: 'Types'
   },
+  role: {
+    label: 'Role',
+    labels: {
+      name: 'Name',
+      role_attributions: '@:role_attribution.label_plural'
+    },
+    helper: 'Choose a role',
+    helpers: {
+      name: 'Enter the name of the role'
+    },
+    error: 'Invalid role',
+    errors: {
+      name: 'Invalid name'
+    },
+    actions: {
+      role_attributions: {
+        create: '@:role_attribution.actions.create'
+      }
+    }
+  },
   role_attribution: {
-    label_plural: 'Role attributions',
+    label_plural: 'Permissions',
+    labels: {
+      user: '@:user.label',
+      role: '@:role.label',
+      org_unit: '@:org_unit.label'
+    },
+    helpers: {
+      user: '@:user.helper',
+      role: '@:role.helper',
+      org_unit: '@:org_unit.helper'
+    },
+    errors: {
+      user: '@:user.error',
+      role: '@:role.error',
+      org_unit: '@:org_unit.error'
+    },
     actions: {
       create: 'Create a new role attribution'
     }
   },
   user: {
+    label: 'User',
     labels: {
       username: 'User name',
       password: 'Password',
@@ -61,6 +110,7 @@ export default {
       language: '@:language',
       role_attributions: '@:role_attribution.label_plural'
     },
+    helper: 'Choose a user',
     helpers: {
       username: 'Enter your user name',
       password: 'Enter your password',
@@ -71,6 +121,7 @@ export default {
       first_name: 'Enter a first name',
       last_name: 'Enter a last name'
     },
+    error: 'Invalid user',
     errors: {
       username: 'User name is required',
       password: 'Password is required',
