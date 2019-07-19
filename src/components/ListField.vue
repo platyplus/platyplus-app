@@ -13,7 +13,7 @@
           v-for="cursor in value"
           :to="path+'/'+cursor.id"
           :key="cursor.id") {{ itemLabel(cursor) }}
-        q-item(:to="path+'/create'")
+        q-item(:to="path+(createSuffix ? '/'+ createSuffix : '')+'/create'")
           q-item-section(avatar)
             q-icon(name="fas fa-plus")
           q-item-section {{$t(form +'.actions.'+name+'.create')}}
@@ -41,7 +41,8 @@ export default {
     create: {
       type: Boolean,
       default: true
-    }
+    },
+    createSuffix: String
   },
   methods: {
     itemLabel (cursor) {

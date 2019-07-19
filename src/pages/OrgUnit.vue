@@ -11,7 +11,8 @@
         :options="options('parent')")
       p-list-field(v-model="children" form="org_unit" name="children"
         path="/org-unit"
-        v-if="reading && item.type.to.length > 0")
+        :create-suffix="item.id"
+        v-if="reading")
       p-list-field(v-model="item.role_attributions" form="org_unit" name="role_attributions"
         :path="'/org-unit/'+item.id+'/attribution'"
         :item-label-template="'{{ user.username }} as {{ role.name }}'"
