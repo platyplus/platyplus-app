@@ -40,7 +40,6 @@ export default {
   props: ['org_unit_id'],
   computed: {
     entryMode () {
-      console.log(this.org_unit_id)
       return this.org_unit_id !== undefined
     },
     initialStages () {

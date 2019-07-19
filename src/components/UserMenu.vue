@@ -2,63 +2,30 @@
   q-drawer(v-model="drawer" side="left" bordered)
     q-list(no-border link inset-delimiter)
       q-item-label(header) Main
-      q-item(to="/" :exact="true")
-        q-item-section(avatar)
-          q-icon(name="fas fa-home")
-        q-item-section Home
-      q-item(to="/profile")
-        q-item-section(avatar)
-         q-icon(name="fas fa-user-circle")
-        q-item-section {{$t('user.profile.title')}}
-      template(v-if="user.preferred_org_unit")
-        q-separator(spaced)
-        q-item-label(header) {{ user.preferred_org_unit && user.preferred_org_unit.name }}
-        q-item(v-for="node in user.preferred_org_unit.workflows" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/workflow/' + node.workflow.id")
-          q-item-section(avatar)
-           q-icon(name="fas fa-route")
-          q-item-section {{node.workflow.name}}
-        q-item(v-for="node in user.preferred_org_unit.isolated_encounter_types" :key="node.id" :to="'/org-unit/'+user.preferred_org_unit.id+'/encounter-type/' + node.encounter_type.id")
-          q-item-section(avatar)
-           q-icon(name="fas fa-table")
-          q-item-section {{node.encounter_type.name}}
-      q-separator(spaced)
+      p-menu-item(to="/" icon="home") Home
+      p-menu-item(to="/profile" icon="user-circle") {{$t('user.profile.title')}}
+
+      template( v-if="user.preferred_org_unit")
+        q-item-label(header) {{ user.preferred_org_unit.name }}
+        p-menu-item(:to="'/org-unit/'+user.preferred_org_unit.id+'/workflow/' + node.workflow.id" icon="route"
+          v-for="node in user.preferred_org_unit.workflows" :key="node.id") {{node.workflow.name}}
+        p-menu-item(:to="'/org-unit/'+user.preferred_org_unit.id+'/encounter-type/' + node.encounter_type.id" icon="route"
+          v-for="node in user.preferred_org_unit.isolated_encounter_types" :key="node.id") {{node.encounter_type.name}}
+      q-separator
+
       q-item-label(header) Configuration
-      q-item(to="/org-unit")
-        q-item-section(avatar)
-          q-icon(name="fas fa-sitemap")
-        q-item-section Organisation
-      q-item(to="/role")
-        q-item-section(avatar)
-          q-icon(name="fas fa-user-lock")
-        q-item-section Roles
-      q-item(to="/user")
-        q-item-section(avatar)
-          q-icon(name="fas fa-users")
-        q-item-section Users
-      q-item(to="/workflow")
-        q-item-section(avatar)
-          q-icon(name="fas fa-route")
-        q-item-section Workflows
-      q-item(to="/encounter-type")
-        q-item-section(avatar)
-          q-icon(name="fas fa-comments")
-        q-item-section Encounter Types
-      q-separator(spaced)
+      p-menu-item(to="/org-unit" icon="sitemap") Organisation
+      p-menu-item(to="/role" icon="user-lock") Roles
+      p-menu-item(to="/workflow" icon="route") Workflows
+      p-menu-item(to="/encounter-type" icon="comments") Encounter Types
+      q-separator
+
       q-item-label(header) Metadata
-      q-item(to="/org-unit-type")
-        q-item-section(avatar)
-          q-icon(name="fas fa-sitemap")
-        q-item-section Org Unit Types
-      q-item(to="/entity-type")
-        q-item-section(avatar)
-          q-icon(name="fas fa-heartbeat")
-        q-item-section Entity Types
-      q-separator(spaced)
+      p-menu-item(to="/org-unit-type" icon="sitemap") Org Unit Types
+      p-menu-item(to="/entity-type" icon="heartbeat") Entity Types
+      q-separator
       q-item-label(header) Administration
-      q-item(to="/import-export")
-        q-item-section(avatar)
-          q-icon(name="fas fas fa-sync")
-        q-item-section Import/Export
+      p-menu-item(to="/import-export" icon="sync") Import/Export
 </template>
 
 <script>
