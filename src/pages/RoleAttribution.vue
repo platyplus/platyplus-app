@@ -2,11 +2,13 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       p-select(v-model="form.user_id" form="role_attribution" name="user" :readonly="reading || Boolean(user_id)"
-        :options="options('user')"
-        option-label="username")
+        required
+        :options="options('user')" option-label="username")
       p-select(v-model="form.role_id" form="role_attribution" name="role" :readonly="reading || Boolean(user_id)"
+        required
         :options="options('role')")
       p-select(v-model="form.org_unit_id" form="role_attribution" name="org_unit" :readonly="reading || Boolean(user_id)"
+        required
         :options="options('org_unit')")
     q-list(
       v-else-if="list.length"
