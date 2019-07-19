@@ -8,6 +8,7 @@
     :options="options"
     :multiple="multiple"
     hide-hint
+    :hide-dropdown-icon="readonly"
     :option-value="optionValue"
     :option-label="optionLabel"
     stack-label

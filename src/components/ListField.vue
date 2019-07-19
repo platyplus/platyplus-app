@@ -2,6 +2,8 @@
   q-field(
     :label="$t(form +'.labels.'+name)"
     stack-label)
+    template(v-if="icon" v-slot:prepend)
+      q-icon(:name="'fas fa-'+icon")
     template(v-slot:control)
       q-list(
         class="col-12"
