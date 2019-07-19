@@ -4,8 +4,8 @@
     v-model="localValue"
     :type="inputType"
     :label="$t(form +'.labels.'+name)"
-    :hint="readonly? '': $t(form +'.helpers.'+name)"
-    :error-label="readonly? '': $t(form +'.errors.'+name)"
+    :hint="hint"
+    :error-label="errorLabel"
     :readonly="readonly"
     :mask="mask"
     @keyup.enter="enter"
@@ -18,12 +18,13 @@
 <script>
 import { QInput } from 'quasar'
 import { icon, types } from './config'
+import { isEmpty } from 'lodash'
 export default {
   name: 'PInput',
   components: {
     QInput
   },
-  props: ['enter', 'form', 'name', 'mask', 'readonly', 'errorLabel', 'value'],
+  props: ['enter', 'form', 'name', 'mask', 'readonly', 'value'],
   methods: {
     focus () {
       this.$refs.input.focus()
@@ -43,6 +44,16 @@ export default {
       set (localValue) {
         this.$emit('input', localValue)
       }
+    },
+    hint () {
+      if (!isEmpty(this.readonly)) {
+        return this.$t(this.form + '.helpers.' + this.name)
+      } else return undefined
+    },
+    errorLabel () {
+      if (!isEmpty(this.readonly)) {
+        return this.$t(this.form + '.errors.' + this.name)
+      } else return undefined
     }
   }
 }
