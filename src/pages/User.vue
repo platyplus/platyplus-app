@@ -2,8 +2,7 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       p-input(v-model="form.username" form="user" name="username" :readonly="reading"
-        ref="firstInput"
-        :enter="save")
+        autofocus :enter="save")
       p-select(v-model="relations.roles" form="user" name="roles" :readonly="reading"
         multiple :options="options('roles')")
       p-select(v-model="relations.org_unit_memberships" form="user" name="membership" :readonly="reading"

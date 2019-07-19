@@ -5,8 +5,7 @@
       v-if="reading"
       mask="date")
     p-input(v-model="form.attributes.first_name" form="user" name="first_name" :readonly="reading"
-      ref="firstInput"
-      :enter="save")
+      autofocus :enter="save")
       //- // TODO  v-validate="validate('attributes.first_name')"
     p-input(v-model="form.attributes.last_name" form="user" name="last_name" :readonly="reading"
       :enter="save")
@@ -14,12 +13,13 @@
       v-if="reading"
       multiple :options="options('roles')")
     p-select(v-model="form.locale" form="user" name="language" :readonly="reading"
-      option-value="value" option-label="label"
-      :options="$locales")
+      required
+      :options="$locales" option-value="value" option-label="label")
     p-select(v-model="relations.org_unit_memberships" form="user" name="membership" readonly
       v-if="reading"
       multiple :options="options('org_unit_memberships')")
     p-select(v-model="form.preferred_org_unit_id" form="user" name="preferred_org_unit" :readonly="reading"
+      required
       :options="preferredOrgUnitOptions")
     p-list-field(v-model="item.role_attributions" form="user" name="role_attributions"
         :path="'/user/'+item.id+'/attribution'"

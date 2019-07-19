@@ -2,8 +2,7 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       p-input(v-model="form.name" form="org_unit" name="name" :readonly="reading"
-        ref="firstInput"
-        :enter="save")
+        autofocus :enter="save")
       p-select(v-model="form.parent_id" form="org_unit" name="parent" :readonly="reading || Boolean(parent_id)"
         :options="options('parent')")
       p-select(v-model="form.type_id" form="org_unit" name="type" :readonly="reading"

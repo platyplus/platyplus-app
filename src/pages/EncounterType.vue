@@ -2,14 +2,14 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       p-input(v-model="form.name" form="encounter_type" name="name" :readonly="reading"
-        ref="firstInput"
-        :enter="save")
+        autofocus :enter="save")
       p-input(v-model="form.title_create" form="encounter_type" name="create" :readonly="reading")
       p-select(v-model="relations.isolated_uses" form="encounter_type" name="isolated_uses" :readonly="reading"
         multiple :options="options('isolated_uses')")
       p-select(v-model="form.entity_type_id" form="encounter_type" name="entity_type" :readonly="reading"
+        required
         :options="options('entity_type')")
-      p-json-input(label="Encounter schema" v-model="form.encounter_schema" :readonly="reading")
+      p-json-input(v-model="form.encounter_schema" form="encounter_type" name="encounter_schema" :readonly="reading")
     q-list(
       v-else-if="list.length"
       highlight)

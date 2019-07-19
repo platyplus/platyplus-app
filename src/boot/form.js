@@ -106,10 +106,6 @@ export const mixin = (table, settings = {}) => {
                 settings.relations[relation].default || []
             }
           })
-        // Focus on the input referenced as 'firstInput' in the template
-        if (!this.reading) {
-          this.$nextTick(() => this.$refs.firstInput?.focus())
-        }
       },
       async _save ({
         oldValues = this.item,
@@ -228,7 +224,8 @@ export const mixin = (table, settings = {}) => {
       ...Object.keys(settings.options)
         .filter(name => settings.options[name].table)
         .reduce((aggr, name) => {
-          if (!config.queries[settings.options[name].table]['option']) {
+          const query = config.queries[settings.options[name].table]['option']
+          if (!query) {
             throw Error(
               `The 'option' query has to be implemented for the table '${
                 settings.options[name].table
@@ -236,10 +233,20 @@ export const mixin = (table, settings = {}) => {
             )
           }
           aggr[`${name}_options`] = {
-            query: config.queries[settings.options[name].table]['option'],
+            query: query,
             update: data => data[Object.keys(data)[0]],
             variables: {
               where: settings.options[name].where || {}
+            },
+            subscribeToMore: {
+              document: queryToSubscription(query),
+              variables: {
+                where: settings.options[name].where || {}
+              },
+              // Mutate the previous result
+              updateQuery: (previousResult, { subscriptionData: { data } }) => {
+                return data
+              }
             }
           }
           return aggr

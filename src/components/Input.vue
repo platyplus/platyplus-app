@@ -1,5 +1,6 @@
 <template lang="pug">
   q-input(
+    :autofocus="autofocus"
     ref="input"
     v-model="localValue"
     :type="inputType"
@@ -24,13 +25,7 @@ export default {
     QInput
   },
   mixins: [FieldMixin],
-  props: ['mask', 'value'],
-  methods: {
-    focus () {
-      // TODO
-      if (!this.readonly) this.$refs.input.focus()
-    }
-  },
+  props: ['mask', 'value', 'autofocus'],
   computed: {
     inputType () {
       return types[this.name] || 'text'

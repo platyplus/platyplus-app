@@ -2,8 +2,7 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       p-input(v-model="form.name" form="entity_type" name="name" :readonly="reading"
-        ref="firstInput"
-        :enter="save")
+        autofocus :enter="save")
       p-list-field(v-model="item.encounter_types" form="entity_type" name="encounter_types"
         :path="'/entity-type/'+item.id+'/encounter-type'"
         v-if="reading")

@@ -17,8 +17,53 @@ export default {
   logout: {
     message: 'Are you sure to want to sign out?'
   },
+  encounter_type: {
+    label_plural: 'Encounter types',
+    labels: {
+      name: 'Name',
+      create: 'Creation label',
+      isolated_uses: 'Isolated uses',
+      entity_type: '@:entity_type.label',
+      encounter_schema: 'Schema'
+    },
+    helpers: {
+      name: 'Name fo the encounter type',
+      create: 'Label used for creating an encounter',
+      isolated_uses:
+        'Org units using this encounter type outside of a workflow',
+      entity_type: 'Type of the entity with which the encounter type works'
+    },
+    errors: {
+      name: 'Invalid name',
+      create: 'Invalid label',
+      isolated_uses: 'Invalid list of isolated used',
+      entity_type: 'Invalid entity type'
+    },
+    actions: {
+      create: 'Create a new encounter type'
+    }
+  },
+  entity_type: {
+    label: 'Entity type',
+    labels: {
+      name: 'Name',
+      encounter_types: '@:encounter_type.label_plural'
+    },
+    helpers: {
+      name: 'Name of the entity type'
+    },
+    errors: {
+      name: 'Invalid name'
+    },
+    actions: {
+      encounter_types: {
+        create: '@:encounter_type.actions.create'
+      }
+    }
+  },
   org_unit: {
     label: 'Org Unit',
+    label_plural: 'Org Units',
     labels: {
       name: 'Name',
       parent: 'Parent',
@@ -53,7 +98,23 @@ export default {
   },
   org_unit_type: {
     label: 'Type',
-    label_plural: 'Types'
+    label_plural: 'Types',
+    labels: {
+      name: 'Name',
+      from: 'Possible parents',
+      to: 'Possible children'
+    },
+    helpers: {
+      name: 'Enter the name of the Org Unit Type',
+      from:
+        'Select the possible types of parents this type can get. No parents means a root type.',
+      to: 'Select the possible types of children this type can get'
+    },
+    errors: {
+      name: 'Invalid name',
+      from: 'Invalid list of parents',
+      to: 'Invalid list of children'
+    }
   },
   role: {
     label: 'Role',
@@ -94,6 +155,27 @@ export default {
     },
     actions: {
       create: 'Create a new role attribution'
+    }
+  },
+  stage: {
+    label_plural: 'Stages',
+    labels: {
+      name: 'Name',
+      previous: 'Previous stages',
+      next: 'Next stages'
+    },
+    helpers: {
+      name: 'Name of the stage',
+      previous: 'Possible previous stages',
+      next: 'Possible next stages'
+    },
+    errors: {
+      name: 'Invalid name',
+      previous: 'Invalid previous stages',
+      next: 'Invalid next stages'
+    },
+    actions: {
+      create: 'Create a new stage'
     }
   },
   user: {
@@ -141,6 +223,24 @@ export default {
   },
   workflow: {
     label: 'Workflow',
-    label_plural: 'Workflows'
+    label_plural: 'Workflows',
+    labels: {
+      name: 'Name',
+      stages: '@:stage.label_plural',
+      org_units: '@:org_unit.label_plural'
+    },
+    helpers: {
+      name: 'Name of the workflow',
+      org_units: 'Org Units using the workflow'
+    },
+    errors: {
+      name: 'Invalid name',
+      org_units: 'Invalid org units'
+    },
+    actions: {
+      stages: {
+        create: '@:stage.actions.create'
+      }
+    }
   }
 }

@@ -52,16 +52,16 @@ const mutations = {
       }
     }
   `,
-  // insert: gql`
-  //   mutation insert_entity_type($objects: [entity_type_insert_input!]!) {
-  //     insert_entity_type(objects: $objects) {
-  //       returning {
-  //         ...entity_type_base
-  //       }
-  //     }
-  //   }
-  //   ${fragments.base}
-  // `,
+  insert: gql`
+    mutation insert_entity_type($name: String) {
+      result: insert_entity_type(objects: [{ name: $name }]) {
+        returning {
+          ...entity_type_base
+        }
+      }
+    }
+    ${fragments.base}
+  `,
   update: gql`
     mutation update_entity_type($id: uuid!, $name: String) {
       result: update_entity_type(

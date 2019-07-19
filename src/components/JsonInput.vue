@@ -1,5 +1,12 @@
 <template lang="pug">
-  codemirror(:options="options" ref="codemirror" :value="stringifiedValue" @input="onCmCodeChange")
+  q-field(
+    :readonly="readonly"
+    :label="$t(form +'.labels.'+name)"
+    stack-label)
+    template(v-if="icon" v-slot:prepend)
+      q-icon(:name="'fas fa-'+icon")
+    template(v-slot:control)
+      codemirror(:options="options" ref="codemirror" :value="stringifiedValue" @input="onCmCodeChange")
 </template>
 
 <script>
@@ -9,10 +16,14 @@
  * TODO: make if work as a form input i.e. implement validations
  */
 import VueCodemirror from 'vue-codemirror'
+import { FieldMixin } from './config'
 export default {
   extends: VueCodemirror,
+  mixins: [FieldMixin],
   name: 'JsonInput',
-  props: ['readonly', 'value'],
+  props: {
+    value: { type: Object, default: () => ({}) }
+  },
   data: function () {
     return { lastValue: this.value }
   },

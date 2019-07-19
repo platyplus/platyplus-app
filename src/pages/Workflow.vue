@@ -10,10 +10,9 @@
           q-item(v-for="node in stage.encounter_types" :key="node.id" :to="'/org-unit/'+org_unit_id+'/stage/'+stage.id+'/encounter-type/'+node.encounter_type.id+'/create'") {{node.encounter_type.title_create}}
     div(v-else)
       div(v-if="details")
-        p-input(v-model="form.name" form="workflow" name="stage" :readonly="reading"
-          ref="firstInput"
-          :enter="save")
-        p-list-field(v-model="item.stages" form="workflow" name="stage"
+        p-input(v-model="form.name" form="workflow" name="name" :readonly="reading"
+          autofocus :enter="save")
+        p-list-field(v-model="item.stages" form="workflow" name="stages"
           :path="'/workflow/'+item.id+'/stage'"
           v-if="reading")
         p-select(v-model="relations.org_units" form="workflow" name="org_units" :readonly="reading"

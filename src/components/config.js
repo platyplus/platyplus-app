@@ -13,6 +13,12 @@ const icons = {
   workflows: 'route',
   type: 'angle-double-up',
   language: 'language',
+  encounter_type: {
+    create: 'tag',
+    isolated_uses: 'sitemap',
+    entity_type: 'heartbeat',
+    encounter_schema: 'file-code'
+  },
   user: {
     self: 'user'
   },
@@ -23,6 +29,10 @@ const icons = {
     self: 'sitemap',
     parent: 'sitemap',
     children: 'sitemap'
+  },
+  org_unit_type: {
+    from: 'sitemap',
+    to: 'sitemap'
   }
 }
 export const types = {

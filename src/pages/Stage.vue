@@ -2,8 +2,7 @@
   q-page(v-if="details" padding class="justify-center")
     router-link(v-if="item.workflow" :to="'/workflow/'+workflow_id") Back to {{item.workflow.name}}
     p-input(v-model="form.name" form="stage" name="name" :readonly="reading"
-      ref="firstInput"
-      :enter="save")
+      autofocus :enter="save")
     p-select(v-model="relations.previous" form="stage" name="previous" :readonly="reading"
       multiple :options="options('previous')")
     p-select(v-model="relations.next" form="stage" name="next" :readonly="reading"
@@ -18,7 +17,7 @@
 import { mixin } from 'boot/form'
 // TODO: next/previous: bug when removing reference to self
 export default {
-  name: 'PageOrgUnit',
+  name: 'PageStage',
   mixins: [mixin('stage')],
   props: ['workflow_id'],
   methods: {

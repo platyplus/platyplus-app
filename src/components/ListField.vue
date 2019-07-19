@@ -1,5 +1,6 @@
 <template lang="pug">
   q-field(
+    :readonly="readonly"
     :label="$t(form +'.labels.'+name)"
     stack-label)
     template(v-if="icon" v-slot:prepend)

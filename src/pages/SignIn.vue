@@ -1,8 +1,7 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     p-input(v-model="username" form="user" name="username"
-      ref="username"
-      :enter="login")
+      autofocus :enter="login")
     p-input(v-model="password" form="user" name="password"
       :enter="login")
     q-btn(icon="fas fa-sign-in-alt" label="Sign in" @click="login")
@@ -29,9 +28,6 @@ export default {
         )
       }
     }
-  },
-  mounted () {
-    this.$nextTick(() => this.$refs.username.focus())
   }
 }
 </script>

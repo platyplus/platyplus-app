@@ -2,8 +2,7 @@
   q-page(padding class="justify-center")
     div(v-if="details")
       p-input(v-model="form.name" form="role" name="name" :readonly="reading"
-        ref="firstInput"
-        :enter="save")
+        autofocus :enter="save")
       q-toggle(
         label="Global"
         :disable="reading"
