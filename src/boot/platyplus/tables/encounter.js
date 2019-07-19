@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
-import jexl from 'jexl'
-import { templateStringToExpression } from 'boot/formGenerator'
-import encounterType from './encounter_type'
+// import jexl from 'jexl'
+// import { templateStringToExpression } from 'boot/formGenerator'
 import orgUnit from './org_unit'
 import entity from './entity'
 
@@ -25,7 +24,9 @@ const fragments = {
       ...encounter_minimal
       type_id
       type {
-        ...encounter_type_base
+        id
+        name
+        encounter_schema
       }
       entity_id
       entity {
@@ -36,10 +37,9 @@ const fragments = {
         ...org_unit_base
       }
       data
-      label @client
+      # label @client
     }
     ${entity.fragments.base}
-    ${encounterType.fragments.base}
     ${orgUnit.fragments.base}
     ${minimal}
   `
@@ -97,18 +97,19 @@ const mutations = {
   `
 }
 
-const resolvers = {
-  label: (item, args, ctx) => {
-    try {
-      const expression = templateStringToExpression(
-        item.type.encounter_schema.label
-      )
-      return jexl.evalSync(expression, item.data)
-    } catch (e) {
-      console.warn(e)
-      return item.id
-    }
-  }
-}
+// const resolvers = {
+//   label: (item, args, ctx) => {
+//     try {
+//       const expression = templateStringToExpression(
+//         item.type.encounter_schema.label
+//       )
+//       return jexl.evalSync(expression, item.data)
+//     } catch (e) {
+//       console.warn(e)
+//       return item.id
+//     }
+//   }
+// }
 
-export default { settings, fragments, queries, mutations, resolvers }
+// export default { settings, fragments, queries, mutations, resolvers }
+export default { settings, fragments, queries, mutations }

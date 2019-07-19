@@ -1,0 +1,7 @@
+- args:
+    name: type
+    new_name: encounter_type
+    table:
+      name: encounter
+      schema: public
+  type: rename_relationship

@@ -1,18 +1,15 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      div(v-if="reading")
-        vue-form-generator(:schema="roEncounterSchema" :model="item.data")
-      div(v-else-if="encounter_type")
-        vue-form-generator(:schema="encounter_type.encounter_schema" :model="form.data")
+      p-custom-form(:schema="encounter_type.encounter_schema" v-model="form.data" :readonly="reading" @last-page="updateIsLastPage")
     q-list(
       v-else-if="list && list.length"
       highlight)
       q-item(
         v-for="item in list"
         :to="'/encounter/'+item.id"
-        :key="item.id") {{item.label}}
-    p-button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
+        :key="item.id") {{item.id}}
+    p-button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" :disableSave="!isLastPage" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
 </template>
 
 <style scoped>
@@ -20,16 +17,17 @@
 
 <script>
 import { mixin } from 'boot/form'
-import { makeReadOnly, prepareForm } from 'boot/formGenerator'
 import { queries } from 'boot/platyplus'
 // TODO: on load, merge all data into one property, and then dispatch on save
 export default {
   name: 'PageEncounter',
   mixins: [mixin('encounter')],
-  data: () => ({
-    roEncounterSchema: {}
-  }),
   props: ['org_unit_id', 'type_id'],
+  data () {
+    return {
+      isLastPage: false
+    }
+  },
   computed: {
     listVariables () {
       return {
@@ -53,6 +51,9 @@ export default {
     }
   },
   methods: {
+    updateIsLastPage (event) {
+      this.isLastPage = event
+    },
     async save () {
       const newValues = {
         id: this.id,
@@ -70,18 +71,7 @@ export default {
       if (this.type_id) this.item.type_id = this.type_id
       if (this.org_unit_id) this.item.org_unit_id = this.org_unit_id
       this._resetForm()
-    }
-  },
-  watch: {
-    /**
-     * Prepares the several forms.
-     * Triggerred when the encounter type is available
-     */
-    encounter_type (newValue) {
-      if (newValue) {
-        this.roEncounterSchema = makeReadOnly(newValue.encounter_schema)
-        prepareForm(this.encounter_type.encounter_schema, this.item.data)
-      }
+      this.$root.$emit('reset')
     }
   },
   apollo: {
@@ -89,7 +79,7 @@ export default {
      * Loads the encounter type from the path, but don't load if not present
      */
     _encounter_type: {
-      query: queries.encounterType.form,
+      query: queries.encounter_type.form,
       variables () {
         return {
           where: { id: { _eq: this.type_id } }
