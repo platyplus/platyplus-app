@@ -22,7 +22,7 @@
     p-select(v-model="form.preferred_org_unit_id" form="user" name="preferred_org_unit" :readonly="reading"
       :options="preferredOrgUnitOptions")
     p-list-field(v-model="item.role_attributions" form="user" name="role_attributions"
-        :path="'/user/'+item.id+'/attributions'"
+        :path="'/user/'+item.id+'/attribution'"
         :item-label-template="'{{ role.name }} in {{ org_unit.name }}'"
         v-if="reading && item.role_attributions.length")
     p-button-bar(
