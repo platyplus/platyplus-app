@@ -20,8 +20,30 @@ export default {
   logout: {
     message: 'Are you sure to want to sign out?'
   },
+  org_unit: {
+    labels: {
+      name: 'Name',
+      parent: 'Parent',
+      children: 'Children',
+      type: 'Type',
+      role_attributions: 'Role attributions',
+      workflows: '@:workflow.label_plural'
+    },
+    actions: {
+      children: {
+        create: 'Create a new child org unit'
+      },
+      role_attributions: {
+        create: '@:role_attribution.actions.create'
+      }
+    }
+  },
+  org_unit_type: {
+    label: 'Type',
+    label_plural: 'Types'
+  },
   role_attribution: {
-    title_plural: 'Role attributions',
+    label_plural: 'Role attributions',
     actions: {
       create: 'Create a new role attribution'
     }
@@ -37,7 +59,7 @@ export default {
       first_name: 'First name',
       last_name: 'Last name',
       language: '@:language',
-      role_attributions: '@:role_attribution.title_plural'
+      role_attributions: '@:role_attribution.label_plural'
     },
     helpers: {
       username: 'Enter your user name',
@@ -65,5 +87,9 @@ export default {
     profile: {
       title: 'Profile'
     }
+  },
+  workflow: {
+    label: 'Workflow',
+    label_plural: 'Workflows'
   }
 }

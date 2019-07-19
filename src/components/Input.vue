@@ -4,8 +4,8 @@
     v-model="localValue"
     :type="inputType"
     :label="$t(form +'.labels.'+name)"
-    :hint="hint"
-    :error-label="errorLabel"
+    :hint="readonly ? '' : $t(form +'.helpers.'+name)"
+    :error-label="readonly ? '' : $t(form +'.errors.'+name)"
     :readonly="readonly"
     :mask="mask"
     @keyup.enter="enter"
@@ -17,43 +17,23 @@
 </template>
 <script>
 import { QInput } from 'quasar'
-import { icon, types } from './config'
-import { isEmpty } from 'lodash'
+import { types, FieldMixin } from './config'
 export default {
   name: 'PInput',
   components: {
     QInput
   },
-  props: ['enter', 'form', 'name', 'mask', 'readonly', 'value'],
+  mixins: [FieldMixin],
+  props: ['mask', 'value'],
   methods: {
     focus () {
-      this.$refs.input.focus()
+      // TODO
+      if (!this.readonly) this.$refs.input.focus()
     }
   },
   computed: {
-    icon () {
-      return icon(this.form, this.name)
-    },
     inputType () {
       return types[this.name] || 'text'
-    },
-    localValue: {
-      get () {
-        return this.value
-      },
-      set (localValue) {
-        this.$emit('input', localValue)
-      }
-    },
-    hint () {
-      if (!isEmpty(this.readonly)) {
-        return this.$t(this.form + '.helpers.' + this.name)
-      } else return undefined
-    },
-    errorLabel () {
-      if (!isEmpty(this.readonly)) {
-        return this.$t(this.form + '.errors.' + this.name)
-      } else return undefined
     }
   }
 }

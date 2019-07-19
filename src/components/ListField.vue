@@ -17,10 +17,11 @@
 </template>
 <script>
 import { QField, QList, QItem, QItemSection, QIcon } from 'quasar'
-import { icon } from './config'
+import { FieldMixin } from './config'
 import Handlebars from 'handlebars'
 export default {
   extends: QField,
+  mixins: [FieldMixin],
   components: {
     QField,
     QList,
@@ -29,8 +30,6 @@ export default {
     QIcon
   },
   props: {
-    form: String,
-    name: String,
     itemLabelTemplate: {
       type: String,
       default: '{{name}}'
@@ -39,11 +38,6 @@ export default {
     create: {
       type: Boolean,
       default: true
-    }
-  },
-  computed: {
-    icon () {
-      return icon(this.form, this.name)
     }
   },
   methods: {

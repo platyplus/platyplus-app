@@ -19,3 +19,28 @@ export const types = {
 // on déduit que user.memberships est de type org_unit[] et donc avec l'icône sitemap
 export const icon = (form, name) =>
   icons[name] || ((icons[form] && icons[form][name]) || undefined)
+
+export const FieldMixin = {
+  props: {
+    enter: Function,
+    form: String,
+    name: String,
+    readonly: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    localValue: {
+      get () {
+        return this.value
+      },
+      set (localValue) {
+        this.$emit('input', localValue)
+      }
+    },
+    icon () {
+      return icon(this.form, this.name)
+    }
+  }
+}

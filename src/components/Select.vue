@@ -1,39 +1,39 @@
 <template lang="pug">
   q-select(
-    :value="value"
-    @input="handleChange"
+    v-model="localValue"
     :label="$t(form +'.labels.'+name)"
     :hint="readonly? '': $t(form +'.helpers.'+name)"
     :error-label="readonly? '': $t(form +'.errors.'+name)"
     :readonly="readonly"
     :options="options"
-
     :multiple="multiple"
-    :use-chips="multiple"
     hide-hint
     :option-value="optionValue"
     :option-label="optionLabel"
     stack-label
     emit-value
     map-options
-    filter
-    )
+    filter)
     template(v-if="icon" v-slot:prepend)
       q-icon(:name="'fas fa-'+icon")
+    template(v-if="multiple" v-slot:selected-item="scope")
+      q-chip(
+        dense
+        :removable="!readonly"
+        @remove="scope.removeAtIndex(scope.index)"
+        tabindex="scope.tabindex") {{ scope.opt[optionLabel] }}
 </template>
 <script>
 import { QSelect } from 'quasar'
-import { icon } from './config'
+import { FieldMixin } from './config'
 
 export default {
   extends: QSelect,
+  mixins: [FieldMixin],
   components: {
     QSelect
   },
   props: {
-    enter: Function,
-    form: String,
-    name: String,
     multiple: {
       type: Boolean,
       default: false
@@ -48,13 +48,7 @@ export default {
   },
   methods: {
     handleChange (newVal) {
-      console.log('input')
       this.$emit('input', newVal)
-    }
-  },
-  computed: {
-    icon () {
-      return icon(this.form, this.name)
     }
   }
 }
