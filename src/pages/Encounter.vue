@@ -1,7 +1,8 @@
 <template lang="pug">
   q-page(padding class="justify-center")
     div(v-if="details")
-      p-custom-form(:schema="encounter_type.encounter_schema" v-model="form.data" :readonly="reading" @last-page="updateIsLastPage")
+      p-survey(:schema="encounter_type.encounter_schema" v-model="form.data" :readonly="reading"
+        @save="save" @reset="reset" @cancel="cancel")
     q-list(
       v-else-if="list && list.length"
       highlight)
@@ -9,7 +10,7 @@
         v-for="item in list"
         :to="'/encounter/'+item.id"
         :key="item.id") {{item.id}}
-    p-button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @save="save" :disableSave="!isLastPage" @reset="reset" @cancel="cancel" @remove="remove" :deletionConfirmed="deletionConfirmed")
+    p-button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @remove="remove" :deletionConfirmed="deletionConfirmed")
 </template>
 
 <style scoped>
@@ -23,11 +24,6 @@ export default {
   name: 'PageEncounter',
   mixins: [mixin('encounter')],
   props: ['org_unit_id', 'type_id'],
-  data () {
-    return {
-      isLastPage: false
-    }
-  },
   computed: {
     listVariables () {
       return {
@@ -51,9 +47,6 @@ export default {
     }
   },
   methods: {
-    updateIsLastPage (event) {
-      this.isLastPage = event
-    },
     async save () {
       const newValues = {
         id: this.id,
@@ -71,7 +64,6 @@ export default {
       if (this.type_id) this.item.type_id = this.type_id
       if (this.org_unit_id) this.item.org_unit_id = this.org_unit_id
       this._resetForm()
-      this.$root.$emit('reset')
     }
   },
   apollo: {

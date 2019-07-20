@@ -1,8 +1,8 @@
-import * as SurveyVue from 'survey-vue'
+// import * as SurveyVue from 'survey-vue'
 // import cloneDeep from 'lodash/cloneDeep'
 // TODO: remove jexl?
 // import jexl from 'jexl'
-import CustomForm from 'components/CustomForm.vue'
+import Survey from 'components/Survey.vue'
 
 /**
  * Converts a template-like string to an expression that can be evaluated by Jexl
@@ -115,6 +115,5 @@ import CustomForm from 'components/CustomForm.vue'
 // }
 
 export default ({ app, router, Vue, store }) => {
-  Vue.use(SurveyVue)
-  Vue.component('p-custom-form', CustomForm)
+  Vue.component('p-survey', Survey)
 }

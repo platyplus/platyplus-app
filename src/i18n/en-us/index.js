@@ -3,6 +3,8 @@ export default {
   no: 'No',
   ok: 'OK',
   cancel: 'Cancel',
+  previous: 'Previous',
+  next: 'Next',
   reset: 'Reset',
   edit: 'Edit',
   create: 'Create',
