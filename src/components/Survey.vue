@@ -4,11 +4,9 @@
       form(onsubmit='return false;')
         .sv_custom_header
         .sv_container
-          div(v-if='hasTitle', :class='css.header')
-            h3
-              survey-string(:locstring='survey.locTitle')
-            h5
-              survey-string(:locstring='survey.locDescription')
+          div(v-if='hasTitle')
+            h3 {{locString(survey.locTitle)}}
+            h5 {{locString(survey.locDescription)}}
           template(v-if="survey.state === 'starting'")
             div(:class='css.body')
               div(v-if="survey.isNavigationButtonsShowing === 'top' || survey.isNavigationButtonsShowing === 'both'", :class='css.footer')
@@ -18,15 +16,23 @@
                   input(type='button', :value='survey.startSurveyText', :class="getNavBtnClasses('start')", @click='start')
           template(v-if="survey.state === 'running'")
             div(:class='css.body')
-              survey-progress(v-if='survey.isShowProgressBarOnTop', :survey='survey', :css='css')
               survey-timerpanel(v-if='survey.isTimerPanelShowingOnTop', :survey='survey', :css='css')
               div(v-if="survey.isNavigationButtonsShowing === 'top' || survey.isNavigationButtonsShowing === 'both'", :class='css.footer')
                 input(type='button', :value='survey.pagePrevText', v-show='!survey.isFirstPage && survey.isShowPrevButton', :class="getNavBtnClasses('prev')", @click='prevPage')
                 input(type='button', :value='survey.pageNextText', v-show='!survey.isLastPage', :class="getNavBtnClasses('next')", @click='nextPage')
                 input(v-if='survey.isEditMode', type='button', :value='survey.completeText', v-show='survey.isLastPage', :class="getNavBtnClasses('complete')", @click='completeLastPage')
-              survey-page(:id='survey.currentPage.id', :survey='survey', :page='survey.currentPage', :css='css')
               survey-timerpanel(v-if='survey.isTimerPanelShowingOnBottom', :survey='survey', :css='css')
-              survey-progress(style='margin-top: 1em', v-if='survey.isShowProgressBarOnBottom', :survey='survey', :css='css')
+              q-stepper(v-model="survey.currentPageNo" header-nav
+                ref="stepper" color="primary" animated alternative-labels :contracted="$q.screen.lt.md")
+                q-step(v-for="(page, index) in survey.visiblePages" :key="index"
+                  :name="index"
+                  :title="locString(page.locTitle)"
+                  :prefix="String(index+1)"
+                  :done="(index < lastValidatedPage) || readonly"
+                  :header-nav="(index <= lastValidatedPage) || readonly")
+                  div: survey-string(:locString="page.locDescription")
+                  div(v-for="(row, index) in page.rows" v-if="row.visible" :key="page.id + '_' + index")
+                    p-survey-row(:row="row" :survey="survey")
               div(v-if="survey.isNavigationButtonsShowing === 'bottom' || survey.isNavigationButtonsShowing === 'both'", :class='css.footer')
                 input(type='button', :value='survey.pagePrevText', v-show='!survey.isFirstPage && survey.isShowPrevButton', :class="getNavBtnClasses('prev')", @click='prevPage')
                 input(type='button', :value='survey.pageNextText', v-show='!survey.isLastPage', :class="getNavBtnClasses('next')", @click='nextPage')
@@ -53,9 +59,8 @@
 <style></style>
 
 <script>
+import { QStepper, QStep } from 'quasar'
 import * as SurveyVue from 'survey-vue'
-import Vue from 'vue'
-Vue.use(SurveyVue)
 // SurveyVue.StylesManager.applyTheme('default')
 SurveyVue.StylesManager.applyTheme('darkblue')
 // var defaultThemeColors = SurveyVue.StylesManager.ThemeColors['default']
@@ -73,12 +78,15 @@ const css = {}
 const defaultOptions = {
   showTitle: true,
   // showNavigationButtons: 'none',
+  checkErrorsMode: 'onValueChanged',
+  showPageTitles: false,
   showProgressBar: 'bottom',
-  goNextPageAutomatic: true
+  goNextPageAutomatic: true // TODO put as a settings in the encounter type
 }
 
 export default {
   name: 'PSurvey',
+  components: { QStepper, QStep },
   props: {
     schema: {},
     value: {},
@@ -94,10 +102,13 @@ export default {
     survey.data = this.value
     survey.onComplete.add(this.onSave)
     survey.onValueChanged.add(this.onChange)
+    survey.onCurrentPageChanged.add(this.onChangePage)
+    survey.onValidatedErrorsOnCurrentPage.add(this.onErrorsCheck)
     survey.mode = this.readonly ? 'display' : 'edit'
     survey.css = css
     return {
       survey,
+      lastValidatedPage: 0,
       initialValues: this.value
     }
   },
@@ -113,6 +124,22 @@ export default {
     },
     onChange (sender, options) {
       this.$emit('input', this.survey.data)
+    },
+    onChangePage (sender, options) {
+      this.lastValidatedPage = Math.max(
+        this.lastValidatedPage,
+        this.survey.currentPageNo
+      )
+    },
+    onErrorsCheck (sender, options) {
+      if (options.errors.length > 0) {
+        this.lastValidatedPage = this.survey.currentPageNo
+      } else {
+        this.lastValidatedPage = Math.max(
+          this.lastValidatedPage,
+          this.survey.currentPageNo
+        )
+      }
     },
     getNavBtnClasses (btnType) {
       const btnClass = this.css.navigation[btnType]
@@ -132,6 +159,9 @@ export default {
       this.survey.prevPage()
     },
     nextPage () {
+      // if (!this.survey.nextPage()) {
+      //   this.lastValidatedPage = this.survey.currentPageNo
+      // }
       this.survey.nextPage()
     },
     completeLastPage () {
@@ -139,6 +169,9 @@ export default {
     },
     doTrySaveAgain () {
       this.survey.doComplete()
+    },
+    locString (str) {
+      return str.renderedHtml
     }
   },
   computed: {

@@ -2,7 +2,10 @@
 // import cloneDeep from 'lodash/cloneDeep'
 // TODO: remove jexl?
 // import jexl from 'jexl'
+import * as SurveyVue from 'survey-vue'
 import Survey from 'components/Survey.vue'
+import SurveyRow from 'components/SurveyRow.vue'
+import SurveyElement from 'components/SurveyElement.vue'
 
 /**
  * Converts a template-like string to an expression that can be evaluated by Jexl
@@ -115,5 +118,8 @@ import Survey from 'components/Survey.vue'
 // }
 
 export default ({ app, router, Vue, store }) => {
+  Vue.use(SurveyVue)
+  Vue.component('p-survey-element', SurveyElement)
+  Vue.component('p-survey-row', SurveyRow)
   Vue.component('p-survey', Survey)
 }
