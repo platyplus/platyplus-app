@@ -1,21 +1,26 @@
 <template lang="pug">
-q-input(type="textarea"
+
+q-input(
+  :type="question.inputType"
   class="self-center full-width"
   :label="title"
-  stack-label outlined
+  stack-label
+  outlined
   autogrow
   :readonly="question.isReadOnly"
   v-model="question.value"
   :id="question.inputId"
   :maxlength="question.getMaxLength()"
   :rows="question.rows"
-  :placeholder="question.placeHolder")
+  :placeholder="question.placeHolder"
+
+  :size="question.size")
 </template>
 <script>
-import { Comment } from 'survey-vue'
+import { Text } from 'survey-vue'
 export default {
-  extends: Comment,
-  name: 'SurveyComment',
+  extends: Text,
+  name: 'SurveyText',
   computed: {
     title () {
       // TODO put in a mixin

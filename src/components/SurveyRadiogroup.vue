@@ -1,14 +1,17 @@
 <template lang="pug">
-  q-field(:label="title" stack-label)
-    template(v-slot:control)
-      div(class="self-center full-width")
-        div(class="row")
-          q-option-group(v-if='!question.hasColumns' v-model="question.renderedValue" :options="options(question.visibleChoices)")
-          div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
-            q-option-group(v-model="question.renderedValue" :options="options(column)")
-        div(class="row" v-show="question.hasOther && question.renderedValue && question.isOtherSelected")
-          survey-other-choice(:question="question")
-    //- div(v-if='question.canShowClearButton')
+q-field(:label="title" stack-label outlined :readonly="question.isReadOnly")
+  template(v-slot:control)
+    div(class="self-center full-width")
+      div(class="row")
+        div(v-if='!question.hasColumns' class="col")
+          q-option-group(v-model="question.renderedValue"
+            :options="options(question.visibleChoices)")
+          p-survey-other-choice(v-show="isOtherActive(column)" :question="question")
+        div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
+          q-option-group(v-model="question.renderedValue"
+            :options="options(column)")
+          p-survey-other-choice(v-show="isOtherActive(column)" :question="question")
+  //- div(v-if='question.canShowClearButton')
     //-   input(type='button' :class='question.cssClasses.clearButton' v-on:click='function() { question.clearValue(); }' :value='question.clearButtonCaption')
 </template>
 
@@ -25,6 +28,20 @@ export default {
         value: item.value,
         label: item.locText.renderedHtml
       }))
+    },
+    isOtherActive (column) {
+      if (
+        this.question.hasOther &&
+        this.question.renderedValue &&
+        this.question.isOtherSelected
+      ) {
+        if (column) {
+          return column.some(
+            item => item.itemValue === this.question.otherItem.itemValue
+          )
+        } else return true
+      }
+      return false
     }
   },
   computed: {

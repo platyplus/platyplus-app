@@ -1,11 +1,10 @@
 <template lang="pug">
-  q-field(:label="title" stack-label)
-    template(v-slot:control)
-      q-rating(v-model="question.value"
-        :readonly="question.isReadOnly"
-        :max="question.rateMax"
-        size="1.5em"
-        class="self-center full-width q-pa-sm")
+q-field(:label="title" stack-label outlined :readonly="question.isReadOnly")
+  template(v-slot:control)
+    q-rating(v-model="question.value"
+      :max="question.rateMax"
+      size="1.5em"
+      class="self-center full-width q-pa-sm")
   //- <div>
   //-   <div :class="question.cssClasses.root">
   //-     <label
@@ -60,6 +59,12 @@ export default {
         (this.question.no ? String(this.question.no) + '. ' : '') +
         this.question.locTitle.renderedHtml
       )
+    }
+  },
+  created () {
+    // TODO incorrect: doit pouvoir enregistrer la valeur 'undefined'
+    if (!this.question.value) {
+      this.question.value = this.question.defaultValue || 0
     }
   }
 }
