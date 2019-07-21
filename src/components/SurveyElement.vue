@@ -1,5 +1,5 @@
 <template lang="pug">
-  q-field(:label="title" stack-label)
+  div
     //- div(v-if='element.hasTitleOnLeftTop', :class="element.hasTitleOnLeft ? 'title-left' : ''")
     //-   h5(v-if='element.hasTitle', :class='element.cssClasses.title')
     //-     span(v-if='element.no', style='position: static;', :class='element.cssClasses.number') {{element.no}}
@@ -8,19 +8,17 @@
     //-   div(v-if='!element.locDescription.isEmpty', :class='element.cssClasses.description')
     //-     survey-string(:loc-string='element.locDescription')
     //- div(:class="element.hasTitleOnLeft ? 'content-left' : ''")
-    template(v-slot:hint)
-      div(v-if='!element.locDescription.isEmpty')
-        survey-string(:loc-string='element.locDescription')
-    template(v-slot:error)
-      div TODO errors
-      survey-errors(v-if='hasErrorsOnTop', :question='element', :location="'top'")
-      survey-errors(v-if='hasErrorsOnBottom', :question='element', :location="'bottom'")
-    template(v-slot:control)
-      //- div {{getWidgetComponentName(element)}}
-      component(:is="'p-'+getWidgetComponentName(element)", :question='element')
-      div(v-if='element.hasComment')
-        div {{element.commentText}}
-        survey-other-choice(:question='element')
+    //- template(v-slot:hint)
+    //-   survey-string(v-if='!element.locDescription.isEmpty' :loc-string='element.locDescription')
+    //- template(v-slot:error)
+    //-   div TODO errors
+    //-   survey-errors(v-if='hasErrorsOnTop', :question='element', :location="'top'")
+    //-   survey-errors(v-if='hasErrorsOnBottom', :question='element', :location="'bottom'")
+    //- div {{getWidgetComponentName(element)}}
+    component(:is="'p-'+getWidgetComponentName(element)", :question='element')
+    div(v-if='element.hasComment')
+      div {{element.commentText}}
+      survey-other-choice(:question='element')
       //- h5(v-if='element.hasTitleOnBottom', :class='element.cssClasses.title')
       //-   span(v-if='element.no', style='position: static;', :class='element.cssClasses.number') {{element.no}}
       //-   span(v-if='element.no', style='position: static;') .
@@ -34,14 +32,6 @@ import { QField, QIcon } from 'quasar'
 export default {
   extends: SurveyElementVue,
   name: 'SurveyElement',
-  components: { QField, QIcon },
-  computed: {
-    title () {
-      return (
-        (this.element.no ? String(this.element.no) + '. ' : '') +
-        this.element.locTitle.renderedHtml
-      )
-    }
-  }
+  components: { QField, QIcon }
 }
 </script>

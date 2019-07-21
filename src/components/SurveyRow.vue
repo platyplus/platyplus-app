@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  div(style="max-width: 100%")
     p-survey-element(v-if="element.visible" v-for="element in row.elements"
       :key="element.idValue" :id="element.id"
       :element="element" :survey="survey"

@@ -1,11 +1,13 @@
 <template lang="pug">
-  div(class="self-center full-width")
-    div(class="row")
-      q-option-group(v-if='!question.hasColumns' v-model="question.renderedValue" :options="options(question.visibleChoices)")
-      div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
-        q-option-group(v-model="question.renderedValue" :options="options(column)")
-    div(class="row" v-show="question.hasOther && question.renderedValue && question.isOtherSelected")
-      survey-other-choice(:question="question")
+  q-field(:label="title" stack-label)
+    template(v-slot:control)
+      div(class="self-center full-width")
+        div(class="row")
+          q-option-group(v-if='!question.hasColumns' v-model="question.renderedValue" :options="options(question.visibleChoices)")
+          div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
+            q-option-group(v-model="question.renderedValue" :options="options(column)")
+        div(class="row" v-show="question.hasOther && question.renderedValue && question.isOtherSelected")
+          survey-other-choice(:question="question")
     //- div(v-if='question.canShowClearButton')
     //-   input(type='button' :class='question.cssClasses.clearButton' v-on:click='function() { question.clearValue(); }' :value='question.clearButtonCaption')
 </template>
@@ -23,6 +25,15 @@ export default {
         value: item.value,
         label: item.locText.renderedHtml
       }))
+    }
+  },
+  computed: {
+    title () {
+      // TODO put in a mixin
+      return (
+        (this.question.no ? String(this.question.no) + '. ' : '') +
+        this.question.locTitle.renderedHtml
+      )
     }
   }
 }
