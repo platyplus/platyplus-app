@@ -1,30 +1,47 @@
 <template lang="pug">
-  div(:class='getQuestionClass(element)')
-    div(v-if='element.hasTitleOnLeftTop', :class="element.hasTitleOnLeft ? 'title-left' : ''")
-      h5(v-if='element.hasTitle', :class='element.cssClasses.title')
-        span(v-if='element.no', style='position: static;', :class='element.cssClasses.number') {{element.no}}
-        span(v-if='element.no', style='position: static;') .
-        survey-string(:loc-string='element.locTitle')
-      div(v-if='!element.locDescription.isEmpty', :class='element.cssClasses.description')
+  q-field(:label="title" stack-label)
+    //- div(v-if='element.hasTitleOnLeftTop', :class="element.hasTitleOnLeft ? 'title-left' : ''")
+    //-   h5(v-if='element.hasTitle', :class='element.cssClasses.title')
+    //-     span(v-if='element.no', style='position: static;', :class='element.cssClasses.number') {{element.no}}
+    //-     span(v-if='element.no', style='position: static;') .
+    //-     survey-string(:loc-string='element.locTitle')
+    //-   div(v-if='!element.locDescription.isEmpty', :class='element.cssClasses.description')
+    //-     survey-string(:loc-string='element.locDescription')
+    //- div(:class="element.hasTitleOnLeft ? 'content-left' : ''")
+    template(v-slot:hint)
+      div(v-if='!element.locDescription.isEmpty')
         survey-string(:loc-string='element.locDescription')
-    div(:class="element.hasTitleOnLeft ? 'content-left' : ''")
+    template(v-slot:error)
+      div TODO errors
       survey-errors(v-if='hasErrorsOnTop', :question='element', :location="'top'")
-      component(:is='getWidgetComponentName(element)', :question='element')
+      survey-errors(v-if='hasErrorsOnBottom', :question='element', :location="'bottom'")
+    template(v-slot:control)
+      //- div {{getWidgetComponentName(element)}}
+      component(:is="'p-'+getWidgetComponentName(element)", :question='element')
       div(v-if='element.hasComment')
         div {{element.commentText}}
         survey-other-choice(:question='element')
-      survey-errors(v-if='hasErrorsOnBottom', :question='element', :location="'bottom'")
-      h5(v-if='element.hasTitleOnBottom', :class='element.cssClasses.title')
-        span(v-if='element.no', style='position: static;', :class='element.cssClasses.number') {{element.no}}
-        span(v-if='element.no', style='position: static;') .
-        survey-string(:loc-string='element.locTitle')
-      div(v-if='!element.locDescription.isEmpty', v-show='element.hasTitleOnBottom')
-        survey-string(:loc-string='element.locDescription')
+      //- h5(v-if='element.hasTitleOnBottom', :class='element.cssClasses.title')
+      //-   span(v-if='element.no', style='position: static;', :class='element.cssClasses.number') {{element.no}}
+      //-   span(v-if='element.no', style='position: static;') .
+      //-   survey-string(:loc-string='element.locTitle')
+      //- div(v-if='!element.locDescription.isEmpty', v-show='element.hasTitleOnBottom')
+      //-   survey-string(:loc-string='element.locDescription')
 </template>
 <script>
 import { SurveyElementVue } from 'survey-vue'
+import { QField, QIcon } from 'quasar'
 export default {
   extends: SurveyElementVue,
-  name: 'SurveyElement'
+  name: 'SurveyElement',
+  components: { QField, QIcon },
+  computed: {
+    title () {
+      return (
+        (this.element.no ? String(this.element.no) + '. ' : '') +
+        this.element.locTitle.renderedHtml
+      )
+    }
+  }
 }
 </script>

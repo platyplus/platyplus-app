@@ -6,6 +6,7 @@ import * as SurveyVue from 'survey-vue'
 import Survey from 'components/Survey.vue'
 import SurveyRow from 'components/SurveyRow.vue'
 import SurveyElement from 'components/SurveyElement.vue'
+import SurveyRadiogroup from 'components/SurveyRadiogroup.vue'
 
 /**
  * Converts a template-like string to an expression that can be evaluated by Jexl
@@ -119,6 +120,7 @@ import SurveyElement from 'components/SurveyElement.vue'
 
 export default ({ app, router, Vue, store }) => {
   Vue.use(SurveyVue)
+  Vue.component('p-survey-radiogroup', SurveyRadiogroup)
   Vue.component('p-survey-element', SurveyElement)
   Vue.component('p-survey-row', SurveyRow)
   Vue.component('p-survey', Survey)
