@@ -5,7 +5,7 @@ q-input(v-if="!question.isReadOnly"
       v-model="question.comment"
       :maxlength="question.getOthersMaxLength()"
       :placeholder="question.otherPlaceHolder"
-      :label="question.locTitle.renderedHtml")
+      :label="question.otherText")
 div(v-else :class="question.cssClasses.other") {{question.comment}}
 </template>
 <script>
