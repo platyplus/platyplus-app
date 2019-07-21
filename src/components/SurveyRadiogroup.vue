@@ -6,11 +6,11 @@ q-field(:label="title" stack-label outlined :readonly="question.isReadOnly")
         div(v-if='!question.hasColumns' class="col")
           q-option-group(v-model="question.renderedValue"
             :options="options(question.visibleChoices)")
-          p-survey-other-choice(v-show="isOtherActive(column)" :question="question")
+          p-survey-other-choice(v-if="isOtherActive()" :question="question")
         div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
           q-option-group(v-model="question.renderedValue"
             :options="options(column)")
-          p-survey-other-choice(v-show="isOtherActive(column)" :question="question")
+          p-survey-other-choice(v-if="isOtherActive(column)" :question="question")
   //- div(v-if='question.canShowClearButton')
     //-   input(type='button' :class='question.cssClasses.clearButton' v-on:click='function() { question.clearValue(); }' :value='question.clearButtonCaption')
 </template>

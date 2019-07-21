@@ -1,6 +1,7 @@
 <template lang="pug">
 q-input(v-if="!question.isReadOnly"
       borderless
+      autofocus
       v-model="question.comment"
       :maxlength="question.getOthersMaxLength()"
       :placeholder="question.otherPlaceHolder"
