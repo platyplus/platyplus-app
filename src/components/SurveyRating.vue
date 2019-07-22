@@ -4,10 +4,13 @@ q-field(:label="title"
   :readonly="question.isReadOnly"
   :error="question.hasErrors()" bottom-slots)
   template(v-slot:control)
-    q-rating(v-model="localValue"
-      :max="question.rateMax"
-      size="1.5em"
-      class="self-center full-width q-pa-sm")
+    div(class="self-center full-width row q-pa-sm")
+      div(class="col text-right") {{question.minRateDescription}}
+      div(class="col-8 text-center")
+        q-rating(v-model="localValue"
+          :max="question.rateMax"
+          size="1.5em")
+      div(class="col text-left") {{question.maxRateDescription}}
   template(v-slot:error)
     div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
   //- <div>

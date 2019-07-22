@@ -4,16 +4,15 @@ q-field(:label="title"
   :readonly="question.isReadOnly"
   :error="question.hasErrors()" bottom-slots)
   template(v-slot:control)
-    div(class="self-center full-width")
-      div(class="row")
-        div(v-if='!question.hasColumns' class="col")
-          q-option-group(v-model="question.renderedValue"
-            :options="options(question.visibleChoices)"
-            type="checkbox"
-            :inline="inline")
-        div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
-          q-option-group(v-model="question.renderedValue" type="checkbox"
-            :options="options(column)")
+    div(class="self-center full-width row")
+      div(v-if='!question.hasColumns' class="col")
+        q-option-group(v-model="question.renderedValue"
+          :options="options(question.visibleChoices)"
+          type="checkbox"
+          :inline="inline")
+      div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
+        q-option-group(v-model="question.renderedValue" type="checkbox"
+          :options="options(column)")
   template(v-slot:error)
     div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
 </template>

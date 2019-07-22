@@ -5,17 +5,16 @@ q-field(:label="title"
   :error="question.hasErrors()" bottom-slots
   :clearable="question.canShowClearButton")
   template(v-slot:control)
-    div(class="self-center full-width")
-      div(class="row")
-        div(v-if='!question.hasColumns' class="col")
-          q-option-group(v-model="question.renderedValue"
-            :options="options(question.visibleChoices)"
-            :inline="inline")
-          //- p-survey-other-choice(v-if="isOtherActive()" :question="question")
-        div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
-          q-option-group(v-model="question.renderedValue"
-            :options="options(column)")
-      p-survey-other-choice(v-if="isOtherActive()" :question="question")
+    div(class="self-center full-width row")
+      div(v-if='!question.hasColumns' class="col")
+        q-option-group(v-model="question.renderedValue"
+          :options="options(question.visibleChoices)"
+          :inline="inline")
+        //- p-survey-other-choice(v-if="isOtherActive()" :question="question")
+      div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
+        q-option-group(v-model="question.renderedValue"
+          :options="options(column)")
+    p-survey-other-choice(v-if="isOtherActive()" :question="question")
   //- div(v-if='question.canShowClearButton')
     //-   input(type='button' :class='question.cssClasses.clearButton' v-on:click='function() { question.clearValue(); }' :value='question.clearButtonCaption')
   template(v-slot:error)
