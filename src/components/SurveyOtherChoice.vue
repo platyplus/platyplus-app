@@ -6,9 +6,10 @@ q-input(v-if="!question.isReadOnly"
       :maxlength="question.getOthersMaxLength()"
       :placeholder="question.otherPlaceHolder"
       :label="question.otherText"
-      :error="hasErrors")
+      :error="hasErrors" bottom-slots)
 div(v-else) {{question.comment}}
 </template>
+
 <script>
 export default {
   // TODO focus when the 'other' choice is selected (emit/on $root?)

@@ -46,6 +46,7 @@ module.exports = function (ctx) {
         'QPageContainer',
         'QPage',
         'QPageSticky',
+        'QPopupProxy',
         'QToolbar',
         'QToolbarTitle',
         'QBtn',

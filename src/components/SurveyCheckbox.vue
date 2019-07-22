@@ -13,8 +13,8 @@ q-field(:label="title"
       div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
         q-option-group(v-model="question.renderedValue" type="checkbox"
           :options="options(column)")
-  template(v-slot:error)
-    div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
+  //- template(v-slot:error)
+  //-   div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
 </template>
 <script>
 import { Checkbox } from 'survey-vue'

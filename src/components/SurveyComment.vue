@@ -10,8 +10,12 @@ q-input(type="textarea"
   :id="question.inputId"
   :maxlength="question.getMaxLength()"
   :rows="question.rows"
-  :placeholder="question.placeHolder")
+  :placeholder="question.placeHolder"
+  :error="question.hasErrors()" bottom-slots)
+  template(v-slot:error)
+    div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
 </template>
+
 <script>
 import { Comment } from 'survey-vue'
 export default {

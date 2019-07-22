@@ -13,11 +13,11 @@ div(v-show="table.rows.length")
 </template>
 <script>
 import { MatrixTable } from 'survey-vue'
-import { QMarkupTable, QTh, QTr, QTd } from 'quasar'
+import { QMarkupTable } from 'quasar'
 export default {
   extends: MatrixTable,
   name: 'SurveyMatrixTable',
-  components: { QMarkupTable, QTh, QTr, QTd }
+  components: { QMarkupTable }
 }
 </script>
 <style>

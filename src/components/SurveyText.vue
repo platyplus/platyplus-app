@@ -1,9 +1,11 @@
 <template lang="pug">
 q-input(
-  :type="question.inputType"
+  :type="inputType"
   class="self-center full-width"
   :label="title"
-  stack-label outlined autogrow
+  stack-label outlined
+  :mask="question.inputType === 'date' ? 'date': ''"
+  :autogrow="question.inputType === 'textarea'"
   autofocus
   :readonly="question.isReadOnly"
   v-model="question.value"
@@ -15,7 +17,12 @@ q-input(
   :error="question.hasErrors()" bottom-slots)
   template(v-slot:error)
     div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
+  template(v-slot:append v-if="question.inputType === 'date'")
+    q-icon(name="fas fa-calendar" class="cursor-pointer")
+      q-popup-proxy(ref="qDateProxy" transition-show="scale" transition-hide="scale")
+        q-date(v-model="question.value" @input="() => $refs.qDateProxy.hide()")
 </template>
+
 <script>
 import { Text } from 'survey-vue'
 export default {
@@ -36,6 +43,10 @@ export default {
         (this.question.no ? String(this.question.no) + '. ' : '') +
         this.question.locTitle.renderedHtml
       )
+    },
+    inputType () {
+      if (this.question.inputType === 'date') return undefined
+      else return this.question.inputType
     }
   }
 }

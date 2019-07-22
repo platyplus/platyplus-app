@@ -1,9 +1,7 @@
 <template lang="pug">
-td(:headers='getHeaders()')
+td
   div(v-if='cell.hasQuestion')
-    survey-errors(v-if='hasErrorsOnTop' :question='cell.question' :location="'top'")
     component(v-if='isVisible' :is="'p-'+getWidgetComponentName(cell.question)" :question='cell.question' :inline="false")
-    survey-errors(v-if='hasErrorsOnBottom' :question='cell.question' :location="'bottom'")
   button(v-if='cell.isRemoveRow' type='button' :class="question.cssClasses.button + ' ' + question.cssClasses.buttonRemove" @click='removeRowClick()')
     span {{question.removeRowText}}
     span(:class='question.cssClasses.iconRemove')
