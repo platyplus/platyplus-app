@@ -1,12 +1,11 @@
 <template lang="pug">
 q-input(v-if="!question.isReadOnly"
       borderless
-      autofocus
       v-model="question.comment"
       :maxlength="question.getOthersMaxLength()"
       :placeholder="question.otherPlaceHolder"
       :label="question.otherText"
-      :error="hasErrors" bottom-slots)
+      :error="hasErrors" @blur="question.hasErrors()" bottom-slots)
 div(v-else) {{question.comment}}
 </template>
 
@@ -23,6 +22,13 @@ export default {
           .getAllErrors()
           .some(item => item.text === this.question.otherErrorText)
       )
+    }
+  },
+  methods: {
+    focus () {
+      // TODO mixin
+      console.log('in other focus')
+      this.$nextTick(() => this.$refs.input.focus())
     }
   }
 }

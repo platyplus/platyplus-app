@@ -6,7 +6,6 @@ q-input(
   stack-label outlined
   :mask="question.inputType === 'date' ? 'date': ''"
   :autogrow="question.inputType === 'textarea'"
-  autofocus
   :readonly="question.isReadOnly"
   v-model="question.value"
   :id="question.inputId"
@@ -14,7 +13,7 @@ q-input(
   :rows="question.rows"
   :placeholder="question.placeHolder"
   :size="question.size"
-  :error="question.hasErrors()" bottom-slots)
+  :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots)
   template(v-slot:error)
     div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
   template(v-slot:append v-if="question.inputType === 'date'")

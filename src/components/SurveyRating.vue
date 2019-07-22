@@ -2,7 +2,7 @@
 q-field(:label="title"
   stack-label outlined
   :readonly="question.isReadOnly"
-  :error="question.hasErrors()" bottom-slots)
+  :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots)
   template(v-slot:control)
     div(class="self-center full-width row q-pa-sm")
       div(class="col text-right") {{question.minRateDescription}}

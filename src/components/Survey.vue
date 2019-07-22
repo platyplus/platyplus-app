@@ -16,7 +16,7 @@ form(onsubmit='return false;')
       input(type='button', :value='survey.pageNextText', v-show='!survey.isLastPage', :class="getNavBtnClasses('next')", @click='nextPage')
       input(v-if='survey.isEditMode', type='button', :value='survey.completeText', v-show='survey.isLastPage', :class="getNavBtnClasses('complete')", @click='completeLastPage')
     survey-timerpanel(v-if='survey.isTimerPanelShowingOnBottom', :survey='survey', :css='css')
-    q-stepper(v-model="survey.currentPageNo" header-nav
+    q-stepper(v-model="survey.currentPageNo" header-nav bordered
       ref="stepper" color="primary" animated alternative-labels :contracted="$q.screen.lt.md")
       template(v-slot:navigation)
         q-stepper-navigation

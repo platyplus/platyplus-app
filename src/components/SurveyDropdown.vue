@@ -8,6 +8,7 @@ div
       :max="question.choicesMax"
       :step="question.choicesStep"
       :label="title || question.optionsCaption"
+      :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots
       stack-label
       outlined
       :readonly="question.isReadOnly"
@@ -16,6 +17,7 @@ div
       stack-label
       outlined
       emit-value
+      :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots
       :readonly="question.isReadOnly"
       :id="question.inputId"
       :options="question.visibleChoices" option-label="text" :option-disable="(item) => !item.isEnabled")

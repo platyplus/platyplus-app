@@ -4,14 +4,13 @@ q-input(type="textarea"
   :label="title"
   stack-label outlined
   autogrow
-  autofocus
   :readonly="question.isReadOnly"
   v-model="question.value"
   :id="question.inputId"
   :maxlength="question.getMaxLength()"
   :rows="question.rows"
   :placeholder="question.placeHolder"
-  :error="question.hasErrors()" bottom-slots)
+  :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots)
   template(v-slot:error)
     div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
 </template>

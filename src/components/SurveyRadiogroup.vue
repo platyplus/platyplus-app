@@ -2,15 +2,15 @@
 q-field(:label="title"
   stack-label outlined
   :readonly="question.isReadOnly"
-  :error="question.hasErrors()" bottom-slots
+  :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots
   :clearable="question.canShowClearButton")
   template(v-slot:control)
     div(class="self-center full-width row")
       div(v-if='!question.hasColumns' class="col")
         q-option-group(v-model="question.renderedValue"
+          @input="question.hasErrors()"
           :options="options(question.visibleChoices)"
           :inline="inline")
-        //- p-survey-other-choice(v-if="isOtherActive()" :question="question")
       div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
         q-option-group(v-model="question.renderedValue"
           :options="options(column)")
@@ -41,19 +41,12 @@ export default {
         label: item.locText.renderedHtml
       }))
     },
-    isOtherActive (column) {
-      if (
+    isOtherActive () {
+      return (
         this.question.hasOther &&
         this.question.renderedValue &&
         this.question.isOtherSelected
-      ) {
-        if (column) {
-          return column.some(
-            item => item.itemValue === this.question.otherItem.itemValue
-          )
-        } else return true
-      }
-      return false
+      )
     }
   },
   computed: {
