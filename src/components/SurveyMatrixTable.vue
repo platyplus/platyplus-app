@@ -1,5 +1,5 @@
 <template lang="pug">
-div
+div(v-show="table.rows.length")
   q-markup-table
     thead(v-if='table.showHeader')
       tr
