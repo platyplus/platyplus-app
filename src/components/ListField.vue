@@ -22,7 +22,7 @@
 <script>
 import { QField, QList, QItem, QItemSection, QIcon } from 'quasar'
 import { FieldMixin } from './config'
-import Handlebars from 'handlebars'
+import Handlebars from 'handlebars/dist/cjs/handlebars'
 export default {
   extends: QField,
   mixins: [FieldMixin],
