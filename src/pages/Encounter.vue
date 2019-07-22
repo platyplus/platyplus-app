@@ -1,6 +1,6 @@
 <template lang="pug">
   q-page(padding class="justify-center")
-    div(v-if="details")
+    div(v-if="details && encounter_type")
       p-survey(:schema="encounter_type.encounter_schema" v-model="form.data" :readonly="reading"
         @save="save" @reset="reset" @cancel="cancel")
     q-list(
