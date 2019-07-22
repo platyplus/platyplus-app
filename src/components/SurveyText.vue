@@ -1,12 +1,9 @@
 <template lang="pug">
-
 q-input(
   :type="question.inputType"
   class="self-center full-width"
   :label="title"
-  stack-label
-  outlined
-  autogrow
+  stack-label outlined autogrow
   autofocus
   :readonly="question.isReadOnly"
   v-model="question.value"
@@ -14,8 +11,10 @@ q-input(
   :maxlength="question.getMaxLength()"
   :rows="question.rows"
   :placeholder="question.placeHolder"
-
-  :size="question.size")
+  :size="question.size"
+  :error="question.hasErrors()" bottom-slots)
+  template(v-slot:error)
+    div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
 </template>
 <script>
 import { Text } from 'survey-vue'

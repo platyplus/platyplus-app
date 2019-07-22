@@ -8,7 +8,7 @@ q-card(v-if='question.isVisible' flat bordered)
       component(v-for="(item, index) in row"
       :is="'p-'+getWidgetComponentName(item.editor)"
       :question="item.editor"
-      :key="question.inputId + '-' + rowIndex + '-' + index"
+      :key="question.inputId + '-' + rowindex + '-' + index"
       class="q-pa-xs")
       //- survey-errors(v-if="hasErrorsOnBottom" :question="item.editor" :location="'bottom'")
 </template>

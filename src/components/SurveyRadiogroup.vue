@@ -1,5 +1,9 @@
 <template lang="pug">
-q-field(:label="title" stack-label outlined :readonly="question.isReadOnly")
+q-field(:label="title"
+  stack-label outlined
+  :readonly="question.isReadOnly"
+  :error="question.hasErrors()" bottom-slots
+  :clearable="question.canShowClearButton")
   template(v-slot:control)
     div(class="self-center full-width")
       div(class="row")
@@ -14,6 +18,8 @@ q-field(:label="title" stack-label outlined :readonly="question.isReadOnly")
       p-survey-other-choice(v-if="isOtherActive()" :question="question")
   //- div(v-if='question.canShowClearButton')
     //-   input(type='button' :class='question.cssClasses.clearButton' v-on:click='function() { question.clearValue(); }' :value='question.clearButtonCaption')
+  template(v-slot:error)
+    div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
 </template>
 
 <script>

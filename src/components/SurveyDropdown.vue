@@ -39,7 +39,6 @@ export default {
   computed: {
     title () {
       // TODO put in a mixin
-      console.log(this.question.locTitle.renderedHtml)
       if (!this.inline) return
       return (
         (this.question.no ? String(this.question.no) + '. ' : '') +

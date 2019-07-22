@@ -1,10 +1,15 @@
 <template lang="pug">
-q-field(:label="title" stack-label outlined :readonly="question.isReadOnly")
+q-field(:label="title"
+  stack-label outlined
+  :readonly="question.isReadOnly"
+  :error="question.hasErrors()" bottom-slots)
   template(v-slot:control)
-    q-rating(v-model="question.value"
+    q-rating(v-model="localValue"
       :max="question.rateMax"
       size="1.5em"
       class="self-center full-width q-pa-sm")
+  template(v-slot:error)
+    div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
   //- <div>
   //-   <div :class="question.cssClasses.root">
   //-     <label
@@ -59,12 +64,15 @@ export default {
         (this.question.no ? String(this.question.no) + '. ' : '') +
         this.question.locTitle.renderedHtml
       )
-    }
-  },
-  created () {
-    // TODO incorrect: doit pouvoir enregistrer la valeur 'undefined'
-    if (!this.question.value) {
-      this.question.value = this.question.defaultValue || 0
+    },
+    localValue: {
+      // Mandatory as QRating does not accept undefined values
+      get () {
+        return this.question.value || 0
+      },
+      set (value) {
+        this.question.value = value
+      }
     }
   }
 }
