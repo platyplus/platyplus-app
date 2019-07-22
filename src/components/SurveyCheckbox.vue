@@ -6,23 +6,20 @@ q-field(:label="title" stack-label outlined :readonly="question.isReadOnly")
         div(v-if='!question.hasColumns' class="col")
           q-option-group(v-model="question.renderedValue"
             :options="options(question.visibleChoices)"
+            type="checkbox"
             :inline="inline")
-          //- p-survey-other-choice(v-if="isOtherActive()" :question="question")
         div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
-          q-option-group(v-model="question.renderedValue"
+          q-option-group(v-model="question.renderedValue" type="checkbox"
             :options="options(column)")
-      p-survey-other-choice(v-if="isOtherActive()" :question="question")
-  //- div(v-if='question.canShowClearButton')
-    //-   input(type='button' :class='question.cssClasses.clearButton' v-on:click='function() { question.clearValue(); }' :value='question.clearButtonCaption')
 </template>
-
 <script>
-import { Radiogroup } from 'survey-vue'
+import { Checkbox } from 'survey-vue'
 import { QOptionGroup } from 'quasar'
+
 export default {
-  extends: Radiogroup,
+  extends: Checkbox,
+  name: 'SurveyCheckbox',
   components: { QOptionGroup },
-  name: 'SurveyRadiogroup',
   props: {
     inline: {
       type: Boolean,

@@ -1,11 +1,15 @@
 <template lang="pug">
-q-field(:label="title" stack-label :readonly="question.isReadOnly" outlined)
-  template(v-slot:control)
+q-card(v-if='question.isVisible' flat bordered)
+  q-card-section: div(class="text-subtitle1 text-weight-medium") {{title}}
+  q-card-section
     div(v-for="(row, rowindex) in question.getRows()"
-      :key="question.inputId + 'rowkey' + rowindex"
-      class="row self-center full-width q-field--borderless")
+      :key="question.inputId + 'rowkey' + rowindex")
       //- survey-errors(v-if="hasErrorsOnTop" :question="item.editor" :location="'top'")
-      component(v-for="item in row" :is="'p-'+getWidgetComponentName(item.editor)" :question="item.editor")
+      component(v-for="(item, index) in row"
+      :is="'p-'+getWidgetComponentName(item.editor)"
+      :question="item.editor"
+      :key="question.inputId + '-' + rowIndex + '-' + index"
+      class="q-pa-xs")
       //- survey-errors(v-if="hasErrorsOnBottom" :question="item.editor" :location="'bottom'")
 </template>
 <script>

@@ -12,6 +12,14 @@ import SurveyComment from 'components/SurveyComment.vue'
 import SurveyRating from 'components/SurveyRating.vue'
 import SurveyMultipletext from 'components/SurveyMultipletext.vue'
 import SurveyText from 'components/SurveyText.vue'
+import SurveyPanel from 'components/SurveyPanel.vue'
+import SurveyPanelDynamic from 'components/SurveyPanelDynamic.vue'
+import SurveyMatrixDropdown from 'components/SurveyMatrixDropdown.vue'
+import SurveyMatrixTable from 'components/SurveyMatrixTable.vue'
+import SurveyMatrixDynamic from 'components/SurveyMatrixDynamic.vue'
+import SurveyMatrixCell from 'components/SurveyMatrixCell.vue'
+import SurveyCheckbox from 'components/SurveyCheckbox.vue'
+import SurveyDropdown from 'components/SurveyDropdown.vue'
 
 /**
  * Converts a template-like string to an expression that can be evaluated by Jexl
@@ -125,6 +133,15 @@ import SurveyText from 'components/SurveyText.vue'
 
 export default ({ app, router, Vue, store }) => {
   Vue.use(SurveyVue)
+
+  Vue.component('p-survey-dropdown', SurveyDropdown)
+  Vue.component('p-survey-checkbox', SurveyCheckbox)
+  Vue.component('p-survey-matrixcell', SurveyMatrixCell)
+  Vue.component('p-survey-matrixdynamic', SurveyMatrixDynamic)
+  Vue.component('p-survey-matrixtable', SurveyMatrixTable)
+  Vue.component('p-survey-matrixdropdown', SurveyMatrixDropdown)
+  Vue.component('p-survey-panel', SurveyPanel)
+  Vue.component('p-survey-paneldynamic', SurveyPanelDynamic)
   Vue.component('p-survey-text', SurveyText)
   Vue.component('p-survey-multipletext', SurveyMultipletext)
   Vue.component('p-survey-rating', SurveyRating)

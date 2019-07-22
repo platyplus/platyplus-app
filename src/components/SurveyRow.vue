@@ -1,9 +1,9 @@
 <template lang="pug">
-div(style="max-width: 100%")
+div(class="row")
   p-survey-element(v-if="element.visible" v-for="element in row.elements"
     :key="element.idValue" :id="element.id"
     :element="element" :survey="survey"
-    :style="{ paddingLeft: element.paddingLeft, paddingRight: element.paddingRight, width: element.renderWidth, display: 'inline-block' }")
+    class="col-sm col-xs-12 q-pa-xs")
 </template>
 <script>
 import { Row } from 'survey-vue'

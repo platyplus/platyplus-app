@@ -7,6 +7,7 @@ q-input(
   stack-label
   outlined
   autogrow
+  autofocus
   :readonly="question.isReadOnly"
   v-model="question.value"
   :id="question.inputId"
@@ -21,9 +22,17 @@ import { Text } from 'survey-vue'
 export default {
   extends: Text,
   name: 'SurveyText',
+  props: {
+    inline: {
+      // Flags 'false' when in a table -> mixin
+      type: Boolean,
+      default: true
+    }
+  },
   computed: {
     title () {
       // TODO put in a mixin
+      if (!this.inline) return
       return (
         (this.question.no ? String(this.question.no) + '. ' : '') +
         this.question.locTitle.renderedHtml
