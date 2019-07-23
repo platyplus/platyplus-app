@@ -13,14 +13,15 @@ div
       outlined
       :readonly="question.isReadOnly"
       :id="question.inputId")
-  q-select(v-else v-model='value' :label="title || question.optionsCaption"
+  q-select(v-model="question.renderedValue"
+      :label="title || question.optionsCaption"
       stack-label
       outlined
       emit-value
       :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots
       :readonly="question.isReadOnly"
       :id="question.inputId"
-      :options="question.visibleChoices" option-label="text" :option-disable="(item) => !item.isEnabled")
+      :options="question.visibleChoices"  option-label="text" option-value="itemValue" :option-disable="(item) => !item.isEnabled")
   p-survey-other-choice(v-show='isOtherSelected' :question='question')
 </template>
 
