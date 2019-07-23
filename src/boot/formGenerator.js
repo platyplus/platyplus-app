@@ -21,6 +21,7 @@ import SurveyMatrixCell from 'components/SurveyMatrixCell.vue'
 import SurveyCheckbox from 'components/SurveyCheckbox.vue'
 import SurveyDropdown from 'components/SurveyDropdown.vue'
 import SurveyHtml from 'components/SurveyHtml.vue'
+import SurveyMatrix from 'components/SurveyMatrix.vue'
 
 /**
  * Converts a template-like string to an expression that can be evaluated by Jexl
@@ -134,6 +135,7 @@ import SurveyHtml from 'components/SurveyHtml.vue'
 
 export default ({ app, router, Vue, store }) => {
   Vue.use(SurveyVue)
+  Vue.component('p-survey-matrix', SurveyMatrix)
   Vue.component('p-survey-html', SurveyHtml)
   Vue.component('p-survey-dropdown', SurveyDropdown)
   Vue.component('p-survey-checkbox', SurveyCheckbox)

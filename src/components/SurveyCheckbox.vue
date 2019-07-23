@@ -2,19 +2,22 @@
 q-field(:label="title"
   stack-label outlined
   :readonly="question.isReadOnly"
-  :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots)
+  :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots no-error-icon)
   template(v-slot:control)
     div(class="self-center full-width row")
       div(v-if='!question.hasColumns' class="col")
         q-option-group(v-model="question.renderedValue"
           :options="options(question.visibleChoices)"
+          @input="question.hasErrors()"
           type="checkbox"
           :inline="inline")
       div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
         q-option-group(v-model="question.renderedValue" type="checkbox"
+          @input="question.hasErrors()"
           :options="options(column)")
-  //- template(v-slot:error)
-  //-   div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
+    p-survey-other-choice(v-if="question.hasOther && question.isOtherSelected" :question="question")
+  template(v-slot:error)
+    div(v-for="error in question.getAllErrors()") {{error.locText.renderedHtml}}
 </template>
 <script>
 import { Checkbox } from 'survey-vue'

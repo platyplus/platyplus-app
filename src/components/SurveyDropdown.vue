@@ -13,7 +13,7 @@ div
       outlined
       :readonly="question.isReadOnly"
       :id="question.inputId")
-  q-select(v-model="question.renderedValue"
+  q-select(v-else v-model="question.renderedValue"
       :label="title || question.optionsCaption"
       stack-label
       outlined

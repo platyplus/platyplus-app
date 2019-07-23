@@ -28,7 +28,7 @@ form(onsubmit='return false;')
           :name="index"
           :title="locString(page.locTitle)"
           :prefix="String(index+1)"
-          :done="(index < lastValidatedPage) || readonly"
+          :done="(index < lastValidatedPage) && !readonly"
           :header-nav="(index <= lastValidatedPage) || readonly")
           survey-string(:locString="page.locDescription")
           div(v-for="(row, index) in page.rows" v-if="row.visible" :key="page.id + '_' + index")

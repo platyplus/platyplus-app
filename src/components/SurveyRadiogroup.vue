@@ -3,7 +3,7 @@ q-field(:label="title"
   stack-label outlined
   class="row"
   :readonly="question.isReadOnly"
-  :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots
+  :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots no-error-icon
   :clearable="question.canShowClearButton")
   template(v-slot:control)
     div(class="self-center full-width")
@@ -14,6 +14,7 @@ q-field(:label="title"
           :inline="inline")
       div(v-if='question.hasColumns' v-for='column in question.columns' class="col")
         q-option-group(v-model="question.renderedValue"
+          @input="question.hasErrors()"
           :options="options(column)")
     p-survey-other-choice(v-if="isOtherActive()" :question="question")
   //- div(v-if='question.canShowClearButton')

@@ -1,7 +1,7 @@
 <template lang="pug">
 q-input(v-if="!question.isReadOnly"
       borderless
-      class="q-pa-none"
+      class="q-pa-none self-center full-width"
       v-model="question.comment"
       :maxlength="question.getOthersMaxLength()"
       :placeholder="question.otherPlaceHolder"
