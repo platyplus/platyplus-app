@@ -1,11 +1,12 @@
 <template lang="pug">
 q-field(:label="title"
   stack-label outlined
+  class="row"
   :readonly="question.isReadOnly"
   :error="question.currentErrorCount > 0" @blur="question.hasErrors()" bottom-slots
   :clearable="question.canShowClearButton")
   template(v-slot:control)
-    div(class="self-center full-width row")
+    div(class="self-center full-width")
       div(v-if='!question.hasColumns' class="col")
         q-option-group(v-model="question.renderedValue"
           @input="question.hasErrors()"
