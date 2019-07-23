@@ -47,6 +47,11 @@ export default {
       if (this.entity_type_id) this.item.entity_type_id = this.entity_type_id
       this._resetForm()
     }
+    // async save (e) {
+    //   this.form.encounter_schema.title = this.form.name
+    //   const save = await this._save()
+    //   if (save) this._postSave(save)
+    // }
   }
 }
 </script>

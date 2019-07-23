@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
 // import jexl from 'jexl'
 // import { templateStringToExpression } from 'boot/formGenerator'
-import orgUnit from './org_unit'
 import entity from './entity'
 
 const settings = {
@@ -19,6 +18,13 @@ const minimal = gql`
 
 const fragments = {
   minimal,
+  list: gql`
+    fragment encounter_list on encounter {
+      ...encounter_minimal
+      # TODO
+    }
+    ${minimal}
+  `,
   base: gql`
     fragment encounter_base on encounter {
       ...encounter_minimal
@@ -34,13 +40,13 @@ const fragments = {
       }
       org_unit_id
       org_unit {
-        ...org_unit_base
+        id
+        name
       }
       data
       # label @client
     }
     ${entity.fragments.base}
-    ${orgUnit.fragments.base}
     ${minimal}
   `
 }
@@ -54,6 +60,15 @@ const queries = {
       }
     }
     ${fragments.base}
+  `,
+  list: gql`
+    query encounter($where: encounter_bool_exp) {
+      encounter(where: $where) {
+        # TODO: order by
+        ...encounter_list
+      }
+    }
+    ${fragments.list}
   `
 }
 

@@ -7705,8 +7705,8 @@ supports-color@^6.1.0:
     has-flag "^3.0.0"
 
 survey-vue@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/survey-vue/-/survey-vue-1.1.0.tgz#d234d944e534cdc1817a7d368e1c98a15aedc61b"
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/survey-vue/-/survey-vue-1.1.1.tgz#b5b78ac9014fdb2e901bf8e0cf68834f21166c6a"
   dependencies:
     vue "^2.1.10"
 

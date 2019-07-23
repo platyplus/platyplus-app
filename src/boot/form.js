@@ -11,10 +11,14 @@ import ButtonBar from 'components/ButtonBar.vue'
 export const mixin = (table, settings = {}) => {
   settings = Object.assign(
     {
+      // TODO distinction between item queris and list queries
       query: 'form', // Graphql query index
       insert: 'insert', // Grqphql insert mutation index
       update: 'update', // Graphql update mutation index
-      list: true, // Whether the component also manages a list, or an unique item
+      /** Set to false if the component doesn't manage a list.
+       * If the 'list' query doesn't exist, uses the 'query form' query
+       */
+      list: 'list',
       validations: {},
       defaultValues: {},
       options: {},
@@ -186,28 +190,35 @@ export const mixin = (table, settings = {}) => {
       }
     },
     apollo: {
-      list: {
-        query: config.queries[table][settings.query],
-        variables () {
-          return this.listVariables || { where: settings.where }
-        },
-        skip () {
-          return (
-            !settings.list || (this.listSkip instanceof Object && this.listSkip)
-          )
-        },
-        update: data => data[table],
-        subscribeToMore: {
-          document: queryToSubscription(config.queries[table][settings.query]),
+      ...(settings.list && {
+        list: {
+          query:
+            config.queries[table][settings.list] ||
+            config.queries[table][settings.query],
           variables () {
             return this.listVariables || { where: settings.where }
           },
-          // Mutate the previous result
-          updateQuery: (previousResult, { subscriptionData: { data } }) => {
-            return data
+          skip () {
+            return (
+              !settings.list ||
+              (this.listSkip instanceof Object && this.listSkip)
+            )
+          },
+          update: data => data[table],
+          subscribeToMore: {
+            document: queryToSubscription(
+              config.queries[table][settings.query]
+            ),
+            variables () {
+              return this.listVariables || { where: settings.where }
+            },
+            // Mutate the previous result
+            updateQuery: (previousResult, { subscriptionData: { data } }) => {
+              return data
+            }
           }
         }
-      },
+      }),
       item: {
         // TODO: code the subscription as well => make it generic in the hasura plugin?
         query: config.queries[table][settings.query],

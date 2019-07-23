@@ -1,7 +1,7 @@
 <template lang="pug">
   q-page(padding class="justify-center")
-    div(v-if="details && encounter_type")
-      p-survey(:schema="encounter_type.encounter_schema" v-model="form.data" :readonly="reading"
+    div(v-if="details && schema")
+      p-survey(:schema="schema" v-model="form.data" :readonly="reading"
         @save="save" @reset="reset" @cancel="cancel")
     q-list(
       v-else-if="list && list.length"
@@ -38,12 +38,16 @@ export default {
       }
     },
     /**
-     * @returns the encounter type, either from the encounter
+     * @returns the encounter type schema, either from the encounter
      * (when the encounter exists, i.e. not when creating one)
-     * or from Apollo through the path props
+     * or from Apollo through the path props.
+     * Updates the schema with encounter_type fields
      */
-    encounter_type () {
-      return this.item.type || this._encounter_type
+    schema () {
+      const encounterType = this.item.type || this._encounter_type
+      if (encounterType) {
+        return { ...encounterType.encounter_schema, title: encounterType.name }
+      } else return null
     }
   },
   methods: {

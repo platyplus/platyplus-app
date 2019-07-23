@@ -46,13 +46,8 @@ const minimal = gql`
   }
   ${orgUnitType.fragments.base}
 `
-const base = gql`
-  fragment org_unit_base on org_unit {
-    ...org_unit_minimal
-    parent_id
-    parent {
-      ...org_unit_minimal
-    }
+const children = gql`
+  fragment org_unit_children on org_unit {
     # TODO number of levels are limited that way...
     children(order_by: { name: asc }) {
       ...org_unit_minimal
@@ -66,6 +61,18 @@ const base = gql`
         }
       }
     }
+  }
+  ${minimal}
+`
+
+const base = gql`
+  fragment org_unit_base on org_unit {
+    ...org_unit_minimal
+    parent_id
+    parent {
+      ...org_unit_minimal
+    }
+    ...org_unit_children
     role_attributions {
       id
       user {
@@ -85,10 +92,20 @@ const base = gql`
     }
   }
   ${minimal}
+  ${children}
   ${workflow.fragments.minimal}
 `
 const fragments = {
   minimal,
+  list: gql`
+    fragment org_unit_list on org_unit {
+      ...org_unit_minimal
+      parent_id
+      ...org_unit_children
+    }
+    ${minimal}
+    ${children}
+  `,
   base,
   full: gql`
     fragment org_unit_full on org_unit {
@@ -113,6 +130,14 @@ const queries = {
       }
     }
     ${fragments.base}
+  `,
+  list: gql`
+    query org_unit($where: org_unit_bool_exp) {
+      org_unit(where: $where, order_by: { name: asc }) {
+        ...org_unit_list
+      }
+    }
+    ${fragments.list}
   `,
   option: gql`
     query org_unit($where: org_unit_bool_exp) {

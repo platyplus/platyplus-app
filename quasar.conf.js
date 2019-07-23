@@ -85,7 +85,10 @@ module.exports = function (ctx) {
       vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
-      // analyze: true,
+      analyze: {
+        analyzerMode: 'static',
+        reportFilename: 'report.html' // TODO avoid to put the file in the dist's directory
+      },
       // extractCSS: false,
       extendWebpack (cfg) {
         cfg.devtool = 'inline-module-source-map'
