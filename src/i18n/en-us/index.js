@@ -23,21 +23,24 @@ export default {
     label_plural: 'Encounter types',
     labels: {
       name: 'Name',
-      create: 'Creation label',
+      title_create: 'Creation label',
+      encounter_title: 'Encounter title',
       isolated_uses: 'Isolated uses',
       entity_type: '@:entity_type.label',
       encounter_schema: 'Schema'
     },
     helpers: {
       name: 'Name fo the encounter type',
-      create: 'Label used for creating an encounter',
+      title_create: 'Label used for creating an encounter',
+      encounter_title: 'Template used to generate each encounter title',
       isolated_uses:
         'Org units using this encounter type outside of a workflow',
       entity_type: 'Type of the entity with which the encounter type works'
     },
     errors: {
       name: 'Invalid name',
-      create: 'Invalid label',
+      title_create: 'Invalid label',
+      encounter_title: 'Invalid encounter title',
       isolated_uses: 'Invalid list of isolated used',
       entity_type: 'Invalid entity type'
     },

@@ -133,6 +133,40 @@ import SurveyMatrix from 'components/SurveyMatrix.vue'
 //   }
 // }
 
+// SurveyVue.StylesManager.applyTheme('default')
+SurveyVue.StylesManager.applyTheme('darkblue')
+// var defaultThemeColors = SurveyVue.StylesManager.ThemeColors['default']
+// defaultThemeColors["$main-color"] = "#7ff07f";
+// defaultThemeColors["$main-hover-color"] = "#6fe06f";
+// defaultThemeColors["$text-color"] = "#4a4a4a";
+// defaultThemeColors["$header-color"] = "#7ff07f";
+// defaultThemeColors["$header-background-color"] = "#4a4a4a";
+// defaultThemeColors["$body-container-background-color"] = "#f8f8f8";
+// SurveyVue.StylesManager.applyTheme()
+// const defaultOptions = {
+//   showTitle: true
+//   // showNavigationButtons: 'none',
+//   // checkErrorsMode: 'onValueChanged',
+//   // showPageTitles: true
+//   // showProgressBar: 'bottom'
+//   // goNextPageAutomatic: true // TODO put as a settings in the encounter type
+// }
+SurveyVue.SurveyModel.showTitle = true
+
+// TODO find a way to use Handlebars in the SurveyJS engine...
+export function processTextTemplate (template, data) {
+  var processor = new SurveyVue.TextPreProcessor()
+  processor.onProcess = function (textValue) {
+    if (data[textValue.name]) {
+      textValue.value = data[textValue.name] // TODO deep get e.g. {address.city} in data= {address:{city:'Brubru'}}
+      textValue.isExists = true
+    }
+  }
+  return processor.process(template)
+}
+
+export { SurveyVue }
+
 export default ({ app, router, Vue, store }) => {
   Vue.use(SurveyVue)
   Vue.component('p-survey-matrix', SurveyMatrix)

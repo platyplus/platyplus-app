@@ -56,29 +56,7 @@ form(onsubmit='return false;')
 
 <script>
 import { QStepper, QStepperNavigation, QStep } from 'quasar'
-import * as SurveyVue from 'survey-vue'
-// SurveyVue.StylesManager.applyTheme('default')
-SurveyVue.StylesManager.applyTheme('darkblue')
-// var defaultThemeColors = SurveyVue.StylesManager.ThemeColors['default']
-// defaultThemeColors["$main-color"] = "#7ff07f";
-// defaultThemeColors["$main-hover-color"] = "#6fe06f";
-// defaultThemeColors["$text-color"] = "#4a4a4a";
-// defaultThemeColors["$header-color"] = "#7ff07f";
-// defaultThemeColors["$header-background-color"] = "#4a4a4a";
-// defaultThemeColors["$body-container-background-color"] = "#f8f8f8";
-// SurveyVue.StylesManager.applyTheme()
-
-// TODO https://github.com/surveyjs/survey-library/blob/master/src/defaultCss/cssstandard.ts
-const css = {}
-
-const defaultOptions = {
-  showTitle: true
-  // showNavigationButtons: 'none',
-  // checkErrorsMode: 'onValueChanged',
-  // showPageTitles: true
-  // showProgressBar: 'bottom'
-  // goNextPageAutomatic: true // TODO put as a settings in the encounter type
-}
+import { SurveyVue } from '../boot/formGenerator'
 
 export default {
   name: 'PSurvey',
@@ -92,16 +70,15 @@ export default {
     }
   },
   data () {
-    let jsonSurvey = { ...defaultOptions, ...this.schema }
     // TODO make the initial schema dynamic (with a 'watch'?)
-    let survey = new SurveyVue.Model(jsonSurvey)
+    let survey = new SurveyVue.Model(this.schema)
     survey.data = this.value
     survey.onComplete.add(this.onSave)
     survey.onValueChanged.add(this.onChange)
     survey.onCurrentPageChanged.add(this.onChangePage)
     survey.onValidatedErrorsOnCurrentPage.add(this.onErrorsCheck)
     survey.mode = this.readonly ? 'display' : 'edit'
-    survey.css = css
+    // survey.css = css // TODO remove?
     return {
       survey,
       lastValidatedPage: 0,

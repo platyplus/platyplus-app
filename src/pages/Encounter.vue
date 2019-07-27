@@ -9,7 +9,7 @@
       q-item(
         v-for="item in list"
         :to="'/encounter/'+item.id"
-        :key="item.id") {{item.id}}
+        :key="item.id") {{title(item)}}
     p-button-bar(:reading="reading" :details="details" @create="create" @edit="edit" @remove="remove" :deletionConfirmed="deletionConfirmed")
 </template>
 
@@ -19,6 +19,7 @@
 <script>
 import { mixin } from 'boot/form'
 import { queries } from 'boot/platyplus'
+import { processTextTemplate } from 'boot/formGenerator'
 // TODO: on load, merge all data into one property, and then dispatch on save
 export default {
   name: 'PageEncounter',
@@ -44,10 +45,15 @@ export default {
      * Updates the schema with encounter_type fields
      */
     schema () {
-      const encounterType = this.item.type || this._encounter_type
-      if (encounterType) {
-        return { ...encounterType.encounter_schema, title: encounterType.name }
+      if (this.encounterType) {
+        return {
+          ...this.encounterType.encounter_schema,
+          title: this.encounterType.name
+        }
       } else return null
+    },
+    encounterType () {
+      return this.item.type || this._encounter_type
     }
   },
   methods: {
@@ -68,6 +74,16 @@ export default {
       if (this.type_id) this.item.type_id = this.type_id
       if (this.org_unit_id) this.item.org_unit_id = this.org_unit_id
       this._resetForm()
+    },
+    title (item) {
+      if (this.encounterType) {
+        const { b, ...data } = { ...item, ...item.data }
+        return (
+          processTextTemplate(this.encounterType.encounter_title, data) ||
+          item.id
+        )
+      }
+      return item.id
     }
   },
   apollo: {

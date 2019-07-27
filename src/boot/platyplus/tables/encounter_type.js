@@ -26,6 +26,7 @@ const minimal = gql`
     id
     name
     title_create
+    encounter_title
   }
 `
 
@@ -83,6 +84,7 @@ const mutations = {
     mutation insert_encounter_type(
       $name: String
       $title_create: String
+      $encounter_title: String
       $entity_type_id: uuid
       $isolated_uses_add: [org_unit_isolated_encounter_type_insert_input!]!
       $encounter_schema: jsonb
@@ -92,6 +94,7 @@ const mutations = {
           {
             name: $name
             title_create: $title_create
+            encounter_title: $encounter_title
             entity_type_id: $entity_type_id
             encounter_schema: $encounter_schema
             isolated_uses: { data: $isolated_uses_add }
@@ -113,6 +116,7 @@ const mutations = {
       $encounter_schema: jsonb
       $name: String
       $title_create: String
+      $encounter_title: String
       $entity_type_id: uuid
     ) {
       isolated_uses_add: insert_org_unit_isolated_encounter_type(
@@ -133,6 +137,7 @@ const mutations = {
         _set: {
           name: $name
           title_create: $title_create
+          encounter_title: $encounter_title
           entity_type_id: $entity_type_id
           encounter_schema: $encounter_schema
         }

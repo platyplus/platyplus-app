@@ -22,6 +22,7 @@ const fragments = {
     fragment encounter_list on encounter {
       ...encounter_minimal
       # TODO
+      data
     }
     ${minimal}
   `,
