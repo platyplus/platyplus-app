@@ -1,12 +1,13 @@
 <template lang="pug">
   q-page(padding class="justify-center")
-    div(v-if="details && schema")
-      p-survey(:schema="schema" v-model="form.data" :readonly="reading"
+    div(v-if="details")
+      p-survey(v-if="schema" :schema="schema" v-model="form.data" :readonly="reading"
         @save="save" @reset="reset" @cancel="cancel")
     q-list(
-      v-else-if="list && list.length"
+      v-else
       highlight)
       q-item(
+        v-if="list.length"
         v-for="item in list"
         :to="'/encounter/'+item.id"
         :key="item.id") {{title(item)}}
@@ -37,6 +38,9 @@ export default {
           }
         }
       }
+    },
+    listSkip () {
+      return !(this.type_id && this.org_unit_id)
     },
     /**
      * @returns the encounter type schema, either from the encounter

@@ -186,7 +186,7 @@ export const mixin = (table, settings = {}) => {
         return !this.editFlag && !this.createFlag
       },
       details () {
-        return Boolean(this.item.id) || this.createFlag
+        return Boolean(this.id) || this.createFlag
       }
     },
     apollo: {
@@ -201,6 +201,7 @@ export const mixin = (table, settings = {}) => {
           skip () {
             return (
               !settings.list ||
+              this.details ||
               (this.listSkip instanceof Object && this.listSkip)
             )
           },
