@@ -1,0 +1,6 @@
+- args:
+    relationship: table
+    table:
+      name: check_constraint
+      schema: public
+  type: drop_relationship

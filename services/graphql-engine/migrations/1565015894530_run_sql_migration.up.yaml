@@ -1,0 +1,5 @@
+- args:
+    cascade: false
+    sql: "CREATE OR REPLACE VIEW \"public\".\"check_constraint\" AS \n SELECT *\n
+      \  FROM hdb_catalog.hdb_check_constraint\n"
+  type: run_sql

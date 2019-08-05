@@ -1,0 +1,5 @@
+- args:
+    table:
+      name: check_constraint
+      schema: public
+  type: untrack_table

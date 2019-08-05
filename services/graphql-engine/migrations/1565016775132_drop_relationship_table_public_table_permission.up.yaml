@@ -1,0 +1,6 @@
+- args:
+    relationship: table
+    table:
+      name: permission
+      schema: public
+  type: drop_relationship

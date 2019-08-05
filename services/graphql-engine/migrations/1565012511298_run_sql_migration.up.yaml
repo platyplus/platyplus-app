@@ -1,0 +1,15 @@
+- args:
+    cascade: false
+    sql:
+      "CREATE OR REPLACE VIEW \"public\".\"permission\" AS \n  SELECT hdb_permission.table_schema,\n
+      \   hdb_permission.table_name,\n    hdb_permission.role_name,\n    json_object_agg(hdb_permission.perm_type,
+      hdb_permission.perm_def)->'select' AS select,\n    json_object_agg(hdb_permission.perm_type,
+      hdb_permission.perm_def)->'insert' AS insert,\n    json_object_agg(hdb_permission.perm_type,
+      hdb_permission.perm_def)->'update' AS update,\n    json_object_agg(hdb_permission.perm_type,
+      hdb_permission.perm_def)->'delete' AS delete\n   FROM hdb_catalog.hdb_permission\n
+      \ GROUP BY hdb_permission.table_schema, hdb_permission.table_name, hdb_permission.role_name;"
+  type: run_sql
+- args:
+    name: permission
+    schema: public
+  type: add_existing_table_or_view

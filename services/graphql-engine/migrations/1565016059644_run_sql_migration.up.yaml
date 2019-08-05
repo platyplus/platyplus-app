@@ -1,0 +1,6 @@
+- args:
+    cascade: false
+    sql: "CREATE OR REPLACE VIEW \"public\".\"check_constraint\" AS \n SELECT cons.*\n
+      \  FROM hdb_catalog.hdb_check_constraint as cons\n   join public.table as tab\n
+      \  on cons.table_name = tab.table_name and cons.table_schema = tab.table_schema\n"
+  type: run_sql

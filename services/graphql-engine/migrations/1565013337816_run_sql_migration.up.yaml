@@ -1,0 +1,10 @@
+- args:
+    cascade: false
+    sql: "CREATE OR REPLACE VIEW \"public\".\"table\" AS \n SELECT hdb_table.table_schema,
+      hdb_table.table_name\n   FROM hdb_catalog.hdb_table\n  where is_system_defined
+      is false"
+  type: run_sql
+- args:
+    name: table
+    schema: public
+  type: add_existing_table_or_view

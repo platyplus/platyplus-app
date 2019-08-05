@@ -1,0 +1,5 @@
+- args:
+    cascade: false
+    sql: "CREATE OR REPLACE VIEW \"public\".\"permission\" AS \n SELECT *\n   FROM
+      hdb_catalog.hdb_permission_agg\n"
+  type: run_sql
