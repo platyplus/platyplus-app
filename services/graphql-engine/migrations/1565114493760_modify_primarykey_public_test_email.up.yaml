@@ -1,0 +1,4 @@
+- args:
+    sql: "alter table \"public\".\"test_email\"\n    add constraint \"test_email_pkey\"
+      \n    primary key ( \"id\" );"
+  type: run_sql
