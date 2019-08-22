@@ -70,11 +70,9 @@ const link = split(
 export const apolloClient = new ApolloClient({
   link,
   cache,
-  // shouldBatch: true, // https://blog.apollographql.com/query-batching-in-apollo-63acfd859862 // TODO TS?
+  // shouldBatch: true, // https://blog.apollographql.com/query-batching-in-apollo-63acfd859862 // TODO when available in Hasura
   connectToDevTools: true // * automatic in development, option for production
 })
-
-// apolloClient.onResetStore(() => new Promise(setDefaultState)) // TODO
 
 export const apolloProvider = new VueApollo({
   defaultClient: apolloClient,

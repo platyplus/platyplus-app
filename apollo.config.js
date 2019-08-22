@@ -9,7 +9,7 @@ module.exports = {
   client: {
     service: {
       name: 'graphql-gateway',
-      url: HASURA_URL, // TODO: don't forget to add an entry to /etc/hosts if the API_URL redirects to localhost!
+      url: HASURA_URL, // ! don't forget to add an entry to /etc/hosts if the API_URL redirects to localhost!
       headers: {
         'x-hasura-admin-secret': ADMIN_SECRET
       },
