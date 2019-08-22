@@ -13,7 +13,7 @@
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
-    "@casl/ability": "3.1.2",
+    "@casl/ability": "3.2.0",
     "@casl/vue": "0.5.1",
     "@quasar/extras": "1.2.0",
     "apollo-cache-inmemory": "1.6.2",
