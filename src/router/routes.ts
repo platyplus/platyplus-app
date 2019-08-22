@@ -1,65 +1,10 @@
 import { RouteConfig } from 'vue-router'
-// import { snakeCase } from 'lodash'
-/*
-const crudRoutes = (path: string, page: string, id = 'id'): RouteConfig[] => {
-  const resource = snakeCase(page)
-  return [
-    {
-      path,
-      component: () => import(`pages/${page}.vue`),
-      props: route => ({
-        ...route.params,
-        table: resource
-      }),
-      meta: {
-        resource
-      }
-    },
-    {
-      path: `${path}/create`,
-      component: () => import(`pages/${page}.vue`),
-      props: route => ({
-        ...route.params,
-        createFlag: true,
-        table: resource
-      }),
-      meta: {
-        resource,
-        action: 'create'
-      }
-    },
-    {
-      path: `${path}/:${id}`,
-      component: () => import(`pages/${page}.vue`),
-      props: route => ({
-        ...route.params,
-        table: resource
-      }),
-      meta: {
-        resource,
-        action: 'read'
-      }
-    },
-    {
-      path: `${path}/:${id}/edit`,
-      component: () => import(`pages/${page}.vue`),
-      props: route => ({
-        ...route.params,
-        editFlag: true,
-        table: resource
-      }),
-      meta: {
-        resource,
-        action: 'edit'
-      }
-    }
-  ]
-}
-*/
+import { store } from 'src/store'
 const hasuraTableUserComponents = () => ({
   header: () => import('layouts/user/Header.vue'),
   menu: () => import('layouts/user/Menu.vue')
 })
+
 const routes: RouteConfig[] = [
   // { path: '/', redirect: '/en/' }, // TODO: locale from the client's browser
   {
@@ -108,17 +53,22 @@ const routes: RouteConfig[] = [
         }
       },
       {
+        // TODO decide whether to use the hasura system for the profile page, or to have a special profile page
         path: 'profile',
         components: {
-          default: () => import('pages/Profile.vue'),
+          default: () =>
+            import('components/hasura-table/ReadElementDispatcher.vue'),
           ...hasuraTableUserComponents()
         },
-        props: () => ({
-          // id: getUser().id, // TODO TS
-          table: 'user'
-        })
+        props: {
+          default: () => ({
+            id: store.getters['user/token'].id,
+            tableClass: store.getters['hasura/class']('user')
+          })
+        }
       },
       {
+        // TODO
         path: 'profile/edit',
         components: {
           default: () => import('pages/Profile.vue'),
@@ -126,7 +76,7 @@ const routes: RouteConfig[] = [
         },
         props: () => ({
           editFlag: true,
-          // id: getUser().id, // TODO TS
+          id: store.getters['user/token'].id,
           table: 'user'
         }),
         meta: {
@@ -153,44 +103,11 @@ const routes: RouteConfig[] = [
           ...hasuraTableUserComponents()
         }
       }
-      // ...crudRoutes('org-unit', 'OrgUnit'),
-      // {
-      //   path: 'org-unit/:id/create',
-      //   component: () => import('pages/OrgUnit.vue'),
-      //   props: route => ({
-      //     createFlag: true,
-      //     parent_id: route.params.id
-      //   })
-      // },
-      // ...crudRoutes('org-unit/:org_unit_id/attribution', 'RoleAttribution'),
-      // ...crudRoutes('org-unit/:org_unit_id/workflow', 'Workflow'),
-      // ...crudRoutes(
-      //   'org-unit/:org_unit_id/stage/:stage_id/encounter-type/:type_id',
-      //   'EncounterState'
-      // ),
-      // ...crudRoutes('org-unit-type', 'OrgUnitType'),
-      // ...crudRoutes('entity-type', 'EntityType'),
-      // ...crudRoutes(
-      //   'entity-type/:entity_type_id/encounter-type',
-      //   'EncounterType'
-      // ),
-      // ...crudRoutes('encounter-type', 'EncounterType'),
-      // ...crudRoutes('workflow', 'Workflow'),
-      // ...crudRoutes('workflow/:workflow_id/stage', 'Stage'),
-      // ...crudRoutes('user', 'User'),
-      // ...crudRoutes('user/:user_id/attribution', 'RoleAttribution'),
-      // ...crudRoutes('role', 'Role'),
-      // ...crudRoutes('role/:role_id/attribution', 'RoleAttribution'),
-      // ...crudRoutes(
-      //   'org-unit/:org_unit_id/encounter-type/:type_id',
-      //   'Encounter'
-      // ),
-      // ...crudRoutes('encounter', 'Encounter')
     ]
   }
 ]
 
-// Always leave this as last one
+// ! Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',

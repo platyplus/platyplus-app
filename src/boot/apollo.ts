@@ -4,59 +4,26 @@
 import { ApolloClient, ApolloError } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
-// import fetch from 'node-fetch'
-import { createUploadLink } from 'apollo-upload-client'
 import clone from 'clone'
 
 import { WebSocketLink } from 'apollo-link-ws'
 import { setContext } from 'apollo-link-context'
 import { getMainDefinition } from 'apollo-utilities'
 import { split, DocumentNode } from 'apollo-link'
-import { getEncodedToken, getClaim } from './user'
-// import { resolvers as platyplusResolvers } from './platyplus'
+import { createHttpLink } from 'apollo-link-http'
+import { getEncodedToken } from './user'
 import { getConfig } from '../helpers'
 import { QuasarBootOptions } from 'src/types/quasar'
 // import gql from 'graphql-tag'
 // import { OperationDefinitionNode } from 'graphql'
 
-// const typeDefs = gql`
-//   type token {
-//     id: ID
-//     encoded: String
-//   }
-//   extend type Query {
-//     token: token
-//   }
-//   extend type Mutation {
-//     updateToken(token: String!): token
-//   }
-// `
 const config = getConfig()
 
-// const resolvers = {
-//   // ...platyplusResolvers, // TODO TS
-//   Mutation: {
-//     updateToken
-//   }
-// }
-
 const cache = new InMemoryCache()
-function setDefaultState() {
-  cache.writeData({
-    data: {
-      token: {
-        __typename: 'token',
-        id: null,
-        encoded: null
-      }
-    }
-  })
-}
-setDefaultState()
 
 const uri = `${window.location.protocol}//${config.API}`
-// const httpLink = createUploadLink({ uri, fetch }) // TODO TS
-const httpLink = createUploadLink({ uri })
+
+const httpLink = createHttpLink({ uri })
 
 const authHeaders = () => {
   const token = getEncodedToken()
@@ -66,6 +33,7 @@ const authHeaders = () => {
     }
   } else return {}
 }
+
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
   uri: uri.replace('http', 'ws'),
@@ -105,12 +73,11 @@ const link = split(
 export const apolloClient = new ApolloClient({
   link,
   cache,
-  // resolvers,
   // shouldBatch: true, // https://blog.apollographql.com/query-batching-in-apollo-63acfd859862 // TODO TS?
-  connectToDevTools: true
+  connectToDevTools: true // TODO only dev, not prod?
 })
 
-// apolloClient.onResetStore(() => new Promise(setDefaultState)) // TODO TS
+// apolloClient.onResetStore(() => new Promise(setDefaultState)) // TODO
 
 export const apolloProvider = new VueApollo({
   defaultClient: apolloClient,

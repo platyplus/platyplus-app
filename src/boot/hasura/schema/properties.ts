@@ -7,11 +7,11 @@ export interface Mapping {
   to: ColumnProperty
 }
 export abstract class BaseProperty {
-  public readonly class: TableClass
+  public readonly tableClass: TableClass
   public readonly name: string
   public readonly type: string
   protected constructor(cls: TableClass, name: string, type: string) {
-    this.class = cls
+    this.tableClass = cls
     this.name = name
     this.type = type
   }
@@ -34,7 +34,7 @@ export class ColumnProperty extends BaseProperty {
     return { [this.name]: true }
   }
   public get references() {
-    return this.class.relationshipProperties.filter(
+    return this.tableClass.relationshipProperties.filter(
       property =>
         !property.isMultiple &&
         property.mapping &&
@@ -42,7 +42,7 @@ export class ColumnProperty extends BaseProperty {
     )
   }
   public get isReference() {
-    return this.class.relationshipProperties.some(
+    return this.tableClass.relationshipProperties.some(
       property =>
         !property.isMultiple &&
         property.mapping &&
@@ -76,7 +76,7 @@ export class RelationshipProperty extends BaseProperty {
     this.mapping = mapping
   }
   public get reference() {
-    return this.mapping.length && this.mapping[0].to.class
+    return this.mapping.length && this.mapping[0].to.tableClass
   }
   public get isMultiple() {
     return this.type === 'array'

@@ -7,7 +7,9 @@ export class FieldMixin extends Vue {
   @Prop(Object) public property?: BaseProperty
   @Prop(Object) public element?: ObjectMap
   public get tableName() {
-    return this.property && this.property.class && this.property.class.name
+    return (
+      this.property && this.property.tableClass && this.property.tableClass.name
+    )
   }
 
   public get value() {

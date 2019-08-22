@@ -1,25 +1,41 @@
 import { jsonToGraphQLQuery, VariableType } from 'json-to-graphql-query'
 import gql from 'graphql-tag'
 import { set } from 'object-path'
+import { Ability } from '@casl/ability'
+import { permittedFieldsOf } from '@casl/ability/extra'
 import { TableClass } from '../schema'
 
 export interface PreGraphQl {
   [key: string]: boolean | PreGraphQl
 }
 
-export const preGraphQl = (tableClass: TableClass) => {
+export const preGraphQl = (tableClass: TableClass, ability: Ability) => {
   let result: PreGraphQl = {}
-  for (const property of tableClass.properties) {
-    result = Object.assign(result, property.preGraphQl)
+  const permittedFields = permittedFieldsOf(ability, 'select', tableClass.name)
+  for (const columnName of permittedFields) {
+    const property = tableClass.getColumnProperty(columnName)
+    if (property) {
+      result = Object.assign(result, property.preGraphQl)
+      if (property.isReference) {
+        for (const reference of property.references) {
+          result = Object.assign(result, reference.preGraphQl)
+        }
+      }
+    }
   }
   return { query: { [tableClass.name]: result } }
 }
 
-export const graphQlQuery = (tableClass: TableClass) =>
-  gql(jsonToGraphQLQuery(preGraphQl(tableClass), { pretty: true }))
+// TODO handle the case where there is no property
+export const graphQlQuery = (tableClass: TableClass, ability: Ability) =>
+  gql(jsonToGraphQLQuery(preGraphQl(tableClass, ability), { pretty: true }))
 
-export const elementGraphQlQuery = (tableClass: TableClass) => {
-  const baseQuery = preGraphQl(tableClass)
+// TODO handle the case where there is no property
+export const elementGraphQlQuery = (
+  tableClass: TableClass,
+  ability: Ability
+) => {
+  const baseQuery = preGraphQl(tableClass, ability)
   set(baseQuery, 'query.__variables', {
     id: 'uuid!'
   })

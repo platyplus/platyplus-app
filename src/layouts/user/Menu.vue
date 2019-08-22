@@ -14,16 +14,17 @@
       q-separator
 
       q-item-label(header) Configuration
-      p-menu-item(to="/data/org_unit" icon="sitemap") Organisation
-      p-menu-item(to="/data/role" icon="user-lock") Roles
-      p-menu-item(to="/data/workflow" icon="route") Workflows
-      p-menu-item(to="/data/encounter_type" icon="comments") Encounter Types
+      p-menu-item(v-if="$can('select', 'org_unit')" to="/data/org_unit" icon="sitemap") Organisation
+      p-menu-item(v-if="$can('select', 'role')" to="/data/role" icon="user-lock") Roles
+      p-menu-item(v-if="$can('select', 'workflow')" to="/data/workflow" icon="route") Workflows
+      p-menu-item(v-if="$can('select', 'encounter_type')" to="/data/encounter_type" icon="comments") Encounter Types
       q-separator
 
       q-item-label(header) Metadata
-      p-menu-item(to="/data/org_unit_type" icon="sitemap") Org Unit Types
-      p-menu-item(to="/data/entity_type" icon="heartbeat") Entity Types
+      p-menu-item(v-if="$can('select', 'org_unit_type')" to="/data/org_unit_type" icon="sitemap") Org Unit Types
+      p-menu-item(v-if="$can('select', 'entity_type')" to="/data/entity_type" icon="heartbeat") Entity Types
       q-separator
+      
       q-item-label(header) Administration
       p-menu-item(to="/import-export" icon="sync") Import/Export
 </template>

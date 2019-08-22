@@ -1,12 +1,15 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Route } from 'vue-router'
-import { ability } from 'src/boot/user/store' // TODO acces through a vuex getter?
 
 import { navigationModule } from './store'
 import { QuasarBootOptions } from 'src/types/quasar'
 
 Component.registerHooks(['beforeRouteEnter'])
+
+/**
+ * * Exposes the previous route to any component through the $from property
+ */
 
 @Component
 class RouterMixin extends Vue {
@@ -21,20 +24,30 @@ class RouterMixin extends Vue {
 
 export default ({ Vue, store, router }: QuasarBootOptions) => {
   store.registerModule('navigation', navigationModule)
-  store.commit('navigation/linkRouter', router) // Creates a pointer to the vue router available from the Vuex store
+  /**
+   * * Creates a pointer to the vue router available from the Vuex store
+   * It is required for the Vuex routing actions
+   */
+  store.commit('navigation/linkRouter', router)
   Vue.mixin(RouterMixin)
 
+  /**
+   * * Main navigation guard.
+   * If not authenticated:
+   * - Redirects '/' to '/public'
+   * - Only allows child routes of the '/public' route.
+   * - If another route is requested, store the requested route to the Vuex store and redirect to the authentication page.
+   * If authenticated:
+   * - If no preferred org unit exists, redirects to the page to select it
+   * - Routes otherwise
+   */
   router.beforeEach(async (to, from, next) => {
-    // TODO recuperer l'id et le type de l'objet, et vérifier d'ability
-    // TODO put into a beforeEnter in the created hasura routes
-    const canNavigate = to.matched.some(route => {
-      return ability.can(route.meta.action || 'read', {
-        $type: route.meta.resource || 'org_unit' // TODO
-      })
-    })
     if (!store.getters['user/authenticated']) {
       if (to.path === '/') return next('/public')
-      if (!canNavigate) {
+      const publicRoute = to.matched.some(route => {
+        return route.path === '/public'
+      })
+      if (!publicRoute) {
         store.dispatch('navigation/routeRequest', { path: to.path })
         return next('/public/auth/signin')
       }
@@ -48,12 +61,6 @@ export default ({ Vue, store, router }: QuasarBootOptions) => {
         next('/profile/current-org-unit')
       }
     }
-    if (!canNavigate) {
-      // TODO completer les routes puis activer
-      console.log('Forbidden')
-      //   return next('/')
-    }
-    console.log('succeed: ' + to.path)
     return next()
   })
 }

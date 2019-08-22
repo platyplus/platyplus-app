@@ -11,26 +11,7 @@ q-page(v-if="$authenticated" padding class="justify-center")
 import { Vue, Component } from 'vue-property-decorator'
 
 @Component
-export default class PageIndex extends Vue {
-  get canUser() {
-    return this.$can('select', {
-      __typename: 'user',
-      id: '4edf74b7-ddb9-4da0-8022-9a30ba12503d'
-    })
-  }
-  get canOther() {
-    return this.$can('select', {
-      __typename: 'user',
-      id: '12345678-abcd-1234-5678-a1b2c3d4e5f6'
-    })
-  }
-  get canGeneral() {
-    return this.$can('select', 'user')
-  }
-  get canIdiot() {
-    return this.$can('select', 'zou')
-  }
-}
+export default class PageIndex extends Vue {}
 </script>
 
 <style>

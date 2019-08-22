@@ -1,15 +1,12 @@
-import { Store, mapGetters } from 'vuex'
-import { RootState } from 'src/store'
+import { mapGetters } from 'vuex'
 import { QuasarBootOptions } from 'src/types/quasar'
 import { userModule, ability } from './store'
 import { abilitiesPlugin } from '@casl/vue'
+import { store } from 'src/store'
 
-let currentStore: Store<RootState>
-
-export const getEncodedToken = () => currentStore.getters['user/encodedToken']
+export const getEncodedToken = () => store.getters['user/encodedToken']
 
 export default ({ Vue, store }: QuasarBootOptions) => {
-  currentStore = store
   store.registerModule('user', userModule)
   Vue.use(abilitiesPlugin, ability)
   Vue.mixin({

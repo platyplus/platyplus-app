@@ -4,7 +4,8 @@ import Vuex, {
   ActionTree,
   MutationTree,
   ModuleTree,
-  StoreOptions
+  StoreOptions,
+  Store
 } from 'vuex'
 import { alert } from './alert'
 
@@ -26,11 +27,15 @@ export interface Module<S, R> {
   mutations?: MutationTree<S>
   modules?: ModuleTree<R>
 }
+
+export let store: Store<RootState>
+
 export default function(/* { ssrContext } */) {
   const Store: StoreOptions<RootState> = new Vuex.Store<RootState>({
     modules: {
       alert
     }
   })
+  store = Store as Store<RootState>
   return Store
 }

@@ -1,0 +1,12 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - name
+      filter: {}
+    role: user
+    table:
+      name: workflow
+      schema: public
+  type: create_select_permission

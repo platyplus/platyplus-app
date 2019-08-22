@@ -31,9 +31,11 @@ export const createRoutes = (schema: Schema) => {
             component: ListLoader,
             props: { tableClass },
             beforeEnter: (to, from, next) => {
-              console.log('Implement the list navigation guard') // TODO
-              console.log(to.params)
-              next()
+              if (ability.can('select', tableClass.name)) next()
+              else {
+                // TODO not implemented
+                return next('/unauthorized')
+              }
             }
           },
           {
@@ -44,28 +46,16 @@ export const createRoutes = (schema: Schema) => {
               tableClass
             }),
             beforeEnter: (to, from, next) => {
-              console.log('Implement the read navigation guard') // TODO
-              console.log(from)
-              console.log(
-                ability.can('read', {
-                  ...to.params,
-                  __typename: tableClass.name
-                })
-              )
-              next()
+              // TODO not ideal as this ability check is done before fetching the data
+              if (ability.can('select', tableClass.name)) next()
+              else {
+                // TODO not implemented
+                return next('/unauthorized')
+              }
             }
           }
         ]
       }))
     }
   ] as RouteConfig[]
-  // return this.classes.map(tableClass => ({
-  //   name: tableClass.name,
-  //   allowedRoutes: {
-  //     list: true,
-  //     create: true,
-  //     view: true,
-  //     edit: true
-  //   }
-  // }))
 }

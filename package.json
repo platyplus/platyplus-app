@@ -22,7 +22,6 @@
     "apollo-link-context": "^1.0.18",
     "apollo-link-http": "^1.5.15",
     "apollo-link-ws": "^1.0.18",
-    "apollo-upload-client": "^10.0.1",
     "clientconfig": "^1.1.1",
     "clone": "^2.1.2",
     "graphql": "^14.3.1",

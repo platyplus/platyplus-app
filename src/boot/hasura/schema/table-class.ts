@@ -144,17 +144,4 @@ export class TableClass {
       }
     }
   }
-
-  public get selectProperties(): BaseProperty[] {
-    // TODO remove columns not in permissions
-    return this.properties
-  }
-  public get insertProperties(): BaseProperty[] {
-    // TODO remove columns not in permissions
-    return this.properties
-  }
-  public get updateProperties(): BaseProperty[] {
-    // TODO remove columns not in permissions
-    return this.properties
-  }
 }

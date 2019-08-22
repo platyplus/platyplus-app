@@ -3,8 +3,6 @@ import { NavigationState } from './state'
 import { RootState } from 'src/store'
 import { createRoutes } from '../routes'
 import { Schema } from 'src/boot/hasura'
-import { Rule } from '@casl/ability'
-import { ability } from 'src/boot/user/store'
 
 export const actions: ActionTree<NavigationState, RootState> = {
   routeRequest({ commit }, { path }) {
@@ -31,7 +29,6 @@ export const actions: ActionTree<NavigationState, RootState> = {
    */
   loadRoutes: async ({ state, rootGetters }) => {
     const schema: Schema = rootGetters['hasura/schema']
-    const rules: Rule[] = rootGetters['user/rules']
     state.router.addRoutes(createRoutes(schema))
   }
 }
