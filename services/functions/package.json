@@ -18,7 +18,7 @@
     "graphql": "14.3.1",
     "graphql-request": "1.8.2",
     "graphql-tag": "2.10.1",
-    "koa": "2.7.0",
+    "koa": "2.8.1",
     "koa-bodyparser": "4.2.1",
     "koa-router": "7.4.0"
   },
