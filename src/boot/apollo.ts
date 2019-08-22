@@ -1,11 +1,10 @@
 /**
- * Configuration of the GraphQL client
+ * * Configuration of the GraphQL client
  */
 import { ApolloClient, ApolloError } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 import clone from 'clone'
-
 import { WebSocketLink } from 'apollo-link-ws'
 import { setContext } from 'apollo-link-context'
 import { getMainDefinition } from 'apollo-utilities'
@@ -14,8 +13,6 @@ import { createHttpLink } from 'apollo-link-http'
 import { getEncodedToken } from './user'
 import { getConfig } from '../helpers'
 import { QuasarBootOptions } from 'src/types/quasar'
-// import gql from 'graphql-tag'
-// import { OperationDefinitionNode } from 'graphql'
 
 const config = getConfig()
 
@@ -74,7 +71,7 @@ export const apolloClient = new ApolloClient({
   link,
   cache,
   // shouldBatch: true, // https://blog.apollographql.com/query-batching-in-apollo-63acfd859862 // TODO TS?
-  connectToDevTools: true // TODO only dev, not prod?
+  connectToDevTools: true // * automatic in development, option for production
 })
 
 // apolloClient.onResetStore(() => new Promise(setDefaultState)) // TODO
