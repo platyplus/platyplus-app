@@ -1,0 +1,14 @@
+- args:
+    name: foreign_key_constraints
+    table:
+      name: table
+      schema: public
+    using:
+      manual_configuration:
+        column_mapping:
+          table_name: table_name
+          table_schema: table_schema
+        remote_table:
+          name: foreign_key_constraint
+          schema: public
+  type: create_array_relationship

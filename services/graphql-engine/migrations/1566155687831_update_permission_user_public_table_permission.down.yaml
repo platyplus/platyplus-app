@@ -1,0 +1,25 @@
+- args:
+    role: user
+    table:
+      name: permission
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - table_schema
+      - table_name
+      - role_name
+      - select
+      - insert
+      - update
+      - delete
+      filter:
+        role_name:
+          _in: x-hasura-allowed-roles
+    role: user
+    table:
+      name: permission
+      schema: public
+  type: create_select_permission

@@ -23,10 +23,15 @@ services:
       - ./package.json:/opt/build/package.json
       - ./yarn.lock:/opt/build/yarn.lock
       - ./quasar.conf.js:/opt/build/quasar.conf.js
+      - ./quasar.extensions.json:/opt/build/quasar.extensions.json
       - ./.quasar:/opt/build/.quasar
       - ./babel.config.js:/opt/build/babel.config.js
-      - ./.eslintrc:/opt/build/.eslintrc
-      - ./.postcssrc:/opt/build/.postcssrc
+      - ./.eslintrc.js:/opt/build/.eslintrc.js
+      - ./apollo.config.js:/opt/build/apollo.config.js
+      - ./tsconfig.json:/opt/build/tsconfig.json
+      - ./.eslintignore:/opt/build/.eslintignore
+      - ./.stylintrc:/opt/build/.stylintrc
+      - ./.postcssrc.js:/opt/build/.postcssrc.js
       - notused_app:/opt/build/node_modules # TODO revoir cette merde
   authentication:
     build:

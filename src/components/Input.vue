@@ -1,5 +1,6 @@
 <template lang="pug">
   q-input(
+    :autocomplete="autocomplete"
     :autofocus="autofocus"
     ref="input"
     v-model="localValue"
@@ -16,20 +17,23 @@
     template(v-if="icon" v-slot:prepend)
       q-icon(:name="'fas fa-'+icon")
 </template>
-<script>
+<script lang="ts">
 import { QInput } from 'quasar'
 import { types, FieldMixin } from './config'
-export default {
-  name: 'PInput',
+import Component, { mixins } from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
+@Component({
   components: {
     QInput
-  },
-  mixins: [FieldMixin],
-  props: ['mask', 'value', 'autofocus'],
-  computed: {
-    inputType () {
-      return types[this.name] || 'text'
-    }
+  }
+})
+export default class PInput extends mixins(FieldMixin) {
+  @Prop(String) autocomplete?: string
+  @Prop(String) mask?: string
+  @Prop({ type: Boolean, default: false }) autofocus?: boolean
+
+  get inputType() {
+    return (this.name && types[this.name]) || 'text'
   }
 }
 </script>

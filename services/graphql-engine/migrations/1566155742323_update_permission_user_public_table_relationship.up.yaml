@@ -1,0 +1,26 @@
+- args:
+    role: user
+    table:
+      name: relationship
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - definition
+      - comment
+      - name
+      - table_name
+      - table_schema
+      - type
+      filter:
+        table:
+          permissions:
+            role_name:
+              _in: x-hasura-roles
+    role: user
+    table:
+      name: relationship
+      schema: public
+  type: create_select_permission

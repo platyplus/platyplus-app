@@ -119,14 +119,18 @@ const resolvers = {
       const valid = await bcrypt.compare(password, user.password)
 
       if (valid) {
-        const roles = user.roles.map(node => node.role.name).concat('user')
+        const roles = user.roles.map(node => node.role.name)
+        // * See: https://docs.hasura.io/1.0/graphql/manual/auth/authorization/roles-variables.html
+        const postgresRoles = '{' + roles.map(role => `${role}`).join(',') + '}'
         const token = jwt.sign(
           {
             id: user.id,
             'https://hasura.io/jwt/claims': {
-              'x-hasura-allowed-roles': roles,
-              'x-hasura-default-role': 'admin', // TODO: return highest role level
-              'x-hasura-user-id': user.id
+              'x-hasura-allowed-roles': roles, //! Required by Hasura but doesn't work for permissions
+              // TODO: return highest role level
+              'x-hasura-default-role': roles[0], //! Required by Hasura
+              'x-hasura-user-id': user.id,
+              'x-hasura-roles': postgresRoles
             }
           },
           PRIVATE_KEY,

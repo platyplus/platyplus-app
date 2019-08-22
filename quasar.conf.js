@@ -1,22 +1,28 @@
 // Configuration for your app
 
-module.exports = function (ctx) {
+// eslint-disable-next-line no-undef
+module.exports = function(ctx) {
   return {
+    // Quasar looks for *.js files by default
+    sourceFiles: {
+      router: 'src/router/index.ts',
+      store: 'src/store/index.ts'
+    },
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
-      'abilities',
-      'layout',
-      'router',
-      'auth',
-      'i18n',
-      'inputs',
-      'apollo',
+      // ! The order of the modules counts and therefore should remain the same!
+      'apollo', // TODO merge with hasura
+      'user',
+      // 'auth',
+      'navigation',
       'hasura',
-      'platyplus',
-      'moment',
-      'form',
-      'formGenerator'
+      // 'moment', // ! Do not use. Use rather the built-in quasar helpers
+      'i18n',
+      'layout', // TODO merge with?
+      'inputs'
+      // 'form', // TODO TS
+      // 'formGenerator' // TODO TS
     ],
     css: ['app.styl'],
     extras: [
@@ -43,6 +49,7 @@ module.exports = function (ctx) {
         'QDialog',
         'QDrawer',
         'QField',
+        'QForm',
         'QPageContainer',
         'QPage',
         'QPageSticky',
@@ -75,13 +82,13 @@ module.exports = function (ctx) {
     supportIE: true,
     build: {
       scopeHoisting: true,
-      env: ctx.dev
-        ? {
-          API: JSON.stringify('graphql.localhost/v1/graphql')
-        }
-        : {
-          API: JSON.stringify('graphql.platyplus.io/v1/graphql')
-        },
+      env: {
+        API: JSON.stringify(
+          ctx.dev
+            ? 'graphql.localhost/v1/graphql'
+            : 'graphql.platyplus.io/v1/graphql'
+        )
+      },
       vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
@@ -90,7 +97,7 @@ module.exports = function (ctx) {
         reportFilename: 'report.html' // TODO avoid to put the file in the dist's directory
       },
       // extractCSS: false,
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         cfg.devtool = 'inline-module-source-map'
         cfg.module.rules.push({
           enforce: 'pre',
@@ -102,6 +109,10 @@ module.exports = function (ctx) {
           test: /\.pug$/,
           loader: 'pug-plain-loader'
         })
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias, // This adds the existing alias
+          handlebars: 'handlebars/dist/handlebars.min.js'
+        }
       }
     },
 
@@ -128,8 +139,10 @@ module.exports = function (ctx) {
         // description: 'Best PWA App in town!',
         display: 'standalone',
         orientation: 'portrait',
+        /*eslint-disable @typescript-eslint/camelcase */
         background_color: '#ffffff',
         theme_color: '#027be3',
+        /*eslint-enable @typescript-eslint/camelcase */
         icons: [
           {
             src: 'statics/icons/icon-128x128.png',
@@ -168,10 +181,10 @@ module.exports = function (ctx) {
     electron: {
       // bundler: 'builder', // or 'packager'
 
-      extendWebpack (cfg) {
-        // do something with Electron main process Webpack cfg
-        // chainWebpack also available besides this extendWebpack
-      },
+      // extendWebpack(cfg) {
+      // do something with Electron main process Webpack cfg
+      // chainWebpack also available besides this extendWebpack
+      // },
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options

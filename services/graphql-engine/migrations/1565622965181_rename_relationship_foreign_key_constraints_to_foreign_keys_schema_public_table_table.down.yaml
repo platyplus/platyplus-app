@@ -1,0 +1,7 @@
+- args:
+    name: foreign_keys
+    new_name: foreign_key_constraints
+    table:
+      name: table
+      schema: public
+  type: rename_relationship

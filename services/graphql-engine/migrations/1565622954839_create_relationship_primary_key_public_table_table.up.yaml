@@ -1,0 +1,14 @@
+- args:
+    name: primary_key
+    table:
+      name: table
+      schema: public
+    using:
+      manual_configuration:
+        column_mapping:
+          table_name: table_name
+          table_schema: table_schema
+        remote_table:
+          name: primary_key
+          schema: public
+  type: create_object_relationship

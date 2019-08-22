@@ -19,37 +19,40 @@
             q-icon(name="fas fa-plus")
           q-item-section {{$t(form +'.actions.'+name+'.create')}}
 </template>
-<script>
+<script lang="ts">
 import { QField, QList, QItem, QItemSection, QIcon } from 'quasar'
+import Component, { mixins } from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 import { FieldMixin } from './config'
-import Handlebars from 'handlebars/dist/cjs/handlebars'
-export default {
-  extends: QField,
-  mixins: [FieldMixin],
+// import Handlebars from 'handlebars/dist/cjs/handlebars' // TODO TS
+import Handlebars from 'handlebars'
+
+@Component({
   components: {
     QField,
     QList,
     QItem,
     QItemSection,
     QIcon
-  },
-  props: {
-    itemLabelTemplate: {
-      type: String,
-      default: '{{name}}'
-    },
-    path: String,
-    create: {
-      type: Boolean,
-      default: true
-    },
-    createSuffix: String
-  },
-  methods: {
-    itemLabel (cursor) {
-      var template = Handlebars.compile(this.itemLabelTemplate)
-      return template(cursor)
-    }
+  }
+})
+export default class PField extends mixins(FieldMixin, QField) {
+  @Prop({
+    type: String,
+    default: '{{name}}'
+  })
+  readonly itemLabelTemplate?: string
+  @Prop(String) readonly path?: string
+  @Prop({
+    type: Boolean,
+    default: true
+  })
+  readonly create?: boolean
+  @Prop(String) readonly createSuffix?: string
+
+  itemLabel(cursor: {}) {
+    var template = Handlebars.compile(this.itemLabelTemplate)
+    return template(cursor)
   }
 }
 </script>

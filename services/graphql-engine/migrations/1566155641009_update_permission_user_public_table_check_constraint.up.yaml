@@ -1,0 +1,24 @@
+- args:
+    role: user
+    table:
+      name: check_constraint
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - table_schema
+      - table_name
+      - constraint_name
+      - check
+      filter:
+        table:
+          permissions:
+            role_name:
+              _in: x-hasura-roles
+    role: user
+    table:
+      name: check_constraint
+      schema: public
+  type: create_select_permission

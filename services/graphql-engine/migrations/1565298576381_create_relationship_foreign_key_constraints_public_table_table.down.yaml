@@ -1,0 +1,6 @@
+- args:
+    relationship: foreign_key_constraints
+    table:
+      name: table
+      schema: public
+  type: drop_relationship

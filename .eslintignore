@@ -1,1 +1,8 @@
 /dist
+/services
+/server
+/scripts
+/components
+/docs/.vuepress/dist
+/backup
+/temp
