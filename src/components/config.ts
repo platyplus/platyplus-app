@@ -1,8 +1,9 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { ObjectMap } from 'src/types/common'
+import { get } from 'object-path'
 
 /*eslint-disable @typescript-eslint/camelcase */
-const icons: ObjectMap = {
+/*eslint-disable @typescript-eslint/no-explicit-any */
+const icons: Record<string, any> = {
   preferred_org_unit: 'location-arrow',
   created_at: 'clock',
   username: 'user',
@@ -50,9 +51,9 @@ export const types: { [key: string]: string } = {
 export const icon = (form: string, name: string) => {
   if (icons[name]) {
     if (typeof icons[name] === 'string') return icons[name]
-    else return icons[name].self
+    else return get(icons, `${name}.self`)
   } else if (icons[form]) {
-    return icons[form][name]
+    return get(icons, `${form}.${name}`)
   } else return undefined
 }
 
