@@ -53,7 +53,7 @@ services:
       - ./services/authentication/package-lock.json:/opt/package-lock.json
       - notused_auth:/opt/app/node_modules
   configuration: # TODO: revoir
-    image: k8s.gcr.io/git-sync:v3.1.1
+    image: k8s.gcr.io/git-sync:v3.1.2
     environment: # See https://github.com/kubernetes/git-sync/blob/master/cmd/git-sync/main.go
       GIT_SYNC_REPO: https://github.com/platyplus/configuration
       GIT_SYNC_ROOT: /git
