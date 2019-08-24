@@ -1,5 +1,5 @@
 export { HasuraMixin } from './hasura'
-export { ListLoaderMixin } from './list-loader'
+export { CollectionLoaderMixin } from './collection-loader'
 export { ElementLoaderMixin } from './element-loader'
 export { ElementContainerMixin } from './element-container'
 export { FieldMixin } from './field'

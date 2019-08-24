@@ -4,7 +4,7 @@ import UserLayout from 'src/layouts/user/Layout.vue'
 import UserHeader from 'src/layouts/user/Header.vue'
 import UserMenu from 'src/layouts/user/Menu.vue'
 import Index from 'src/components/hasura-table/Index.vue'
-import ListLoader from 'src/components/hasura-table/ListLoader.vue'
+import CollectionLoader from 'src/components/hasura-table/CollectionLoader.vue'
 import ReadElementDispatcher from 'src/components/hasura-table/ReadElementDispatcher.vue'
 import EditElementDispatcher from 'src/components/hasura-table/EditElementDispatcher.vue'
 import { ability } from '../user/store'
@@ -29,7 +29,7 @@ export const createRoutes = (schema: Schema) => {
         children: [
           {
             path: '',
-            component: ListLoader,
+            component: CollectionLoader,
             props: { tableClass },
             beforeEnter: (to, from, next) => {
               if (ability.can('select', tableClass.name)) next()

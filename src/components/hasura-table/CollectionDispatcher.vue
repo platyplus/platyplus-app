@@ -5,21 +5,21 @@ component(:is="componentName" :tableClass="tableClass" :list="list")
 <script lang="ts">
 import { Mixins, Component, Prop } from 'vue-property-decorator'
 import { HasuraMixin } from 'src/boot/hasura'
-import List from './List.vue'
+import SimpleList from './SimpleList.vue'
 import Tree from './Tree.vue'
 import Chips from './ListChips.vue'
 
 @Component({
   components: {
-    'h-list': List,
+    'h-simple-list': SimpleList,
     'h-tree': Tree,
     'h-chips': Chips
   }
 })
-export default class ListDispatcher extends Mixins(HasuraMixin) {
-  // TODO create a list-loader mixin?
+export default class CollectionDispatcher extends Mixins(HasuraMixin) {
+  // TODO create a collection-loader mixin?
   @Prop({ type: Array, default: () => [] }) list?: []
-  @Prop({ type: String, default: 'list' }) type?: string
+  @Prop({ type: String, default: 'simple-list' }) type?: string
 
   /**
    * Returns the component name to use to render the list.

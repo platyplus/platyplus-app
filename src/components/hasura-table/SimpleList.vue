@@ -19,7 +19,7 @@ import ListItem from './ListItem.vue'
     'h-list-item': ListItem
   }
 })
-export default class HasuraTableList extends Mixins(HasuraMixin) {
+export default class SimpleList extends Mixins(HasuraMixin) {
   @Prop({ type: Array, default: () => [] }) list?: []
 }
 </script>

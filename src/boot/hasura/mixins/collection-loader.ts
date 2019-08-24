@@ -13,6 +13,6 @@ import { ability } from 'src/boot/user/store'
     }
   }
 })
-export class ListLoaderMixin extends Mixins(HasuraMixin) {
+export class CollectionLoaderMixin extends Mixins(HasuraMixin) {
   public list = []
 }
