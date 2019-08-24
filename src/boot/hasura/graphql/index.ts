@@ -4,38 +4,83 @@ import { set } from 'object-path'
 import { Ability } from '@casl/ability'
 import { permittedFieldsOf } from '@casl/ability/extra'
 import { TableClass } from '../schema'
+import { ObjectMap } from 'src/types/common'
+import { RelationshipProperty } from '../schema/properties'
 
-export interface PreGraphQl {
-  [key: string]: boolean | PreGraphQl
-}
-
-export const preGraphQl = (tableClass: TableClass, ability: Ability) => {
-  let result: PreGraphQl = {}
+/**
+ * * Filters the 'JSON object' and removes the properties that are not permitted with the ability
+ * @param tableClass
+ * @param jsonObject 'JSON object' as per defined in https://github.com/dupski/json-to-graphql-query
+ * @param ability Casl ability
+ */
+const filteredJsonObject = (
+  tableClass: TableClass,
+  jsonObject: ObjectMap,
+  ability: Ability
+) => {
   const permittedFields = permittedFieldsOf(ability, 'select', tableClass.name)
-  for (const columnName of permittedFields) {
-    const property = tableClass.getColumnProperty(columnName)
-    if (property) {
-      result = Object.assign(result, property.preGraphQl)
-      if (property.isReference) {
-        for (const reference of property.references) {
-          result = Object.assign(result, reference.preGraphQl)
+  const result: ObjectMap = {}
+  for (const fieldName of Object.keys(jsonObject)) {
+    const subObject = jsonObject[fieldName]
+    if (typeof subObject === 'object' && !Array.isArray(subObject)) {
+      const relationship = tableClass.getRelationshipProperty(fieldName)
+      if (relationship && subObject) {
+        const subObjectResult = filteredJsonObject(
+          relationship.reference,
+          subObject,
+          ability
+        )
+        if (Object.keys(subObjectResult).length > 0) {
+          result[fieldName] = subObjectResult
         }
+      } else {
+        result[fieldName] = subObject
+      }
+    } else {
+      if (permittedFields.includes(fieldName)) {
+        result[fieldName] = subObject
       }
     }
   }
-  return { query: { [tableClass.name]: result } }
+  return result
 }
 
-// TODO handle the case where there is no property
-export const graphQlQuery = (tableClass: TableClass, ability: Ability) =>
-  gql(jsonToGraphQLQuery(preGraphQl(tableClass, ability), { pretty: true }))
+const encapsulateGraphQlQuery = (
+  tableClass: TableClass,
+  jsonObject: ObjectMap
+) => ({
+  query: { [tableClass.name]: jsonObject }
+})
 
-// TODO handle the case where there is no property
+export const listGraphQlQuery = (tableClass: TableClass, ability: Ability) => {
+  return gql(
+    jsonToGraphQLQuery(
+      encapsulateGraphQlQuery(
+        tableClass,
+        filteredJsonObject(tableClass, tableClass.jsonObjectList, ability)
+      ),
+      { pretty: true }
+    )
+  )
+}
+
+export const optionsGraphQlQuery = (
+  property: RelationshipProperty,
+  ability: Ability
+) => {
+  // TODO customiser
+  return listGraphQlQuery(property.reference, ability)
+}
+
+// ! Only works when the primary key is id of type uuid
 export const elementGraphQlQuery = (
   tableClass: TableClass,
   ability: Ability
 ) => {
-  const baseQuery = preGraphQl(tableClass, ability)
+  const baseQuery = encapsulateGraphQlQuery(
+    tableClass,
+    filteredJsonObject(tableClass, tableClass.jsonObjectElement, ability)
+  )
   set(baseQuery, 'query.__variables', {
     id: 'uuid!'
   })

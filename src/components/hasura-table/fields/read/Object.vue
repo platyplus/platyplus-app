@@ -19,5 +19,5 @@ import Chip from 'src/components/hasura-table/Chip.vue'
     'h-chip': Chip
   }
 })
-export default class HasuraTableElement extends Mixins(FieldMixin) {}
+export default class ReadObjectField extends Mixins(FieldMixin) {}
 </script>

@@ -1,3 +1,7 @@
+import Handlebars from 'handlebars'
+import { ObjectMap } from 'src/types/common'
+import { set } from 'object-path'
+
 interface Config {
   API?: string
 }
@@ -20,4 +24,17 @@ export function getConfig() {
     localStorage.setItem('config', JSON.stringify(config))
     return config
   } else return JSON.parse(configString)
+}
+
+export const getHandlebarsVars = (value: string) => {
+  const ast = Handlebars.parse(value)
+  const keys: ObjectMap = {}
+  for (const i in ast.body) {
+    if (ast.body[i].type === 'MustacheStatement') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const bodyElement = ast.body[i] as any
+      set(keys, bodyElement.path.original, true)
+    }
+  }
+  return keys
 }

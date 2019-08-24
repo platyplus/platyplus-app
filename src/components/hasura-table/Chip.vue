@@ -9,5 +9,5 @@ import { Component, Mixins } from 'vue-property-decorator'
 import { ElementContainerMixin } from 'src/boot/hasura'
 
 @Component
-export default class HasuraTableElement extends Mixins(ElementContainerMixin) {}
+export default class Chip extends Mixins(ElementContainerMixin) {}
 </script>

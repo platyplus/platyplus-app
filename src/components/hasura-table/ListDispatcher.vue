@@ -4,7 +4,6 @@ component(:is="componentName" :tableClass="tableClass" :list="list")
 
 <script lang="ts">
 import { Mixins, Component, Prop } from 'vue-property-decorator'
-import Handlebars from 'handlebars'
 import { HasuraMixin } from 'src/boot/hasura'
 import List from './List.vue'
 import Tree from './Tree.vue'
@@ -18,17 +17,10 @@ import Chips from './ListChips.vue'
   }
 })
 export default class ListDispatcher extends Mixins(HasuraMixin) {
+  // TODO create a list-loader mixin?
   @Prop({ type: Array, default: () => [] }) list?: []
   @Prop({ type: String, default: 'list' }) type?: string
 
-  get itemLabelTemplate() {
-    return '{{name}}' // TODO
-  }
-
-  itemLabel(item = {}) {
-    const template = Handlebars.compile(this.itemLabelTemplate)
-    return template(item)
-  }
   /**
    * Returns the component name to use to render the list.
    */

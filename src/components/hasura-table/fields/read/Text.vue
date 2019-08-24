@@ -4,7 +4,7 @@ div(v-if="element")
   slot(name="field" :property="property"  :element="element")
     q-field(:label="$t(tableName +'.labels.'+name)" :key="name" :name="name" stack-label)
       template(v-slot:control)
-        div {{value}}
+        div {{elementValue}}
   slot(name="after-field" :property="property" :element="element")
 div(v-else) Element does not exist
 </template>
@@ -14,5 +14,5 @@ import { Component, Mixins } from 'vue-property-decorator'
 import { FieldMixin } from 'src/boot/hasura'
 
 @Component
-export default class HasuraTableElement extends Mixins(FieldMixin) {}
+export default class ReadTextField extends Mixins(FieldMixin) {}
 </script>

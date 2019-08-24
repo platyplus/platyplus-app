@@ -4,6 +4,7 @@ export default {
   no: 'No',
   ok: 'OK',
   cancel: 'Cancel',
+  save: 'Save',
   previous: 'Previous',
   next: 'Next',
   reset: 'Reset',

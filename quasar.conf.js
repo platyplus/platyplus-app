@@ -73,10 +73,15 @@ module.exports = function(ctx) {
       directives: ['Ripple', 'ClosePopup'],
 
       // Quasar plugins
-      plugins: ['Notify'],
+      plugins: ['Notify', 'Loading'],
 
       iconSet: 'fontawesome-v5',
-      lang: 'en-us' // Quasar language
+      lang: 'en-us', // Quasar language
+      config: {
+        loading: {
+          delay: 400
+        }
+      }
     },
 
     supportIE: true,

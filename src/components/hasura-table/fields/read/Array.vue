@@ -4,7 +4,7 @@ div(v-if="element")
   slot(name="field" :property="property"  :element="element")
     q-field(:label="$t(tableName +'.labels.'+name)" :key="name" :name="name" stack-label)
       template(v-slot:control)
-        h-list(type="chips" :tableClass="property.reference" :list="value")
+        h-list(type="chips" :tableClass="property.reference" :list="elementValue")
   slot(name="after-field" :property="property" :element="element")
 div(v-else) Element does not exist
 </template>
@@ -19,5 +19,5 @@ import List from 'src/components/hasura-table/ListDispatcher.vue'
     'h-list': List
   }
 })
-export default class HasuraTableElement extends Mixins(FieldMixin) {}
+export default class ReadArrayField extends Mixins(FieldMixin) {}
 </script>

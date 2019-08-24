@@ -11,8 +11,8 @@ div(v-else) Element does not exist
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { FieldMixin } from 'src/boot/hasura'
+import { FieldEditMixin } from 'src/boot/hasura'
 
 @Component
-export default class ReadBooleanField extends Mixins(FieldMixin) {}
+export default class EditBooleanField extends Mixins(FieldEditMixin) {}
 </script>

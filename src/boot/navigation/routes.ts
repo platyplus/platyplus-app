@@ -6,6 +6,7 @@ import UserMenu from 'src/layouts/user/Menu.vue'
 import Index from 'src/components/hasura-table/Index.vue'
 import ListLoader from 'src/components/hasura-table/ListLoader.vue'
 import ReadElementDispatcher from 'src/components/hasura-table/ReadElementDispatcher.vue'
+import EditElementDispatcher from 'src/components/hasura-table/EditElementDispatcher.vue'
 import { ability } from '../user/store'
 
 // ! This is a prototype function that should be implemented asap
@@ -48,6 +49,22 @@ export const createRoutes = (schema: Schema) => {
             beforeEnter: (to, from, next) => {
               // TODO not ideal as this ability check is done before fetching the data
               if (ability.can('select', tableClass.name)) next()
+              else {
+                // TODO not implemented
+                return next('/unauthorized')
+              }
+            }
+          },
+          {
+            path: ':id/edit',
+            component: EditElementDispatcher,
+            props: route => ({
+              ...route.params,
+              tableClass
+            }),
+            beforeEnter: (to, from, next) => {
+              // TODO not ideal as this ability check is done before fetching the data
+              if (ability.can('update', tableClass.name)) next()
               else {
                 // TODO not implemented
                 return next('/unauthorized')

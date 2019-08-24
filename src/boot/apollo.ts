@@ -13,6 +13,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { getEncodedToken } from './user'
 import { getConfig } from '../helpers'
 import { QuasarBootOptions } from 'src/types/quasar'
+import { Component, Watch, Vue, Mixins } from 'vue-property-decorator'
 
 const config = getConfig()
 
@@ -76,6 +77,13 @@ export const apolloClient = new ApolloClient({
 
 export const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
+  defaultOptions: {
+    // $loadingKey: 'loadingQueries',
+    $query: {
+      loadingKey: 'loadingQueries' // * Cannot use a key starting with a dollar
+    }
+    // fetchPolicy: 'cache-and-network',
+  },
   errorHandler({ graphQLErrors, networkError }: ApolloError) {
     if (graphQLErrors) {
       graphQLErrors.map(({ message, locations, path }) =>
@@ -113,8 +121,31 @@ export const queryToSubscription = (query: DocumentNode) => {
   }
 }
 
+/**
+ * Global mixin that uses the 'loadingQueries' key with Apollo and
+ * that shows/hides the Quasar loading plugin spinner
+ */
+@Component
+export class ApolloMixin extends Vue {
+  public loadingQueries: number = 0
+
+  @Watch('loadingQueries')
+  public onLoadingQueriesChanged(newValue: number) {
+    if (newValue > 0) {
+      this.$q.loading.show()
+    } else {
+      this.$q.loading.hide()
+    }
+  }
+
+  public beforeDestroy() {
+    this.$q.loading.hide()
+  }
+}
+
 export default ({ app, Vue }: QuasarBootOptions) => {
   Vue.use(VueApollo)
+  Vue.mixin(Mixins(ApolloMixin))
   app.apolloProvider = apolloProvider
 }
 

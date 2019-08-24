@@ -12,9 +12,9 @@ export class FieldMixin extends Vue {
     )
   }
 
-  public get value() {
+  public get elementValue() {
     if (this.element && this.property) return this.element[this.property.name]
-    else return undefined
+    else return {}
   }
 
   public get name() {

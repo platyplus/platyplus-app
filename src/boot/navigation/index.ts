@@ -4,6 +4,7 @@ import { Route } from 'vue-router'
 
 import { navigationModule } from './store'
 import { QuasarBootOptions } from 'src/types/quasar'
+import { Mixins } from 'vue-property-decorator'
 
 Component.registerHooks(['beforeRouteEnter'])
 
@@ -29,7 +30,7 @@ export default ({ Vue, store, router }: QuasarBootOptions) => {
    * It is required for the Vuex routing actions
    */
   store.commit('navigation/linkRouter', router)
-  Vue.mixin(RouterMixin)
+  Vue.mixin(Mixins(RouterMixin))
 
   /**
    * * Main navigation guard.
