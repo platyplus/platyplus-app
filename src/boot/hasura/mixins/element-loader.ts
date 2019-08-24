@@ -1,4 +1,4 @@
-import { Component, Prop, Mixins, Watch } from 'vue-property-decorator'
+import { Component, Prop, Mixins } from 'vue-property-decorator'
 import { HasuraMixin } from './hasura'
 import { elementGraphQlQuery } from '../graphql'
 import { ability } from 'src/boot/user/store'
