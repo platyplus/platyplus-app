@@ -72,8 +72,8 @@ export class TableClass {
   }
 
   private get jsonObjectIds() {
-    return this.idProperties.reduce<ObjectMap>((prev, relationship) => {
-      prev[relationship.name] = true
+    return this.idColumnNames.reduce<ObjectMap>((prev, name) => {
+      prev[name] = true
       return prev
     }, {})
   }
@@ -86,6 +86,9 @@ export class TableClass {
   }
   public get idProperties() {
     return this.columnProperties.filter(property => property.isId)
+  }
+  public get idColumnNames() {
+    return this.idProperties.map(property => property.name)
   }
   public getProperty(name: string) {
     return this.properties.find(property => property.name === name)

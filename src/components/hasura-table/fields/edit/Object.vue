@@ -49,7 +49,7 @@ export default class EditObjectField extends Mixins(FieldEditMixin) {
   // ! The options system will only work for elements with single column primary keys
   get optionValue() {
     return (
-      (this.property && get(this.property, 'tableClass.idProperties.0.name')) ||
+      (this.property && get(this.property, 'tableClass.idColumnNames.0')) ||
       'id'
     )
   }
