@@ -14,31 +14,18 @@ q-form(autofocus @reset="reset" @submit="submit")
   slot(name="actions" :element="element")
     q-btn(v-if="$can('update', element)" v-t="'save'" type="submit")
     q-btn(v-t="'reset'" type="reset")
-    q-btn(v-if="true" v-t="'cancel'" :to="previous")
+    q-btn(v-if="true" v-t="'cancel'" @click="previous()")
   slot(name="after-actions" :element="element")
 </template>
 
 <script lang="ts">
-import { Mixins, Component, Watch } from 'vue-property-decorator'
-import { ElementLoaderMixin } from 'src/boot/hasura'
+import { Mixins, Component } from 'vue-property-decorator'
+import { FormManagerMixin, BaseProperty } from 'src/boot/hasura'
 import Text from './fields/edit/Text.vue'
 import BooleanField from './fields/edit/Boolean.vue'
 import ArrayField from './fields/edit/Array.vue'
 import ObjectField from './fields/edit/Object.vue'
-import { Route } from 'vue-router'
-import { ObjectMap } from 'src/types/common'
-import {
-  RelationshipProperty,
-  BaseProperty
-} from 'src/boot/hasura/schema/properties'
-import { permittedFieldsOf } from '@casl/ability/extra'
-import { pick } from 'src/helpers'
-
-Component.registerHooks([
-  'beforeRouteEnter',
-  'beforeRouteLeave',
-  'beforeRouteUpdate'
-])
+import { RelationshipProperty } from 'src/boot/hasura/schema/properties'
 
 @Component({
   components: {
@@ -48,9 +35,7 @@ Component.registerHooks([
     'h-edit-field-bool': BooleanField
   }
 })
-export default class EditElementDispatcher extends Mixins(ElementLoaderMixin) {
-  form: ObjectMap = {}
-
+export default class EditElementDispatcher extends Mixins(FormManagerMixin) {
   /**
    * * Returns the property name the form needs to use:
    * - the property name in case of a 'column' property
@@ -58,7 +43,6 @@ export default class EditElementDispatcher extends Mixins(ElementLoaderMixin) {
    * TODO - Arrays
    * ! The current system does not take into account relationships with multiple column keys!
    *  */
-
   propertyFieldName(property: BaseProperty) {
     // <=> test: if property is a RelationshipProperty
     if ('mapping' in property) {
@@ -68,65 +52,12 @@ export default class EditElementDispatcher extends Mixins(ElementLoaderMixin) {
     return property.name
   }
 
-  get action() {
-    return Object.keys(this.element).length > 0 ? 'update' : 'insert'
-  }
-
-  // TODO
-  submit() {
-    console.log('todo save')
-  }
-
-  // TODO
-  reset() {
-    console.log('init form')
-    // TODO set default values from the initial element
-    // TODO set default values from the hasura permissions and from the backend schema
-    // TODO set the possible 'object' or 'array' property values?
-    // Keeps only allowed fields
-    this.form = pick(
-      this.element,
-      permittedFieldsOf(
-        this.$ability,
-        this.action,
-        this.tableClass && this.tableClass.name
-      )
-    )
-  }
-
-  get previous() {
+  previous() {
+    // TODO replace the route, don't push a new route
     if (this.$from) {
-      return this.$from.path
-    } else
-      return this.$route.path.substring(
-        0,
-        this.$route.path.lastIndexOf('/edit')
-      )
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  beforeRouteEnter(to: Route, from: Route, next: any) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    next((vm: any) => {
-      if (!vm.$can('update', vm.element)) {
-        console.log('cannot update') // TODO navigation guard
-      }
-    })
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  beforeRouteLeave(to: Route, from: Route, next: any) {
-    console.log('Confirm leaving the page if modifications done') // TODO
-    //* See https://router.vuejs.org/guide/advanced/navigation-guards.html#in-component-guards
-    next()
-  }
-
-  /**
-   * Watches if the element has been loaded, so it can set the initial form.
-   */
-  @Watch('element')
-  onElementChanged() {
-    this.reset()
+      // return this.$from.fullPath
+      this.$router.go(-1)
+    } else this.read()
   }
 }
 </script>

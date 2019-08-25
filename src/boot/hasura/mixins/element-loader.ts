@@ -1,5 +1,5 @@
 import { Component, Mixins } from 'vue-property-decorator'
-import { elementGraphQlQuery } from '../graphql'
+import { readQuery } from '../graphql'
 import { ability } from 'src/boot/user/store'
 import { BaseProperty } from '..'
 import { permittedFieldsOf } from '@casl/ability/extra'
@@ -11,7 +11,7 @@ import { pick } from 'src/helpers'
   apollo: {
     element: {
       query() {
-        return elementGraphQlQuery(this.tableClass, ability)
+        return readQuery(this.tableClass, ability)
       },
       update: data => data[Object.keys(data)[0]][0], // TODO handle the case of non-existing element
       variables() {

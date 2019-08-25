@@ -49,7 +49,7 @@ export default ({ Vue, store, router }: QuasarBootOptions) => {
         return route.path === '/public'
       })
       if (!publicRoute) {
-        store.dispatch('navigation/routeRequest', { path: to.path })
+        store.dispatch('navigation/routeRequest', { path: to.fullPath })
         return next('/public/auth/signin')
       }
     } else {
@@ -58,7 +58,7 @@ export default ({ Vue, store, router }: QuasarBootOptions) => {
         !user.preferred_org_unit &&
         !to.matched.some(route => route.meta.withoutPreferredOrgUnit)
       ) {
-        store.dispatch('navigation/routeRequest', { path: to.path })
+        store.dispatch('navigation/routeRequest', { path: to.fullPath })
         next('/profile/current-org-unit')
       }
     }

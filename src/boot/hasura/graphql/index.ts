@@ -1,11 +1,16 @@
 import { jsonToGraphQLQuery, VariableType } from 'json-to-graphql-query'
 import gql from 'graphql-tag'
-import { set } from 'object-path'
 import { Ability } from '@casl/ability'
 import { permittedFieldsOf } from '@casl/ability/extra'
 import { TableClass } from '../schema'
 import { ObjectMap } from 'src/types/common'
 import { RelationshipProperty } from '../schema/properties'
+
+const graphQlTypes: Record<string, string> = {
+  uuid: 'uuid',
+  text: 'String'
+}
+const graphQlType = (type: string) => graphQlTypes[type] || 'String'
 
 /**
  * * Filters the 'JSON object' and removes the properties that are not permitted with the ability
@@ -40,52 +45,113 @@ const filteredJsonObject = (
   return result
 }
 
-const encapsulateGraphQlQuery = (
-  tableClass: TableClass,
-  jsonObject: ObjectMap
-) => ({
-  query: { [tableClass.name]: jsonObject }
-})
-
-export const listGraphQlQuery = (tableClass: TableClass, ability: Ability) =>
+export const listQuery = (tableClass: TableClass, ability: Ability) =>
   gql(
     jsonToGraphQLQuery(
-      encapsulateGraphQlQuery(
-        tableClass,
-        filteredJsonObject(tableClass, tableClass.jsonObjectList, ability)
-      ),
+      {
+        query: {
+          [tableClass.name]: filteredJsonObject(
+            tableClass,
+            tableClass.jsonObjectList,
+            ability
+          )
+        }
+      },
       { pretty: true }
     )
   )
 
-// TODO customiser?
-export const optionsGraphQlQuery = (
+// TODO customiser? This query is supposed to fetch all the possible options that can be used.
+// TODO The dynamic filter should then occur on the client side.
+export const optionsQuery = (
   property: RelationshipProperty,
   ability: Ability
-) => listGraphQlQuery(property.reference, ability)
+) => listQuery(property.reference, ability)
 
-export const elementGraphQlQuery = (
+const whereCondition = (idColumnNames: string[]) => ({
+  _and: idColumnNames.map(name => ({ [name]: { _eq: new VariableType(name) } }))
+})
+export const readQuery = (tableClass: TableClass, ability: Ability) =>
+  gql(
+    jsonToGraphQLQuery(
+      {
+        query: {
+          __variables: tableClass.idProperties.reduce<ObjectMap>(
+            (result, property) => {
+              result[property.name] = graphQlType(property.type) + '!'
+              return result
+            },
+            {}
+          ),
+          [tableClass.name]: {
+            __args: {
+              where: whereCondition(tableClass.idColumnNames)
+            },
+            ...filteredJsonObject(
+              tableClass,
+              tableClass.jsonObjectElement,
+              ability
+            )
+          }
+        }
+      },
+      { pretty: true }
+    )
+  )
+
+/**
+ *
+ * @param tableClass
+ * @param ability
+ * ! Don't forget to check the ability against the element value before mutating!
+ */
+// TODO finish this up: Upsert + many-to-many relationships
+export const upsertMutation = (
   tableClass: TableClass,
-  ability: Ability
+  ability: Ability,
+  action: string = 'update'
 ) => {
-  const baseQuery = encapsulateGraphQlQuery(
-    tableClass,
-    filteredJsonObject(tableClass, tableClass.jsonObjectElement, ability)
+  const idFields = tableClass.idColumnNames
+  const permittedEditFields = permittedFieldsOf(
+    ability,
+    action,
+    tableClass.name
+  ).filter(field => !idFields.includes(field))
+  const allFields = [...permittedEditFields, ...idFields]
+  const variableProperties = tableClass.properties.filter(property =>
+    allFields.includes(property.name)
   )
-  set(
-    baseQuery,
-    'query.__variables',
-    tableClass.idProperties.reduce<ObjectMap>((result, property) => {
-      result[property.name] = property.type
-      return result
-    }, {})
-  )
-  set(baseQuery, `query.${tableClass.name}.__args`, {
-    where: {
-      _and: tableClass.idColumnNames.map(name => ({
-        [name]: { _eq: new VariableType(name) }
-      }))
+  const mutation = {
+    mutation: {
+      __variables: variableProperties.reduce<Record<string, string>>(
+        (result, property) => {
+          result[property.name] = graphQlType(property.type)
+          // TODO take the 'required' fields with no default value into account - add an '!'
+          if (idFields.includes(property.name)) result[property.name] += '!'
+          return result
+        },
+        {}
+      ),
+      [`${action}_${tableClass.name}`]: {
+        __args: {
+          where: whereCondition(idFields),
+          // TODO set ALL fields including the PK fields, and 'catch' the conflict upsert-style
+          _set: permittedEditFields.reduce<Record<string, VariableType>>(
+            (result, name) => {
+              result[name] = new VariableType(name)
+              return result
+            },
+            {}
+          )
+        },
+        // ! Returns the entire 'element' query - may be a bit too much
+        returning: filteredJsonObject(
+          tableClass,
+          tableClass.jsonObjectElement,
+          ability
+        )
+      }
     }
-  })
-  return gql(jsonToGraphQLQuery(baseQuery, { pretty: true }))
+  }
+  return gql(jsonToGraphQLQuery(mutation, { pretty: true }))
 }

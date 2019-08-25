@@ -23,7 +23,7 @@ div(v-else) Element does not exist
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { FieldEditMixin, optionsGraphQlQuery } from 'src/boot/hasura'
+import { FieldEditMixin, optionsQuery } from 'src/boot/hasura'
 import { ObjectMap } from '../../../../types/common'
 import { ability } from 'src/boot/user/store'
 import { get } from 'object-path'
@@ -32,7 +32,7 @@ import { get } from 'object-path'
   apollo: {
     options: {
       query() {
-        return optionsGraphQlQuery(this.property, ability)
+        return optionsQuery(this.property, ability)
       },
       update(data: Record<string, ObjectMap[]>) {
         return data[Object.keys(data)[0]].map(item => ({
