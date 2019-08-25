@@ -6,6 +6,7 @@ import { permittedFieldsOf } from '@casl/ability/extra'
 import { ObjectMap } from 'src/types/common'
 import { ElementMixin } from './element'
 import { pick } from 'src/helpers'
+import { Dictionary } from 'vue-router/types/router'
 
 @Component({
   apollo: {
@@ -18,7 +19,7 @@ import { pick } from 'src/helpers'
         return this.id
       },
       skip() {
-        return !this.id
+        return this.isNew
       }
     }
   }
@@ -26,10 +27,14 @@ import { pick } from 'src/helpers'
 export class ElementLoaderMixin extends Mixins(ElementMixin) {
   public element: ObjectMap = {}
 
+  protected get isNew() {
+    return Object.keys(this.id).length == 0
+  }
+
   protected get id() {
     if (this.tableClass) {
       return pick(this.$route.query, this.tableClass.idColumnNames)
-    }
+    } else return {}
   }
 
   protected componentName(
