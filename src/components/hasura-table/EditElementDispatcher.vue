@@ -32,6 +32,7 @@ import {
   BaseProperty
 } from 'src/boot/hasura/schema/properties'
 import { permittedFieldsOf } from '@casl/ability/extra'
+import { pick } from 'src/helpers'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -79,19 +80,18 @@ export default class EditElementDispatcher extends Mixins(ElementLoaderMixin) {
   // TODO
   reset() {
     console.log('init form')
-    // Keeps only allowed fields
-    const permittedColumns = permittedFieldsOf(
-      this.$ability,
-      this.action,
-      this.tableClass && this.tableClass.name
-    )
     // TODO set default values from the initial element
     // TODO set default values from the hasura permissions and from the backend schema
     // TODO set the possible 'object' or 'array' property values?
-    this.form = permittedColumns.reduce<ObjectMap>((aggr, fieldName) => {
-      aggr[fieldName] = this.element[fieldName]
-      return aggr
-    }, {})
+    // Keeps only allowed fields
+    this.form = pick(
+      this.element,
+      permittedFieldsOf(
+        this.$ability,
+        this.action,
+        this.tableClass && this.tableClass.name
+      )
+    )
   }
 
   get previous() {

@@ -38,3 +38,12 @@ export const getHandlebarsVars = (value: string) => {
   }
   return keys
 }
+
+// https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_pick
+export const pick = (object: ObjectMap, keys: string[]) =>
+  keys.reduce<ObjectMap>((obj, key) => {
+    if (object && object.hasOwnProperty(key)) {
+      obj[key] = object[key]
+    }
+    return obj
+  }, {})

@@ -48,15 +48,11 @@ export class ElementLoaderMixin extends Mixins(HasuraMixin) {
    * TODO 'multiple' relationship fields
    */
   protected fields(action: string) {
-    const result = []
-    if (this.tableClass) {
-      const permittedColumns = permittedFieldsOf(
-        this.$ability,
-        action,
-        this.tableClass.name
-      )
-      for (const columnName of permittedColumns) {
-        const property = this.tableClass.getColumnProperty(columnName)
+    const tableClass = this.tableClass
+    if (tableClass) {
+      const columns = permittedFieldsOf(this.$ability, action, tableClass.name)
+      return columns.reduce<BaseProperty[]>((result, columnName) => {
+        const property = tableClass.getColumnProperty(columnName)
         if (property) {
           if (property.isReference) {
             result.push(...property.references)
@@ -64,8 +60,8 @@ export class ElementLoaderMixin extends Mixins(HasuraMixin) {
             result.push(property)
           }
         }
-      }
-    }
-    return result
+        return result
+      }, [])
+    } else return []
   }
 }

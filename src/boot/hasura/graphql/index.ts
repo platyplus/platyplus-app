@@ -30,16 +30,11 @@ const filteredJsonObject = (
           subObject,
           ability
         )
-        if (Object.keys(subObjectResult).length > 0) {
+        if (Object.keys(subObjectResult).length)
           result[fieldName] = subObjectResult
-        }
-      } else {
-        result[fieldName] = subObject
-      }
-    } else {
-      if (permittedFields.includes(fieldName)) {
-        result[fieldName] = subObject
-      }
+      } else result[fieldName] = subObject
+    } else if (permittedFields.includes(fieldName)) {
+      result[fieldName] = subObject
     }
   }
   return result
@@ -52,8 +47,8 @@ const encapsulateGraphQlQuery = (
   query: { [tableClass.name]: jsonObject }
 })
 
-export const listGraphQlQuery = (tableClass: TableClass, ability: Ability) => {
-  return gql(
+export const listGraphQlQuery = (tableClass: TableClass, ability: Ability) =>
+  gql(
     jsonToGraphQLQuery(
       encapsulateGraphQlQuery(
         tableClass,
@@ -62,15 +57,12 @@ export const listGraphQlQuery = (tableClass: TableClass, ability: Ability) => {
       { pretty: true }
     )
   )
-}
 
+// TODO customiser?
 export const optionsGraphQlQuery = (
   property: RelationshipProperty,
   ability: Ability
-) => {
-  // TODO customiser
-  return listGraphQlQuery(property.reference, ability)
-}
+) => listGraphQlQuery(property.reference, ability)
 
 // ! Only works when the primary key is id of type uuid
 export const elementGraphQlQuery = (
