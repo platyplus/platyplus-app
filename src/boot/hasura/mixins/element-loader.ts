@@ -1,10 +1,11 @@
-import { Component, Prop, Mixins } from 'vue-property-decorator'
-import { HasuraMixin } from './hasura'
+import { Component, Mixins } from 'vue-property-decorator'
 import { elementGraphQlQuery } from '../graphql'
 import { ability } from 'src/boot/user/store'
 import { BaseProperty } from '..'
 import { permittedFieldsOf } from '@casl/ability/extra'
 import { ObjectMap } from 'src/types/common'
+import { ElementMixin } from './element'
+import { pick } from 'src/helpers'
 
 @Component({
   apollo: {
@@ -14,7 +15,7 @@ import { ObjectMap } from 'src/types/common'
       },
       update: data => data[Object.keys(data)[0]][0], // TODO handle the case of non-existing element
       variables() {
-        return { id: this.id }
+        return this.id
       },
       skip() {
         return !this.id
@@ -22,9 +23,14 @@ import { ObjectMap } from 'src/types/common'
     }
   }
 })
-export class ElementLoaderMixin extends Mixins(HasuraMixin) {
-  @Prop(String) public id?: string
+export class ElementLoaderMixin extends Mixins(ElementMixin) {
   public element: ObjectMap = {}
+
+  protected get id() {
+    if (this.tableClass) {
+      return pick(this.$route.query, this.tableClass.idColumnNames)
+    }
+  }
 
   protected componentName(
     property: BaseProperty,

@@ -40,12 +40,9 @@ export const createRoutes = (schema: Schema) => {
             }
           },
           {
-            path: ':id',
+            path: 'read',
             component: ReadElementDispatcher,
-            props: route => ({
-              ...route.params,
-              tableClass
-            }),
+            props: { tableClass },
             beforeEnter: (to, from, next) => {
               // TODO not ideal as this ability check is done before fetching the data
               if (ability.can('select', tableClass.name)) next()
@@ -56,12 +53,9 @@ export const createRoutes = (schema: Schema) => {
             }
           },
           {
-            path: ':id/edit',
+            path: 'edit',
             component: EditElementDispatcher,
-            props: route => ({
-              ...route.params,
-              tableClass
-            }),
+            props: { tableClass },
             beforeEnter: (to, from, next) => {
               // TODO not ideal as this ability check is done before fetching the data
               if (ability.can('update', tableClass.name)) next()

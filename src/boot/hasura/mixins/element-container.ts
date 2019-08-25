@@ -1,16 +1,8 @@
 import { Component, Prop, Mixins } from 'vue-property-decorator'
-import { HasuraMixin } from './hasura'
 import { ObjectMap } from 'src/types/common'
+import { ElementMixin } from './element'
 
 @Component
-export class ElementContainerMixin extends Mixins(HasuraMixin) {
+export class ElementContainerMixin extends Mixins(ElementMixin) {
   @Prop({ type: Object, default: () => ({}) }) public element?: ObjectMap
-
-  public get label() {
-    if (this.element) {
-      if (this.tableClass) {
-        return this.tableClass.label(this.element)
-      } else return this.element.id
-    } else return undefined
-  }
 }

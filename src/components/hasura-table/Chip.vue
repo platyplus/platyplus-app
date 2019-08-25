@@ -1,5 +1,5 @@
 <template lang="pug">
-q-chip(v-if="element" :to="'/data/'+tableName + '/'+ element.id" :key="element.id")
+q-chip(v-if="element" :to="linkToElement()")
     div {{label}}
 div(v-else) Element does not exist
 </template>

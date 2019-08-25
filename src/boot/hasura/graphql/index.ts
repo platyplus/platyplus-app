@@ -64,7 +64,6 @@ export const optionsGraphQlQuery = (
   ability: Ability
 ) => listGraphQlQuery(property.reference, ability)
 
-// ! Only works when the primary key is id of type uuid
 export const elementGraphQlQuery = (
   tableClass: TableClass,
   ability: Ability
@@ -73,11 +72,20 @@ export const elementGraphQlQuery = (
     tableClass,
     filteredJsonObject(tableClass, tableClass.jsonObjectElement, ability)
   )
-  set(baseQuery, 'query.__variables', {
-    id: 'uuid!'
-  })
+  set(
+    baseQuery,
+    'query.__variables',
+    tableClass.idProperties.reduce<ObjectMap>((result, property) => {
+      result[property.name] = property.type
+      return result
+    }, {})
+  )
   set(baseQuery, `query.${tableClass.name}.__args`, {
-    where: { id: { _eq: new VariableType('id') } }
+    where: {
+      _and: tableClass.idColumnNames.map(name => ({
+        [name]: { _eq: new VariableType(name) }
+      }))
+    }
   })
   return gql(jsonToGraphQLQuery(baseQuery, { pretty: true }))
 }

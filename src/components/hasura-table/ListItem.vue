@@ -1,5 +1,5 @@
 <template lang="pug">
-q-item(v-if="element" :to="'/data/'+tableName + '/'+ element.id" :key="element.id") {{label}}
+q-item(v-if="element" :to="linkToElement()") {{label}}
 div(v-else) Element does not exist
 </template>
 
