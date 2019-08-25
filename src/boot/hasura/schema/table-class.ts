@@ -85,10 +85,12 @@ export class TableClass {
     return this.labelCompiledTemplate(element)
   }
   public get idProperties() {
-    return this.columnProperties.filter(property => property.isId)
+    return this.columnProperties.filter(property =>
+      this.idColumnNames.includes(property.name)
+    )
   }
   public get idColumnNames() {
-    return this.idProperties.map(property => property.name)
+    return (this.table.primary_key && this.table.primary_key.columns) || []
   }
   public getProperty(name: string) {
     return this.properties.find(property => property.name === name)

@@ -70,4 +70,8 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
       }, [])
     } else return []
   }
+
+  public edit() {
+    this.$router.replace(this.$route.fullPath.replace('/read', '/edit'))
+  }
 }

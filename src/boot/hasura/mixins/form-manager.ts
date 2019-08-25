@@ -27,11 +27,10 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
         this.$ability,
         this.action
       )
-      const result = await this.$apollo.mutate({
+      await this.$apollo.mutate({
         mutation,
         variables: this.form
       })
-      console.log(result)
       // TODO catch the result? Update the cache?
       this.read()
     }
@@ -39,7 +38,6 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
 
   // TODO
   public reset() {
-    console.log('init form')
     // TODO set default values from the initial element
     // TODO set default values from the hasura permissions and from the backend schema
     // TODO set the possible 'object' or 'array' property values?

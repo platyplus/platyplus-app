@@ -11,7 +11,7 @@ div
   slot(name="after-fields" :element="element")
   slot(name="before-actions" :element="element")
   slot(name="actions" :element="element")
-    q-btn(v-if="$can('update', element)" v-t="'edit'" :to="linkToElement('edit')")
+    q-btn(v-if="$can('update', element)" v-t="'edit'" @click="edit()")
     q-btn(v-if="$can('delete', element)" v-t="'remove'" @click="")
   slot(name="after-actions" :element="element")
 </template>

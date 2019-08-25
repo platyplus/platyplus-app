@@ -1,10 +1,15 @@
-import { jsonToGraphQLQuery, VariableType } from 'json-to-graphql-query'
+import {
+  jsonToGraphQLQuery,
+  VariableType,
+  EnumType
+} from 'json-to-graphql-query'
 import gql from 'graphql-tag'
 import { Ability } from '@casl/ability'
 import { permittedFieldsOf } from '@casl/ability/extra'
 import { TableClass } from '../schema'
 import { ObjectMap } from 'src/types/common'
 import { RelationshipProperty } from '../schema/properties'
+import { get } from 'object-path'
 
 const graphQlTypes: Record<string, string> = {
   uuid: 'uuid',
@@ -132,17 +137,22 @@ export const upsertMutation = (
         },
         {}
       ),
-      [`${action}_${tableClass.name}`]: {
+      [`insert_${tableClass.name}`]: {
         __args: {
-          where: whereCondition(idFields),
-          // TODO set ALL fields including the PK fields, and 'catch' the conflict upsert-style
-          _set: permittedEditFields.reduce<Record<string, VariableType>>(
-            (result, name) => {
+          objects: [
+            allFields.reduce<Record<string, VariableType>>((result, name) => {
               result[name] = new VariableType(name)
               return result
-            },
-            {}
-          )
+            }, {})
+          ],
+          // eslint-disable-next-line @typescript-eslint/camelcase
+          on_conflict: {
+            constraint: new EnumType(
+              get(tableClass.table, 'primary_key.constraint_name')
+            ),
+            // eslint-disable-next-line @typescript-eslint/camelcase
+            update_columns: permittedEditFields.map(name => new EnumType(name))
+          }
         },
         // ! Returns the entire 'element' query - may be a bit too much
         returning: filteredJsonObject(

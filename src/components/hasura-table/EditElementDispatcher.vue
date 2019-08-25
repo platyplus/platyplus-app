@@ -14,7 +14,7 @@ q-form(autofocus @reset="reset" @submit="submit")
   slot(name="actions" :element="element")
     q-btn(v-if="$can('update', element)" v-t="'save'" type="submit")
     q-btn(v-t="'reset'" type="reset")
-    q-btn(v-if="true" v-t="'cancel'" @click="previous()")
+    q-btn(v-if="true" v-t="'cancel'" @click="read()")
   slot(name="after-actions" :element="element")
 </template>
 
@@ -50,14 +50,6 @@ export default class EditElementDispatcher extends Mixins(FormManagerMixin) {
       return keyColumns && keyColumns[0].name
     }
     return property.name
-  }
-
-  previous() {
-    // TODO replace the route, don't push a new route
-    if (this.$from) {
-      // return this.$from.fullPath
-      this.$router.go(-1)
-    } else this.read()
   }
 }
 </script>
