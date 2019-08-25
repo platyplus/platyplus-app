@@ -1,5 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { get } from 'object-path'
+import { coalesce } from 'object-path'
 
 /*eslint-disable @typescript-eslint/camelcase */
 /*eslint-disable @typescript-eslint/no-explicit-any */
@@ -48,14 +48,8 @@ export const types: { [key: string]: string } = {
 // TODO refaire un systeme plus malin, idealement calé sur le schema serveur
 // Définir une icône par table et la déduire des relations. De cette manière,
 // on déduit que user.memberships est de type org_unit[] et donc avec l'icône sitemap
-export const icon = (form: string, name: string) => {
-  if (icons[name]) {
-    if (typeof icons[name] === 'string') return icons[name]
-    else return get(icons, `${name}.self`)
-  } else if (icons[form]) {
-    return get(icons, `${form}.${name}`)
-  } else return undefined
-}
+export const icon = (form: string, name: string) =>
+  coalesce(icons, [`${name}.self`, name, `${form}.${name}`])
 
 @Component
 export class FieldMixin extends Vue {

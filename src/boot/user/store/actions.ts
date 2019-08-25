@@ -5,7 +5,7 @@ import { PROFILE_QUERY, LOGIN_MUTATION, Rule } from '../definitions'
 // TODO find a way to reduce the dependency to another module, e.g. go get the client from the vuex store?
 import { apolloClient } from 'src/boot/apollo'
 import { hasuraToSift } from './ability'
-import { get } from 'object-path'
+import { get, coalesce } from 'object-path'
 
 export const actions: ActionTree<UserState, RootState> = {
   async signin({ commit, dispatch }, { username, password }) {
@@ -65,9 +65,10 @@ export const actions: ActionTree<UserState, RootState> = {
             }
             const fields = get(permission, `${permissionType}.columns`)
             if (fields && fields.length) rule.fields = fields
-            const filter =
-              get(permission, `${permissionType}.filter`) ||
-              get(permission, `${permissionType}.check`)
+            const filter = coalesce(permission, [
+              `${permissionType}.filter`,
+              `${permissionType}.check`
+            ])
             if (filter && Object.keys(filter).length)
               rule.conditions = hasuraToSift(filter, hasuraClaims)
             newRules.push(rule)
