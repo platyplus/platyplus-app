@@ -57,14 +57,28 @@ export const createRoutes = (schema: Schema) => {
             component: EditElementDispatcher,
             props: { tableClass },
             beforeEnter: (to, from, next) => {
-              // TODO if to.query has all the required fields -> can update?
-              // TODO else can insert?
-              // TODO insert and $can 'insert'
               // TODO not ideal as this ability check is done before fetching the data
+              if (
+                !tableClass.idColumnNames.every(
+                  columnName => !!to.query[columnName]
+                )
+              ) {
+                return next(`/data/${tableClass.name}`)
+              }
               if (ability.can('update', tableClass.name)) next()
               else {
-                // TODO not implemented
-                return next('/unauthorized')
+                return next('/error') // TODO not implemented
+              }
+            }
+          },
+          {
+            path: 'create',
+            component: EditElementDispatcher,
+            props: { tableClass },
+            beforeEnter: (to, from, next) => {
+              if (ability.can('insert', tableClass.name)) next()
+              else {
+                return next('/error') // TODO not implemented
               }
             }
           }

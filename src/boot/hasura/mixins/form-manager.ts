@@ -30,10 +30,10 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
   public async submit() {
     if (this.tableClass && this.formChanged) {
       const variables = { ...this.form }
-      // Copies the primary key fields from the initial element, or set their default values
-      this.tableClass.idProperties.map(idColumn => {
-        variables[idColumn.name] =
-          this.element[idColumn.name] || idColumn.generateDefault()
+      // Forces the primary key fields from the initial element, or set their default values
+      this.tableClass.idProperties.map(idProperty => {
+        variables[idProperty.name] =
+          this.element[idProperty.name] || idProperty.generateDefault()
       })
       const mutation = upsertMutation(
         this.tableClass,
@@ -53,26 +53,16 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
 
   // TODO
   public reset() {
+    // TODO sort the following todos either in the 'reset' method (when the user can still modify the field) or in the 'save' method (when the user is not allowed to modify its value)
+    // TODO set 'fixed' values from the route query e.g. query: {parent_id: '1234'} when creating a child org_unit
     // TODO set default values from the initial element
     // TODO set default values from the hasura permissions and from the backend schema
     // TODO set the possible 'object' or 'array' property values?
     // Copies the allowed fields from the initial element
     this.form = pick(
       this.element,
-      permittedFieldsOf(
-        this.$ability,
-        this.action,
-        this.tableClass && this.tableClass.name
-      )
+      permittedFieldsOf(this.$ability, this.action, this.tableName)
     )
-  }
-
-  public read(id: ObjectMap = this.id) {
-    this.$router.replace({
-      path: this.$route.path.replace('/edit', '/read'),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      query: id as Record<string, any>
-    })
   }
 
   /**

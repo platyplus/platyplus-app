@@ -36,6 +36,21 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
     } else return {}
   }
 
+  private navigate(action: string, id: ObjectMap) {
+    this.$router.replace({
+      path: `/data/${this.tableName}/${action}`,
+      query: id as Record<string, string | (string | null)[] | null | undefined>
+    })
+  }
+
+  public read(id: ObjectMap = this.id) {
+    this.navigate('read', id)
+  }
+
+  public edit(id: ObjectMap = this.id) {
+    this.navigate('edit', id)
+  }
+
   protected componentName(
     property: BaseProperty,
     prefix: string,
@@ -73,9 +88,5 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
         return result
       }, [])
     } else return []
-  }
-
-  public edit() {
-    this.$router.replace(this.$route.fullPath.replace('/read', '/edit'))
   }
 }
