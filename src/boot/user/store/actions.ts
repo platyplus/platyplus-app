@@ -50,6 +50,7 @@ export const actions: ActionTree<UserState, RootState> = {
    * TODO document
    */
   addUserRules: async ({ commit, getters, rootGetters }) => {
+    // TODO Add the rule that once cannot insert an element if they cannot insert all the PK columns
     const hasuraClaims = getters['claims']
     if (!hasuraClaims) return // TODO handle this error?
     const schema = rootGetters['hasura/schema']
@@ -63,14 +64,29 @@ export const actions: ActionTree<UserState, RootState> = {
               actions: permissionType,
               subject: tableClass.name
             }
-            const fields = get(permission, `${permissionType}.columns`)
-            if (fields && fields.length) rule.fields = fields
-            const filter = coalesce(permission, [
-              `${permissionType}.filter`,
-              `${permissionType}.check`
-            ])
-            if (filter && Object.keys(filter).length)
-              rule.conditions = hasuraToSift(filter, hasuraClaims)
+            const fields: string[] = get(
+              permission,
+              `${permissionType}.columns`,
+              []
+            )
+            const filter = coalesce(
+              permission,
+              [`${permissionType}.filter`, `${permissionType}.check`],
+              {}
+            )
+            if (
+              // ! If not all the primary key columns can be inserted, then we can't insert
+              permissionType === 'insert' &&
+              !tableClass.idColumnNames.every((colName: string) =>
+                fields.includes(colName)
+              )
+            ) {
+              rule.inverted = true
+            } else {
+              if (fields.length) rule.fields = fields
+              if (Object.keys(filter).length)
+                rule.conditions = hasuraToSift(filter, hasuraClaims)
+            }
             newRules.push(rule)
           }
         }

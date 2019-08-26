@@ -22,9 +22,9 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
   }
 
   public get canSave() {
-    return this.isNew
-      ? this.$can('insert', this.tableName)
-      : this.$can('update', this.element)
+    if (this.isNew) {
+      return this.$can('insert', this.tableName)
+    } else return this.$can('update', this.element)
   }
 
   public async submit() {
@@ -88,8 +88,8 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     next((vm: any) => {
       vm.reset()
-      if (!vm.$can('update', vm.element)) {
-        console.log('cannot update') // TODO navigation guard insert + update
+      if (!vm.canSave) {
+        console.log(`cannot ${vm.action}`) // TODO navigation guard insert + update
       }
     })
   }

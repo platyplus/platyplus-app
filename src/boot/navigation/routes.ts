@@ -57,6 +57,9 @@ export const createRoutes = (schema: Schema) => {
             component: EditElementDispatcher,
             props: { tableClass },
             beforeEnter: (to, from, next) => {
+              // TODO if to.query has all the required fields -> can update?
+              // TODO else can insert?
+              // TODO insert and $can 'insert'
               // TODO not ideal as this ability check is done before fetching the data
               if (ability.can('update', tableClass.name)) next()
               else {

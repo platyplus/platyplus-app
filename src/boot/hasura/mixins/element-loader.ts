@@ -6,7 +6,6 @@ import { permittedFieldsOf } from '@casl/ability/extra'
 import { ObjectMap } from 'src/types/common'
 import { ElementMixin } from './element'
 import { pick } from 'src/helpers'
-import { Dictionary } from 'vue-router/types/router'
 
 @Component({
   apollo: {

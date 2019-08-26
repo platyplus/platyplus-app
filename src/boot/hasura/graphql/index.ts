@@ -13,7 +13,8 @@ import { get } from 'object-path'
 
 const graphQlTypes: Record<string, string> = {
   uuid: 'uuid',
-  text: 'String'
+  text: 'String',
+  bool: 'Boolean'
 }
 const graphQlType = (type: string) => graphQlTypes[type] || 'String'
 
