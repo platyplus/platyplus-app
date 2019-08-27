@@ -74,12 +74,22 @@ export const actions: ActionTree<UserState, RootState> = {
               [`${permissionType}.filter`, `${permissionType}.check`],
               {}
             )
+            // TODO raise warnings when on enough permission to read the label?
             if (
-              // ! If not all the primary key columns can be inserted, then we can't insert
-              permissionType === 'insert' &&
-              !tableClass.idColumnNames.every((colName: string) =>
-                fields.includes(colName)
-              )
+              // No permission no insert/select if no permission to insert/select all the pk columns
+              ['insert', 'select'].includes(permissionType) &&
+              !tableClass.idColumnNames.every((colName: string) => {
+                if (fields.includes(colName)) {
+                  return true
+                } else {
+                  console.warn(
+                    `Permission to ${permissionType} the primary key column '${colName}' on the table '${
+                      tableClass.name
+                    }' is required.`
+                  )
+                  return false
+                }
+              })
             ) {
               rule.inverted = true
             } else {
