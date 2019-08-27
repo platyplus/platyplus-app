@@ -12,4 +12,7 @@ export class FieldEditMixin extends Mixins(FieldMixin) {
   public set formValue(newValue) {
     this.$emit('input', newValue)
   }
+  public get required() {
+    return !!this.property && this.property.required
+  }
 }

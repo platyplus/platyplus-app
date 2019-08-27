@@ -5,7 +5,8 @@ div(v-if="element")
     q-input(:label="$t(tableName +'.labels.'+name)"
       :key="name"
       :name="name"
-      v-model="formValue")
+      v-model="formValue"
+      :required="property.required")
   slot(name="after-field" :property="property" :element="element")
 div(v-else) Element does not exist
 </template>

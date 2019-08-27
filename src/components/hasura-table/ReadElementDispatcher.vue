@@ -12,7 +12,7 @@ div
   slot(name="before-actions" :element="element")
   slot(name="actions" :element="element")
     q-btn(v-if="$can('update', element)" v-t="'edit'" @click="edit()")
-    q-btn(v-if="$can('delete', element)" v-t="'remove'" @click="")
+    q-btn(v-if="$can('delete', element)" v-t="'remove'" @click="remove()")
   slot(name="after-actions" :element="element")
 </template>
 

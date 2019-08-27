@@ -4,7 +4,7 @@ div(v-if="element")
   slot(name="field" :property="property"  :element="element")
     q-field(:label="$t(tableName +'.labels.'+name)" :key="name" :name="name" stack-label)
       template(v-slot:control)
-        q-toggle(v-model="elementValue" disable)
+        q-toggle(v-model="formValue")
   slot(name="after-field" :property="property" :element="element")
 div(v-else) Element does not exist
 </template>

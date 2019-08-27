@@ -10,6 +10,7 @@ export abstract class BaseProperty {
   public readonly tableClass: TableClass
   public readonly name: string
   public readonly type: string
+  public abstract readonly required: boolean
   protected constructor(cls: TableClass, name: string, type: string) {
     this.tableClass = cls
     this.name = name
@@ -18,6 +19,7 @@ export abstract class BaseProperty {
 }
 export class ColumnProperty extends BaseProperty {
   public readonly isId: boolean
+  public readonly required: boolean
   public readonly defaultValue?: string
   public constructor(tableClass: TableClass, column: Column) {
     super(tableClass, column.name, column.domain || column.type)
@@ -25,7 +27,8 @@ export class ColumnProperty extends BaseProperty {
     this.isId =
       !!tableClass.table.primary_key &&
       tableClass.table.primary_key.columns.includes(column.name)
-    this.defaultValue = column.default || undefined
+    this.defaultValue = column.default || undefined // TODO set the function straight ahead?
+    this.required = !column.is_nullable && !column.default
   }
 
   public get references() {
@@ -48,7 +51,12 @@ export class ColumnProperty extends BaseProperty {
 
   public generateDefault() {
     const defaultFunctions: Record<string, Function> = {
-      'gen_random_uuid()': uuidv1
+      // TODO ugly
+      'gen_random_uuid()': uuidv1,
+      "'{}'::jsonb": () => ({}),
+      true: () => true,
+      false: () => false,
+      "'en-uk'::text": () => 'en-uk'
     }
     if (this.defaultValue) {
       const defaultFunction = defaultFunctions[this.defaultValue]
@@ -68,6 +76,10 @@ export class RelationshipProperty extends BaseProperty {
   public mapping: Mapping[] = []
   public constructor(cls: TableClass, relationship: Relationship) {
     super(cls, relationship.name, relationship.type)
+  }
+
+  public get required() {
+    return this.keyColumns.some(column => column.required)
   }
 
   public linkProperty(mapping: Mapping[]) {

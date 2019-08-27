@@ -132,8 +132,8 @@ export const upsertMutation = (
       __variables: variableProperties.reduce<Record<string, string>>(
         (result, property) => {
           result[property.name] = graphQlType(property.type)
-          // TODO take the 'required' fields with no default value into account - add an '!'
-          if (idFields.includes(property.name)) result[property.name] += '!'
+          if (idFields.includes(property.name) || property.required)
+            result[property.name] += '!' // Flag any primary key or (non nullable + no default) field as required
           return result
         },
         {}

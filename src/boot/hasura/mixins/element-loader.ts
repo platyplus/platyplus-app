@@ -51,6 +51,10 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
     this.navigate('edit', id)
   }
 
+  public remove() {
+    console.log('Remove method - to be coded') // TODO
+  }
+
   protected componentName(
     property: BaseProperty,
     prefix: string,
