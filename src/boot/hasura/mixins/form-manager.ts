@@ -48,7 +48,7 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
       // TODO catch the result? Update the cache? -> update the collection cache at least
       this.reset() // Reset is required to then check if any field changed in the beforeRouteLeave hook
       this.read(pick(data, this.tableClass.idColumnNames))
-    }
+    } else this.read()
   }
 
   // TODO
