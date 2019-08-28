@@ -1,25 +1,27 @@
 <template lang="pug">
 q-form(autofocus @reset="reset" @submit="submit")
-  slot(name="before-fields" :element="element")
-  slot(name="fields" :element="element")
-    component(v-for="property, key in fields(action)"
-      :key="'field-'+key"
-      :is="componentName(property, 'h-edit-field')"
-      :property="property"
-      :element="element"
-      :tableClass="property.class"
-      v-model="form[propertyFieldName(property)]")
-  slot(name="after-fields" :element="element")
-  slot(name="before-actions" :element="element")
-  slot(name="actions" :element="element")
-    q-btn(v-if="canSave" v-t="'save'" type="submit")
-    q-btn(v-t="'reset'" type="reset")
-    q-btn(v-if="true" v-t="'cancel'" @click="previous()")
-  slot(name="after-actions" :element="element")
+  validation-observer(ref="validator")
+    slot(name="before-fields" :element="element")
+    slot(name="fields" :element="element")
+      component(v-for="property, key in fields(action)"
+        :key="'field-'+key"
+        :is="componentName(property, 'h-edit-field')"
+        :property="property"
+        :element="element"
+        :tableClass="property.class"
+        v-model="form[propertyFieldName(property)]")
+    slot(name="after-fields" :element="element")
+    slot(name="before-actions" :element="element")
+    slot(name="actions" :element="element")
+      q-btn(v-if="canSave" v-t="'save'" type="submit")
+      q-btn(v-t="'reset'" type="reset")
+      q-btn(v-if="true" v-t="'cancel'" @click="previous()")
+    slot(name="after-actions" :element="element")
 </template>
 
 <script lang="ts">
 import { Mixins, Component } from 'vue-property-decorator'
+import { ValidationObserver } from 'vee-validate'
 import { FormManagerMixin, BaseProperty } from 'src/boot/hasura'
 import Text from './fields/edit/Text.vue'
 import BooleanField from './fields/edit/Boolean.vue'
@@ -29,6 +31,7 @@ import { RelationshipProperty } from 'src/boot/hasura/schema/properties'
 
 @Component({
   components: {
+    ValidationObserver,
     'h-edit-field-text': Text,
     'h-edit-field-array': ArrayField,
     'h-edit-field-object': ObjectField,

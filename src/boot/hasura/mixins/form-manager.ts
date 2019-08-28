@@ -13,6 +13,11 @@ Component.registerHooks([
   'beforeRouteUpdate'
 ])
 
+interface VeeOberverComponent extends Element {
+  validate: () => boolean
+  reset: () => void
+}
+
 @Component
 export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
   public form: ObjectMap = {}
@@ -28,6 +33,8 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
   }
 
   public async submit() {
+    const validator = this.$refs.validator as VeeOberverComponent
+    if (!!validator && !(await validator.validate())) return
     if (this.tableClass && this.formChanged) {
       const variables = { ...this.form }
       // Forces the primary key fields from the initial element, or set their default values
@@ -63,6 +70,8 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
       this.element,
       permittedFieldsOf(this.$ability, this.action, this.tableName)
     )
+    const validator = this.$refs.validator as VeeOberverComponent
+    this.$nextTick(() => !!validator && validator.reset())
   }
 
   /**
