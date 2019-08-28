@@ -29,7 +29,7 @@
     "graphql-tag": "2.10.1",
     "handlebars": "4.1.2",
     "jexl": "2.1.1",
-    "jsonlint-mod": "1.7.4",
+    "jsonlint-mod": "1.7.5",
     "jwt-decode": "2.2.0",
     "lodash": "4.17.15",
     "node-fetch": "2.6.0",
