@@ -77,18 +77,18 @@ export const optionsQuery = (
 const whereCondition = (idColumnNames: string[]) => ({
   _and: idColumnNames.map(name => ({ [name]: { _eq: new VariableType(name) } }))
 })
+const idVariables = (tableClass: TableClass) =>
+  tableClass.idProperties.reduce<ObjectMap>((result, property) => {
+    result[property.name] = graphQlType(property.type) + '!'
+    return result
+  }, {})
+
 export const readQuery = (tableClass: TableClass, ability: Ability) =>
   gql(
     jsonToGraphQLQuery(
       {
         query: {
-          __variables: tableClass.idProperties.reduce<ObjectMap>(
-            (result, property) => {
-              result[property.name] = graphQlType(property.type) + '!'
-              return result
-            },
-            {}
-          ),
+          __variables: idVariables(tableClass),
           [tableClass.name]: {
             __args: {
               where: whereCondition(tableClass.idColumnNames)
@@ -166,3 +166,27 @@ export const upsertMutation = (
   }
   return gql(jsonToGraphQLQuery(mutation, { pretty: true }))
 }
+
+export const deleteMutation = (tableClass: TableClass, ability: Ability) =>
+  gql(
+    jsonToGraphQLQuery(
+      {
+        mutation: {
+          __variables: idVariables(tableClass),
+          [`delete_${tableClass.name}`]: {
+            __args: {
+              where: whereCondition(tableClass.idColumnNames)
+            },
+            returning: filteredJsonObject(
+              tableClass,
+              tableClass.jsonObjectElement,
+              ability
+            )
+          }
+        }
+      },
+      {
+        pretty: true
+      }
+    )
+  )

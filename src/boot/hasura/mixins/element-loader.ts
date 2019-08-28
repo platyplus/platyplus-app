@@ -1,5 +1,5 @@
 import { Component, Mixins } from 'vue-property-decorator'
-import { readQuery } from '../graphql'
+import { readQuery, deleteMutation } from '../graphql'
 import { ability } from 'src/boot/user/store'
 import { BaseProperty } from '..'
 import { permittedFieldsOf } from '@casl/ability/extra'
@@ -52,7 +52,33 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
   }
 
   public remove() {
-    console.log('Remove method - to be coded') // TODO
+    const tableLabel = this.$i18n.t(`${this.tableName}.label`) as string
+    const message = this.$i18n.t('delete.label', {
+      tableLabel: tableLabel,
+      label: this.label
+    }) as string
+    this.$q
+      .dialog({
+        title: this.$i18n.t('delete.title') as string,
+        message,
+        cancel: true,
+        persistent: true
+      })
+      .onOk(async () => {
+        // TODO ask confirmation
+        if (this.tableClass) {
+          if (this.$ability.can('delete', this.element)) {
+            const mutation = deleteMutation(this.tableClass, this.$ability)
+            // TODO catch errors
+            await this.$apollo.mutate({
+              mutation,
+              variables: this.id
+            })
+            // TODO remove in the cached list
+            this.$router.replace(`/data/${this.tableName}`)
+          }
+        }
+      })
   }
 
   protected componentName(

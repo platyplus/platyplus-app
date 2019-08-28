@@ -36,6 +36,7 @@ export default class UserHeader extends Mixins(HasuraMixin) {
     this.$store.dispatch('navigation/toggleDrawer')
   }
   async logout() {
+    // TODO use the Dialog plugin, not the q-dialog component
     this.$store.dispatch('user/signout')
     this.dialog = false
     this.$router.replace('/public')

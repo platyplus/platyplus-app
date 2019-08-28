@@ -11,7 +11,7 @@ export class ElementMixin extends Mixins(HasuraMixin) {
     if (this.element) {
       if (this.tableClass) {
         return this.tableClass.label(this.element)
-      } else return this.element.id
+      } else return JSON.stringify(this.element.id)
     } else return undefined
   }
 

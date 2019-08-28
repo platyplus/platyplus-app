@@ -12,6 +12,10 @@ export default {
   create: 'Create',
   remove: 'Remove',
   select: 'Select',
+  delete: {
+    title: 'Confirmation',
+    label: 'Are you sure to delete the {tableLabel} "{label}"?'
+  },
   location: {
     message: 'You are in {location}.',
     select: 'Select your location:',

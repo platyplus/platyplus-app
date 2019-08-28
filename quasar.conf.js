@@ -73,7 +73,7 @@ module.exports = function(ctx) {
       directives: ['Ripple', 'ClosePopup'],
 
       // Quasar plugins
-      plugins: ['Notify', 'Loading'],
+      plugins: ['Notify', 'Loading', 'Dialog'],
 
       iconSet: 'fontawesome-v5',
       lang: 'en-us', // Quasar language
