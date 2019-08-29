@@ -53,8 +53,10 @@ interface CheckConstraint {
 interface ForeignKeyConstraint {
   column_mapping: { [key: string]: string }
   constraint_name: string
-  on_delete: 'a' | 'c' // TODO or else?
-  on_update: 'a' | 'c'
+  // * a = no action, r = restrict, c = cascade, n = set null, d = set default
+  // See https://www.postgresql.org/docs/9.1/catalog-pg-constraint.html
+  on_delete: 'a' | 'r' | 'c' | 'n' | 'd'
+  on_update: 'a' | 'r' | 'c' | 'n' | 'd'
   ref_table_name: string
   ref_table_schema: string
   table_name?: string
