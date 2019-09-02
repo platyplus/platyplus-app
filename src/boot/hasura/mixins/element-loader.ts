@@ -1,17 +1,19 @@
 import { Component, Mixins } from 'vue-property-decorator'
-import { readQuery, deleteMutation } from '../graphql'
+import { elementQuery, deleteMutation } from '../graphql'
 import { ability } from 'src/boot/user/store'
 import { BaseProperty } from '..'
 import { permittedFieldsOf } from '@casl/ability/extra'
 import { ObjectMap } from 'src/types/common'
 import { ElementMixin } from './element'
 import { pick } from 'src/helpers'
+import { ColumnProperty, RelationshipProperty } from '../schema/properties'
+import { get } from 'object-path'
 
 @Component({
   apollo: {
     element: {
       query() {
-        return readQuery(this.tableClass, ability)
+        return elementQuery(this.tableClass, ability)
       },
       update: data => data[Object.keys(data)[0]][0], // TODO handle the case of non-existing element
       variables() {
@@ -98,25 +100,42 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
   }
 
   /**
-   * Shows only the column fields that are not keys (primary or foreign),
-   * and the relationships related to the permitted foreign keys
-   * TODO 'multiple' relationship fields
+   * Returns the permitted properties of the element (except ids), whether
+   * they are columns or relationship, according to the current ability
+   * and given the param action
    */
   protected fields(action: string) {
     const tableClass = this.tableClass
-    if (tableClass) {
-      const columns = permittedFieldsOf(this.$ability, action, tableClass.name)
-      return columns.reduce<BaseProperty[]>((result, columnName) => {
-        const property = tableClass.getColumnProperty(columnName)
-        if (property) {
-          if (property.isReference) {
-            result.push(...property.references)
-          } else if (!property.isId) {
-            result.push(property)
+    if (tableClass && Object.keys(this.element).length) {
+      const permittedColumns = permittedFieldsOf(
+        this.$ability,
+        action,
+        tableClass.name
+      )
+      const result: BaseProperty[] = []
+      for (const property of tableClass.properties) {
+        if (property.isColumn) {
+          const columnProperty = property as ColumnProperty
+          if (
+            permittedColumns.includes(columnProperty.name) &&
+            !columnProperty.isReference &&
+            !columnProperty.isId
+          ) {
+            result.push(columnProperty)
           }
+        } else {
+          const relationshipProperty = property as RelationshipProperty
+          // TODO if can 'action' reference label fieds (or other fields as well?)
+          const subject =
+            // TODO a bit too much: such permission filter may be delegated to the array/object sub-component
+            (relationshipProperty.isMultiple
+              ? get(this.element, `${relationshipProperty.name}.0`)
+              : get(this.element, relationshipProperty.name)) ||
+            relationshipProperty.tableClass.name
+          if (this.$can(action, subject)) result.push(relationshipProperty)
         }
-        return result
-      }, [])
+      }
+      return result
     } else return []
   }
 }

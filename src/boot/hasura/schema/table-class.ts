@@ -84,6 +84,12 @@ export class TableClass {
   public label(element: ObjectMap) {
     return this.labelCompiledTemplate(element)
   }
+  public get labelProperties() {
+    const hbVariables = Object.keys(getHandlebarsVars(this.labelTemplate))
+    return this.properties.filter(property =>
+      hbVariables.includes(property.name)
+    )
+  }
   public get idProperties() {
     return this.columnProperties.filter(property =>
       this.idColumnNames.includes(property.name)

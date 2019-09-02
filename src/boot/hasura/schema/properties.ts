@@ -11,6 +11,7 @@ export abstract class BaseProperty {
   public readonly name: string
   public readonly type: string
   public abstract readonly required: boolean
+  public abstract readonly isColumn: boolean
   protected constructor(cls: TableClass, name: string, type: string) {
     this.tableClass = cls
     this.name = name
@@ -20,6 +21,7 @@ export abstract class BaseProperty {
 export class ColumnProperty extends BaseProperty {
   public readonly isId: boolean
   public readonly required: boolean
+  public readonly isColumn: boolean
   public readonly defaultValue?: string
   public constructor(tableClass: TableClass, column: Column) {
     super(tableClass, column.name, column.domain || column.type)
@@ -29,6 +31,7 @@ export class ColumnProperty extends BaseProperty {
       tableClass.table.primary_key.columns.includes(column.name)
     this.defaultValue = column.default || undefined // TODO set the function straight ahead?
     this.required = !column.is_nullable && !column.default
+    this.isColumn = true
   }
 
   public get references() {
@@ -63,9 +66,7 @@ export class ColumnProperty extends BaseProperty {
       if (defaultFunction) return defaultFunction()
       else
         throw new Error(
-          `Unknown function for the default value '${
-            this.defaultValue
-          }' of the column '${this.name}'.`
+          `Unknown function for the default value '${this.defaultValue}' of the column '${this.name}'.`
         )
     }
     throw new Error(`No default value defined for the column '${this.name}'.`)
@@ -74,8 +75,10 @@ export class ColumnProperty extends BaseProperty {
 
 export class RelationshipProperty extends BaseProperty {
   public mapping: Mapping[] = []
+  public readonly isColumn: boolean
   public constructor(cls: TableClass, relationship: Relationship) {
     super(cls, relationship.name, relationship.type)
+    this.isColumn = false
   }
 
   public get required() {
