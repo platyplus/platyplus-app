@@ -6,6 +6,7 @@ import { Schema } from 'src/boot/hasura'
 
 export const actions: ActionTree<NavigationState, RootState> = {
   routeRequest({ commit }, { path }) {
+    commit('setDrawer', false)
     commit('routeRequest', path)
   },
   route({ commit, state }, { path }) {

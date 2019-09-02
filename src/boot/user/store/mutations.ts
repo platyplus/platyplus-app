@@ -41,7 +41,8 @@ export const mutations: MutationTree<UserState> = {
   },
 
   setProfile(state, user) {
-    state.profile = user
+    if (state.profile) state.profile = { ...state.profile, ...user }
+    else state.profile = user
   },
 
   signout(state) {

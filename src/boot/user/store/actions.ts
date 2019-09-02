@@ -1,7 +1,12 @@
 import { ActionTree } from 'vuex'
 import { UserState } from './state'
 import { RootState } from 'src/store'
-import { PROFILE_QUERY, LOGIN_MUTATION, Rule } from '../definitions'
+import {
+  PROFILE_QUERY,
+  LOGIN_MUTATION,
+  Rule,
+  UPDATE_PREFERRED_ORG_UNIT
+} from '../definitions'
 // TODO find a way to reduce the dependency to another module, e.g. go get the client from the vuex store?
 import { apolloClient } from 'src/boot/apollo'
 import { hasuraToSift } from './ability'
@@ -46,6 +51,19 @@ export const actions: ActionTree<UserState, RootState> = {
     }
   },
 
+  udpatePreferredOrgUnit: async ({ commit, state }, id) => {
+    if (state.profile) {
+      const result = await apolloClient.mutate({
+        mutation: UPDATE_PREFERRED_ORG_UNIT,
+        variables: {
+          userId: state.profile.id,
+          orgUnitId: id
+        }
+      })
+      commit('setProfile', get(result, 'data.update_user.returning.0'))
+    }
+  },
+
   /**
    * TODO document
    */
@@ -83,9 +101,7 @@ export const actions: ActionTree<UserState, RootState> = {
                   return true
                 } else {
                   console.warn(
-                    `Permission to ${permissionType} the primary key column '${colName}' on the table '${
-                      tableClass.name
-                    }' is required.`
+                    `Permission to ${permissionType} the primary key column '${colName}' on the table '${tableClass.name}' is required.`
                   )
                   return false
                 }

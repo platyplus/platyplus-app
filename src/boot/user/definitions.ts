@@ -43,6 +43,17 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `
+
+const preferredOrgUnitFragment = gql`
+  fragment preferred_org_unit on user {
+    preferred_org_unit_id
+    preferred_org_unit {
+      id
+      name
+    }
+  }
+`
+
 // TODO complete and fragment
 export const PROFILE_QUERY = gql`
   query user_profile($id: uuid) {
@@ -58,10 +69,7 @@ export const PROFILE_QUERY = gql`
           name
         }
       }
-      preferred_org_unit {
-        id
-        name
-      }
+      ...preferred_org_unit
       role_attributions {
         role {
           id
@@ -74,4 +82,19 @@ export const PROFILE_QUERY = gql`
       }
     }
   }
+  ${preferredOrgUnitFragment}
+`
+
+export const UPDATE_PREFERRED_ORG_UNIT = gql`
+  mutation update_preferred_org_unit_id($userId: uuid!, $orgUnitId: uuid!) {
+    update_user(
+      where: { id: { _eq: $userId } }
+      _set: { preferred_org_unit_id: $orgUnitId }
+    ) {
+      returning {
+        ...preferred_org_unit
+      }
+    }
+  }
+  ${preferredOrgUnitFragment}
 `

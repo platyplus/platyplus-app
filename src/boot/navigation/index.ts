@@ -58,8 +58,9 @@ export default ({ Vue, store, router }: QuasarBootOptions) => {
         !user.preferred_org_unit &&
         !to.matched.some(route => route.meta.withoutPreferredOrgUnit)
       ) {
+        // TODO weird error: when loading app.localhost/data/org_unit/edit with no preferred org_unit
         store.dispatch('navigation/routeRequest', { path: to.fullPath })
-        next('/profile/current-org-unit')
+        return next('/profile/current-org-unit')
       }
     }
     return next()

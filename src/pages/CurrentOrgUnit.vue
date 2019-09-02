@@ -12,31 +12,21 @@ q-page(v-if="$authenticated" padding class="justify-center")
 </style>
 
 <script lang="ts">
-// import { upsertMutation } from 'boot/hasura'
 import { Vue, Component } from 'vue-property-decorator'
 import { get } from 'object-path'
 
 @Component
 export default class PageCurrentOrgUnit extends Vue {
   async selectOrgUnit(id: string) {
-    console.log(id)
-    // TODO update via a Vuex action
-    // await upsertMutation({
-    //   apollo: this.$apollo,
-    //   table: 'user',
-    //   update: 'update_preferred_org_unit',
-    //   data: {
-    //     id: this.user.id,
-    //     preferred_org_unit_id: id
-    //   }
-    // })
-    // this.$store.dispatch('navigation/route', {
-    //   path: this.$from ? this.$from.path : '/profile/current-org-unit'
-    // })
+    await this.$store.dispatch('user/udpatePreferredOrgUnit', id)
+    this.$store.dispatch('navigation/route', {
+      path: this.$from ? this.$from.path : '/profile/current-org-unit'
+    })
   }
+
   get list() {
     const preferredOrgUnitId = get(this.$profile, 'preferred_org_unit.id')
-    if (this.$profile.org_unit_memberships && preferredOrgUnitId) {
+    if (this.$profile.org_unit_memberships) {
       return this.$profile.org_unit_memberships
         .map(item => item.org_unit)
         .filter(item => item.id !== preferredOrgUnitId)
