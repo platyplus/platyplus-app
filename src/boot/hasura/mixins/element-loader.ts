@@ -83,20 +83,13 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
       })
   }
 
-  protected componentName(
-    property: BaseProperty,
-    prefix: string,
-    defaultType: string = 'text'
-  ) {
-    const propertyType = property ? property.type : defaultType
-    const possibleComponentName = `${prefix}-${propertyType}`
+  protected componentName(property: BaseProperty, prefix: string) {
+    const possibleComponentName = `${prefix}-${property.componentKind}`
     if (this.$options.components) {
       const components = Object.keys(this.$options.components)
       if (components.includes(possibleComponentName))
         return possibleComponentName
     }
-    console.log(`No component for the '${propertyType}' property type.`)
-    return `${prefix}-${defaultType}`
   }
 
   /**

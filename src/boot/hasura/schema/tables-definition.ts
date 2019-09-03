@@ -50,7 +50,7 @@ interface CheckConstraint {
   check: string
   constraint_name: string | null
 }
-interface ForeignKeyConstraint {
+export interface ForeignKeyConstraint {
   column_mapping: { [key: string]: string }
   constraint_name: string
   // * a = no action, r = restrict, c = cascade, n = set null, d = set default
@@ -80,37 +80,43 @@ export interface TableDefinition {
 export const configTablesQuery = gql`
   query config_tables {
     table {
-      table_name
-      table_schema
+      table_name # required, part of the ID
+      table_schema # required, part of the ID
       columns
-      relationships {
-        definition
-        name
-        type
-      }
       primary_key {
+        table_schema # required, part of the ID
+        table_name # required, part of the ID
         columns
         constraint_name
       }
       foreign_keys {
+        table_schema # required, part of the ID
+        table_name # required, part of the ID
+        constraint_name # required, part of the ID
         column_mapping
-        constraint_name
         on_delete
         on_update
         ref_table_name
         ref_table_schema
       }
       relationships {
+        table_schema # required, part of the ID
+        table_name # required, part of the ID
+        name # required, part of the ID
         comment
         definition
-        name
         type
       }
       check_constraints {
+        table_schema # required, part of the ID
+        table_name # required, part of the ID
+        constraint_name # required, part of the ID
         check
-        constraint_name
       }
       permissions {
+        table_schema # required, part of the ID
+        table_name # required, part of the ID
+        role_name # required, part of the ID
         delete
         insert
         role_name

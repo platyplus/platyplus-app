@@ -5,7 +5,7 @@ import {
   TableRef,
   ColumnRef
 } from './tables-definition'
-import { Schema } from './schema'
+import Schema from './schema'
 import {
   BaseProperty,
   ColumnProperty,
@@ -16,7 +16,7 @@ import Handlebars from 'handlebars'
 import { getHandlebarsVars } from 'src/helpers'
 import { ObjectMap } from 'src/types/common'
 
-export class TableClass {
+export default class TableClass {
   public labelTemplate = '{{name}}' // TODO
   public readonly table: TableDefinition
   private readonly schema: Schema

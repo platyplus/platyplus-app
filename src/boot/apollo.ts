@@ -2,7 +2,11 @@
  * * Configuration of the GraphQL client
  */
 import { ApolloClient, ApolloError } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import {
+  InMemoryCache,
+  IdGetterObj,
+  defaultDataIdFromObject
+} from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 import clone from 'clone'
 import { WebSocketLink } from 'apollo-link-ws'
@@ -14,10 +18,53 @@ import { getEncodedToken } from './user'
 import { getConfig } from '../helpers'
 import { QuasarBootOptions } from 'src/types/quasar'
 import { Component, Watch, Vue, Mixins } from 'vue-property-decorator'
+import { ObjectMap } from 'src/types/common'
+import { store } from 'src/store'
+import { TableClass } from './hasura'
 
 const config = getConfig()
 
-const cache = new InMemoryCache()
+const cache = new InMemoryCache({
+  /**
+   * * Returns the 'Graphql ID' of the object so it can be normalized in the cache.
+   * - Generate custom IDs for special object types e.g. table, permission...
+   * - If tableClasses are loaded, and if there is more than one primary key column, generate a custom ID
+   * - Use the default generated ID otherwise.
+   */
+  dataIdFromObject: (object: IdGetterObj) => {
+    const obj = object as ObjectMap
+    switch (object.__typename) {
+      case 'table':
+        return `table:${obj.table_schema}.${obj.table_name}`
+      case 'permission':
+        return `permission:${obj.table_schema}.${obj.table_name}.${obj.role_name}`
+      case 'relationship':
+        return `relationship:${obj.table_schema}.${obj.table_name}.${obj.name}`
+      case 'primary_key':
+        return `primary_key:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
+      case 'foreign_key_constraint':
+        return `foreign_key_constraint:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
+      case 'check_constraint':
+        return `check_constraint:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
+      default:
+        // * Maps the tableClasses 'composed' ids when they are loaded and available from the Vuex store
+        if (store && object.__typename) {
+          const tableClass: TableClass | undefined = store.getters[
+            'hasura/class'
+          ](object.__typename)
+          if (tableClass) {
+            const idColumnNames = tableClass.idColumnNames
+            if (idColumnNames.length > 1)
+              // * Generates the ID only for objects with multiple primary key columns
+              return `${tableClass.name}:${idColumnNames
+                .map(colName => obj[colName])
+                .join('.')}`
+          }
+        }
+        return defaultDataIdFromObject(object)
+    }
+  }
+})
 
 const uri = `${window.location.protocol}//${config.API}`
 

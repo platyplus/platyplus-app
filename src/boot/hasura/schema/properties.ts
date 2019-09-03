@@ -1,5 +1,5 @@
-import { Column, Relationship } from './tables-definition'
-import { TableClass } from './table-class'
+import { Column, Relationship, ForeignKeyConstraint } from './tables-definition'
+import TableClass from './table-class'
 import uuidv1 from 'uuid/v1'
 
 export interface Mapping {
@@ -10,18 +10,46 @@ export abstract class BaseProperty {
   public readonly tableClass: TableClass
   public readonly name: string
   public readonly type: string
+  /**
+   * * Returns whether the property is required or not.
+   */
   public abstract readonly required: boolean
   public abstract readonly isColumn: boolean
+  public abstract readonly isMultiple: boolean
+  public abstract readonly isOwnedByClass: boolean
   protected constructor(cls: TableClass, name: string, type: string) {
     this.tableClass = cls
     this.name = name
     this.type = type
+  }
+
+  /**
+   * * Returns the default kind of component to use to represent the property.
+   * By default, it is the postgresql/graphql type // TODO
+   * If the property is a relationship, then it checks if it is part ('owned') of the class.
+   * * A relationship is 'owned' by its table class when it's cascade deleted.
+   */
+  public get componentKind() {
+    const defaultType = this.type || 'text'
+    if (this.isColumn) {
+      return defaultType
+    } else {
+      if (this.isMultiple) {
+        if (this.isOwnedByClass) return 'internal-array'
+        else return 'foreign-array'
+      } else {
+        if (this.isOwnedByClass) return 'internal-object'
+        else return 'foreign-object'
+      }
+    }
   }
 }
 export class ColumnProperty extends BaseProperty {
   public readonly isId: boolean
   public readonly required: boolean
   public readonly isColumn: boolean
+  public readonly isMultiple = false
+  public readonly isOwnedByClass = true
   public readonly defaultValue?: string
   public constructor(tableClass: TableClass, column: Column) {
     super(tableClass, column.name, column.domain || column.type)
@@ -76,24 +104,76 @@ export class ColumnProperty extends BaseProperty {
 export class RelationshipProperty extends BaseProperty {
   public mapping: Mapping[] = []
   public readonly isColumn: boolean
+  public foreignKeyConstraint?: ForeignKeyConstraint
+  /**
+   * * The 'inverse' property is the other property that can exist in case of a two-ways relationship binding.
+   * E.g. if a 'car' has a property 'owner' and a 'person' has a property 'cars',
+   * then the inverse of 'owner' will be 'cars' and vice-versa
+   */
+  public inverse?: RelationshipProperty
   public constructor(cls: TableClass, relationship: Relationship) {
     super(cls, relationship.name, relationship.type)
     this.isColumn = false
   }
 
+  /**
+   * * Flags the property as required if one of its key columns is required.
+   */
   public get required() {
     return this.keyColumns.some(column => column.required)
   }
 
-  public linkProperty(mapping: Mapping[]) {
-    this.mapping = mapping
+  /**
+   * * The relationship is considered as part of the parent object if it is cascade deleted
+   */
+  public get isOwnedByClass() {
+    return (
+      !!this.inverse &&
+      !!this.inverse.foreignKeyConstraint &&
+      this.inverse.foreignKeyConstraint.on_delete === 'c'
+    )
   }
+
+  public linkProperty(mapping: Mapping[]) {
+    const foreignKeyColumnNames = mapping.map(map => map.from.name)
+    this.foreignKeyConstraint = this.tableClass.table.foreign_keys.find(fk =>
+      Object.keys(fk.column_mapping).every(columnName =>
+        // * test the schema name (e.g. 'public') as well
+        foreignKeyColumnNames.includes(columnName)
+      )
+    )
+    this.mapping = mapping
+    // * Searches the 'inverse' relationship on the reference table class, and link them together
+    this.inverse = this.reference.relationshipProperties.find(
+      property =>
+        !!property.mapping.length &&
+        property.mapping.every(map =>
+          foreignKeyColumnNames.includes(map.to.name)
+        )
+    )
+    if (this.inverse) {
+      this.inverse.inverse = this
+    }
+  }
+
+  /**
+   * * The 'reference' class is the table class the relationship refers to.
+   * E.g. if a 'car' table has an 'owner' relationship property,
+   * then the reference will return the table class of the owner, for instance 'person'
+   */
   public get reference() {
     return this.mapping[0].to.tableClass
   }
+  /**
+   * * Express whether the relationship is 'many to one' or 'many to many' rather than 'one to many'
+   */
   public get isMultiple() {
+    // TODO 'many to many'
     return this.type === 'array'
   }
+  /**
+   * * Returns the foreign key column properties of the relationship
+   */
   public get keyColumns() {
     return this.mapping.map(mapping => mapping.from)
   }

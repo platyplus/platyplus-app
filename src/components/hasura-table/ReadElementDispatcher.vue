@@ -27,8 +27,10 @@ import ObjectField from './fields/read/Object.vue'
 @Component({
   components: {
     'h-read-field-text': Text,
-    'h-read-field-array': ArrayField,
-    'h-read-field-object': ObjectField,
+    'h-read-field-internal-array': ArrayField,
+    'h-read-field-foreign-array': ArrayField,
+    'h-read-field-internal-object': ObjectField,
+    'h-read-field-foreign-object': ObjectField,
     'h-read-field-bool': BooleanField
   }
 })

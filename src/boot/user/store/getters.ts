@@ -9,6 +9,7 @@ export const getters: GetterTree<UserState, RootState> = {
     )
   },
   profile(state) {
+    // TODO get/set profile with apollo cache (not stored in vuex -> single source of truth)
     return state.profile
   },
   token(state) {

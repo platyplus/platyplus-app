@@ -1,9 +1,9 @@
-import { Schema } from 'src/boot/hasura'
+import Schema from 'src/boot/hasura/schema/schema'
 
 export interface HasuraState {
   schema: Schema
 }
 
 export const state: HasuraState = {
-  schema: ({ classes: [] } as unknown) as Schema
+  schema: new Schema([])
 }

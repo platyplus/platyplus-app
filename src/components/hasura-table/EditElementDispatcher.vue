@@ -33,8 +33,10 @@ import { RelationshipProperty } from 'src/boot/hasura/schema/properties'
   components: {
     ValidationObserver,
     'h-edit-field-text': Text,
-    'h-edit-field-array': ArrayField,
-    'h-edit-field-object': ObjectField,
+    'h-edit-field-internal-array': ArrayField,
+    'h-edit-field-foreign-array': ArrayField,
+    'h-edit-field-internal-object': ObjectField,
+    'h-edit-field-foreign-object': ObjectField,
     'h-edit-field-bool': BooleanField
   }
 })
