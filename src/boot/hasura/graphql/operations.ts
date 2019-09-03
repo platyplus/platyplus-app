@@ -16,6 +16,9 @@ import {
   graphQlType
 } from './common'
 
+// TODO it became useless to add the foreign key columns to the queries. Think about removing them
+// TODO example: org_unit { parent_id, parent { id } } -> org_unit { parent { id } } is enough
+
 export const listQuery = (tableClass: TableClass, ability: Ability) =>
   gql(
     jsonToGraphQLQuery(

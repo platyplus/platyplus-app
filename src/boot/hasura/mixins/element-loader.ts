@@ -96,6 +96,7 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
    * Returns the permitted properties of the element (except ids), whether
    * they are columns or relationship, according to the current ability
    * and given the param action
+   * TODO move to a mixin so it can be used at field level as well?
    */
   protected fields(action: string) {
     const tableClass = this.tableClass

@@ -1,6 +1,5 @@
 import { Route } from 'vue-router'
 import { Component, Mixins, Watch } from 'vue-property-decorator'
-import { permittedFieldsOf } from '@casl/ability/extra'
 import { ObjectMap } from 'src/types/common'
 import { pick } from 'src/helpers'
 import { ElementLoaderMixin } from './element-loader'
@@ -33,6 +32,7 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
   }
 
   public async submit() {
+    // TODO revoir avec le nouveau systeme
     const validator = this.$refs.validator as VeeOberverComponent
     if (!!validator && !(await validator.validate())) return
     if (this.tableClass && this.formChanged) {
@@ -58,18 +58,18 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
     } else this.read()
   }
 
-  // TODO
   public reset() {
     // TODO sort the following todos either in the 'reset' method (when the user can still modify the field) or in the 'save' method (when the user is not allowed to modify its value)
-    // TODO set 'fixed' values from the route query e.g. query: {parent_id: '1234'} when creating a child org_unit
-    // TODO set default values from the initial element
-    // TODO set default values from the hasura permissions and from the backend schema
-    // TODO set the possible 'object' or 'array' property values?
-    // Copies the allowed fields from the initial element
-    this.form = pick(
-      this.element,
-      permittedFieldsOf(this.$ability, this.action, this.tableName)
-    )
+    // TODO set 'fixed' values from the route query e.g. query: {parent_id: '1234'} when creating a child org_unit -> field component
+    // TODO set default values from the initial element -> on save
+    // TODO set default values from the hasura permissions and from the backend schema -> on save
+    /**
+     * Every field is checked with the user's ability before being added
+     */
+    // TODO complicated and not really usefull here to filter allowed fields.
+    // TODO Do it at field validation level/save level
+    // ! https://sam.beckham.io/wrote/deep-copying-and-the-immutability-issue.html
+    this.form = JSON.parse(JSON.stringify(this.element))
     const validator = this.$refs.validator as VeeOberverComponent
     this.$nextTick(() => !!validator && validator.reset())
   }
@@ -97,11 +97,8 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
    * * Returns true if any modification has been done in the form
    */
   public get formChanged(): boolean {
-    return Object.keys(this.form).some(
-      field =>
-        (!!this.element[field] && this.element[field]) !==
-        (!!this.form[field] && this.form[field])
-    )
+    // * Bourrin mais pour l'instant ça marche...
+    return JSON.stringify(this.element) !== JSON.stringify(this.form)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

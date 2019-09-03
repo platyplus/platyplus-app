@@ -1,9 +1,9 @@
 import { Component, Prop, Mixins } from 'vue-property-decorator'
-import { FieldMixin } from './field'
-import { GenericObject } from 'src/types/common'
-
 import { extend } from 'vee-validate'
 import { required } from 'vee-validate/dist/rules'
+import { FieldMixin } from './field'
+import { GenericObject } from 'src/types/common'
+import { elementAsOption, optionAsElement } from '../graphql/common'
 
 extend('required', {
   ...required,
@@ -12,13 +12,13 @@ extend('required', {
 
 @Component
 export class FieldEditMixin extends Mixins(FieldMixin) {
-  @Prop([String, Object, Boolean, Number]) public value?: GenericObject
+  @Prop([String, Object, Boolean, Number, Array]) public value?: GenericObject
 
   public get formValue() {
-    return this.value
+    return elementAsOption(this.value, this.property)
   }
   public set formValue(newValue) {
-    this.$emit('input', newValue)
+    this.$emit('input', optionAsElement(newValue))
   }
   public get rules() {
     return {

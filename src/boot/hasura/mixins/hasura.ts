@@ -1,5 +1,5 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
-import { TableClass } from '../schema/table-class'
+import TableClass from '../schema/table-class'
 
 @Component
 export class HasuraMixin extends Vue {

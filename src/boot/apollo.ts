@@ -2,11 +2,7 @@
  * * Configuration of the GraphQL client
  */
 import { ApolloClient, ApolloError } from 'apollo-client'
-import {
-  InMemoryCache,
-  IdGetterObj,
-  defaultDataIdFromObject
-} from 'apollo-cache-inmemory'
+import { InMemoryCache, IdGetterObj } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 import clone from 'clone'
 import { WebSocketLink } from 'apollo-link-ws'
@@ -19,8 +15,7 @@ import { getConfig } from '../helpers'
 import { QuasarBootOptions } from 'src/types/quasar'
 import { Component, Watch, Vue, Mixins } from 'vue-property-decorator'
 import { ObjectMap } from 'src/types/common'
-import { store } from 'src/store'
-import { TableClass } from './hasura'
+import { uniqueGraphQlId } from './hasura/graphql/common'
 
 const config = getConfig()
 
@@ -47,21 +42,7 @@ const cache = new InMemoryCache({
       case 'check_constraint':
         return `check_constraint:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
       default:
-        // * Maps the tableClasses 'composed' ids when they are loaded and available from the Vuex store
-        if (store && object.__typename) {
-          const tableClass: TableClass | undefined = store.getters[
-            'hasura/class'
-          ](object.__typename)
-          if (tableClass) {
-            const idColumnNames = tableClass.idColumnNames
-            if (idColumnNames.length > 1)
-              // * Generates the ID only for objects with multiple primary key columns
-              return `${tableClass.name}:${idColumnNames
-                .map(colName => obj[colName])
-                .join('.')}`
-          }
-        }
-        return defaultDataIdFromObject(object)
+        return uniqueGraphQlId(obj)
     }
   }
 })

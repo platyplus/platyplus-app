@@ -6,9 +6,8 @@ export default class Schema {
   public readonly classes: TableClass[] = []
   public constructor(tables: TableDefinition[]) {
     this.classes = tables.map(table => new TableClass(this, table))
-    for (const cls of this.classes) {
-      cls.linkProperties()
-    }
+    for (const cls of this.classes) cls.linkProperties()
+    for (const cls of this.classes) cls.linkManyToManies()
   }
 
   public getClass(name: string) {

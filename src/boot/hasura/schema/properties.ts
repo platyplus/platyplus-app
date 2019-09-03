@@ -104,6 +104,7 @@ export class ColumnProperty extends BaseProperty {
 export class RelationshipProperty extends BaseProperty {
   public mapping: Mapping[] = []
   public readonly isColumn: boolean
+  public through?: RelationshipProperty
   public foreignKeyConstraint?: ForeignKeyConstraint
   /**
    * * The 'inverse' property is the other property that can exist in case of a two-ways relationship binding.
@@ -135,6 +136,7 @@ export class RelationshipProperty extends BaseProperty {
   }
 
   public linkProperty(mapping: Mapping[]) {
+    this.mapping = mapping
     const foreignKeyColumnNames = mapping.map(map => map.from.name)
     this.foreignKeyConstraint = this.tableClass.table.foreign_keys.find(fk =>
       Object.keys(fk.column_mapping).every(columnName =>
@@ -142,17 +144,38 @@ export class RelationshipProperty extends BaseProperty {
         foreignKeyColumnNames.includes(columnName)
       )
     )
-    this.mapping = mapping
     // * Searches the 'inverse' relationship on the reference table class, and link them together
-    this.inverse = this.reference.relationshipProperties.find(
+    const inverse = this.reference.relationshipProperties.find(
       property =>
         !!property.mapping.length &&
         property.mapping.every(map =>
           foreignKeyColumnNames.includes(map.to.name)
         )
     )
-    if (this.inverse) {
+    if (inverse) {
+      this.inverse = inverse
       this.inverse.inverse = this
+    }
+  }
+  public linkManyToManies() {
+    const refHasBothPkFk = this.reference.idProperties.some(
+      property =>
+        property.isReference &&
+        property.references.some(
+          reference => reference.name === this.tableClass.name
+        )
+    )
+    if (refHasBothPkFk) {
+      const throughColProperty = this.reference.idProperties.find(
+        property =>
+          property.isReference &&
+          property.references.some(
+            reference => reference.name !== this.tableClass.name
+          )
+      )
+      if (throughColProperty) {
+        this.through = throughColProperty.references[0]
+      }
     }
   }
 
@@ -168,13 +191,17 @@ export class RelationshipProperty extends BaseProperty {
    * * Express whether the relationship is 'many to one' or 'many to many' rather than 'one to many'
    */
   public get isMultiple() {
-    // TODO 'many to many'
     return this.type === 'array'
+  }
+
+  public get isManyToMany() {
+    return !!this.through
   }
   /**
    * * Returns the foreign key column properties of the relationship
    */
   public get keyColumns() {
-    return this.mapping.map(mapping => mapping.from)
+    if (this.isMultiple) return [] as ColumnProperty[]
+    else return this.mapping.map(mapping => mapping.from)
   }
 }

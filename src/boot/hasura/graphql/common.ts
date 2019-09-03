@@ -1,8 +1,10 @@
 import { VariableType } from 'json-to-graphql-query'
 import { Ability } from '@casl/ability'
 import { permittedFieldsOf } from '@casl/ability/extra'
-import { TableClass } from '../schema'
-import { ObjectMap } from 'src/types/common'
+import { TableClass, BaseProperty } from '../schema'
+import { ObjectMap, GenericObject } from 'src/types/common'
+import { store } from 'src/store'
+import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 
 const graphQlTypes: Record<string, string> = {
   uuid: 'uuid',
@@ -30,7 +32,9 @@ export const filteredJsonObject = (
       const relationship = tableClass.getRelationshipProperty(fieldName)
       if (relationship && subObject) {
         const subObjectResult = filteredJsonObject(
-          relationship.reference,
+          // TODO Improve this ugly M2M hack?
+          (relationship.through ? relationship.through : relationship)
+            .reference,
           subObject,
           ability
         )
@@ -53,3 +57,62 @@ export const idVariables = (tableClass: TableClass) =>
     result[property.name] = graphQlType(property.type) + '!'
     return result
   }, {})
+
+export const uniqueGraphQlId = (object: ObjectMap) => {
+  // * Maps the tableClasses 'composed' ids when they are loaded and available from the Vuex store
+  if (store && object.__typename) {
+    const tableClass: TableClass | undefined = store.getters['hasura/class'](
+      object.__typename
+    )
+    if (tableClass) {
+      const idColumnNames = tableClass.idColumnNames
+      if (idColumnNames.length > 1)
+        // * Generates the ID only for objects with multiple primary key columns
+        return `${tableClass.name}:${idColumnNames
+          .map(colName => object[colName])
+          .join('.')}`
+    }
+  }
+  return defaultDataIdFromObject(object)
+}
+
+/**
+ * * This function add two generated fields to an element:
+ * _label, based on the template of the property
+ * _id, baed on the primary key fields of the property.
+ * This function is used to create a standard label and a standard key
+ * regardless of the underlying table class
+ * @param element
+ * @param property
+ */
+export const elementAsOption = (
+  element?: GenericObject,
+  property?: BaseProperty
+) => {
+  if (
+    element &&
+    typeof element === 'object' &&
+    !Array.isArray(element) &&
+    property
+  ) {
+    return {
+      ...element,
+      _id: uniqueGraphQlId(element),
+      _label: property.tableClass.label(element)
+    }
+  } else return element
+}
+
+/**
+ * * Converts an 'option element' that has been enriched by the above function
+ * * in removing the _id and _label fields
+ * @param option
+ */
+export const optionAsElement = (option?: GenericObject) => {
+  if (option && typeof option === 'object' && !Array.isArray(option)) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, _label, ...result } = option
+    return result
+  }
+  return option
+}

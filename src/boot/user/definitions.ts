@@ -63,7 +63,6 @@ export const PROFILE_QUERY = gql`
       attributes
       locale
       org_unit_memberships {
-        id
         org_unit {
           id
           name

@@ -50,8 +50,18 @@ export default class TableClass {
     }
   }
 
+  /**
+   * * Sets the properties required to generate the label.
+   * Filters the properties that exists in the template but does not exist in the table class
+   */
   private get jsonObjectLabel() {
-    return getHandlebarsVars(this.labelTemplate)
+    // TODO won't work with nested handlebar variables
+    const propNames = this.properties.map(property => property.name)
+    const result = getHandlebarsVars(this.labelTemplate)
+    return Object.keys(result).reduce<ObjectMap>((prev, curr) => {
+      if (propNames.includes(curr)) prev[curr] = true
+      return prev
+    }, {})
   }
 
   private get jsonObjectColumns() {
@@ -64,7 +74,17 @@ export default class TableClass {
   private get jsonObjectRelationships() {
     return this.relationshipProperties.reduce<ObjectMap>(
       (prev, relationship) => {
-        prev[relationship.name] = relationship.reference.jsonObjectList
+        if (relationship.isManyToMany) {
+          prev[relationship.name] = {
+            // TODO remove the useless properties e.g. user { org_units { user { id }, user_id } }
+            ...relationship.reference.jsonObjectRelationships,
+            ...relationship.reference.jsonObjectIds
+          }
+          // prev[relationship.name] = {
+          //   ...relationship.reference.jsonObjectList,
+          //   ...relationship.reference.jsonObjectRelationships
+          // }
+        } else prev[relationship.name] = relationship.reference.jsonObjectList
         return prev
       },
       {}
@@ -207,5 +227,9 @@ export default class TableClass {
         }
       }
     }
+  }
+  public linkManyToManies() {
+    for (const relationship of this.relationshipProperties)
+      relationship.linkManyToManies()
   }
 }

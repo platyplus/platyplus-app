@@ -9,7 +9,7 @@ q-form(autofocus @reset="reset" @submit="submit")
         :property="property"
         :element="element"
         :tableClass="property.class"
-        v-model="form[propertyFieldName(property)]")
+        v-model="form[property.name]")
     slot(name="after-fields" :element="element")
     slot(name="before-actions" :element="element")
     slot(name="actions" :element="element")
@@ -22,12 +22,11 @@ q-form(autofocus @reset="reset" @submit="submit")
 <script lang="ts">
 import { Mixins, Component } from 'vue-property-decorator'
 import { ValidationObserver } from 'vee-validate'
-import { FormManagerMixin, BaseProperty } from 'src/boot/hasura'
+import { FormManagerMixin } from 'src/boot/hasura'
 import Text from './fields/edit/Text.vue'
 import BooleanField from './fields/edit/Boolean.vue'
 import ArrayField from './fields/edit/Array.vue'
 import ObjectField from './fields/edit/Object.vue'
-import { RelationshipProperty } from 'src/boot/hasura/schema/properties'
 
 @Component({
   components: {
@@ -41,22 +40,6 @@ import { RelationshipProperty } from 'src/boot/hasura/schema/properties'
   }
 })
 export default class EditElementDispatcher extends Mixins(FormManagerMixin) {
-  /**
-   * * Returns the property name the form needs to use:
-   * - the property name in case of a 'column' property
-   * - the name of the foreign key column in case of an 'object' relationship property
-   * TODO - Arrays
-   * ! The current system does not take into account relationships with multiple column keys!
-   *  */
-  propertyFieldName(property: BaseProperty) {
-    // <=> test: if property is a RelationshipProperty
-    if ('mapping' in property) {
-      let keyColumns = (property as RelationshipProperty).keyColumns
-      return keyColumns && keyColumns[0].name
-    }
-    return property.name
-  }
-
   previous() {
     this.isNew ? this.$router.go(-1) : this.read()
   }

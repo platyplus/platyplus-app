@@ -8,11 +8,9 @@ div(v-if="element")
       :error-label="$t(tableName +'.errors.'+name)"
       v-model="formValue"
       :options="options"
-      :option-value="optionValue"
+      option-value="_id"
       option-label="_label"
-      emit-value
-      map-options
-      :clearable="true"
+      :clearable="!property.required"
       filter
       :key="name"
       :name="name"
@@ -26,7 +24,7 @@ import { Component, Mixins } from 'vue-property-decorator'
 import { FieldEditMixin, optionsQuery } from 'src/boot/hasura'
 import { ObjectMap } from '../../../../types/common'
 import { ability } from 'src/boot/user/store'
-import { get } from 'object-path'
+import { elementAsOption } from 'src/boot/hasura/graphql/common'
 
 @Component({
   apollo: {
@@ -35,24 +33,14 @@ import { get } from 'object-path'
         return optionsQuery(this.property, ability)
       },
       update(data: Record<string, ObjectMap[]>) {
-        return data[Object.keys(data)[0]].map(item => ({
-          ...item,
-          _label: this.property.tableClass.label(item)
-        }))
+        return data[Object.keys(data)[0]].map(item =>
+          elementAsOption(item, this.property)
+        )
       }
     }
   }
 })
 export default class EditObjectField extends Mixins(FieldEditMixin) {
   options = []
-
-  // ! The options system will only work for elements with single column primary keys
-  get optionValue() {
-    return (
-      (this.property && get(this.property, 'tableClass.idColumnNames.0')) ||
-      'id'
-    )
-  }
-  // TODO clearable field if not required
 }
 </script>
