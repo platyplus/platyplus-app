@@ -1,0 +1,22 @@
+- args:
+    role: user
+    table:
+      name: org_unit_type_mapping
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check: {}
+      columns:
+      - from_id
+      - id
+      - to_id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: org_unit_type_mapping
+      schema: public
+  type: create_insert_permission

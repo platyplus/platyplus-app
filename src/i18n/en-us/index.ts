@@ -81,6 +81,8 @@ export default {
       parent: 'Parent',
       children: 'Children',
       type: '@:org_unit_type.label',
+      org_unit_memberships: 'Memberships',
+      isolated_encounter_types: 'Isolated encounter types',
       role_attributions: '@:role_attribution.label_plural',
       workflows: '@:workflow.label_plural'
     },
@@ -134,6 +136,7 @@ export default {
     labels: {
       name: 'Name',
       global: 'Global role',
+      permissions: 'Permissions',
       role_attributions: '@:role_attribution.label_plural'
     },
     helper: 'Choose a role',
