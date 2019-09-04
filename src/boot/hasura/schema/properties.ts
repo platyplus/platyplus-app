@@ -17,37 +17,23 @@ export abstract class BaseProperty {
   public abstract readonly isColumn: boolean
   public abstract readonly isMultiple: boolean
   public abstract readonly isOwnedByClass: boolean
+  /**
+   * * Returns the default kind of component to use to represent the property.
+   * By default, it is the postgresql/graphql type
+   * If the property is a relationship, then it checks if it is part ('owned') of the class.
+   * * A relationship is 'owned' by its table class when it's cascade deleted.
+   */
+  public abstract readonly componentKind: string
   protected constructor(cls: TableClass, name: string, type: string) {
     this.tableClass = cls
     this.name = name
     this.type = type
   }
-
-  /**
-   * * Returns the default kind of component to use to represent the property.
-   * By default, it is the postgresql/graphql type // TODO
-   * If the property is a relationship, then it checks if it is part ('owned') of the class.
-   * * A relationship is 'owned' by its table class when it's cascade deleted.
-   */
-  public get componentKind() {
-    const defaultType = this.type || 'text'
-    if (this.isColumn) {
-      return defaultType
-    } else {
-      if (this.isMultiple) {
-        if (this.isOwnedByClass) return 'internal-array'
-        else return 'foreign-array'
-      } else {
-        if (this.isOwnedByClass) return 'internal-object'
-        else return 'foreign-object'
-      }
-    }
-  }
 }
 export class ColumnProperty extends BaseProperty {
   public readonly isId: boolean
   public readonly required: boolean
-  public readonly isColumn: boolean
+  public readonly isColumn = true
   public readonly isMultiple = false
   public readonly isOwnedByClass = true
   public readonly defaultValue?: string
@@ -59,7 +45,10 @@ export class ColumnProperty extends BaseProperty {
       tableClass.table.primary_key.columns.includes(column.name)
     this.defaultValue = column.default || undefined // TODO set the function straight ahead?
     this.required = !column.is_nullable && !column.default
-    this.isColumn = true
+  }
+
+  public get componentKind() {
+    return this.type || 'text'
   }
 
   public get references() {
@@ -103,7 +92,7 @@ export class ColumnProperty extends BaseProperty {
 
 export class RelationshipProperty extends BaseProperty {
   public mapping: Mapping[] = []
-  public readonly isColumn: boolean
+  public readonly isColumn = false
   public through?: RelationshipProperty
   public foreignKeyConstraint?: ForeignKeyConstraint
   /**
@@ -114,7 +103,6 @@ export class RelationshipProperty extends BaseProperty {
   public inverse?: RelationshipProperty
   public constructor(cls: TableClass, relationship: Relationship) {
     super(cls, relationship.name, relationship.type)
-    this.isColumn = false
   }
 
   /**
@@ -122,6 +110,13 @@ export class RelationshipProperty extends BaseProperty {
    */
   public get required() {
     return this.keyColumns.some(column => column.required)
+  }
+
+  /**
+   * * Express whether the relationship is 'many to one' or 'many to many' rather than 'one to many'
+   */
+  public get isMultiple() {
+    return this.type === 'array'
   }
 
   /**
@@ -133,6 +128,58 @@ export class RelationshipProperty extends BaseProperty {
       !!this.inverse.foreignKeyConstraint &&
       this.inverse.foreignKeyConstraint.on_delete === 'c'
     )
+  }
+
+  public get componentKind() {
+    if (this.isMultiple) {
+      if (this.isManyToMany) {
+        if (this.isSimpleManyToMany) return 'simple-many-to-many'
+        else return 'nested-many-to-many'
+        // TODO: if properties other than the two FK, then the component eihter be:
+        // nested-many-to-many if not too much keys (and if isOwnedByClass?)
+        // complete-many-to-many (allors to show the full form for each item, in a popup or something)
+      } else {
+        return 'simple-many-to-one'
+        // TODO nested or complete (popup-like) components. How to decide which one to use?
+      }
+    } else {
+      return 'nested-object'
+      // TODO either 'nested' or 'complete' object.
+    }
+  }
+
+  /**
+   * * The 'reference' class is the table class the relationship refers to.
+   * E.g. if a 'car' table has an 'owner' relationship property,
+   * then the reference will return the table class of the owner, for instance 'person'
+   */
+  public get reference() {
+    return this.mapping[0].to.tableClass
+  }
+
+  public get isManyToMany() {
+    return !!this.through
+  }
+
+  /**
+   * * A 'Simple' Many-To-Many relationship has no other columns than
+   * * the ones composing the two foreign key relationships
+   */
+  public get isSimpleManyToMany() {
+    return (
+      !!this.through &&
+      this.through.tableClass.columnProperties.every(
+        prop => prop.isReference
+      ) &&
+      this.through.tableClass.relationshipProperties.length === 2
+    )
+  }
+  /**
+   * * Returns the foreign key column properties of the relationship
+   */
+  public get keyColumns() {
+    if (this.isMultiple) return [] as ColumnProperty[]
+    else return this.mapping.map(mapping => mapping.from)
   }
 
   public linkProperty(mapping: Mapping[]) {
@@ -157,6 +204,7 @@ export class RelationshipProperty extends BaseProperty {
       this.inverse.inverse = this
     }
   }
+
   public linkManyToManies() {
     const refHasBothPkFk = this.reference.idProperties.some(
       property =>
@@ -177,31 +225,5 @@ export class RelationshipProperty extends BaseProperty {
         this.through = throughColProperty.references[0]
       }
     }
-  }
-
-  /**
-   * * The 'reference' class is the table class the relationship refers to.
-   * E.g. if a 'car' table has an 'owner' relationship property,
-   * then the reference will return the table class of the owner, for instance 'person'
-   */
-  public get reference() {
-    return this.mapping[0].to.tableClass
-  }
-  /**
-   * * Express whether the relationship is 'many to one' or 'many to many' rather than 'one to many'
-   */
-  public get isMultiple() {
-    return this.type === 'array'
-  }
-
-  public get isManyToMany() {
-    return !!this.through
-  }
-  /**
-   * * Returns the foreign key column properties of the relationship
-   */
-  public get keyColumns() {
-    if (this.isMultiple) return [] as ColumnProperty[]
-    else return this.mapping.map(mapping => mapping.from)
   }
 }

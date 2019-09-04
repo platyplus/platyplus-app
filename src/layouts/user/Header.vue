@@ -2,7 +2,7 @@
 q-toolbar(color="primary")
   q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
     q-icon(name="fas fa-bars")
-  q-toolbar-title {{ title }}
+  q-toolbar-title {{ $title }}
   q-select(
     hide-underline
     emit-value

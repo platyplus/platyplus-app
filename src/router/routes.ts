@@ -56,8 +56,7 @@ const routes: RouteConfig[] = [
         // TODO decide whether to use the hasura system for the profile page, or to have a special profile page
         path: 'profile',
         components: {
-          default: () =>
-            import('components/hasura-table/ReadElementDispatcher.vue'),
+          default: () => import('pages/Profile.vue'),
           ...hasuraTableUserComponents()
         },
         props: {

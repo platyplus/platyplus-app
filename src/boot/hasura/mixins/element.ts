@@ -8,7 +8,7 @@ export class ElementMixin extends Mixins(HasuraMixin) {
   public element?: ObjectMap
 
   public get label() {
-    if (this.element) {
+    if (this.element && !!Object.keys(this.element).length) {
       if (this.tableClass) {
         return this.tableClass.label(this.element)
       } else return JSON.stringify(this.element.id)

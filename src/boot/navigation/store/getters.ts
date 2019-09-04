@@ -5,5 +5,8 @@ import { RootState } from 'src/store'
 export const getters: GetterTree<NavigationState, RootState> = {
   drawer(state) {
     return state.drawer
+  },
+  title(state) {
+    return state.title
   }
 }

@@ -17,5 +17,8 @@ export const mutations: MutationTree<NavigationState> = {
   // Creates a pointer to the vue router available from the Vuex store
   linkRouter(state, router) {
     state.router = router
+  },
+  setTitle(state, title) {
+    state.title = title
   }
 }

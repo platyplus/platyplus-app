@@ -26,16 +26,20 @@ import { FormManagerMixin } from 'src/boot/hasura'
 import Text from './fields/edit/Text.vue'
 import BooleanField from './fields/edit/Boolean.vue'
 import ArrayField from './fields/edit/Array.vue'
+import SimpleManyToManyField from './fields/edit/SimpleManyToMany.vue'
 import ObjectField from './fields/edit/Object.vue'
 
 @Component({
   components: {
     ValidationObserver,
     'h-edit-field-text': Text,
-    'h-edit-field-internal-array': ArrayField,
-    'h-edit-field-foreign-array': ArrayField,
-    'h-edit-field-internal-object': ObjectField,
-    'h-edit-field-foreign-object': ObjectField,
+    'h-edit-field-simple-many-to-many': SimpleManyToManyField,
+    'h-edit-field-nested-many-to-many': ArrayField,
+    'h-edit-field-complete-many-to-many': ArrayField,
+    'h-edit-field-nested-many-to-one': ArrayField,
+    'h-edit-field-complete-many-to-one': ArrayField,
+    'h-edit-field-nested-object': ObjectField,
+    'h-edit-field-complete-object': ObjectField,
     'h-edit-field-bool': BooleanField
   }
 })

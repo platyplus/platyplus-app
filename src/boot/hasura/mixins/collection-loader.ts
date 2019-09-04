@@ -2,6 +2,7 @@ import { Component, Mixins } from 'vue-property-decorator'
 import { HasuraMixin } from './hasura'
 import { listQuery } from '../graphql'
 import { ability } from 'src/boot/user/store'
+import { PageMixin } from 'src/mixins/page'
 
 @Component({
   apollo: {
@@ -13,6 +14,12 @@ import { ability } from 'src/boot/user/store'
     }
   }
 })
-export class CollectionLoaderMixin extends Mixins(HasuraMixin) {
+export class CollectionLoaderMixin extends Mixins(HasuraMixin, PageMixin) {
   public list = []
+
+  public get title() {
+    return this.tableName
+      ? this.$i18n.t(this.tableName + '.label_plural').toString()
+      : 'Platyplus'
+  }
 }

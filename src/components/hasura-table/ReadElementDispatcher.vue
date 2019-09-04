@@ -22,15 +22,27 @@ import { ElementLoaderMixin } from 'src/boot/hasura'
 import Text from './fields/read/Text.vue'
 import BooleanField from './fields/read/Boolean.vue'
 import ArrayField from './fields/read/Array.vue'
+import SimpleManyToManyField from './fields/read/SimpleManyToMany.vue'
+import SimpleManyToOneField from './fields/read/SimpleManyToOne.vue'
 import ObjectField from './fields/read/Object.vue'
+
+Component.registerHooks([
+  'beforeRouteEnter',
+  'beforeRouteLeave',
+  'beforeRouteUpdate'
+])
 
 @Component({
   components: {
     'h-read-field-text': Text,
-    'h-read-field-internal-array': ArrayField,
-    'h-read-field-foreign-array': ArrayField,
-    'h-read-field-internal-object': ObjectField,
-    'h-read-field-foreign-object': ObjectField,
+    'h-read-field-simple-many-to-many': SimpleManyToManyField,
+    'h-read-field-nested-many-to-many': ArrayField,
+    'h-read-field-complete-many-to-many': ArrayField,
+    'h-read-field-simple-many-to-one': SimpleManyToOneField,
+    'h-read-field-nested-many-to-one': ArrayField,
+    'h-read-field-complete-many-to-one': ArrayField,
+    'h-read-field-nested-object': ObjectField,
+    'h-read-field-complete-object': ObjectField,
     'h-read-field-bool': BooleanField
   }
 })

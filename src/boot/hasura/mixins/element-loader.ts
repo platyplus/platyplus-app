@@ -1,4 +1,4 @@
-import { Component, Mixins } from 'vue-property-decorator'
+import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { elementQuery, deleteMutation } from '../graphql'
 import { ability } from 'src/boot/user/store'
 import { BaseProperty } from '..'
@@ -7,7 +7,6 @@ import { ObjectMap } from 'src/types/common'
 import { ElementMixin } from './element'
 import { pick } from 'src/helpers'
 import { ColumnProperty, RelationshipProperty } from '../schema/properties'
-import { get } from 'object-path'
 
 @Component({
   apollo: {
@@ -84,6 +83,7 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
   }
 
   protected componentName(property: BaseProperty, prefix: string) {
+    // TODO allow custom component name per property
     const possibleComponentName = `${prefix}-${property.componentKind}`
     if (this.$options.components) {
       const components = Object.keys(this.$options.components)
@@ -120,16 +120,23 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
         } else {
           const relationshipProperty = property as RelationshipProperty
           // TODO if can 'action' reference label fieds (or other fields as well?)
-          const subject =
-            // TODO a bit too much: such permission filter may be delegated to the array/object sub-component
-            (relationshipProperty.isMultiple
-              ? get(this.element, `${relationshipProperty.name}.0`)
-              : get(this.element, relationshipProperty.name)) ||
-            relationshipProperty.tableClass.name
-          if (this.$can(action, subject)) result.push(relationshipProperty)
+          // const subject =
+          //   // TODO a bit too much: such permission filter may be delegated to the array/object sub-component
+          //   (relationshipProperty.isMultiple
+          //     ? get(this.element, `${relationshipProperty.name}.0`)
+          //     : get(this.element, relationshipProperty.name)) ||
+          //   relationshipProperty.tableClass.name
+          // if (this.$can(action, subject)) result.push(relationshipProperty)
+          if (this.$can(action, relationshipProperty.tableClass.name))
+            result.push(relationshipProperty)
         }
       }
       return result
     } else return []
+  }
+
+  @Watch('element', { deep: true })
+  public onElementChange() {
+    this.$store.commit('navigation/setTitle', this.label)
   }
 }

@@ -4,7 +4,6 @@
 // import JsonInput from 'components/JsonInput.vue'
 import Input from '../components/Input.vue'
 import Select from '../components/Select.vue'
-import ListField from '../components/ListField.vue'
 import { QuasarBootOptions } from 'src/types/quasar'
 // Code Mirror imports
 /*
@@ -34,5 +33,4 @@ export default ({ Vue }: QuasarBootOptions) => {
   // Vue.component('p-json-input', JsonInput)
   Vue.component('p-input', Input)
   Vue.component('p-select', Select)
-  Vue.component('p-list-field', ListField)
 }

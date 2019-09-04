@@ -14,7 +14,8 @@ export default ({ Vue, store }: QuasarBootOptions) => {
     computed: mapGetters({
       $authenticated: 'user/authenticated',
       $profile: 'user/profile',
-      $token: 'user/token'
+      $token: 'user/token',
+      $title: 'navigation/title'
     })
   })
 }

@@ -17,7 +17,7 @@ import { getHandlebarsVars } from 'src/helpers'
 import { ObjectMap } from 'src/types/common'
 
 export default class TableClass {
-  public labelTemplate = '{{name}}' // TODO
+  public labelTemplate: string
   public readonly table: TableDefinition
   private readonly schema: Schema
   private readonly labelCompiledTemplate: HandlebarsTemplateDelegate
@@ -31,6 +31,13 @@ export default class TableClass {
         relationship => new RelationshipProperty(this, relationship)
       )
     ]
+    // TODO ability to define a custom label template
+    if (table.columns.find(col => col.name === 'name'))
+      this.labelTemplate = '{{name}}'
+    else this.labelTemplate = '{{id}}'
+    // table.primary_key && table.primary_key.columns
+    //   ? table.primary_key.columns.map(id => `{{${id}}}`).join('.')
+    //   : 'no label'
     this.labelCompiledTemplate = Handlebars.compile(this.labelTemplate)
   }
 
@@ -65,10 +72,12 @@ export default class TableClass {
   }
 
   private get jsonObjectColumns() {
-    return this.columnProperties.reduce<ObjectMap>((prev, relationship) => {
-      prev[relationship.name] = true
-      return prev
-    }, {})
+    return this.columnProperties
+      .filter(column => !column.isReference)
+      .reduce<ObjectMap>((prev, curr) => {
+        prev[curr.name] = true
+        return prev
+      }, {})
   }
 
   private get jsonObjectRelationships() {

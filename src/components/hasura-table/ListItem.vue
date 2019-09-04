@@ -1,5 +1,5 @@
 <template lang="pug">
-q-item(v-if="element" :to="linkToElement()") {{label}}
+q-item(v-if="element" :to="linkToElement()" exact) {{label}}
 div(v-else) Element does not exist
 </template>
 

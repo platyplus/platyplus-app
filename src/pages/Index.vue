@@ -8,10 +8,15 @@ q-page(v-if="$authenticated" padding class="justify-center")
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
+import { PageMixin } from 'src/mixins/page'
 
 @Component
-export default class PageIndex extends Vue {}
+export default class Index extends Mixins(PageMixin) {
+  get title() {
+    return 'Home' // TODO i18n
+  }
+}
 </script>
 
 <style>

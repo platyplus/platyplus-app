@@ -1,6 +1,6 @@
 <template lang="pug">
 q-page(
-  v-if="authenticated"
+  v-if="$authenticated"
   padding
   class="justify-center")
   //- q-uploader(:url="url")
@@ -12,10 +12,13 @@ q-page(
 </style>
 
 <script lang="ts">
-// import gql from 'graphql-tag'
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
+import { PageMixin } from '../mixins/page'
 @Component
-export default class PageImportExport extends Vue {
+export default class ImportExport extends Mixins(PageMixin) {
+  get title() {
+    return 'Import/Export'
+  }
   forms = {}
   async importXlsForms(ev: Event) {
     console.log(ev)
