@@ -5,6 +5,8 @@ import { pick } from 'src/helpers'
 import { ElementLoaderMixin } from './element-loader'
 import { upsertMutation } from '../graphql'
 import { get } from 'object-path'
+import { RelationshipProperty, ColumnProperty } from '../schema/properties'
+import { permittedFieldsOf } from '@casl/ability/extra'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -36,12 +38,51 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
     const validator = this.$refs.validator as VeeOberverComponent
     if (!!validator && !(await validator.validate())) return
     if (this.tableClass && this.formChanged) {
-      const variables = { ...this.form }
-      // Forces the primary key fields from the initial element, or set their default values
-      this.tableClass.idProperties.map(idProperty => {
-        variables[idProperty.name] =
-          this.element[idProperty.name] || idProperty.generateDefault()
-      })
+      const variables: ObjectMap = {}
+      // * Forces the primary key fields from the initial element, or set their default values
+      for (const property of this.tableClass.idProperties) {
+        variables[property.name] =
+          this.element[property.name] || property.generateDefault()
+      }
+      const permittedFields = permittedFieldsOf(
+        this.$ability,
+        this.action,
+        this.tableName
+      )
+      for (const property of this.tableClass.properties) {
+        if (property.isColumn) {
+          // * Copies the non ID, non reference, permitted fields
+          const column = property as ColumnProperty
+          if (
+            !column.isId &&
+            !column.isReference &&
+            permittedFields.includes(column.name)
+          ) {
+            variables[column.name] = this.form[column.name]
+          }
+        } else {
+          const relationship = property as RelationshipProperty
+          if (relationship.isMultiple) {
+            console.log('TODO multiple') // TODO
+          } else {
+            // TODO if new object, or if object changed
+            // ? Delete and create if id changed, update otherwise?
+            if (relationship.isOwnedByClass) {
+              console.log('TODO: object owned by class')
+            } else {
+              // * Copies the foreign keys of the many-to-one relationships
+              for (const map of relationship.mapping) {
+                variables[map.from.name] = get(
+                  this.form,
+                  `${relationship.name}.${map.to.name}`,
+                  null
+                )
+              }
+            }
+          }
+        }
+      }
+      console.log(variables)
       const mutation = upsertMutation(
         this.tableClass,
         this.$ability,
