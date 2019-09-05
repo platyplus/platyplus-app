@@ -22,9 +22,9 @@ import { ElementLoaderMixin } from 'src/boot/hasura'
 import Text from './fields/read/Text.vue'
 import BooleanField from './fields/read/Boolean.vue'
 import ArrayField from './fields/read/Array.vue'
-import SimpleManyToManyField from './fields/read/SimpleManyToMany.vue'
-import SimpleManyToOneField from './fields/read/SimpleManyToOne.vue'
-import ObjectField from './fields/read/Object.vue'
+import ManyToManyField from './fields/read/ManyToMany.vue'
+import OneToManyField from './fields/read/OneToMany.vue'
+import ManyToOneField from './fields/read/ManyToOne.vue'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -35,14 +35,15 @@ Component.registerHooks([
 @Component({
   components: {
     'h-read-field-text': Text,
-    'h-read-field-simple-many-to-many': SimpleManyToManyField,
-    'h-read-field-nested-many-to-many': ArrayField,
-    'h-read-field-complete-many-to-many': ArrayField,
-    'h-read-field-simple-many-to-one': SimpleManyToOneField,
-    'h-read-field-nested-many-to-one': ArrayField,
-    'h-read-field-complete-many-to-one': ArrayField,
-    'h-read-field-nested-object': ObjectField,
-    'h-read-field-complete-object': ObjectField,
+    'h-read-field-many-to-many': ManyToManyField,
+    'h-read-field-nested-many-to-many': ArrayField, // TODO
+    'h-read-field-complete-many-to-many': ArrayField, // TODO
+    'h-read-field-one-to-many': OneToManyField,
+    'h-read-field-nested-one-to-many': ArrayField, // TODO
+    'h-read-field-complete-one-to-many': ArrayField, // TODO
+    'h-read-field-many-to-one': ManyToOneField,
+    'h-read-field-nested-many-to-one': ManyToOneField, // TODO
+    'h-read-field-complete-many-to-one': ManyToOneField, // TODO
     'h-read-field-bool': BooleanField
   }
 })

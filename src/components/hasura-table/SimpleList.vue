@@ -1,5 +1,5 @@
 <template lang="pug">
-q-list(v-if="list.length" highlight)
+q-list(v-if="list.length" highlight class="col-12" separator)
     slot(name="before-item")
     template(v-for="item in list")
       slot(name="item" :item="item")

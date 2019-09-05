@@ -1,0 +1,11 @@
+- args:
+    sql: ALTER TABLE "public"."org_unit_isolated_encounter_type" ADD COLUMN "id" uuid
+  type: run_sql
+- args:
+    sql: ALTER TABLE "public"."org_unit_isolated_encounter_type" ALTER COLUMN "id"
+      DROP NOT NULL
+  type: run_sql
+- args:
+    sql: ALTER TABLE "public"."org_unit_isolated_encounter_type" ALTER COLUMN "id"
+      SET DEFAULT gen_random_uuid()
+  type: run_sql

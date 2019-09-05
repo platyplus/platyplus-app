@@ -15,7 +15,10 @@ export class FieldEditMixin extends Mixins(FieldMixin) {
   @Prop([String, Object, Boolean, Number, Array]) public value?: GenericObject
 
   public get formValue() {
-    return elementAsOption(this.value, this.property)
+    return elementAsOption(
+      this.value,
+      this.property && this.property.tableClass
+    )
   }
   public set formValue(newValue) {
     this.$emit('input', optionAsElement(newValue))

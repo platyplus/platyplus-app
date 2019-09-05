@@ -127,8 +127,12 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
           //     : get(this.element, relationshipProperty.name)) ||
           //   relationshipProperty.tableClass.name
           // if (this.$can(action, subject)) result.push(relationshipProperty)
-          if (this.$can(action, relationshipProperty.tableClass.name))
+          if (
+            this.$can('insert', relationshipProperty.tableClass.name) ||
+            this.$can('update', relationshipProperty.tableClass.name)
+          ) {
             result.push(relationshipProperty)
+          }
         }
       }
       return result

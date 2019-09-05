@@ -2,7 +2,7 @@ import { VariableType } from 'json-to-graphql-query'
 import { Ability } from '@casl/ability'
 import { permittedFieldsOf } from '@casl/ability/extra'
 import { TableClass, BaseProperty } from '../schema'
-import { ObjectMap, GenericObject } from 'src/types/common'
+import { ObjectMap, GenericObject, ObjectArray } from 'src/types/common'
 import { store } from 'src/store'
 import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 
@@ -87,20 +87,18 @@ export const uniqueGraphQlId = (object: ObjectMap) => {
  */
 export const elementAsOption = (
   element?: GenericObject,
-  property?: BaseProperty
-) => {
-  if (
-    element &&
-    typeof element === 'object' &&
-    !Array.isArray(element) &&
-    property
-  ) {
+  tableClass?: TableClass
+): GenericObject | undefined => {
+  if (Array.isArray(element)) {
+    return element.map(item => elementAsOption(item, tableClass)) as ObjectArray
+  } else if (element && typeof element === 'object' && tableClass) {
     return {
       ...element,
-      _id: uniqueGraphQlId(element),
-      _label: property.tableClass.label(element)
+      _id: uniqueGraphQlId(element as ObjectMap),
+      _label: tableClass.label(element as ObjectMap)
     }
-  } else return element
+  }
+  return element
 }
 
 /**
@@ -108,8 +106,12 @@ export const elementAsOption = (
  * * in removing the _id and _label fields
  * @param option
  */
-export const optionAsElement = (option?: GenericObject) => {
-  if (option && typeof option === 'object' && !Array.isArray(option)) {
+export const optionAsElement = (
+  option?: GenericObject
+): GenericObject | undefined => {
+  if (Array.isArray(option)) {
+    return option.map(item => optionAsElement(item)) as ObjectArray
+  } else if (option && typeof option === 'object') {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, _label, ...result } = option
     return result

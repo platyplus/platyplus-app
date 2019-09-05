@@ -4,6 +4,7 @@ div(v-if="element")
   slot(name="field" :property="property"  :element="element")
     validation-provider(v-slot="{ errors, invalid }" :rules="rules" slim)
       q-input(:label="$t(tableName +'.labels.'+name)"
+        filled
         :key="name"
         :name="name"
         v-model="formValue"

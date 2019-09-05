@@ -4,7 +4,7 @@ div(v-if="element")
   slot(name="field" :property="property"  :element="element")
     q-field(:label="$t(tableName +'.labels.'+name)" :key="name" :name="name" stack-label)
       template(v-slot:control)
-        h-collection(:tableClass="property.reference" :list="elementValue")
+        h-chip(v-if="element[property.name]" :tableClass="property.reference" :element="element[property.name]")
   slot(name="after-field" :property="property" :element="element")
 div(v-else) Element does not exist
 </template>
@@ -12,12 +12,12 @@ div(v-else) Element does not exist
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import { FieldMixin } from 'src/boot/hasura'
-import Collection from 'src/components/hasura-table/CollectionDispatcher.vue'
+import Chip from 'src/components/hasura-table/Chip.vue'
 
 @Component({
   components: {
-    'h-collection': Collection
+    'h-chip': Chip
   }
 })
-export default class ReadSimpleManyToOneField extends Mixins(FieldMixin) {}
+export default class ReadManyToOneField extends Mixins(FieldMixin) {}
 </script>

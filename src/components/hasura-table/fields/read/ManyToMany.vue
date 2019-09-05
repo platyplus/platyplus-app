@@ -11,7 +11,7 @@ div(v-else) Element does not exist
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { FieldEditMixin, FieldManyToManyMixin } from 'src/boot/hasura'
+import { FieldMixin, FieldManyToManyMixin } from 'src/boot/hasura'
 import Collection from 'src/components/hasura-table/CollectionDispatcher.vue'
 
 @Component({
@@ -19,8 +19,8 @@ import Collection from 'src/components/hasura-table/CollectionDispatcher.vue'
     'h-collection': Collection
   }
 })
-export default class EditSimpleManyToManyField extends Mixins(
-  FieldEditMixin,
+export default class ReadManyToManyField extends Mixins(
+  FieldMixin,
   FieldManyToManyMixin
 ) {}
 </script>

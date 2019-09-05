@@ -4,7 +4,7 @@ import { ObjectMap } from 'src/types/common'
 import { pick } from 'src/helpers'
 import { ElementLoaderMixin } from './element-loader'
 import { upsertMutation } from '../graphql'
-import { get } from 'object-path'
+import { get, set } from 'object-path'
 import { RelationshipProperty, ColumnProperty } from '../schema/properties'
 import { permittedFieldsOf } from '@casl/ability/extra'
 
@@ -38,11 +38,15 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
     const validator = this.$refs.validator as VeeOberverComponent
     if (!!validator && !(await validator.validate())) return
     if (this.tableClass && this.formChanged) {
-      const variables: ObjectMap = {}
+      const tableName = this.tableClass.name
+      const variables: ObjectMap = { [tableName]: {} }
       // * Forces the primary key fields from the initial element, or set their default values
       for (const property of this.tableClass.idProperties) {
-        variables[property.name] =
+        set(
+          variables,
+          [tableName, property.name],
           this.element[property.name] || property.generateDefault()
+        )
       }
       const permittedFields = permittedFieldsOf(
         this.$ability,
@@ -58,24 +62,24 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
             !column.isReference &&
             permittedFields.includes(column.name)
           ) {
-            variables[column.name] = this.form[column.name]
+            set(variables, [tableName, column.name], this.form[column.name])
           }
         } else {
           const relationship = property as RelationshipProperty
           if (relationship.isMultiple) {
             console.log('TODO multiple') // TODO
           } else {
-            // TODO if new object, or if object changed
-            // ? Delete and create if id changed, update otherwise?
+            // TODO if the nested object changed, upsert it
             if (relationship.isOwnedByClass) {
+              // TODO if the nested object changed and it is existing in this.element, delete it
               console.log('TODO: object owned by class')
             } else {
               // * Copies the foreign keys of the many-to-one relationships
               for (const map of relationship.mapping) {
-                variables[map.from.name] = get(
-                  this.form,
-                  `${relationship.name}.${map.to.name}`,
-                  null
+                set(
+                  variables,
+                  [tableName, map.from.name],
+                  get(this.form, `${relationship.name}.${map.to.name}`, null)
                 )
               }
             }
@@ -90,7 +94,7 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
       )
       const result = await this.$apollo.mutate({
         mutation,
-        variables
+        variables: variables[tableName] || {}
       })
       const data = get(result, `data.insert_${this.tableName}.returning.0`)
       // TODO catch the result? Update the cache? -> update the collection cache at least

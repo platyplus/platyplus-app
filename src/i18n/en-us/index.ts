@@ -84,21 +84,30 @@ export default {
       org_unit_memberships: 'Memberships',
       isolated_encounter_types: 'Isolated encounter types',
       role_attributions: '@:role_attribution.label_plural',
-      workflows: '@:workflow.label_plural'
+      workflows: 'Available @:workflow.label_plural'
     },
     helper: 'Choose an org unit',
     helpers: {
+      children: 'Select the children of the org unit',
+      isolated_encounter_types: '',
       name: 'Enter the name of the org unit',
+      org_unit_memberships: 'Select the members of the org units',
       type: 'Select the type of the org unit',
       parent:
         "Select the org unit's parent. Choose none if this is a root org unit",
-      workflows: 'Select the available workflows for this org unit'
+      role_attributions: 'Select the role attributions',
+      workflows:
+        'Select the available @:workflow.label_plural for this org unit'
     },
     error: 'Invalid org unit',
     errors: {
+      children: 'Invalid selection of children',
       name: 'Invalid name',
+      isolated_encounter_types: '',
+      org_unit_memberships: 'Invalid selection of users',
       type: 'Invalid type',
       parent: 'Invalid parent',
+      role_attributions: 'Invalid selection of role attributions',
       workflows: 'Invalid workflows selection'
     },
     actions: {

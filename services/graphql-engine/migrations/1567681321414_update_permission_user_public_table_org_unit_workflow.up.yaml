@@ -1,0 +1,8 @@
+- args:
+    permission:
+      filter: {}
+    role: user
+    table:
+      name: org_unit_workflow
+      schema: public
+  type: create_delete_permission

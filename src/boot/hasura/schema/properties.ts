@@ -133,18 +133,18 @@ export class RelationshipProperty extends BaseProperty {
   public get componentKind() {
     if (this.isMultiple) {
       if (this.isManyToMany) {
-        if (this.isSimpleManyToMany) return 'simple-many-to-many'
+        if (this.isSimpleManyToMany) return 'many-to-many'
         else return 'nested-many-to-many'
         // TODO: if properties other than the two FK, then the component eihter be:
         // nested-many-to-many if not too much keys (and if isOwnedByClass?)
         // complete-many-to-many (allors to show the full form for each item, in a popup or something)
       } else {
-        return 'simple-many-to-one'
+        return 'one-to-many'
         // TODO nested or complete (popup-like) components. How to decide which one to use?
       }
     } else {
-      return 'nested-object'
-      // TODO either 'nested' or 'complete' object.
+      return 'many-to-one'
+      // TODO 'nested' or 'complete' object.
     }
   }
 

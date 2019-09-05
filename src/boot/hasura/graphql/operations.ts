@@ -62,7 +62,11 @@ export const elementQuery = (tableClass: TableClass, ability: Ability) =>
 export const optionsQuery = (
   property: RelationshipProperty,
   ability: Ability
-) => listQuery(property.reference, ability)
+) =>
+  listQuery(
+    property.through ? property.through.reference : property.reference,
+    ability
+  )
 
 /**
  *
