@@ -17,9 +17,9 @@ import { RelationshipProperty } from '../schema/properties'
         const tableClass = relationship.through
           ? relationship.through.reference
           : this.property.reference
-        return data[Object.keys(data)[0]].map(item =>
-          elementAsOption(item, tableClass)
-        )
+        return data[Object.keys(data)[0]]
+          .filter(item => this.$can('insert', item))
+          .map(item => elementAsOption(item, tableClass))
       }
     }
   }
