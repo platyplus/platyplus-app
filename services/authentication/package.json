@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "@bit/platyplus.backend.hasura-client": "0.0.2",
-    "apollo-server-koa": "2.9.1",
+    "apollo-server-koa": "2.9.3",
     "bcryptjs": "2.4.3",
     "graphql": "14.5.3",
     "jsonwebtoken": "8.5.1",
