@@ -27,7 +27,7 @@
     "clientconfig": "1.1.1",
     "graphql": "14.5.3",
     "graphql-tag": "2.10.1",
-    "handlebars": "4.1.2",
+    "handlebars": "4.2.0",
     "jexl": "2.2.1",
     "jsonlint-mod": "1.7.5",
     "jwt-decode": "2.2.0",
