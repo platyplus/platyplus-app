@@ -67,7 +67,7 @@
     "github-label-sync": "1.4.1",
     "pug": "2.0.4",
     "pug-plain-loader": "1.0.0",
-    "typescript": "3.5.3",
+    "typescript": "3.6.2",
     "vuepress": "1.0.3"
   },
   "engines": {
