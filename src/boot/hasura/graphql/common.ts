@@ -77,7 +77,7 @@ export const uniqueGraphQlId = (object: ObjectMap) => {
 }
 
 /**
- * * This function add two generated fields to an element:
+ * * This function adds two generated fields to an element:
  * _label, based on the template of the property
  * _id, baed on the primary key fields of the property.
  * This function is used to create a standard label and a standard key
