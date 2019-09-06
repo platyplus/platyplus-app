@@ -12,7 +12,8 @@ extend('required', {
 
 @Component
 export class FieldEditMixin extends Mixins(FieldMixin) {
-  @Prop([String, Object, Boolean, Number, Array]) public value?: GenericObject
+  @Prop([String, Object, Boolean, Number, Array])
+  public readonly value?: GenericObject
 
   public get formValue() {
     return elementAsOption(
@@ -25,7 +26,7 @@ export class FieldEditMixin extends Mixins(FieldMixin) {
   }
   public get rules() {
     return {
-      required: !!this.property && this.property.required
+      required: this.property.required
     }
   }
 }

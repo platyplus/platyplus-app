@@ -1,5 +1,5 @@
 <template lang="pug">
-div(v-if="element")
+div
   slot(name="before-field" :property="property" :element="element")
   slot(name="field" :property="property"  :element="element")
     validation-provider(v-slot="{ errors, invalid }" :rules="rules" slim)
@@ -11,7 +11,6 @@ div(v-if="element")
         :error-message="errors[0]"
         :error="invalid")
   slot(name="after-field" :property="property" :element="element")
-div(v-else) Element does not exist
 </template>
 
 <script lang="ts">

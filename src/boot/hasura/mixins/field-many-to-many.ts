@@ -1,17 +1,20 @@
-import { Component } from 'vue-property-decorator'
+import { Component, Mixins } from 'vue-property-decorator'
 import { RelationshipProperty } from '../schema/properties'
 import { ObjectMap, ObjectArray } from 'src/types/common'
-import { FieldEditMixin } from './field-edit'
 import { elementAsOption, optionAsElement } from '../graphql/common'
+import { FieldRelationshipMixin } from './field-relationship'
+import { FieldEditMixin } from './field-edit'
 
 @Component
-export class FieldManyToManyMixin extends FieldEditMixin {
+export class FieldManyToManyMixin extends Mixins(
+  FieldRelationshipMixin,
+  FieldEditMixin
+) {
   public get targetList() {
     const elementValue = this.elementValue as ObjectMap[]
-    if (elementValue && this.property && 'through' in this.property) {
-      const relationship = this.property as RelationshipProperty
-      if (relationship.through) {
-        const name = relationship.through.name
+    if (elementValue) {
+      if (this.relationship.through) {
+        const name = this.relationship.through.name
         return elementValue.map(item => item[name])
       }
     }
@@ -19,23 +22,22 @@ export class FieldManyToManyMixin extends FieldEditMixin {
   }
 
   public get formValue() {
-    if (this.value && this.property) {
-      const through = (this.property as RelationshipProperty)
-        .through as RelationshipProperty
-      return (this.value as ObjectMap[]).map(item =>
-        elementAsOption(item[through.name], through.reference)
-      ) as ObjectArray
+    if (this.value) {
+      const through = this.relationship.through
+      if (through)
+        return (this.value as ObjectMap[]).map(item =>
+          elementAsOption(item[through.name], through.reference)
+        ) as ObjectArray
     }
     return [] as ObjectArray
   }
 
   public set formValue(newValue: ObjectArray) {
-    const property = this.property as RelationshipProperty
-    if (property && property.through) {
-      const fromName: string = property.through.name
+    if (this.relationship.through) {
+      const fromName: string = this.relationship.through.name
       const baseElement = {
-        __typename: property.through.tableClass.name,
-        [property.tableClass.name]: this.element // TODO filter only Ids
+        __typename: this.relationship.through.tableClass.name,
+        [this.relationship.tableClass.name]: this.element // TODO filter only Ids
       }
       const result =
         newValue &&

@@ -1,10 +1,9 @@
 import { Component, Watch } from 'vue-property-decorator'
 import { ObjectMap } from 'src/types/common'
-import { FieldMixin } from './field'
+import { FieldRelationshipMixin } from './field-relationship'
 import { optionsQuery } from '../graphql/operations'
 import { ability } from 'src/boot/user/store'
 import { elementAsOption } from '../graphql/common'
-import { RelationshipProperty } from '../schema/properties'
 
 @Component({
   apollo: {
@@ -13,9 +12,8 @@ import { RelationshipProperty } from '../schema/properties'
         return optionsQuery(this.property, ability)
       },
       update(data: Record<string, ObjectMap[]>) {
-        const relationship = this.property as RelationshipProperty
-        const tableClass = relationship.through
-          ? relationship.through.reference
+        const tableClass = this.relationship.through
+          ? this.relationship.through.reference
           : this.property.reference
         return data[Object.keys(data)[0]]
           .filter(item => this.$can('insert', item))
@@ -24,7 +22,7 @@ import { RelationshipProperty } from '../schema/properties'
     }
   }
 })
-export class FieldOptionsMixin extends FieldMixin {
+export class FieldOptionsMixin extends FieldRelationshipMixin {
   public options: ObjectMap[] = []
   private initialOptions: ObjectMap[] = []
 

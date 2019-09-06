@@ -17,23 +17,45 @@
     template(v-if="icon" v-slot:prepend)
       q-icon(:name="'fas fa-'+icon")
 </template>
+
 <script lang="ts">
 import { QInput } from 'quasar'
-import { types, FieldMixin } from './config'
-import Component, { mixins } from 'vue-class-component'
-import { Prop } from 'vue-property-decorator'
+import { Prop, Vue, Component } from 'vue-property-decorator'
+import { icon } from 'src/helpers'
+
+const types: { [key: string]: string } = {
+  password: 'password'
+}
+
 @Component({
   components: {
     QInput
   }
 })
-export default class PInput extends mixins(FieldMixin) {
-  @Prop(String) autocomplete?: string
-  @Prop(String) mask?: string
-  @Prop({ type: Boolean, default: false }) autofocus?: boolean
+export default class PInput extends Vue {
+  @Prop(String) readonly autocomplete?: string
+  @Prop(String) readonly mask?: string
+  @Prop({ type: Boolean, default: false }) readonly autofocus!: boolean
+  @Prop(Function) readonly enter?: Function
+  @Prop(String) readonly form!: string
+  @Prop(String) readonly name!: string
+  @Prop({ type: Boolean, default: false }) readonly readonly!: boolean
+  @Prop([Object, String]) readonly value?: {} | string
+
+  public get localValue() {
+    return this.value
+  }
+
+  public set localValue(newValue) {
+    this.$emit('input', newValue)
+  }
+
+  public get icon() {
+    return icon(this.form, this.name)
+  }
 
   get inputType() {
-    return (this.name && types[this.name]) || 'text'
+    return types[this.name] || 'text'
   }
 }
 </script>

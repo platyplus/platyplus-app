@@ -32,9 +32,7 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
   }
 
   protected get id() {
-    if (this.tableClass) {
-      return pick(this.$route.query, this.tableClass.idColumnNames)
-    } else return {}
+    return pick(this.$route.query, this.tableClass.idColumnNames)
   }
 
   private navigate(action: string, id: ObjectMap) {
@@ -53,31 +51,31 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
   }
 
   public remove() {
-    const tableLabel = this.$i18n.t(`${this.tableName}.label`) as string
-    const message = this.$i18n.t('delete.label', {
-      tableLabel: tableLabel,
-      label: this.label
-    }) as string
+    const tableLabel = this.$i18n.t(`${this.tableName}.label`).toString()
+    const message = this.$i18n
+      .t('delete.label', {
+        tableLabel: tableLabel,
+        label: this.label
+      })
+      .toString()
     this.$q
       .dialog({
-        title: this.$i18n.t('delete.title') as string,
+        title: this.$i18n.t('delete.title').toString(),
         message,
         cancel: true,
         persistent: true
       })
       .onOk(async () => {
         // TODO ask confirmation
-        if (this.tableClass) {
-          if (this.$ability.can('delete', this.element)) {
-            const mutation = deleteMutation(this.tableClass, this.$ability)
-            // TODO catch errors
-            await this.$apollo.mutate({
-              mutation,
-              variables: this.id
-            })
-            // TODO remove in the cached list
-            this.$router.replace(`/data/${this.tableName}`)
-          }
+        if (this.$ability.can('delete', this.element)) {
+          const mutation = deleteMutation(this.tableClass, this.$ability)
+          // TODO catch errors
+          await this.$apollo.mutate({
+            mutation,
+            variables: this.id
+          })
+          // TODO remove in the cached list
+          this.$router.replace(`/data/${this.tableName}`)
         }
       })
   }

@@ -1,5 +1,5 @@
 <template lang="pug">
-div(v-if="element")
+div
   slot(name="before-field" :property="property" :element="element")
   slot(name="field" :property="property"  :element="element")
     q-select(:label="$t(tableName +'.labels.'+name)"
@@ -20,17 +20,29 @@ div(v-if="element")
       :key="name"
       :name="name"
       stack-label)
+      template(v-slot:selected-item="{opt, removeAtIndex, tabindex, index}")
+        q-chip(dense
+          :removable="canRemove(opt)" 
+          @remove="removeAtIndex(index)"
+          tabindex="tabindex") {{opt._label}}
   slot(name="after-field" :property="property" :element="element")
-div(v-else) Element does not exist
 </template>
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import { FieldEditMixin, FieldOptionsMixin } from 'src/boot/hasura'
+import { ObjectMap } from 'src/types/common'
+import { optionAsElement } from 'src/boot/hasura/graphql/common'
 
 @Component
 export default class SelectMultiple extends Mixins(
   FieldEditMixin,
   FieldOptionsMixin
-) {}
+) {
+  canRemove(option: ObjectMap) {
+    // TODO: on peut supprimer un org_unit.child quand parent_id est modifiable et nullable
+    // TODO: bloquer l'icône 'x' dans le chip ne suffit pas: il faut aussi désactiver la déselection dans le dropdown
+    return this.$can('update', optionAsElement(option), 'parent_id')
+  }
+}
 </script>

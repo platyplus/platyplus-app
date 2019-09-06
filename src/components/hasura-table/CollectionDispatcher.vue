@@ -4,7 +4,7 @@ component(:is="componentName" :tableClass="tableClass" :list="list")
 
 <script lang="ts">
 import { Mixins, Component, Prop } from 'vue-property-decorator'
-import { HasuraMixin } from 'src/boot/hasura'
+import { CollectionContainerMixin } from 'src/boot/hasura'
 import SimpleList from './SimpleList.vue'
 import Tree from './Tree.vue'
 import Chips from './ListChips.vue'
@@ -16,10 +16,10 @@ import Chips from './ListChips.vue'
     'h-chips': Chips
   }
 })
-export default class CollectionDispatcher extends Mixins(HasuraMixin) {
-  // TODO create a collection-loader mixin?
-  @Prop({ type: Array, default: () => [] }) list?: []
-  @Prop({ type: String, default: 'simple-list' }) type?: string
+export default class CollectionDispatcher extends Mixins(
+  CollectionContainerMixin
+) {
+  @Prop({ type: String, default: 'simple-list' }) public readonly type!: string
 
   /**
    * Returns the component name to use to render the list.

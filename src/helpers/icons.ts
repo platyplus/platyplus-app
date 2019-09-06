@@ -1,4 +1,3 @@
-import { Vue, Component, Prop } from 'vue-property-decorator'
 import { coalesce } from 'object-path'
 
 /*eslint-disable @typescript-eslint/camelcase */
@@ -42,33 +41,8 @@ const icons: Record<string, any> = {
 }
 /*eslint-enable @typescript-eslint/camelcase */
 
-export const types: { [key: string]: string } = {
-  password: 'password'
-}
 // TODO refaire un systeme plus malin, idealement calé sur le schema serveur
 // Définir une icône par table et la déduire des relations. De cette manière,
 // on déduit que user.memberships est de type org_unit[] et donc avec l'icône sitemap
 export const icon = (form: string, name: string) =>
   coalesce(icons, [`${name}.self`, name, `${form}.${name}`])
-
-@Component
-export class FieldMixin extends Vue {
-  @Prop(Function) public readonly enter?: Function
-  @Prop(String) public readonly form?: string
-  @Prop(String) public readonly name?: string
-  @Prop({ type: Boolean, default: false })
-  public readonly readonly: boolean = false
-  @Prop([Object, String]) public readonly value?: {} | string
-
-  public get localValue() {
-    return this.value
-  }
-
-  public set localValue(newValue) {
-    this.$emit('input', newValue)
-  }
-
-  public get icon() {
-    return this.form && this.name && icon(this.form, this.name)
-  }
-}

@@ -4,5 +4,6 @@ import { ElementMixin } from './element'
 
 @Component
 export class ElementContainerMixin extends Mixins(ElementMixin) {
-  @Prop({ type: Object, default: () => ({}) }) public element?: ObjectMap
+  @Prop({ type: Object, default: () => ({}) })
+  public readonly element!: ObjectMap
 }

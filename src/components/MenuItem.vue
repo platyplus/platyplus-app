@@ -10,8 +10,8 @@
 import { Prop, Component, Vue } from 'vue-property-decorator'
 @Component
 export default class MenuItem extends Vue {
-  @Prop(String) icon?: string
-  @Prop(String) to?: string
+  @Prop(String) readonly icon?: string
+  @Prop(String) readonly to?: string
 }
 </script>
 

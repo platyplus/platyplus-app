@@ -10,10 +10,10 @@ q-toolbar(color="primary")
 import { Component, Vue, Prop } from 'vue-property-decorator'
 @Component
 export default class PublicHeader extends Vue {
-  @Prop({ type: String, default: '' }) title?: string // * should receive the i18n translation path of the title
+  @Prop({ type: String, default: 'Platyplus' }) readonly title!: string // * should receive the i18n translation path of the title
   get translatedTitle() {
     // TODO i18n according to the above comment
-    return this.title || 'Platyplus!'
+    return this.title
   }
 }
 </script>

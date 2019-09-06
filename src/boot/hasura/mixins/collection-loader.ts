@@ -18,8 +18,6 @@ export class CollectionLoaderMixin extends Mixins(HasuraMixin, PageMixin) {
   public list = []
 
   public get title() {
-    return this.tableName
-      ? this.$i18n.t(this.tableName + '.label_plural').toString()
-      : 'Platyplus'
+    return this.$i18n.t(this.tableName + '.label_plural').toString()
   }
 }

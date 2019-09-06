@@ -33,8 +33,8 @@
 import { Prop, Component, Vue } from 'vue-property-decorator'
 @Component
 export default class UserMenu extends Vue {
-  @Prop(String) icon?: string
-  @Prop(Boolean) to?: string
+  @Prop(String) readonly icon?: string
+  @Prop(Boolean) readonly to?: string
 
   get drawer() {
     return this.$store.getters['navigation/drawer']

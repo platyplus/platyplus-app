@@ -1,5 +1,5 @@
 <template lang="pug">
-div(v-if="element")
+div
   slot(name="before-field" :property="property" :element="element")
   slot(name="field" :property="property"  :element="element")
     q-select(:label="$t(tableName +'.labels.'+name)"
@@ -21,7 +21,6 @@ div(v-if="element")
       :name="name"
       stack-label)
   slot(name="after-field" :property="property" :element="element")
-div(v-else) Element does not exist
 </template>
 
 <script lang="ts">

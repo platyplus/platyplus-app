@@ -9,8 +9,8 @@ div(v-else)
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Prop } from 'vue-property-decorator'
-import { HasuraMixin } from 'src/boot/hasura'
+import { Component, Mixins } from 'vue-property-decorator'
+import { CollectionContainerMixin } from 'src/boot/hasura'
 import ListItem from './ListItem.vue'
 import Chip from './Chip.vue'
 
@@ -20,7 +20,5 @@ import Chip from './Chip.vue'
     'h-chip': Chip
   }
 })
-export default class HasuraTableList extends Mixins(HasuraMixin) {
-  @Prop({ type: Array, default: () => [] }) list?: []
-}
+export default class HasuraTableList extends Mixins(CollectionContainerMixin) {}
 </script>

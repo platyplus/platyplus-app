@@ -115,13 +115,13 @@ export const apolloProvider = new VueApollo({
   errorHandler({ graphQLErrors, networkError }: ApolloError) {
     if (graphQLErrors) {
       graphQLErrors.map(({ message, locations, path }) =>
-        console.log(
+        console.warn(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
         )
       )
     }
     if (networkError) {
-      console.log(`[Network error]: ${networkError}`)
+      console.warn(`[Network error]: ${networkError}`)
     }
   }
 })

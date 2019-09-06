@@ -37,14 +37,13 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
     // TODO revoir avec le nouveau systeme
     const validator = this.$refs.validator as VeeOberverComponent
     if (!!validator && !(await validator.validate())) return
-    if (this.tableClass && this.formChanged) {
-      const tableName = this.tableClass.name
-      const variables: ObjectMap = { [tableName]: {} }
+    if (this.formChanged) {
+      const variables: ObjectMap = { [this.tableName]: {} }
       // * Forces the primary key fields from the initial element, or set their default values
       for (const property of this.tableClass.idProperties) {
         set(
           variables,
-          [tableName, property.name],
+          [this.tableName, property.name],
           this.element[property.name] || property.generateDefault()
         )
       }
@@ -62,7 +61,11 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
             !column.isReference &&
             permittedFields.includes(column.name)
           ) {
-            set(variables, [tableName, column.name], this.form[column.name])
+            set(
+              variables,
+              [this.tableName, column.name],
+              this.form[column.name]
+            )
           }
         } else {
           const relationship = property as RelationshipProperty
@@ -78,7 +81,7 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
               for (const map of relationship.mapping) {
                 set(
                   variables,
-                  [tableName, map.from.name],
+                  [this.tableName, map.from.name],
                   get(this.form, `${relationship.name}.${map.to.name}`, null)
                 )
               }
@@ -94,7 +97,7 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
       )
       const result = await this.$apollo.mutate({
         mutation,
-        variables: variables[tableName] || {}
+        variables: variables[this.tableName] || {}
       })
       const data = get(result, `data.insert_${this.tableName}.returning.0`)
       // TODO catch the result? Update the cache? -> update the collection cache at least

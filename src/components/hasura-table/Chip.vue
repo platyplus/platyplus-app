@@ -1,7 +1,6 @@
 <template lang="pug">
-q-chip(v-if="element" :to="linkToElement()")
+q-chip(:to="linkToElement()")
     div {{label}}
-div(v-else) Element does not exist
 </template>
 
 <script lang="ts">

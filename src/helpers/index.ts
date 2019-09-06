@@ -1,6 +1,7 @@
 import Handlebars from 'handlebars'
 import { ObjectMap } from 'src/types/common'
 import { set } from 'object-path'
+export * from './icons'
 
 interface Config {
   API?: string

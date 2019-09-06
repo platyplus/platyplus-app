@@ -11,19 +11,18 @@ div(v-else)
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Prop } from 'vue-property-decorator'
-import { HasuraMixin } from 'src/boot/hasura'
+import { Component, Mixins } from 'vue-property-decorator'
+import { CollectionContainerMixin } from 'src/boot/hasura'
 
 // TODO review the way the graphql query is built to get children's children (e.g. org unit)
 // TODO: OR: scan the list through a computed field and add the missing children properties = []
 @Component
-export default class HasuraTableTree extends Mixins(HasuraMixin) {
-  @Prop({ type: Array, default: () => [] }) list?: []
+export default class HasuraTableTree extends Mixins(CollectionContainerMixin) {
   selectedNode = null
   expandedNodes = []
 
   itemLabel(item = {}) {
-    return this.tableClass ? this.tableClass.label(item) : ''
+    return this.tableClass.label(item)
   }
 }
 </script>
