@@ -147,11 +147,50 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
   }
 
   /**
+   * * Returns the changes made in the form based on the initial element
+   * ! The objects are compared with JSON.stringify, which requires a strict manipulation
+   * TODO the many2many selected options are not correctly generated (returns all the columns instead of id + label columns)
+   */
+  public get changes(): ObjectMap {
+    const newValue: ObjectMap = {}
+    for (const property of this.fields(this.action)) {
+      const name = property.name
+      if (property.isColumn) {
+        if (this.form[name] !== this.element[name])
+          newValue[name] = this.form[name]
+      } else {
+        const relationship = property as RelationshipProperty
+        if (relationship.isMultiple) {
+          const oldArray = (this.element[name] || []) as ObjectMap[]
+          const newArray = (this.form[name] || []) as ObjectMap[]
+          const oldStrArray = oldArray.map(item => JSON.stringify(item))
+          const newStrArray = newArray.map(item => JSON.stringify(item))
+          const _add = newStrArray
+            .filter(item => !oldStrArray.includes(item))
+            .map(item => JSON.parse(item))
+          const _remove = oldStrArray
+            .filter(item => !newStrArray.includes(item))
+            .map(item => JSON.parse(item))
+          if (_add.length || _remove.length) {
+            newValue[name] = { _add, _remove }
+          }
+        } else {
+          if (
+            JSON.stringify(this.element[name]) !==
+            JSON.stringify(this.form[name])
+          )
+            newValue[name] = this.form[name]
+        }
+      }
+    }
+    return newValue
+  }
+
+  /**
    * * Returns true if any modification has been done in the form
    */
   public get formChanged(): boolean {
-    // * Bourrin mais pour l'instant ça marche...
-    return JSON.stringify(this.element) !== JSON.stringify(this.form)
+    return Object.keys(this.changes).length !== 0
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
