@@ -1,0 +1,66 @@
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - data_type_id
+      filter:
+        _and:
+        - id:
+            _nin: []
+        - data_type_id:
+            _gte: "12"
+    role: manager
+    table:
+      name: concept
+      schema: public
+  type: create_select_permission
+- args:
+    permission:
+      columns:
+      - source_id
+      filter:
+        _and:
+        - id:
+            _nin: []
+        - data_type_id:
+            _gte: "12"
+      set:
+        id: dew
+    role: manager
+    table:
+      name: concept
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      filter:
+        _and:
+        - id:
+            _nin: []
+        - data_type_id:
+            _gte: "12"
+    role: manager
+    table:
+      name: concept
+      schema: public
+  type: create_delete_permission
+- args:
+    permission:
+      check:
+        _and:
+        - encounter_type_concepts:
+            id:
+              _ne: X-Hasura-User-Id
+        - data_type_id:
+            _gte: X-Hasura-User-Id
+      columns:
+      - class_id
+      - data_type_id
+      set:
+        class_id: 2fwefew
+        source_id: x-hasura-Role-Id
+    role: manager
+    table:
+      name: concept
+      schema: public
+  type: create_insert_permission

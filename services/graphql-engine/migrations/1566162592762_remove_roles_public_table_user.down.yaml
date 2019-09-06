@@ -1,0 +1,69 @@
+- args:
+    permission:
+      check: {}
+      columns:
+      - active
+      - attributes
+      - created_at
+      - locale
+      - password
+      - preferred_org_unit_id
+      - token
+      - username
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: manager
+    table:
+      name: user
+      schema: public
+  type: create_insert_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - active
+      - attributes
+      - created_at
+      - id
+      - locale
+      - password
+      - preferred_org_unit_id
+      - token
+      - username
+      filter: {}
+    role: manager
+    table:
+      name: user
+      schema: public
+  type: create_select_permission
+- args:
+    permission:
+      columns:
+      - active
+      - attributes
+      - created_at
+      - locale
+      - password
+      - preferred_org_unit_id
+      - token
+      - username
+      filter: {}
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: manager
+    table:
+      name: user
+      schema: public
+  type: create_update_permission
+- args:
+    permission:
+      filter: {}
+    role: manager
+    table:
+      name: user
+      schema: public
+  type: create_delete_permission

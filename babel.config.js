@@ -1,7 +1,8 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   presets: ['@quasar/babel-preset-app'],
   plugins: [
-    '@babel/plugin-proposal-optional-chaining',
+    // '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-syntax-dynamic-import',
     [
       '@babel/transform-runtime',

@@ -1,0 +1,21 @@
+- args:
+    role: user
+    table:
+      name: stage_transition
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check: {}
+      columns:
+      - next_id
+      - previous_id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: stage_transition
+      schema: public
+  type: create_insert_permission

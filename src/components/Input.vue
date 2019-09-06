@@ -1,5 +1,6 @@
 <template lang="pug">
   q-input(
+    :autocomplete="autocomplete"
     :autofocus="autofocus"
     ref="input"
     v-model="localValue"
@@ -16,20 +17,45 @@
     template(v-if="icon" v-slot:prepend)
       q-icon(:name="'fas fa-'+icon")
 </template>
-<script>
+
+<script lang="ts">
 import { QInput } from 'quasar'
-import { types, FieldMixin } from './config'
-export default {
-  name: 'PInput',
+import { Prop, Vue, Component } from 'vue-property-decorator'
+import { icon } from 'src/helpers'
+
+const types: { [key: string]: string } = {
+  password: 'password'
+}
+
+@Component({
   components: {
     QInput
-  },
-  mixins: [FieldMixin],
-  props: ['mask', 'value', 'autofocus'],
-  computed: {
-    inputType () {
-      return types[this.name] || 'text'
-    }
+  }
+})
+export default class PInput extends Vue {
+  @Prop(String) readonly autocomplete?: string
+  @Prop(String) readonly mask?: string
+  @Prop({ type: Boolean, default: false }) readonly autofocus!: boolean
+  @Prop(Function) readonly enter?: Function
+  @Prop(String) readonly form!: string
+  @Prop(String) readonly name!: string
+  @Prop({ type: Boolean, default: false }) readonly readonly!: boolean
+  @Prop([Object, String]) readonly value?: {} | string
+
+  public get localValue() {
+    return this.value
+  }
+
+  public set localValue(newValue) {
+    this.$emit('input', newValue)
+  }
+
+  public get icon() {
+    return icon(this.form, this.name)
+  }
+
+  get inputType() {
+    return types[this.name] || 'text'
   }
 }
 </script>

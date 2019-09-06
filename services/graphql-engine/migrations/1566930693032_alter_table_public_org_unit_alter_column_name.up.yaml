@@ -1,0 +1,6 @@
+- args:
+    sql: ALTER TABLE "public"."org_unit" ALTER COLUMN "name" SET NOT NULL;
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."org_unit"."name" IS E''
+  type: run_sql

@@ -1,0 +1,25 @@
+- args:
+    role: user
+    table:
+      name: table
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - columns
+      - constraints
+      - primary_key_columns
+      - table_name
+      - table_schema
+      - view_info
+      filter:
+        permissions:
+          role_name:
+            _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: table
+      schema: public
+  type: create_select_permission

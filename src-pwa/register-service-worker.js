@@ -6,25 +6,29 @@
 import { register } from 'register-service-worker'
 
 register(process.env.SERVICE_WORKER_FILE, {
-  ready () {
+  ready() {
     console.log('App is being served from cache by a service worker.')
   },
-  registered (registration) { // registration -> a ServiceWorkerRegistration instance
+  registered() {
+    // arg registration -> a ServiceWorkerRegistration instance
     console.log('Service worker has been registered.')
   },
-  cached (registration) { // registration -> a ServiceWorkerRegistration instance
+  cached() {
+    // arg registration -> a ServiceWorkerRegistration instance
     console.log('Content has been cached for offline use.')
   },
-  updatefound (registration) { // registration -> a ServiceWorkerRegistration instance
+  updatefound() {
+    // arg registration -> a ServiceWorkerRegistration instance
     console.log('New content is downloading.')
   },
-  updated (registration) { // registration -> a ServiceWorkerRegistration instance
+  updated() {
+    // arg registration -> a ServiceWorkerRegistration instance
     console.log('New content is available; please refresh.')
   },
-  offline () {
+  offline() {
     console.log('No internet connection found. App is running in offline mode.')
   },
-  error (err) {
+  error(err) {
     console.error('Error during service worker registration:', err)
   }
 })

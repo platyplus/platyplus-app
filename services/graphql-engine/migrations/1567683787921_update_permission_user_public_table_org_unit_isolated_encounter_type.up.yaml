@@ -1,0 +1,18 @@
+- args:
+    role: user
+    table:
+      name: org_unit_isolated_encounter_type
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - encounter_type_id
+      - org_unit_id
+      filter: {}
+    role: user
+    table:
+      name: org_unit_isolated_encounter_type
+      schema: public
+  type: create_select_permission

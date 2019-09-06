@@ -1,0 +1,14 @@
+- args:
+    permission:
+      columns:
+      - name
+      filter: {}
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: workflow
+      schema: public
+  type: create_update_permission

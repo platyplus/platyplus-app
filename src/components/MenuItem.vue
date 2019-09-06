@@ -6,10 +6,12 @@
       slot
 </template>
 
-<script>
-export default {
-  name: 'MenuItem',
-  props: ['icon', 'to']
+<script lang="ts">
+import { Prop, Component, Vue } from 'vue-property-decorator'
+@Component
+export default class MenuItem extends Vue {
+  @Prop(String) readonly icon?: string
+  @Prop(String) readonly to?: string
 }
 </script>
 
