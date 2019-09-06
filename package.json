@@ -33,7 +33,7 @@
     "jwt-decode": "2.2.0",
     "lodash": "4.17.15",
     "node-fetch": "2.6.0",
-    "quasar": "1.0.5",
+    "quasar": "1.1.0",
     "subscriptions-transport-ws": "0.9.16",
     "survey-vue": "1.1.8",
     "vee-validate": "2.2.15",
