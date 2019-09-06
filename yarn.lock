@@ -4889,9 +4889,9 @@ javascript-stringify@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/javascript-stringify/-/javascript-stringify-2.0.0.tgz#ef750216ae66504ffd670b68c8b8aa07bdf7b588"
 
-jexl@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/jexl/-/jexl-2.1.1.tgz#d4f2cb9e488ff737f73acc08c5afed37e07f886b"
+jexl@2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/jexl/-/jexl-2.2.1.tgz#1a4fe96707f4794826f492c3f45a6ddd6c49cffb"
 
 js-levenshtein@^1.1.3:
   version "1.1.6"
