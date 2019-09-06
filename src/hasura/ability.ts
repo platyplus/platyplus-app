@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Ability } from '@casl/ability'
-
+// TODO move the ability out of the 'hasura' directory?
 /**
  * The Casl engine requires a property in the object send against the ability in order
  * to idendify which 'subject' we are talking about.
@@ -73,9 +73,9 @@ export const hasuraToSift: any = (
       else {
         const nextKey = Object.keys(object[key])[0]
         if (Object.keys(hasuraColumnKeys).includes(nextKey))
-          result['$where'] = `this.${key} ${hasuraColumnKeys[nextKey]} this.${
-            object[key][nextKey]
-          }`
+          result[
+            '$where'
+          ] = `this.${key} ${hasuraColumnKeys[nextKey]} this.${object[key][nextKey]}`
         else
           result[hasuraKeys[key] || key] = hasuraToSift(
             object[key],

@@ -11,9 +11,6 @@ module.exports = function(ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
-      // ! The order of the modules counts and therefore should remain the same!
-      'user',
-      'navigation',
       'hasura',
       // 'moment', // ! Do not use. Use rather the built-in quasar helpers
       'i18n'

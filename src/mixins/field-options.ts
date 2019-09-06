@@ -3,7 +3,7 @@ import { Component, Watch } from 'vue-property-decorator'
 import { ObjectMap } from 'src/types/common'
 import { optionsQuery } from 'src/hasura/graphql/operations'
 import { elementAsOption } from 'src/hasura/graphql/common'
-import { ability } from 'src/boot/user/store'
+import { ability } from 'src/hasura/ability'
 
 import { FieldRelationshipMixin } from './field-relationship'
 

@@ -9,6 +9,7 @@ import Vuex, {
 } from 'vuex'
 
 import { alert } from './alert'
+import { user } from './user'
 import { hasura } from './hasura'
 import { navigation } from './navigation'
 
@@ -37,6 +38,7 @@ export default function(/* { ssrContext } */) {
   const Store: StoreOptions<RootState> = new Vuex.Store<RootState>({
     modules: {
       alert,
+      user,
       hasura,
       navigation
     }

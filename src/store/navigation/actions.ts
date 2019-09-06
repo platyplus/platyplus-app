@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex'
 
-import { createRoutes } from 'src/boot/navigation/routes'
+import { createRoutes } from 'src/hasura/routes'
 import { Schema } from 'src/hasura/schema'
 
 import { RootState } from '..'

@@ -11,9 +11,10 @@ import { getMainDefinition } from 'apollo-utilities'
 import clone from 'clone'
 import VueApollo from 'vue-apollo'
 
-import { dataIdFromObject } from 'src/hasura/graphql/apollo'
 import { getConfig } from 'src/helpers'
-import { getEncodedToken } from 'src/boot/user'
+
+import { dataIdFromObject } from './graphql/apollo'
+import { getEncodedToken } from './token'
 
 const config = getConfig()
 

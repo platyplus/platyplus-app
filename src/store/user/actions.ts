@@ -1,16 +1,17 @@
 import { ActionTree } from 'vuex'
-import { UserState } from './state'
-import { RootState } from 'src/store'
-import {
-  PROFILE_QUERY,
-  LOGIN_MUTATION,
-  Rule,
-  UPDATE_PREFERRED_ORG_UNIT
-} from '../definitions'
-// TODO find a way to reduce the dependency to another module, e.g. go get the client from the vuex store?
-import { apolloClient } from 'src/hasura/apollo'
-import { hasuraToSift } from './ability'
 import { get, coalesce } from 'object-path'
+
+import { apolloClient } from 'src/hasura/apollo'
+import { hasuraToSift } from 'src/hasura/ability'
+import {
+  LOGIN_MUTATION,
+  PROFILE_QUERY,
+  UPDATE_PREFERRED_ORG_UNIT
+} from 'src/hasura/graphql/profile'
+
+import { RootState } from '..'
+import { UserState } from './state'
+import { Rule } from 'src/types/rule'
 
 export const actions: ActionTree<UserState, RootState> = {
   async signin({ commit, dispatch }, { username, password }) {

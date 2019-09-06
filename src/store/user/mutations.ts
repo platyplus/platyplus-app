@@ -1,8 +1,10 @@
 import { MutationTree } from 'vuex'
 import * as jwtDecode from 'jwt-decode'
+
+import { ability, initialRules } from 'src/hasura/ability'
 import { ObjectMap } from 'src/types/common'
+
 import { UserState } from './state'
-import { ability, initialRules } from './ability'
 
 /**
  * * Workaround for https://docs.hasura.io/1.0/graphql/manual/auth/authorization/roles-variables.html

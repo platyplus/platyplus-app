@@ -1,6 +1,6 @@
 import { RouteConfig } from 'vue-router'
 
-import { ability } from 'src/boot/user/store'
+import { ability } from 'src/hasura/ability'
 import { Schema } from 'src/hasura/schema'
 import CollectionLoader from 'src/components/collections/Loader.vue'
 import ReadElementDispatcher from 'src/components/elements/read/Dispatcher.vue'
