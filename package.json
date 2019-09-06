@@ -36,7 +36,7 @@
     "quasar": "1.1.0",
     "subscriptions-transport-ws": "0.9.16",
     "survey-vue": "1.1.8",
-    "vee-validate": "2.2.15",
+    "vee-validate": "3.0.4",
     "vue-apollo": "3.0.0-rc.2",
     "vue-codemirror": "4.0.6",
     "vue-i18n": "8.14.0",
