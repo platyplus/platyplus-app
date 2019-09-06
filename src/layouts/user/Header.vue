@@ -21,7 +21,7 @@ q-toolbar(color="primary")
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { HasuraMixin } from '../../boot/hasura'
+import { HasuraMixin } from 'src/mixins'
 @Component
 export default class UserHeader extends Mixins(HasuraMixin) {
   dialog = false

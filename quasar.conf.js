@@ -12,17 +12,11 @@ module.exports = function(ctx) {
     // --> boot files are part of "main.js"
     boot: [
       // ! The order of the modules counts and therefore should remain the same!
-      'apollo', // TODO merge with hasura
       'user',
-      // 'auth',
       'navigation',
       'hasura',
       // 'moment', // ! Do not use. Use rather the built-in quasar helpers
-      'i18n',
-      'layout', // TODO merge with?
-      'inputs'
-      // 'form', // TODO TS
-      // 'formGenerator' // TODO TS
+      'i18n'
     ],
     css: ['app.styl'],
     extras: [

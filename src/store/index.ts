@@ -7,7 +7,10 @@ import Vuex, {
   StoreOptions,
   Store
 } from 'vuex'
+
 import { alert } from './alert'
+import { hasura } from './hasura'
+import { navigation } from './navigation'
 
 Vue.use(Vuex)
 
@@ -33,7 +36,9 @@ export let store: Store<RootState>
 export default function(/* { ssrContext } */) {
   const Store: StoreOptions<RootState> = new Vuex.Store<RootState>({
     modules: {
-      alert
+      alert,
+      hasura,
+      navigation
     }
   })
   store = Store as Store<RootState>

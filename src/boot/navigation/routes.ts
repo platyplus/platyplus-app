@@ -1,13 +1,14 @@
-import { Schema } from '../hasura'
 import { RouteConfig } from 'vue-router'
+
+import { ability } from 'src/boot/user/store'
+import { Schema } from 'src/hasura/schema'
+import CollectionLoader from 'src/components/collections/Loader.vue'
+import ReadElementDispatcher from 'src/components/elements/read/Dispatcher.vue'
+import EditElementDispatcher from 'src/components/elements/edit/Dispatcher.vue'
+import PageLayout from 'src/layouts/Page.vue'
 import UserLayout from 'src/layouts/user/Layout.vue'
 import UserHeader from 'src/layouts/user/Header.vue'
 import UserMenu from 'src/layouts/user/Menu.vue'
-import Index from 'src/components/hasura-table/Index.vue'
-import CollectionLoader from 'src/components/hasura-table/CollectionLoader.vue'
-import ReadElementDispatcher from 'src/components/hasura-table/ReadElementDispatcher.vue'
-import EditElementDispatcher from 'src/components/hasura-table/EditElementDispatcher.vue'
-import { ability } from '../user/store'
 
 // ! This is a prototype function that should be implemented asap
 export const createRoutes = (schema: Schema) => {
@@ -18,7 +19,7 @@ export const createRoutes = (schema: Schema) => {
       children: schema.classes.map(tableClass => ({
         path: tableClass.name,
         components: {
-          default: Index,
+          default: PageLayout,
           header: UserHeader,
           menu: UserMenu
         },

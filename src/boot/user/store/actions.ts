@@ -8,7 +8,7 @@ import {
   UPDATE_PREFERRED_ORG_UNIT
 } from '../definitions'
 // TODO find a way to reduce the dependency to another module, e.g. go get the client from the vuex store?
-import { apolloClient } from 'src/boot/apollo'
+import { apolloClient } from 'src/hasura/apollo'
 import { hasuraToSift } from './ability'
 import { get, coalesce } from 'object-path'
 

@@ -13,7 +13,7 @@ q-page(
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { PageMixin } from '../mixins/page'
+import { PageMixin } from '../mixins'
 @Component
 export default class ImportExport extends Mixins(PageMixin) {
   get title() {

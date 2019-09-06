@@ -1,30 +1,10 @@
-import Vue from 'vue'
-import Component from 'vue-class-component'
 import { Route } from 'vue-router'
-
-import { navigationModule } from './store'
-import { QuasarBootOptions } from 'src/types/quasar'
 import { Mixins } from 'vue-property-decorator'
 
-Component.registerHooks(['beforeRouteEnter'])
-
-/**
- * * Exposes the previous route to any component through the $from property
- */
-
-@Component
-class RouterMixin extends Vue {
-  public $from = undefined
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public beforeRouteEnter(to: Route, from: Route, next: any) {
-    next((vm: Vue) => {
-      vm.$from = from
-    })
-  }
-}
+import { RouterMixin } from 'src/mixins'
+import { QuasarBootOptions } from 'src/types/quasar'
 
 export default ({ Vue, store, router }: QuasarBootOptions) => {
-  store.registerModule('navigation', navigationModule)
   /**
    * * Creates a pointer to the vue router available from the Vuex store
    * It is required for the Vuex routing actions
