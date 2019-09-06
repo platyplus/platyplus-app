@@ -35,7 +35,7 @@
     "node-fetch": "2.6.0",
     "quasar": "1.0.5",
     "subscriptions-transport-ws": "0.9.16",
-    "survey-vue": "1.1.7",
+    "survey-vue": "1.1.8",
     "vee-validate": "2.2.15",
     "vue-apollo": "3.0.0-rc.2",
     "vue-codemirror": "4.0.6",
