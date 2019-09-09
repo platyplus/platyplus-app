@@ -1,8 +1,4 @@
-import {
-  jsonToGraphQLQuery,
-  VariableType,
-  EnumType
-} from 'json-to-graphql-query'
+import { jsonToGraphQLQuery, VariableType } from 'json-to-graphql-query'
 import gql from 'graphql-tag'
 import { Ability } from '@casl/ability'
 import { permittedFieldsOf } from '@casl/ability/extra'

@@ -7,8 +7,7 @@ import Vuex, {
   StoreOptions,
   Store
 } from 'vuex'
-import createPersistedState, { Storage } from 'vuex-persistedstate'
-import flatted from 'flatted'
+import createPersistedState from 'vuex-persistedstate'
 
 import { alert } from './alert'
 import { user } from './user'

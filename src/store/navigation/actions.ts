@@ -29,7 +29,7 @@ export const actions: ActionTree<NavigationState, RootState> = {
    * * The new routes are stored into the vue-router instance, which is not part of the Vuex store, except
    * * with the state.navigation.router that is a pointer to the vue-router instance
    */
-  loadRoutes: async ({ state, rootGetters }) => {
+  loadRoutes: async ({ rootGetters }) => {
     const schema: Schema = rootGetters['hasura/schema']
     router.addRoutes(createRoutes(schema))
   }
