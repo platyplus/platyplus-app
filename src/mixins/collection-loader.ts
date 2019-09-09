@@ -5,6 +5,7 @@ import { listQuery } from 'src/hasura/graphql'
 
 import { PageMixin } from './page'
 import { HasuraMixin } from './hasura'
+import { get } from 'object-path'
 
 @Component({
   apollo: {
@@ -12,7 +13,7 @@ import { HasuraMixin } from './hasura'
       query() {
         return listQuery(this.tableClass, ability)
       },
-      update: data => data[Object.keys(data)[0]]
+      update: data => get(data, [Object.keys(data)[0], 'nodes'])
     }
   }
 })

@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: server/Dockerfile
       target: prepare-deps-stage
-    command: ['./node_modules/.bin/quasar', 'dev']
+    command: sh -c "yarn && ./node_modules/.bin/quasar dev"
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
       NODE_ENV: development
@@ -32,7 +32,7 @@ services:
       - ./.eslintignore:/opt/build/.eslintignore
       - ./.stylintrc:/opt/build/.stylintrc
       - ./.postcssrc.js:/opt/build/.postcssrc.js
-      - notused_app:/opt/build/node_modules # TODO revoir cette merde
+      - notused_app:/opt/build/node_modules
   authentication:
     build:
       context: ./services/authentication

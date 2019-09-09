@@ -37,10 +37,22 @@ module.exports = {
         lastUpdated: 'Last Updated',
         nav: [
           { text: 'Home', link: '/' },
+          { text: 'Installation', link: '/installation/' },
           { text: 'Guide', link: '/guide/' },
-          { text: 'Developpers', link: '/developpers/' }
+          { text: 'Developpers', link: '/dev/' }
         ],
-        sidebar: ['/', '/guide/', '/developpers/']
+        sidebar: [
+          '/',
+          '/installation/',
+          '/guide/',
+          {
+            title: 'Developpers', // required
+            path: '/dev/', // optional, which should be a absolute path.
+            collapsable: false, // optional, defaults to true
+            sidebarDepth: 1, // optional, defaults to 1
+            children: ['/dev/installation', '/dev/schema', '/dev/store']
+          }
+        ]
       },
       '/fr/': {
         selectText: 'Langues',
@@ -50,9 +62,9 @@ module.exports = {
         nav: [
           { text: 'Accueil', link: '/fr/' },
           { text: 'Guide', link: '/fr/guide/' },
-          { text: 'Developpeurs', link: '/fr/developpers/' }
+          { text: 'Developpeurs', link: '/fr/dev/' }
         ],
-        sidebar: ['/fr/', '/fr/guide/', '/fr/developpers/']
+        sidebar: ['/fr/', '/fr/guide/', '/fr/dev/']
       }
     },
     algolia: {

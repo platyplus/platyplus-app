@@ -12,6 +12,7 @@ import { ObjectMap } from 'src/types/common'
 import { pick } from 'src/helpers'
 
 import { ElementMixin } from './element'
+import { get } from 'object-path'
 
 @Component({
   apollo: {
@@ -19,7 +20,7 @@ import { ElementMixin } from './element'
       query() {
         return elementQuery(this.tableClass, ability)
       },
-      update: data => data[Object.keys(data)[0]][0], // TODO handle the case of non-existing element
+      update: data => get(data, [Object.keys(data)[0], 0]), // TODO handle the case of non-existing element
       variables() {
         return this.id
       },
@@ -88,11 +89,9 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
   protected componentName(property: BaseProperty, prefix: string) {
     // TODO allow custom component name per property
     const possibleComponentName = `${prefix}-${property.componentKind}`
-    if (this.$options.components) {
-      const components = Object.keys(this.$options.components)
-      if (components.includes(possibleComponentName))
-        return possibleComponentName
-    }
+    if (get(this.$options.components as ObjectMap, possibleComponentName))
+      return possibleComponentName
+    // TODO or else?
   }
 
   /**

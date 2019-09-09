@@ -1,26 +1,24 @@
 ---
-title: Implementers
+title: Installation
 ---
 
-# Implementers documentation
+# Installation
 
-## Installation
-
-### Prerequisites
+## Prerequisites
 
 Docker
 
-### Build the docker images
+## Build the docker images
 
-#### Authentication service
+### Authentication service
 
-#### Server
+### Server
 
-#### Application (this repo)
+### Application (this repo)
 
-### Set the environment variables
+## Set the environment variables
 
-### Set the secrets
+## Set the secrets
 
 ```
 # Generate a hasura secret
@@ -42,7 +40,7 @@ awk -v ORS='\\n' '1' public.pem
 
 cat
 
-### Install the stack
+## Install the stack
 
 ```
 docker stack deploy -c docker-compose.yml -c docker-compose-prod.yml platyplus

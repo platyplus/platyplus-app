@@ -6,7 +6,7 @@ import { Route } from 'vue-router'
 import { mapGetters } from 'vuex'
 
 import { ability } from 'src/hasura/ability'
-import { apolloProvider } from 'src/hasura/apollo'
+import { apolloProvider, persistCache } from 'src/hasura/apollo'
 import { ApolloMixin, RouterMixin } from 'src/mixins'
 import { ObjectMap } from 'src/types/common'
 import { QuasarBootOptions } from 'src/types/quasar'
@@ -15,7 +15,12 @@ import { User } from 'src/types/user'
 import MenuItem from 'components/MenuItem.vue'
 import Input from 'components/Input.vue'
 
-export default ({ Vue, app, store, router }: QuasarBootOptions) => {
+export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
+  Vue.use(VueApollo)
+  Vue.mixin(Mixins(ApolloMixin))
+  await persistCache()
+  app.apolloProvider = apolloProvider
+
   Vue.use(abilitiesPlugin, ability)
   Vue.mixin({
     // * https://vuex.vuejs.org/guide/getters.html#the-mapgetters-helper
@@ -28,10 +33,11 @@ export default ({ Vue, app, store, router }: QuasarBootOptions) => {
   })
 
   /**
-   * * Creates a pointer to the vue router available from the Vuex store
-   * It is required for the Vuex routing actions
+   * * Loads the user data (profile, table classes, permissions) from Apollo
    */
-  store.commit('navigation/linkRouter', router)
+  if (store.getters['user/authenticated'])
+    await store.dispatch('loadUserContext')
+
   Vue.mixin(Mixins(RouterMixin))
 
   /**
@@ -67,10 +73,6 @@ export default ({ Vue, app, store, router }: QuasarBootOptions) => {
     }
     return next()
   })
-
-  Vue.use(VueApollo)
-  Vue.mixin(Mixins(ApolloMixin))
-  app.apolloProvider = apolloProvider
 
   Vue.component('p-input', Input)
   Vue.component('p-menu-item', MenuItem)

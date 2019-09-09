@@ -1,20 +1,3 @@
 # User guide
 
-## Installation
-
-### Prerequisites
-
-- Docker
-- A DNS
-
-### Build the docker images
-
-#### Authentication service
-
-#### Server
-
-#### Application (this repo)
-
-### Set the environment variables
-
-### Install the stack
+Work in progress. Platyplus is at its earliest stage. The end-user features and screens are still constantly changing. The user guide will be then written at a later stage.

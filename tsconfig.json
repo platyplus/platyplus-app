@@ -10,7 +10,7 @@
     "moduleResolution": "node",
     "baseUrl": "."
   },
-  "include": ["src"],
+  "include": ["src", "src-pwa"],
   "exclude": [
     "node_modules",
     "services",

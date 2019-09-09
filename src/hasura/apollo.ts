@@ -1,7 +1,8 @@
 /**
  * * Configuration of the GraphQL client
  */
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory'
+import { persistCache as apolloPersistCache } from 'apollo-cache-persist'
 import { ApolloClient, ApolloError } from 'apollo-client'
 import { split, DocumentNode } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
@@ -11,10 +12,11 @@ import { getMainDefinition } from 'apollo-utilities'
 import clone from 'clone'
 import VueApollo from 'vue-apollo'
 
+import { store } from 'src/store'
 import { getConfig } from 'src/helpers'
 
 import { dataIdFromObject } from './graphql/apollo'
-import { getEncodedToken } from './token'
+import { PersistentStorage, PersistedData } from 'apollo-cache-persist/types'
 
 const config = getConfig()
 
@@ -25,7 +27,7 @@ const uri = `${window.location.protocol}//${config.API}`
 const httpLink = createHttpLink({ uri })
 
 const authHeaders = () => {
-  const token = getEncodedToken()
+  const token = store.getters['user/encodedToken']
   if (token) {
     return {
       Authorization: `Bearer ${token}`
@@ -68,6 +70,16 @@ const link = split(
   authLink.concat(httpLink)
 )
 
+export const persistCache = async () => {
+  // await before instantiating ApolloClient, else queries might run before the cache is persisted
+  await apolloPersistCache({
+    cache,
+    storage: localStorage as PersistentStorage<
+      PersistedData<NormalizedCacheObject>
+    >
+  })
+}
+
 // Create the apollo client
 export const apolloClient = new ApolloClient({
   link,
@@ -103,6 +115,7 @@ export const apolloProvider = new VueApollo({
  * Converts a GraphQL query defined in SDL into its equivalent subscription
  * @param {*} query
  */
+// ? get rid of this? Not in use anymore
 export const queryToSubscription = (query: DocumentNode) => {
   // TODO TS https://github.com/apollographql/apollo-client/issues/3090
   const subscription = clone(query)

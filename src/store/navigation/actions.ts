@@ -2,6 +2,7 @@ import { ActionTree } from 'vuex'
 
 import { createRoutes } from 'src/hasura/routes'
 import { Schema } from 'src/hasura/schema'
+import { router } from 'src/router'
 
 import { RootState } from '..'
 import { NavigationState } from './state'
@@ -14,9 +15,7 @@ export const actions: ActionTree<NavigationState, RootState> = {
   route({ commit, state }, { path }) {
     path = state.routePath || path
     commit('routeReset')
-    if (state.router) {
-      state.router.replace(path)
-    }
+    router.replace(path)
   },
   toggleDrawer({ commit }) {
     commit('toggleDrawer')
@@ -32,6 +31,6 @@ export const actions: ActionTree<NavigationState, RootState> = {
    */
   loadRoutes: async ({ state, rootGetters }) => {
     const schema: Schema = rootGetters['hasura/schema']
-    state.router.addRoutes(createRoutes(schema))
+    router.addRoutes(createRoutes(schema))
   }
 }

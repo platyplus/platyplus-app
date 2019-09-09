@@ -1,0 +1,20 @@
+- args:
+    role: user
+    table:
+      name: org_unit
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: true
+      columns:
+      - id
+      - name
+      - parent_id
+      - type_id
+      filter: {}
+    role: user
+    table:
+      name: org_unit
+      schema: public
+  type: create_select_permission

@@ -15,7 +15,7 @@ export class ElementMixin extends Mixins(HasuraMixin) {
     } else return undefined
   }
 
-  public linkToElement(action: string = 'read') {
+  public linkToElement(action = 'read') {
     return {
       path: '/data/' + this.tableName + '/' + action,
       query: pick(this.element, this.tableClass.idColumnNames)

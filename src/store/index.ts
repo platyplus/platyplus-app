@@ -7,6 +7,8 @@ import Vuex, {
   StoreOptions,
   Store
 } from 'vuex'
+import createPersistedState, { Storage } from 'vuex-persistedstate'
+import flatted from 'flatted'
 
 import { alert } from './alert'
 import { user } from './user'
@@ -41,7 +43,9 @@ export default function(/* { ssrContext } */) {
       user,
       hasura,
       navigation
-    }
+    },
+    // ? A bit overshooting as only the token really needs to be persisted for now
+    plugins: [createPersistedState({ paths: ['user', 'navigation', 'alert'] })]
   })
   store = Store as Store<RootState>
   return Store

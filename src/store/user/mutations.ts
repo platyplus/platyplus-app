@@ -42,14 +42,8 @@ export const mutations: MutationTree<UserState> = {
     state.encodedToken = token
   },
 
-  setProfile(state, user) {
-    if (state.profile) state.profile = { ...state.profile, ...user }
-    else state.profile = user
-  },
-
   signout(state) {
     state.encodedToken = undefined
-    state.profile = undefined
     state.token = undefined
     state.rules = initialRules()
     ability.update(state.rules)

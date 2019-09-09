@@ -2,7 +2,7 @@
 . ./scripts/load-dev-env.sh
 docker build -t platyplus/service-template:latest services/service-template
 # TODO: option --build
-docker-compose -f docker-compose.yml -f docker-compose-dev.yml up --force-recreate --build -d
+docker-compose -f docker-compose.yml -f docker-compose-dev.yml up  -d
 
 # trap ctrl-c and call ctrl_c()
 trap ctrl_c INT

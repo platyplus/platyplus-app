@@ -6,6 +6,7 @@ import { elementAsOption } from 'src/hasura/graphql/common'
 import { ability } from 'src/hasura/ability'
 
 import { FieldRelationshipMixin } from './field-relationship'
+import { get } from 'object-path'
 
 @Component({
   apollo: {
@@ -17,7 +18,7 @@ import { FieldRelationshipMixin } from './field-relationship'
         const tableClass = this.relationship.through
           ? this.relationship.through.reference
           : this.property.reference
-        return data[Object.keys(data)[0]]
+        return get(data, [Object.keys(data)[0], 'nodes'], [])
           .filter(item => this.$can('insert', item))
           .map(item => elementAsOption(item, tableClass))
       }

@@ -6,7 +6,7 @@ import { Component, Watch, Vue } from 'vue-property-decorator'
  */
 @Component
 export class ApolloMixin extends Vue {
-  public loadingQueries: number = 0
+  public loadingQueries = 0
 
   @Watch('loadingQueries')
   public onLoadingQueriesChanged(newValue: number) {

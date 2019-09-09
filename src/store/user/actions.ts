@@ -39,29 +39,30 @@ export const actions: ActionTree<UserState, RootState> = {
    */
   loadUserContext: {
     root: true,
-    handler: async ({ commit, state }) => {
+    handler: async ({ state }) => {
       // TODO handle errors
       if (!(state.token && state.token.id)) return // TODO handle this error
-      const { data } = await apolloClient.query({
+      await apolloClient.query({
         query: PROFILE_QUERY,
         variables: {
           id: state.token.id
         }
       })
-      commit('setProfile', data.user[0])
     }
   },
 
-  udpatePreferredOrgUnit: async ({ commit, state }, id) => {
-    if (state.profile) {
-      const result = await apolloClient.mutate({
+  udpatePreferredOrgUnit: async ({ getters }, id) => {
+    const profile = getters['profile']
+    if (profile) {
+      await apolloClient.mutate({
         mutation: UPDATE_PREFERRED_ORG_UNIT,
         variables: {
-          userId: state.profile.id,
+          userId: profile.id,
           orgUnitId: id
         }
       })
-      commit('setProfile', get(result, 'data.update_user.returning.0'))
+      // TODO write into cache?
+      // commit('setProfile', get(result, 'data.update_user.returning.0'))
     }
   },
 
