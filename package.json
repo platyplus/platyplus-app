@@ -8,8 +8,8 @@
     "dev": "dotenv concurrently \"./scripts/hasura-dev.sh\" \"lerna run watch --stream -- \"",
     "dummey": "docker build  -t platyplus/monorepo:latest . && ",
     "build": "lerna run build",
-    "docker:clean": "echo todo",
-    "docker:compile": "lerna exec 'test -e $PWD/Dockerfile && docker build -f $PWD/Dockerfile . || exit 0'",
+    "docker:clean": "echo TODO",
+    "docker:compile": "lerna exec 'test -e $PWD/Dockerfile && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-):$(yarn info $LERNA_PACKAGE_NAME version -s) -f $PWD/Dockerfile $LERNA_ROOT_PATH || exit 0'",
     "docker:build": "yarn run docker:clean && yarn run docker:compile"
   },
   "devDependencies": {
