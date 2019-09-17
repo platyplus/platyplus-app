@@ -1,13 +1,7 @@
-FROM node:12-alpine as build
+FROM node:12-alpine
 WORKDIR /opt
-COPY . ./
-RUN yarn --production --ignore-optional
-RUN yarn run build
-
-FROM node:12-alpine as production
-WORKDIR /opt
-COPY --from=build ./lib ./
+RUN yarn global add @platyplus/platyplus-server
 COPY packages/platyplus/dist/pwa /var/www
 USER node
 
-CMD ["node","index.js"]
+CMD ["platyplus-server"]

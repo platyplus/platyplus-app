@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import microserver from '@platyplus/microserver'
 import serveStatic from 'koa-static'
 

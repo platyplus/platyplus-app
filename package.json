@@ -10,7 +10,7 @@
     "build": "lerna run build",
     "docker:clean": "echo todo",
     "docker:compile": "lerna exec 'test -e $PWD/Dockerfile && docker build -f $PWD/Dockerfile . || exit 0'",
-    "docker:build": ""
+    "docker:build": "yarn run docker:clean && yarn run docker:compile"
   },
   "devDependencies": {
     "@types/node": "12.7.4",
