@@ -2,6 +2,9 @@
   "name": "@platyplus/microserver",
   "version": "0.0.2-alpha.0",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "> TODO: description",
   "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
   "homepage": "https://github.com/platyplus/platyplus#readme",

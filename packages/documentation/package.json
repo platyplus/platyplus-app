@@ -2,6 +2,9 @@
   "name": "@platyplus/documentation",
   "version": "0.0.1-alpha.0",
   "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "> TODO: description",
   "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
   "homepage": "https://github.com/platyplus/platyplus#readme",
