@@ -1,6 +1,6 @@
 {
   "name": "@platyplus/authentication-service",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "private": false,
   "description": "> TODO: description",
   "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@platyplus/hasura-node-client": "^1.0.0",
-    "@platyplus/microserver": "^0.0.0",
+    "@platyplus/microserver": "^0.0.1-alpha.0",
     "apollo-server-koa": "^2.9.3",
     "bcryptjs": "^2.4.3",
     "dotenv-cli": "^2.0.1",

@@ -1,6 +1,6 @@
 {
   "name": "@platyplus/vuex-apollo-offline",
-  "version": "0.0.0",
+  "version": "0.0.1-alpha.0",
   "private": false,
   "description": "> TODO: description",
   "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
@@ -30,7 +30,6 @@
   "bugs": {
     "url": "https://github.com/platyplus/platyplus/issues"
   },
-  "devDependencies": {},
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-cache-persist": "^0.1.1",
