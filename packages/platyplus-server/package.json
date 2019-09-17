@@ -37,5 +37,6 @@
   },
   "devDependencies": {
     "@types/koa-static": "^4.0.1"
-  }
+  },
+  "gitHead": "6454b65856e0902540d559969c39a8563041ae0f"
 }

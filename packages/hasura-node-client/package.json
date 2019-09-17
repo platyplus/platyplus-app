@@ -33,5 +33,6 @@
   "dependencies": {
     "axios": "^0.19.0",
     "graphql-request": "^1.8.2"
-  }
+  },
+  "gitHead": "6454b65856e0902540d559969c39a8563041ae0f"
 }
