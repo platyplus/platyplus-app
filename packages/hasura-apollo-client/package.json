@@ -46,5 +46,5 @@
     "graphql": "^14.5.4",
     "subscriptions-transport-ws": "^0.9.16"
   },
-  "gitHead": "6454b65856e0902540d559969c39a8563041ae0f"
+  "gitHead": "26c08ca54b080b61cde2c174d52e74d7b516cb2a"
 }
