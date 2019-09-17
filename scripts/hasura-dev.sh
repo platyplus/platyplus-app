@@ -1,5 +1,5 @@
 #!/bin/bash
-. ./scripts/load-dev-env.sh
+# * Important note: don't forget to load the environment variables 
 docker build -t platyplus/service-template:latest services/service-template
 # TODO: option --build
 docker-compose -f docker-compose.yml -f docker-compose-dev.yml up  -d

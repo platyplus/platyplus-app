@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowJs": false,
+    "sourceMap": true,
+    "target": "es6",
+    "strict": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "removeComments": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "lib": ["es6", "dom"]
+  },
+  "exclude": [
+    "node_modules",
+    "lib",
+    "dist",
+    "services",
+    "server",
+    "scripts",
+    "./components/**/*",
+    "backup"
+  ],
+  "rules": {
+    "quotemark": [true, "single"]
+  }
+}

@@ -55,6 +55,7 @@ module.exports = {
 
   // add your custom rules here
   rules: {
+    '@typescript-eslint/explicit-member-accessibility': 'off',
     '@typescript-eslint/camelcase': 'warn', // TODO hasura snake/camel case names?
     'prefer-promise-reject-errors': 'off',
     quotes: ['warn', 'single', { avoidEscape: true }],

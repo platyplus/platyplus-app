@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: server/Dockerfile
+      dockerfile: ./packages/platyplus/Dockerfile
       target: prepare-deps-stage
     command: sh -c "yarn && ./node_modules/.bin/quasar dev"
     environment:
@@ -18,20 +18,7 @@ services:
       - 'traefik.port=8080'
     restart: always
     volumes:
-      - ./src:/opt/build/src:delegated
-      - ./src-pwa:/opt/build/src-pwa:delegated
-      - ./package.json:/opt/build/package.json
-      - ./yarn.lock:/opt/build/yarn.lock
-      - ./quasar.conf.js:/opt/build/quasar.conf.js
-      - ./quasar.extensions.json:/opt/build/quasar.extensions.json
-      - ./.quasar:/opt/build/.quasar
-      - ./babel.config.js:/opt/build/babel.config.js
-      - ./.eslintrc.js:/opt/build/.eslintrc.js
-      - ./apollo.config.js:/opt/build/apollo.config.js
-      - ./tsconfig.json:/opt/build/tsconfig.json
-      - ./.eslintignore:/opt/build/.eslintignore
-      - ./.stylintrc:/opt/build/.stylintrc
-      - ./.postcssrc.js:/opt/build/.postcssrc.js
+      - ./packages/platyplus:/opt/build
       - notused_app:/opt/build/node_modules
   authentication:
     build:

@@ -1,22 +1,9 @@
 {
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "allowJs": false,
-    "sourceMap": true,
-    "target": "es6",
-    "strict": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "baseUrl": "."
-  },
-  "include": ["src", "src-pwa"],
-  "exclude": [
-    "node_modules",
-    "services",
-    "server",
-    "scripts",
-    "components",
-    "backup"
-  ]
+    "baseUrl": "./packages",
+    "paths": {
+      "@platyplus/*": ["./*/src"]
+    }
+  }
 }

@@ -1,0 +1,31 @@
+{
+  "name": "@platyplus/documentation",
+  "version": "0.0.0",
+  "private": true,
+  "description": "> TODO: description",
+  "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
+  "homepage": "https://github.com/platyplus/platyplus#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platyplus/platyplus.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "dev": "vuepress dev",
+    "clean": "rm -rf dist dist-repo",
+    "compile": "vuepress build",
+    "build": "yarn run clean && yarn run compile"
+  },
+  "bugs": {
+    "url": "https://github.com/platyplus/platyplus/issues"
+  },
+  "devDependencies": {
+    "@vuepress/plugin-active-header-links": "1.0.4",
+    "@vuepress/plugin-back-to-top": "1.0.4",
+    "@vuepress/plugin-google-analytics": "1.0.4",
+    "@vuepress/plugin-nprogress": "1.0.4",
+    "@vuepress/plugin-pwa": "1.0.4",
+    "vuepress": "1.0.4"
+  }
+}

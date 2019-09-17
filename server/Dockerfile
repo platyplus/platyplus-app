@@ -1,4 +1,4 @@
-FROM node:11-alpine as prepare-deps-stage
+FROM node:12-alpine as prepare-deps-stage
 WORKDIR /opt/build
 COPY . ./
 RUN NODE_ENV=development yarn --ignore-optional

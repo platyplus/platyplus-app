@@ -2,7 +2,8 @@
 .DS_Store
 .thumbs.db
 node_modules
-/dist
+/packages/**/dist
+/packages/**/lib
 /src-cordova/node_modules
 /src-cordova/platforms
 /src-cordova/plugins
@@ -25,3 +26,6 @@ public.pem
 secret.key
 backup
 .bit
+
+# Tsc
+*.tsbuildinfo
