@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
-console.log('apollo config')
 const fs = require('fs')
 const ADMIN_SECRET =
   process.env.HASURA_ACCESS_KEY || fs.readFileSync('secret.key', 'utf-8') //, (_, data) => data)

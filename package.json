@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "scripts": {
+    "lint": "eslint --ext .js,.ts,.vue .",
     "dev": "dotenv concurrently \"./scripts/hasura-dev.sh\" \"lerna run watch --stream -- \"",
     "build": "lerna run build",
     "docker:build-published": "echo 'TODO: tag' && lerna exec 'test -e $PWD/Dockerfile-published && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-) -f $PWD/Dockerfile-published $LERNA_ROOT_PATH || exit 0'",

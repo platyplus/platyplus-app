@@ -25,7 +25,6 @@
     "url": "git+https://github.com/platyplus/platyplus.git"
   },
   "scripts": {
-    "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"Error: run tests from root\" && exit 1",
     "clean": "rm -rf ./lib",
     "compile": "tsc -p tsconfig.build.json",
