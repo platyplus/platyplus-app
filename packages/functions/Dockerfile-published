@@ -1,0 +1,10 @@
+FROM node:12-alpine
+RUN yarn global add @platyplus/functions-service
+
+# TODO: algo in the template?
+ARG ALGORITHM=RS256
+ENV ALGORITHM $ALGORITHM
+
+USER node
+EXPOSE 3000
+CMD ["functions-service"]

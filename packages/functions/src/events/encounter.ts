@@ -1,7 +1,7 @@
-const gql = require('graphql-tag'),
-  { print } = require('graphql/language/printer'),
-  { graphql, rest } = require('@bit/platyplus.backend.hasura-client'),
-  { getOldNew, generateRules, ALL } = require('./helpers')
+import gql from 'graphql-tag'
+import { print } from 'graphql/language/printer'
+import { graphql, rest } from '@platyplus/hasura-node-client'
+import { getOldNew, generateRules, ALL } from './helpers'
 
 const ENCOUTER_DATE_FIELD = 'created_at' // TODO: not the ideal field
 
@@ -75,7 +75,12 @@ const SQL_AGGREGATE_ENTITY_DATA = (id, rules) =>
 
 // TODO: code a SQL function, and expose through Hasura schema?
 // but then is it possible to map with the good rowtype?
-const SQL_AGGREGATE_STATE_DATA = (entityId, dateStart, dateEnd, rules) =>
+const SQL_AGGREGATE_STATE_DATA = (
+  entityId: string,
+  dateStart: string,
+  dateEnd: string,
+  rules: string
+) =>
   `select jsonb_build_object( ${rules} ) as data
   from (
     select entity_id, data
@@ -120,7 +125,7 @@ const updateEntityAttributes = async ctx => {
  * Updates the data of every state that includes the encounter (old and new date, old and new entity)
  * @param {*} ctx
  */
-const updateStageData = async ctx => {
+const updateStageData = async (ctx: any) => {
   const {
     event: { data }
   } = ctx.request.body
@@ -136,8 +141,8 @@ const updateStageData = async ctx => {
     for (const state of states) {
       const {
         id,
-        stage: { schema }, // eslint-disable-next-line camelcase
-        date_start, // eslint-disable-next-line camelcase
+        stage: { schema }, // eslint-disable-next-line @typescript-eslint/camelcase
+        date_start, // eslint-disable-next-line @typescript-eslint/camelcase
         date_end
       } = state
       // TODO abort if (although abnormal) there is no type or no schema
@@ -164,7 +169,7 @@ const updateStageData = async ctx => {
 // TODO: Avoid infinite loop => STRICT RULE NOT TO UPDATE THE RECORD OF THE EVENT (or find a workaround)
 // to consider: then for encounter: on create: check if one entity exists. if not, create one. It will then trigger an update
 // then on update and on delete, update the entity attributes (still check if entity_id exists)
-module.exports = ALL(async ctx => {
+export default ALL(async (ctx: any) => {
   // await updateEntityAttributes(ctx)
   await updateStageData(ctx)
   // TODO: updateWorkflowData

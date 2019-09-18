@@ -1,6 +1,6 @@
 const AGGREGATORS = ['last'] // The default aggregation is the first value of the array
 
-module.exports.ALL = func => ({
+export const ALL = (func: Function) => ({
   INSERT: func,
   UPDATE: func,
   DELETE: func
@@ -11,23 +11,26 @@ module.exports.ALL = func => ({
  * @param {[String]} compareFields
  * @returns ['old'] for DELETE, ['new'] for INSERT, ['old','new'] for UPDATE with changes in the compareFields, ['new'] for UPDATE with no changes
  */
-module.exports.getOldNew = (ctx, compareFields = []) => {
+export const getOldNew = (ctx: any, compareFields: string[] = []) => {
   const {
     event: { data },
     event: { op }
   } = ctx.request.body
   if (op === 'INSERT') return ['new']
   if (op === 'DELETE') return ['old']
-  for (let field of compareFields) {
+  for (const field of compareFields) {
     if (data.old[field] !== data.new[field]) return ['old', 'new']
   }
   return ['new']
 }
 
-module.exports.generateRules = (schema, aggregators = AGGREGATORS) => {
+export const generateRules = (
+  schema: { [key: string]: any },
+  aggregators = AGGREGATORS
+) => {
   // Generates the aggregation rules from the schema
   const rules = []
-  for (let x in schema) {
+  for (const x in schema) {
     // do not include if by any chance the field x equals false
     if (schema[x]) {
       const aggregator = aggregators.includes(schema[x])
