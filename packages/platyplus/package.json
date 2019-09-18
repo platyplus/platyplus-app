@@ -2,10 +2,11 @@
   "name": "@platyplus/platyplus",
   "version": "0.0.3-alpha.0",
   "private": true,
-  "description": "A Quasar Framework app",
   "productName": "Platyplus",
   "cordovaId": "org.cordova.quasar.app",
+  "description": "A Quasar Framework app",
   "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
+  "homepage": "https://github.com/platyplus/platyplus#readme",
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
     "compile": "quasar build -m pwa -t mat",
@@ -57,6 +58,13 @@
     "pug": "2.0.4",
     "pug-plain-loader": "1.0.0",
     "vuepress": "1.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platyplus/platyplus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/platyplus/platyplus/issues"
   },
   "engines": {
     "node": ">= 11.10.0",

@@ -12,13 +12,12 @@ function ctrl_c() {
     exit
 }
 echo -n "Waiting for the services to be ready"
-envsubst < config.yaml.template > services/graphql-engine/config.yaml
 while ! curl -sf http://graphql.localhost/healthz -o /dev/null
 do
     echo -n .
     sleep 1
 done
 echo
-hasura console --project services/graphql-engine
+cd packages/graphql-engine && yarn run console
 
 # TODO: enhance the script into start-stack $1 dev, prod, ssl...

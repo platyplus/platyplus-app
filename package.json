@@ -6,11 +6,9 @@
   ],
   "scripts": {
     "dev": "dotenv concurrently \"./scripts/hasura-dev.sh\" \"lerna run watch --stream -- \"",
-    "dummey": "docker build  -t platyplus/monorepo:latest . && ",
     "build": "lerna run build",
-    "docker:clean": "echo TODO",
-    "docker:compile": "lerna exec 'test -e $PWD/Dockerfile && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-):$(yarn info $LERNA_PACKAGE_NAME version -s) -f $PWD/Dockerfile $LERNA_ROOT_PATH || exit 0'",
-    "docker:build": "yarn run docker:clean && yarn run docker:compile"
+    "docker:build-published": "echo 'TODO: tag' && lerna exec 'test -e $PWD/Dockerfile-published && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-) -f $PWD/Dockerfile-published $LERNA_ROOT_PATH || exit 0'",
+    "docker:build": "lerna exec 'test -e $PWD/Dockerfile && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-) -f $PWD/Dockerfile $LERNA_ROOT_PATH || exit 0'"
   },
   "devDependencies": {
     "@types/node": "12.7.4",

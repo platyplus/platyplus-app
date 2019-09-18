@@ -30,8 +30,8 @@ ENV HASURA_GRAPHQL_DATABASE_URL $HASURA_GRAPHQL_DATABASE_URL
 ARG HASURA_GRAPHQL_UNAUTHORIZED_ROLE='anonymous'
 ENV HASURA_GRAPHQL_UNAUTHORIZED_ROLE $HASURA_GRAPHQL_UNAUTHORIZED_ROLE
 
-COPY migrations /opt/hasura-migrations
-COPY load-env-and-migrate.sh /bin/load-env-and-migrate.sh
+COPY packages/graphql-engine/migrations /opt/hasura-migrations
+COPY packages/graphql-engine/load-env-and-migrate.sh /bin/load-env-and-migrate.sh
 ENTRYPOINT ["load-env-and-migrate.sh"]
 
 HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT:-8080}/healthz || exit 1

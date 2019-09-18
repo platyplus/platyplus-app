@@ -1,2 +1,0 @@
-access_key: '${HASURA_ACCESS_KEY}'
-endpoint: 'http://graphql.${DOMAIN}'

@@ -15,16 +15,7 @@
     "emitDecoratorMetadata": true,
     "lib": ["es6", "dom"]
   },
-  "exclude": [
-    "node_modules",
-    "lib",
-    "dist",
-    "services",
-    "server",
-    "scripts",
-    "./components/**/*",
-    "backup"
-  ],
+  "exclude": ["node_modules", "lib", "dist", "scripts", ".quasar", "backup"],
   "rules": {
     "quotemark": [true, "single"]
   }

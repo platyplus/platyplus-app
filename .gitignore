@@ -29,3 +29,6 @@ backup
 
 # Tsc
 *.tsbuildinfo
+
+# Lerna
+lerna-debug.log*
