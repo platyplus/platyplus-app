@@ -24,8 +24,9 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "clean": "rm -rf ./lib",
-    "compile": "tsc -p tsconfig.build.json",
-    "build": "yarn run clean && yarn run compile",
+    "prebuild": "yarn run clean",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
     "watch": "tsc -w --preserveWatchOutput",
     "dev": "yarn run watch"
   },

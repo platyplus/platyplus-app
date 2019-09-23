@@ -8,8 +8,7 @@ q-page(
   pre {{forms}}
 </template>
 
-<style>
-</style>
+<style></style>
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'

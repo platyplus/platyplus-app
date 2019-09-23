@@ -3,8 +3,7 @@ q-page(v-if="$authenticated" padding class="justify-center")
   div TODO {{$profile}}...
 </template>
 
-<style>
-</style>
+<style></style>
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
 import { PageMixin } from 'src/mixins'

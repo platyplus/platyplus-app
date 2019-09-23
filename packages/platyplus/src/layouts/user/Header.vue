@@ -44,5 +44,4 @@ export default class UserHeader extends Mixins(HasuraMixin) {
 }
 </script>
 
-<style>
-</style>
+<style></style>

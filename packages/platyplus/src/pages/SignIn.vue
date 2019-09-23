@@ -27,5 +27,4 @@ export default class PageSignIn extends Vue {
 }
 </script>
 
-<style>
-</style>
+<style></style>

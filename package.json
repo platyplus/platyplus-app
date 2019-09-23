@@ -5,26 +5,54 @@
     "packages/*"
   ],
   "scripts": {
-    "lint": "eslint --ext .js,.ts,.vue .",
-    "dev": "dotenv concurrently \"./scripts/hasura-dev.sh\" \"lerna run watch --stream -- \"",
     "build": "lerna run build",
+    "clean": "lerna clean && lerna run clean",
+    "cz": "git-cz",
+    "format": "prettier --write \"./**/*.{ts,js,json,md,vue}\"",
+    "format-check": "prettier --list-different \"./**/*.{ts,js,json,md,vue}\"",
+    "lint": "eslint --ext .js,.ts,.vue .",
+    "lint-fix": "eslint . --ext .js,.ts --fix",
+    "pre-commit": "yarn lint-staged",
+    "pre-push": "yarn format-check",
+    "postinstall": "lerna bootstrap && yarn build && lerna link",
+    "test": "lerna run test --parallel",
+    "typecheck": "lerna run typecheck",
+    "release": "standard-version",
+    "dev": "dotenv concurrently \"./scripts/hasura-dev.sh\" \"lerna run watch --stream -- \"",
     "docker:build-published": "echo 'TODO: tag' && lerna exec 'test -e $PWD/Dockerfile-published && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-) -f $PWD/Dockerfile-published $LERNA_ROOT_PATH || exit 0'",
     "docker:build": "lerna exec 'test -e $PWD/Dockerfile && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-) -f $PWD/Dockerfile $LERNA_ROOT_PATH || exit 0'"
   },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "devDependencies": {
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "@types/node": "12.7.4",
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
     "@vue/eslint-config-standard": "4.0.0",
     "babel-plugin-wildcard": "5.0.0",
     "concurrently": "^4.1.2",
+    "cz-conventional-changelog": "^3.0.2",
     "dotenv-cli": "^2.0.1",
     "eslint": "5.16.0",
     "eslint-config-prettier": "6.1.0",
     "eslint-loader": "2.2.1",
     "eslint-plugin-vue": "5.2.3",
     "github-label-sync": "1.4.1",
+    "husky": "^3.0.5",
     "lerna": "^3.16.4",
+    "lint-staged": "^9.2.5",
+    "prettier": "^1.18.2",
+    "standard-version": "^7.0.0",
     "typescript": "3.5.3"
   }
 }

@@ -19,5 +19,4 @@ export default class Index extends Mixins(PageMixin) {
 }
 </script>
 
-<style>
-</style>
+<style></style>

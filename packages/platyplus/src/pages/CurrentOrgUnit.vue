@@ -8,8 +8,7 @@ q-page(v-if="$authenticated" padding class="justify-center")
     class="full-width q-mt-md")
 </template>
 
-<style>
-</style>
+<style></style>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'

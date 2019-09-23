@@ -8,9 +8,10 @@
   "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
   "homepage": "https://github.com/platyplus/platyplus#readme",
   "scripts": {
-    "compile": "quasar build -m pwa -t mat",
     "clean": "rm -rf dist",
-    "build": "yarn run clean && yarn run compile",
+    "prebuild": "yarn run clean",
+    "build": "quasar build -m pwa -t mat",
+    "typecheck": "tsc --noEmit",
     "dev": "quasar dev",
     "test": "echo \"No test specified\" && exit 0",
     "docs:dev": "vuepress dev docs",

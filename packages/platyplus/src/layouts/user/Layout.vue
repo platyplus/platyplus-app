@@ -13,5 +13,4 @@ import { Vue, Component } from 'vue-property-decorator'
 export default class UserLayout extends Vue {}
 </script>
 
-<style>
-</style>
+<style></style>

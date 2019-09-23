@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: ./packages/platyplus/Dockerfile
+      dockerfile: ./packages/platyplus-service/Dockerfile
       target: prepare-deps-stage
     command: sh -c "yarn && ./node_modules/.bin/quasar dev"
     environment:
@@ -22,7 +22,7 @@ services:
       - notused_app:/opt/build/node_modules
   authentication:
     build:
-      context: ./services/authentication
+      context: ./packages/authentication-service
       args:
         NODE_ENV: development
     command: node /opt/start-dev
@@ -57,17 +57,17 @@ services:
       - configuration:/git
   graphql-engine:
     build:
-      context: ./services/graphql-engine
+      context: ./packages/graphql-engine
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
     healthcheck:
       disable: true
     restart: always
     volumes:
-      - ./services/graphql-engine/migrations:/opt/hasura-migrations
+      - ./packages/graphql-engine/migrations:/opt/hasura-migrations
   functions:
     build:
-      context: ./services/functions
+      context: ./packages/functions-service
       args:
         NODE_ENV: development
     command: node /opt/start-dev

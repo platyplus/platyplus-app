@@ -3,8 +3,7 @@
     router-view
 </template>
 
-<style>
-</style>
+<style></style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'

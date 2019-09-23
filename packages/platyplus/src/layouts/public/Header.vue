@@ -18,5 +18,4 @@ export default class PublicHeader extends Vue {
 }
 </script>
 
-<style>
-</style>
+<style></style>

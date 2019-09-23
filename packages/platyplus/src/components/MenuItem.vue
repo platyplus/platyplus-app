@@ -15,5 +15,4 @@ export default class MenuItem extends Vue {
 }
 </script>
 
-<style>
-</style>
+<style></style>

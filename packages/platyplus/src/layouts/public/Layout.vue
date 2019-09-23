@@ -12,5 +12,4 @@ import { Vue, Component } from 'vue-property-decorator'
 export default class PublicLayout extends Vue {}
 </script>
 
-<style>
-</style>
+<style></style>

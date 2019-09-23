@@ -15,10 +15,10 @@
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "dev": "vuepress dev",
     "clean": "rm -rf dist dist-repo",
-    "compile": "vuepress build",
-    "build": "yarn run clean && yarn run compile"
+    "prebuild": "yarn run clean",
+    "build": "vuepress build",
+    "dev": "vuepress dev"
   },
   "bugs": {
     "url": "https://github.com/platyplus/platyplus/issues"
