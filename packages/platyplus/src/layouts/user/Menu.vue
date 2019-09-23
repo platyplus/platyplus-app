@@ -54,5 +54,4 @@ export default class UserMenu extends Vue {
 }
 </script>
 
-<style>
-</style>
+<style></style>

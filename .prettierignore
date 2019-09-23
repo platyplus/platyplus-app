@@ -6,6 +6,7 @@
 **/shared-fixtures
 **/tests/integration/fixtures/**/*
 **/.vscode
+**/.quasar
 **/.nyc_output
 .github
 CONTRIBUTORS.md
