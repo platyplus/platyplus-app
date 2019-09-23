@@ -6,19 +6,19 @@ This repository contains the following packages:
 
 ## Backend
 
-### [@platyplus/authentication-service](https://github.com/platyplus/platyplus/tree/master/packages/authentication-service)
+### [@platyplus/authentication-service](https://github.com/platyplus/platyplus/tree/master/backend/authentication-service)
 
-### [@platyplus/functions-service](https://github.com/platyplus/platyplus/tree/master/packages/functions-service)
+### [@platyplus/functions-service](https://github.com/platyplus/platyplus/tree/master/backend/functions-service)
 
-### [@platyplus/platyplus-service](https://github.com/platyplus/platyplus/tree/master/packages/platyplus-service)
+### [@platyplus/platyplus-service](https://github.com/platyplus/platyplus/tree/master/backend/platyplus-service)
 
-### [@platyplus/graphql-engine](https://github.com/platyplus/platyplus/tree/master/packages/graphql-engine)
+### [@platyplus/graphql-engine](https://github.com/platyplus/platyplus/tree/master/backend/graphql-engine)
 
 ## Frontend
 
-### [@platyplus/platyplus](https://github.com/platyplus/platyplus/tree/master/packages/platyplus)
+### [@platyplus/platyplus](https://github.com/platyplus/platyplus/tree/master/frontend/platyplus)
 
-### [@platyplus/documentation](https://github.com/platyplus/platyplus/tree/master/packages/documentation)
+### [@platyplus/documentation](https://github.com/platyplus/platyplus/tree/master/frontend/documentation)
 
 ## Javascript libraries
 
