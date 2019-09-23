@@ -1,16 +1,17 @@
 FROM node:12-alpine
 WORKDIR /app
-ENV NODE_ENV=production
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
 RUN yarn global add lerna
 # Dependencies
 COPY package.json yarn.lock lerna.json /app/
 
 # Packages
-COPY packages/platyplus-service/package.json yarn.lock /app/packages/platyplus-service/
-COPY packages/microserver/package.json yarn.lock /app/microserver/platyplus/
-COPY packages/platyplus/package.json yarn.lock /app/packages/platyplus/
-COPY packages/hasura-apollo-client/package.json yarn.lock /app/packages/hasura-apollo-client/
-COPY packages/vuex-apollo-offline/package.json yarn.lock /app/packages/vuex-apollo-offline/
+COPY packages/platyplus-service/package.json packages/platyplus-service/yarn.lock packages/platyplus-service/tsconfig.build.json /app/packages/platyplus-service/
+COPY packages/microserver/package.json packages/microserver/yarn.lock packages/microserver/tsconfig.build.json /app/microserver/platyplus/
+COPY packages/platyplus/package.json packages/platyplus/yarn.lock /app/packages/platyplus/
+COPY packages/hasura-apollo-client/package.json packages/hasura-apollo-client/yarn.lock packages/hasura-apollo-client/tsconfig.build.json /app/packages/hasura-apollo-client/
+COPY packages/vuex-apollo-offline/package.json packages/vuex-apollo-offline/yarn.lock packages/vuex-apollo-offline/tsconfig.build.json /app/packages/vuex-apollo-offline/
 
 # Install dependencies
 RUN yarn

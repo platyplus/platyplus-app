@@ -7,7 +7,7 @@
   "homepage": "https://github.com/platyplus/platyplus#readme",
   "license": "MIT",
   "scripts": {
-    "console": "hasura console --admin-secret $HASURA_ACCESS_KEY --admin-secret http://graphql.$DOMAIN"
+    "console": "dotenv -e ../../.env ./console.sh"
   },
   "repository": {
     "type": "git",

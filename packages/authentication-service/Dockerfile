@@ -1,21 +1,20 @@
 FROM node:12-alpine
 WORKDIR /app
-ENV NODE_ENV=production
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
 RUN yarn global add lerna
 # Dependencies
 COPY package.json yarn.lock lerna.json /app/
 
 # Packages
-COPY packages/platyplus-service/package.json yarn.lock /app/packages/platyplus-service/
-COPY packages/microserver/package.json yarn.lock /app/packages/microserver/
-COPY packages/hasura-node-client/package.json yarn.lock /app/packages/hasura-node-client/
+COPY packages/microserver/package.json packages/microserver/yarn.lock packages/microserver/tsconfig.build.json /app/packages/microserver/
+COPY packages/hasura-node-client/package.json packages/hasura-node-client/yarn.lock packages/hasura-node-client/tsconfig.build.json /app/packages/hasura-node-client/
 
 # Install dependencies
 RUN yarn
 RUN lerna bootstrap
 
 # Copy source
-COPY packages/platyplus-service /app/packages/platyplus-service
 COPY packages/microserver /app/packages/microserver
 COPY packages/hasura-node-client /app/packages/hasura-node-client
 

@@ -1,6 +1,7 @@
 FROM node:12-alpine
 WORKDIR /app
-ENV NODE_ENV=production
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
 RUN yarn global add lerna
 # Dependencies
 COPY package.json yarn.lock lerna.json /app/

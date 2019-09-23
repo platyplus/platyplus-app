@@ -3,5 +3,6 @@
 .git
 *Dockerfile*
 *docker-compose*
-node_modules
+package.json
 config.yaml
+console.sh
