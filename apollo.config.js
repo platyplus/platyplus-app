@@ -5,8 +5,8 @@ require('dotenv').config()
 const ADMIN_SECRET =
   process.env.HASURA_GRAPHQL_ADMIN_SECRET ||
   fs.readFileSync('secret.key', 'utf-8') //, (_, data) => data)
-const HASURA_URL =
-  process.env.HASURA_URL || 'http://graphql.localhost/v1/graphql'
+const DOMAIN = process.env.DOMAIN || 'localhost'
+const HASURA_URL = `http://graphql.${DOMAIN}/v1/graphql`
 module.exports = {
   client: {
     service: {
