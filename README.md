@@ -1,5 +1,7 @@
 # Platyplus
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
 For further details please see the [documentation](https://platyplus.github.io/).
 
 This repository contains the following packages:
