@@ -14,22 +14,26 @@ Some developpers don't want to spend too much time in learning docker commands. 
 
 ### Development dependencies
 
-The docker compose files are automatically generated at every `git commit`. The script requires the package merge-yaml-cli to be installed.
+- The docker compose files are automatically generated at every `git commit`. The script requires the package merge-yaml-cli to be installed.
 
 ```sh
 npm i -g merge-yaml-cli
 ```
 
-[Envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html) is also used in the script to start the services in development mode.
-In Mac OSX, you can install it with brew:
+- [Envsubst](https://www.gnu.org/software/gettext/manual/html_node/envsubst-Invocation.html) is also used in the script to start the services in development mode.
+  In Mac OSX, you can install it with brew:
 
 ```sh
 brew install gettext
 ```
 
+- git version >= 2.13.2
+
 ::: tip
 It is recommended to install the [Hasura CLI](https://docs.hasura.io/1.0/graphql/manual/hasura-cli/install-hasura-cli.html).
 :::
+
+- node
 
 ### VS Code
 
