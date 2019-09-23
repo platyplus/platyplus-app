@@ -30,7 +30,7 @@
     "prebuild": "yarn run clean",
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "watch": "tsc -w --preserveWatchOutput",
+    "watch": "tsc -w -p tsconfig.build.json --preserveWatchOutput",
     "dev": "ts-node-dev ./src/index.ts"
   },
   "bugs": {
