@@ -38,9 +38,14 @@ module.exports = {
     { value: 'revert', name: 'revert:   Reverts to a previous commit' }
   ],
 
-  scopes: [{ name: 'package' }, { name: 'frontend' }, { name: 'backend' }],
+  scopes: [
+    { name: 'root' },
+    { name: 'package' },
+    { name: 'frontend' },
+    { name: 'backend' }
+  ],
 
-  allowTicketNumber: true,
+  allowTicketNumber: false,
   isTicketNumberRequired: false,
   ticketNumberPrefix: 'TICKET-',
   ticketNumberRegExp: '\\d{1,5}',
