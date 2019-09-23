@@ -17,6 +17,7 @@ yarn-debug.log*
 yarn-error.log*
 /docs/.vuepress/dist
 /temp
+.env
 
 # Editor directories and files
 .idea
