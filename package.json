@@ -16,7 +16,7 @@
     "lint-fix": "eslint . --ext .js,.ts --fix",
     "pre-commit": "yarn lint-staged",
     "pre-push": "yarn format-check",
-    "postinstall": "yarn run clean && lerna bootstrap && lerna link",
+    "postinstall": "yarn build && lerna link",
     "test": "lerna run test --parallel",
     "typecheck": "lerna run typecheck",
     "release": "standard-version",
