@@ -22,10 +22,10 @@ This monorepo contains the following packages:
 
 ## Microservices
 
-### [Hasura Graphql Engine](https://github.com/platyplus/platyplus/tree/master/packages/graphql-engine)
-
 ### [@platyplus/authentication-service](https://github.com/platyplus/platyplus/tree/master/packages/authentication-service)
 
 ### [@platyplus/functions-service](https://github.com/platyplus/platyplus/tree/master/packages/functions-service)
 
-### [platyplus/platyplus-service](https://github.com/platyplus/platyplus/tree/master/packages/platyplus-service)
+### [@platyplus/platyplus-service](https://github.com/platyplus/platyplus/tree/master/packages/platyplus-service)
+
+### [Hasura Graphql Engine](https://github.com/platyplus/platyplus/tree/master/packages/graphql-engine)
