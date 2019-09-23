@@ -36,7 +36,7 @@ services:
     restart: always
     volumes:
       - ./packages/authentication-service/src:/app/packages/authentication-service/src
-      - ./packages/microserver/src:/app/packages/microserver/src
+      - ./packages/microservice/src:/app/packages/microservice/src
       - ./packages/hasura-node-client/src:/app/packages/hasura-node-client/src
   # configuration: # TODO: revoir
   #   image: k8s.gcr.io/git-sync:v3.1.2

@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@platyplus/hasura-node-client": "^0.0.3-alpha.0",
-    "@platyplus/microserver": "^0.0.3-alpha.0",
+    "@platyplus/microservice": "^0.0.3-alpha.0",
     "graphql": "14.5.4"
   },
   "devDependencies": {

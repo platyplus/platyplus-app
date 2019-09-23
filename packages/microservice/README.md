@@ -1,11 +1,11 @@
-# `microserver`
+# `microservice`
 
 > TODO: description
 
 ## Usage
 
 ```
-const microserver = require('microserver');
+const microservice = require('microservice');
 
 // TODO: DEMONSTRATE API
 ```

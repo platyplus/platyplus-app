@@ -7,7 +7,7 @@ RUN yarn global add lerna
 COPY package.json yarn.lock lerna.json /app/
 
 # Packages
-COPY packages/microserver/package.json packages/microserver/yarn.lock packages/microserver/tsconfig.build.json /app/packages/microserver/
+COPY packages/microservice/package.json packages/microservice/yarn.lock packages/microservice/tsconfig.build.json /app/packages/microservice/
 COPY packages/hasura-node-client/package.json packages/hasura-node-client/yarn.lock packages/hasura-node-client/tsconfig.build.json /app/packages/hasura-node-client/
 
 # Install dependencies
@@ -15,7 +15,7 @@ RUN yarn
 RUN lerna bootstrap
 
 # Copy source
-COPY packages/microserver /app/packages/microserver
+COPY packages/microservice /app/packages/microservice
 COPY packages/hasura-node-client /app/packages/hasura-node-client
 
 # TODO Build packages? Multistage docker then?

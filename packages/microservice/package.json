@@ -1,5 +1,5 @@
 {
-  "name": "@platyplus/microserver",
+  "name": "@platyplus/microservice",
   "version": "0.0.3-alpha.0",
   "private": false,
   "publishConfig": {

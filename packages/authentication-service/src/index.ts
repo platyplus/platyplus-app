@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server-koa'
 import rasha, { Jwk } from 'rasha'
 
-import microserver from '@platyplus/microserver'
+import microservice from '@platyplus/microservice'
 
 import { resolvers } from './resolvers'
 import { typeDefs } from './type-definitions'
@@ -11,7 +11,7 @@ import { PUBLIC_KEY, ALGORITHM } from './config'
 // We could invalidate it?
 // https://stackoverflow.com/questions/21978658/invalidating-json-web-tokens
 
-const { router, app } = microserver()
+const { router, app } = microservice()
 
 const server = new ApolloServer({
   typeDefs,

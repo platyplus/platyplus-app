@@ -1,8 +1,8 @@
-import microserver from '@platyplus/microserver'
+import microservice from '@platyplus/microservice'
 
 import events from './events'
 
-const { router } = microserver()
+const { router } = microservice()
 
 router.post('/events', async ctx => {
   const {

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-import microserver from '@platyplus/microserver'
+import microservice from '@platyplus/microservice'
 import serveStatic from 'koa-static'
 
 import history from 'koa-history-api-fallback'
 
-const { router, app } = microserver()
+const { router, app } = microservice()
 
 router.get('/config', async (ctx, next) => {
   ctx.body = {
