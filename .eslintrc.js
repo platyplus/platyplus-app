@@ -55,11 +55,12 @@ module.exports = {
 
   // add your custom rules here
   rules: {
+    '@typescript-eslint/explicit-member-accessibility': 'off',
     '@typescript-eslint/camelcase': 'warn', // TODO hasura snake/camel case names?
     'prefer-promise-reject-errors': 'off',
     quotes: ['warn', 'single', { avoidEscape: true }],
-    '@typescript-eslint/indent': 'off', // * still some issues with this rule. Disabling and trusting prettier...
-    // '@typescript-eslint/indent': ['warn', 2],
+    // '@typescript-eslint/indent': 'off', // * still some issues with this rule. Disabling and trusting prettier...
+    // '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/no-empty-interface': 'warn',
     // allow console.log during development only
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',

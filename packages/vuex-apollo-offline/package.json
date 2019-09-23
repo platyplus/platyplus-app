@@ -1,0 +1,42 @@
+{
+  "name": "@platyplus/vuex-apollo-offline",
+  "version": "0.0.3-alpha.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "> TODO: description",
+  "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
+  "homepage": "https://github.com/platyplus/platyplus#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platyplus/platyplus.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "clean": "rm -rf ./lib",
+    "prebuild": "yarn run clean",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "watch": "tsc -w -p tsconfig.build.json --preserveWatchOutput",
+    "dev": "yarn run watch"
+  },
+  "bugs": {
+    "url": "https://github.com/platyplus/platyplus/issues"
+  },
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-cache-persist": "^0.1.1",
+    "graphql": "^14.5.4"
+  },
+  "gitHead": "26c08ca54b080b61cde2c174d52e74d7b516cb2a"
+}

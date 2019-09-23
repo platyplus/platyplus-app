@@ -1,0 +1,42 @@
+FROM hasura/graphql-engine:v1.0.0-beta.6.cli-migrations
+
+# Use the local console assets so console can work while offline
+ARG HASURA_GRAPHQL_CONSOLE_ASSETS_DIR=/srv/console-assets
+ENV HASURA_GRAPHQL_CONSOLE_ASSETS_DIR $HASURA_GRAPHQL_CONSOLE_ASSETS_DIR
+
+ARG AUTH_ALGORITHM=RS256
+ENV AUTH_ALGORITHM $AUTH_ALGORITHM
+
+# Disable the metrics sent to Hasura
+ARG HASURA_GRAPHQL_ENABLE_TELEMETRY=false
+ENV HASURA_GRAPHQL_ENABLE_TELEMETRY $HASURA_GRAPHQL_ENABLE_TELEMETRY
+
+# The console is not enabled as we keep track of the changes (esp. migration files) in running the console from the CLI
+# See /scripts/hasura-dev.sh
+ARG HASURA_GRAPHQL_ENABLE_CONSOLE=false
+ENV HASURA_GRAPHQL_ENABLE_CONSOLE $HASURA_GRAPHQL_ENABLE_CONSOLE
+
+ARG HASURA_GRAPHQL_SERVER_PORT=3000
+ENV HASURA_GRAPHQL_SERVER_PORT $HASURA_GRAPHQL_SERVER_PORT
+
+ENV HASURA_GRAPHQL_ADMIN_SECRET $HASURA_GRAPHQL_ADMIN_SECRET
+
+ARG HASURA_GRAPHQL_JWT_SECRET='{ "type": "RS256", "jwk_url": "http://authentication:3000/jwks"}'
+ENV HASURA_GRAPHQL_JWT_SECRET $HASURA_GRAPHQL_JWT_SECRET
+
+ARG HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:@postgres:5432/postgres
+ENV HASURA_GRAPHQL_DATABASE_URL $HASURA_GRAPHQL_DATABASE_URL
+
+ARG HASURA_GRAPHQL_UNAUTHORIZED_ROLE='anonymous'
+ENV HASURA_GRAPHQL_UNAUTHORIZED_ROLE $HASURA_GRAPHQL_UNAUTHORIZED_ROLE
+
+ARG HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT=10
+ENV HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT $HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT
+
+COPY packages/graphql-engine/migrations /opt/hasura-migrations
+COPY packages/graphql-engine/load-env-and-migrate.sh /bin/
+ENTRYPOINT ["load-env-and-migrate.sh"]
+
+HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT:-8080}/healthz || exit 1
+
+CMD ["graphql-engine", "serve"]

@@ -1,0 +1,19 @@
+{
+  "name": "@platyplus/graphql-engine",
+  "version": "0.0.0",
+  "private": true,
+  "description": "> TODO: description",
+  "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
+  "homepage": "https://github.com/platyplus/platyplus#readme",
+  "license": "MIT",
+  "scripts": {
+    "console": "dotenv -e ../../.env ./console.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platyplus/platyplus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/platyplus/platyplus/issues"
+  }
+}

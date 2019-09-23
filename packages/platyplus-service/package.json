@@ -1,0 +1,48 @@
+{
+  "name": "@platyplus/platyplus-service",
+  "version": "0.0.6-alpha.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "> TODO: description",
+  "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
+  "homepage": "https://github.com/platyplus/platyplus#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "bin": {
+    "platyplus-service": "./lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platyplus/platyplus.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "clean": "rm -rf ./lib",
+    "prebuild": "yarn run clean",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "watch": "tsc -w -p tsconfig.build.json --preserveWatchOutput",
+    "dev": "ts-node-dev ./src/index.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/platyplus/platyplus/issues"
+  },
+  "dependencies": {
+    "@platyplus/microservice": "^0.0.3-alpha.0",
+    "koa-history-api-fallback": "^1.0.0",
+    "koa-static": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/koa-static": "^4.0.1"
+  },
+  "gitHead": "26c08ca54b080b61cde2c174d52e74d7b516cb2a"
+}

@@ -1,13 +1,10 @@
 version: '3.4'
 services:
   app:
-    build:
-      context: .
-      dockerfile: server/Dockerfile
-      target: prepare-deps-stage
-    command: sh -c "yarn && ./node_modules/.bin/quasar dev"
+    build: .
+    command: ['yarn', 'dev:platyplus']
     environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       NODE_ENV: development
       PRIVATE_KEY: '${PRIVATE_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
@@ -18,29 +15,14 @@ services:
       - 'traefik.port=8080'
     restart: always
     volumes:
-      - ./src:/opt/build/src:delegated
-      - ./src-pwa:/opt/build/src-pwa:delegated
-      - ./package.json:/opt/build/package.json
-      - ./yarn.lock:/opt/build/yarn.lock
-      - ./quasar.conf.js:/opt/build/quasar.conf.js
-      - ./quasar.extensions.json:/opt/build/quasar.extensions.json
-      - ./.quasar:/opt/build/.quasar
-      - ./babel.config.js:/opt/build/babel.config.js
-      - ./.eslintrc.js:/opt/build/.eslintrc.js
-      - ./apollo.config.js:/opt/build/apollo.config.js
-      - ./tsconfig.json:/opt/build/tsconfig.json
-      - ./.eslintignore:/opt/build/.eslintignore
-      - ./.stylintrc:/opt/build/.stylintrc
-      - ./.postcssrc.js:/opt/build/.postcssrc.js
-      - notused_app:/opt/build/node_modules
+      - ./packages/platyplus/src:/app/packages/platyplus/src
+      - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src
+      - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src
   authentication:
-    build:
-      context: ./services/authentication
-      args:
-        NODE_ENV: development
-    command: node /opt/start-dev
+    build: .
+    command: ['yarn', 'dev:authentication']
     environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       NODE_ENV: development
       PRIVATE_KEY: '${PRIVATE_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
@@ -53,53 +35,55 @@ services:
       - '9229:9229'
     restart: always
     volumes:
-      - ./services/authentication:/opt/app:delegated
-      - ./services/authentication/package.json:/opt/package.json
-      - ./services/authentication/package-lock.json:/opt/package-lock.json
-      - notused_auth:/opt/app/node_modules
-  configuration: # TODO: revoir
-    image: k8s.gcr.io/git-sync:v3.1.2
-    environment: # See https://github.com/kubernetes/git-sync/blob/master/cmd/git-sync/main.go
-      GIT_SYNC_REPO: https://github.com/platyplus/configuration
-      GIT_SYNC_ROOT: /git
-    user: root
-    healthcheck:
-      disable: true
-    restart: always
-    volumes:
-      - configuration:/git
+      - ./packages/authentication-service/src:/app/packages/authentication-service/src
+      - ./packages/microservice/src:/app/packages/microservice/src
+      - ./packages/hasura-node-client/src:/app/packages/hasura-node-client/src
+  # configuration: # TODO: revoir
+  #   image: k8s.gcr.io/git-sync:v3.1.2
+  #   environment: # See https://github.com/kubernetes/git-sync/blob/master/cmd/git-sync/main.go
+  #     GIT_SYNC_REPO: https://github.com/platyplus/configuration
+  #     GIT_SYNC_ROOT: /git
+  #   user: root
+  #   healthcheck:
+  #     disable: true
+  #   restart: always
+  #   volumes:
+  #     - configuration:/git
   graphql-engine:
     build:
-      context: ./services/graphql-engine
+      context: .
+      dockerfile: ./packages/graphql-engine/Dockerfile
     environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
+      # HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+    command: ['graphql-engine', 'serve']
     healthcheck:
       disable: true
     restart: always
     volumes:
-      - ./services/graphql-engine/migrations:/opt/hasura-migrations
-  functions:
-    build:
-      context: ./services/functions
-      args:
-        NODE_ENV: development
-    command: node /opt/start-dev
-    environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_ACCESS_KEY}'
-      NODE_ENV: development
-    healthcheck:
-      disable: true
-    labels:
-      - 'traefik.frontend.rule=Host:functions.${DOMAIN}'
-      - 'traefik.port=3000'
-    ports:
-      - '9230:9229'
-    restart: always
-    volumes:
-      - ./services/functions:/opt/app:delegated
-      - ./services/functions/package.json:/opt/package.json
-      - ./services/functions/package-lock.json:/opt/package-lock.json
-      - notused_functions:/opt/app/node_modules
+      - ./packages/graphql-engine/migrations:/opt/hasura-migrations
+  # functions:
+  #   build:
+  #     context: ./packages/functions-service
+  #     args:
+  #       NODE_ENV: development
+  #   command: node /opt/start-dev
+  #   environment:
+  #     HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
+  #     NODE_ENV: development
+  #   healthcheck:
+  #     disable: true
+  #   labels:
+  #     - 'traefik.frontend.rule=Host:functions.${DOMAIN}'
+  #     - 'traefik.port=3000'
+  #   ports:
+  #     - '9230:9229'
+  #   restart: always
+  #   volumes:
+  #     - ./services/functions:/opt/app:delegated
+  #     - ./services/functions/package.json:/opt/package.json
+  #     - ./services/functions/package-lock.json:/opt/package-lock.json
+  #     - notused_functions:/opt/app/node_modules
   postgres:
     ports:
       - '5432:5432'

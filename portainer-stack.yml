@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   app:
-    image: platyplus/platyplus
+    image: platyplus/platyplus-service
     depends_on:
       - graphql-engine
     environment:
@@ -10,7 +10,7 @@ services:
       - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - traefik.port=3000
   authentication:
-    image: platyplus/authentication
+    image: platyplus/authentication-service
     environment:
       HASURA_URL: 'http://graphql-engine:3000'
       HASURA_GRAPHQL_ADMIN_SECRET_FILE: /run/secrets/hasura_secret_key
@@ -24,7 +24,7 @@ services:
       - authentication_public_key
       - hasura_secret_key
   functions:
-    image: platyplus/functions
+    image: platyplus/functions-service
     environment:
       HASURA_URL: 'http://graphql-engine:3000'
       POSTGRES_URL: 'postgresql://postgres@postgres/postgres'

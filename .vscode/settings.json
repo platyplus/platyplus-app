@@ -1,6 +1,5 @@
 {
   "vetur.experimental.templateInterpolationService": true,
-  "vetur.validation.template": false,
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -11,5 +10,11 @@
     }
   ],
   "eslint.packageManager": "yarn",
-  "npm.packageManager": "yarn"
+  "npm.packageManager": "yarn",
+  "files.associations": {
+    "[Dd]ockerfile*": "dockerfile",
+    "docker-compose*": "yaml"
+  },
+  "vetur.validation.template": false,
+  "eslint.autoFixOnSave": true
 }

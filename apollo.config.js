@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
-console.log('apollo config')
 const fs = require('fs')
+require('dotenv').config()
 const ADMIN_SECRET =
-  process.env.HASURA_ACCESS_KEY || fs.readFileSync('secret.key', 'utf-8') //, (_, data) => data)
+  process.env.HASURA_GRAPHQL_ADMIN_SECRET ||
+  fs.readFileSync('secret.key', 'utf-8') //, (_, data) => data)
 const HASURA_URL =
   process.env.HASURA_URL || 'http://graphql.localhost/v1/graphql'
 module.exports = {

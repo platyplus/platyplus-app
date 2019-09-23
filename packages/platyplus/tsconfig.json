@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "module": "esnext",
+    "baseUrl": "."
+  },
+  "include": ["src/**/*", "src-pwa/**/*"]
+}

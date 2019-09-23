@@ -1,8 +1,5 @@
-/dist
-/services
-/server
-/scripts
-/components
-/docs/.vuepress/dist
-/backup
-/temp
+node_modules
+dist
+lib
+apollo.config.js
+scripts

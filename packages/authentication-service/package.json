@@ -1,0 +1,55 @@
+{
+  "name": "@platyplus/authentication-service",
+  "version": "0.0.4-alpha.0",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "> TODO: description",
+  "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
+  "homepage": "https://github.com/platyplus/platyplus#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "bin": {
+    "authentication-service": "./lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platyplus/platyplus.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "clean": "rm -rf ./lib",
+    "prebuild": "yarn run clean",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "dev": "ts-node-dev ./src/index.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/platyplus/platyplus/issues"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.3.3",
+    "@types/rasha": "^1.2.0",
+    "ts-node-dev": "^1.0.0-pre.42"
+  },
+  "dependencies": {
+    "@platyplus/hasura-node-client": "^0.0.3-alpha.0",
+    "@platyplus/microservice": "^0.0.3-alpha.0",
+    "apollo-server-koa": "^2.9.3",
+    "bcryptjs": "^2.4.3",
+    "dotenv-cli": "^2.0.1",
+    "graphql": "^14.5.5",
+    "jsonwebtoken": "^8.5.1",
+    "rasha": "^1.2.5"
+  },
+  "gitHead": "26c08ca54b080b61cde2c174d52e74d7b516cb2a"
+}
