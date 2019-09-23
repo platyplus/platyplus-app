@@ -7,7 +7,7 @@ RUN yarn global add lerna
 COPY package.json yarn.lock lerna.json /app/
 
 # Packages
-COPY packages/functions-service/package.json yarn.lock /app/packages/functions-service/
+COPY backend/functions-service/package.json yarn.lock /app/backend/functions-service/
 COPY packages/microservice/package.json yarn.lock /app/packages/microservice/
 COPY packages/hasura-node-client/package.json yarn.lock /app/packages/hasura-node-client/
 
@@ -16,7 +16,7 @@ RUN yarn
 RUN lerna bootstrap
 
 # Copy source
-COPY packages/functions-service /app/packages/functions-service
+COPY backend/functions-service /app/backend/functions-service
 COPY packages/microservice /app/packages/microservice
 COPY packages/hasura-node-client /app/packages/hasura-node-client
 
@@ -28,4 +28,4 @@ ARG ALGORITHM=RS256
 ENV ALGORITHM $ALGORITHM
 
 USER node
-CMD ["node", "packages/functions-service/lib/index.js"]
+CMD ["node", "backend/functions-service/lib/index.js"]

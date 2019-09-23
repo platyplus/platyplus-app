@@ -1,9 +1,13 @@
 {
   "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "baseUrl": "./packages",
+    "baseUrl": ".",
     "paths": {
-      "@platyplus/*": ["./*/src"]
+      "@platyplus/*": [
+        "./packages/*/src",
+        "./backend/*/src",
+        "./frontend/*/src"
+      ]
     }
   }
 }

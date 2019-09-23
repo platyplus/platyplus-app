@@ -33,8 +33,8 @@ ENV HASURA_GRAPHQL_UNAUTHORIZED_ROLE $HASURA_GRAPHQL_UNAUTHORIZED_ROLE
 ARG HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT=10
 ENV HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT $HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT
 
-COPY packages/graphql-engine/migrations /opt/hasura-migrations
-COPY packages/graphql-engine/load-env-and-migrate.sh /bin/
+COPY backend/graphql-engine/migrations /opt/hasura-migrations
+COPY backend/graphql-engine/load-env-and-migrate.sh /bin/
 ENTRYPOINT ["load-env-and-migrate.sh"]
 
 HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT:-8080}/healthz || exit 1

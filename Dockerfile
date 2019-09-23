@@ -10,12 +10,12 @@ RUN lerna link
 
 # Packages
 # Not needed: documentation, grapqhl-engine, platyplus-service
+COPY frontend/platyplus/package.json frontend/platyplus/yarn.lock /app/frontend/platyplus/
+COPY backend/authentication-service/package.json backend/authentication-service/yarn.lock backend/authentication-service/tsconfig.build.json /app/backend/authentication-service/
+COPY backend/functions-service/package.json backend/functions-service/yarn.lock backend/functions-service/tsconfig.build.json /app/backend/functions-service/
 COPY packages/microservice/package.json packages/microservice/yarn.lock packages/microservice/tsconfig.build.json /app/packages/microservice/
-COPY packages/authentication-service/package.json packages/authentication-service/yarn.lock packages/authentication-service/tsconfig.build.json /app/packages/authentication-service/
-COPY packages/functions-service/package.json packages/functions-service/yarn.lock packages/functions-service/tsconfig.build.json /app/packages/functions-service/
 COPY packages/hasura-apollo-client/package.json packages/hasura-apollo-client/yarn.lock packages/hasura-apollo-client/tsconfig.build.json /app/packages/hasura-apollo-client/
 COPY packages/hasura-node-client/package.json packages/hasura-node-client/yarn.lock packages/hasura-node-client/tsconfig.build.json /app/packages/hasura-node-client/
-COPY packages/platyplus/package.json packages/platyplus/yarn.lock /app/packages/platyplus/
 COPY packages/vuex-apollo-offline/package.json packages/vuex-apollo-offline/yarn.lock packages/vuex-apollo-offline/tsconfig.build.json /app/packages/vuex-apollo-offline/
 
 # Install dependencies
@@ -23,4 +23,6 @@ RUN lerna bootstrap --ignore-scripts
 
 # Copy source
 COPY packages /app/packages
+COPY frontend /app/frontend
+COPY backend /app/backend
 

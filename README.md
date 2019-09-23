@@ -1,8 +1,24 @@
 # Platyplus
 
-See [documentation](https://platyplus.github.io/)
+For further details please see the [documentation](https://platyplus.github.io/).
 
-This monorepo contains the following packages:
+This repository contains the following packages:
+
+## Backend
+
+### [@platyplus/authentication-service](https://github.com/platyplus/platyplus/tree/master/packages/authentication-service)
+
+### [@platyplus/functions-service](https://github.com/platyplus/platyplus/tree/master/packages/functions-service)
+
+### [@platyplus/platyplus-service](https://github.com/platyplus/platyplus/tree/master/packages/platyplus-service)
+
+### [@platyplus/graphql-engine](https://github.com/platyplus/platyplus/tree/master/packages/graphql-engine)
+
+## Frontend
+
+### [@platyplus/platyplus](https://github.com/platyplus/platyplus/tree/master/packages/platyplus)
+
+### [@platyplus/documentation](https://github.com/platyplus/platyplus/tree/master/packages/documentation)
 
 ## Javascript libraries
 
@@ -13,19 +29,3 @@ This monorepo contains the following packages:
 ### [@platyplus/vuex-apollo-offline](https://github.com/platyplus/platyplus/tree/master/packages/vuex-apollo-offline)
 
 ### [@platyplus/microservice](https://github.com/platyplus/platyplus/tree/master/packages/microservice)
-
-## Frontend
-
-### [Platyplus](https://github.com/platyplus/platyplus/tree/master/packages/platyplus)
-
-### [Documentation](https://github.com/platyplus/platyplus/tree/master/packages/documentation)
-
-## Microservices
-
-### [@platyplus/authentication-service](https://github.com/platyplus/platyplus/tree/master/packages/authentication-service)
-
-### [@platyplus/functions-service](https://github.com/platyplus/platyplus/tree/master/packages/functions-service)
-
-### [@platyplus/platyplus-service](https://github.com/platyplus/platyplus/tree/master/packages/platyplus-service)
-
-### [Hasura Graphql Engine](https://github.com/platyplus/platyplus/tree/master/packages/graphql-engine)

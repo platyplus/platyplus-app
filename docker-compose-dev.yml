@@ -15,7 +15,7 @@ services:
       - 'traefik.port=8080'
     restart: always
     volumes:
-      - ./packages/platyplus/src:/app/packages/platyplus/src
+      - ./frontend/platyplus/src:/app/frontend/platyplus/src
       - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src
       - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src
   authentication:
@@ -35,7 +35,7 @@ services:
       - '9229:9229'
     restart: always
     volumes:
-      - ./packages/authentication-service/src:/app/packages/authentication-service/src
+      - ./backend/authentication-service/src:/app/backend/authentication-service/src
       - ./packages/microservice/src:/app/packages/microservice/src
       - ./packages/hasura-node-client/src:/app/packages/hasura-node-client/src
   # configuration: # TODO: revoir
@@ -52,7 +52,7 @@ services:
   graphql-engine:
     build:
       context: .
-      dockerfile: ./packages/graphql-engine/Dockerfile
+      dockerfile: ./backend/graphql-engine/Dockerfile
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       # HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
@@ -61,7 +61,7 @@ services:
       disable: true
     restart: always
     volumes:
-      - ./packages/graphql-engine/migrations:/opt/hasura-migrations
+      - ./backend/graphql-engine/migrations:/opt/hasura-migrations
   # functions:
   #   build:
   #     context: ./packages/functions-service

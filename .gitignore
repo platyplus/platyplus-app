@@ -4,6 +4,10 @@
 node_modules
 /packages/**/dist
 /packages/**/lib
+/backend/**/dist
+/backend/**/lib
+/frontend/**/dist
+/frontend/**/lib
 /src-cordova/node_modules
 /src-cordova/platforms
 /src-cordova/plugins

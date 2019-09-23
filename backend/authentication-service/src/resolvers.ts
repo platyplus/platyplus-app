@@ -52,11 +52,9 @@ export const resolvers: IResolvers = {
     },
     // TODO: test if active user
     login: async (_, { username, password }) => {
-      console.log('ICI')
       const user: User = await graphql
         .request(print(LOGIN), { username })
         .then(data => data.user[0])
-      console.log('LA')
 
       if (!user) throw new Error('No such user found.')
 

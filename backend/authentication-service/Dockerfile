@@ -7,6 +7,7 @@ RUN yarn global add lerna
 COPY package.json yarn.lock lerna.json /app/
 
 # Packages
+COPY backend/authentication-service/package.json yarn.lock backend/authentication-service/tsconfig.build.json /app/backend/authentication-service/
 COPY packages/microservice/package.json packages/microservice/yarn.lock packages/microservice/tsconfig.build.json /app/packages/microservice/
 COPY packages/hasura-node-client/package.json packages/hasura-node-client/yarn.lock packages/hasura-node-client/tsconfig.build.json /app/packages/hasura-node-client/
 
@@ -22,4 +23,4 @@ COPY packages/hasura-node-client /app/packages/hasura-node-client
 #RUN lerna run build
 
 USER node
-CMD ["node", "packages/authentication-service/lib/index.js"]
+CMD ["node", "backend/authentication-service/lib/index.js"]

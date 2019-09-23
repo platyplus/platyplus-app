@@ -10,7 +10,7 @@
             "name": "Debug: Authentication",
             "port": 9229,
             "address": "localhost",
-            "localRoot": "${workspaceFolder}/packages/authentication-service",
+            "localRoot": "${workspaceFolder}/backend/authentication-service",
             "remoteRoot": "/opt/app",
             "protocol": "inspector"
         },
@@ -20,7 +20,7 @@
             "name": "Debug: Functions",
             "port": 9230,
             "address": "localhost",
-            "localRoot": "${workspaceFolder}/packages/functions-service",
+            "localRoot": "${workspaceFolder}/backend/functions-service",
             "remoteRoot": "/opt/app",
             "protocol": "inspector"
         },
