@@ -1,6 +1,6 @@
 <template lang="pug">
 q-page(v-if="$authenticated" padding class="justify-center")
-  div TODO {{$profile}}...
+  div Profile page
 </template>
 
 <style></style>
