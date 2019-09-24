@@ -22,7 +22,8 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: yarn install
+      - run: echo "registry=https://registry.npmjs.org/" > .npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=${{secrets.npm_token}}" >> .npmrc
+      - run: cat .npmrc
       - run: yarn run publish
-        env:
-          NPM_TOKEN: ${{secrets.npm_token}}
-
+      
