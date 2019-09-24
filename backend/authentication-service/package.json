@@ -1,6 +1,6 @@
 {
   "name": "@platyplus/authentication-service",
-  "version": "0.0.4-alpha.0",
+  "version": "0.0.5-alpha.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -42,8 +42,8 @@
     "ts-node-dev": "^1.0.0-pre.42"
   },
   "dependencies": {
-    "@platyplus/hasura-node-client": "^0.0.3-alpha.0",
-    "@platyplus/microservice": "^0.0.3-alpha.0",
+    "@platyplus/hasura-node-client": "^0.0.4-alpha.0",
+    "@platyplus/microservice": "^0.0.4-alpha.0",
     "apollo-server-koa": "^2.9.3",
     "bcryptjs": "^2.4.3",
     "dotenv-cli": "^2.0.1",
