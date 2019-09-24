@@ -19,7 +19,7 @@
     "postinstall": "yarn build && lerna link",
     "test": "lerna run test --parallel",
     "typecheck": "lerna run typecheck",
-    "release": "standard-version",
+    "release": "lerna version --conventional-commits --",
     "console": "lerna run --scope @platyplus/graphql-engine console",
     "dev": "concurrently \"dotenv -- docker-compose -f docker-compose.yml -f docker-compose-dev.yml up --build\" \"yarn run console\"",
     "docker:build-published": "echo 'TODO: tag' && lerna exec 'test -e $PWD/Dockerfile-published && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-) -f $PWD/Dockerfile-published $LERNA_ROOT_PATH || exit 0'",
@@ -57,7 +57,6 @@
     "lerna": "^3.16.4",
     "lint-staged": "^9.2.5",
     "prettier": "^1.18.2",
-    "standard-version": "^7.0.0",
     "typescript": "3.5.3"
   }
 }
