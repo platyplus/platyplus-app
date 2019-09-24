@@ -115,7 +115,7 @@ const createVariables = (
     } else {
       const relationship = property as RelationshipProperty
       if (relationship.isMultiple) {
-        console.log('TODO multiple') // TODO
+        // TODO multiple
         if (relationship.isSimpleManyToMany) {
           console.log('TODO M2M')
         }
