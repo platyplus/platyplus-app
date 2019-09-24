@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.4-alpha.3](https://github.com/platyplus/platyplus/compare/@platyplus/platyplus@0.0.4-alpha.2...@platyplus/platyplus@0.0.4-alpha.3) (2019-09-24)
+
+
+### Bug Fixes
+
+* clean the profile page ([f95bc3f](https://github.com/platyplus/platyplus/commit/f95bc3f))
+
+
+
+
+
 ## [0.0.4-alpha.2](https://github.com/platyplus/platyplus/compare/@platyplus/platyplus@0.0.4-alpha.0...@platyplus/platyplus@0.0.4-alpha.2) (2019-09-24)
 
 **Note:** Version bump only for package @platyplus/platyplus
