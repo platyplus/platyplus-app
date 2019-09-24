@@ -1,6 +1,6 @@
 {
   "name": "@platyplus/platyplus",
-  "version": "0.0.4-alpha.5",
+  "version": "0.0.4-alpha.6",
   "private": true,
   "productName": "Platyplus",
   "cordovaId": "org.cordova.quasar.app",
