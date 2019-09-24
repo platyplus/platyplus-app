@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.4-alpha.8](https://github.com/platyplus/platyplus/compare/@platyplus/platyplus@0.0.4-alpha.7...@platyplus/platyplus@0.0.4-alpha.8) (2019-09-24)
+
+**Note:** Version bump only for package @platyplus/platyplus
+
+
+
+
+
 ## [0.0.4-alpha.7](https://github.com/platyplus/platyplus/compare/@platyplus/platyplus@0.0.4-alpha.6...@platyplus/platyplus@0.0.4-alpha.7) (2019-09-24)
 
 **Note:** Version bump only for package @platyplus/platyplus
