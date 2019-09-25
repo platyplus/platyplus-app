@@ -44,8 +44,10 @@ jobs:
         env:
           GCLOUD_AUTH: ${{ secrets.gcloud_auth }}
       - uses: "actions/gcloud/cli@master"
-        args: container clusters list
+        with:
+          args: container clusters list
       - uses: "actions/gcloud/cli@master"
-        args: auth configure-docker --quiet
+        with:
+          args: auth configure-docker --quiet
   # TODO deploy on staging
       
