@@ -54,7 +54,7 @@ jobs:
       - name: List registries
         uses: "actions/gcloud/cli@master"
         with:
-          args: container images list
+          args: container images list --project ${{secrets.gcloud_project_id}}
       # - name: Build docker images
       #   run: yarn run ci:docker build
       #   env:
