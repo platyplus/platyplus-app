@@ -52,7 +52,7 @@ jobs:
         env:
           SCOPE: gcr.io/${{secrets.gcloud_project_id}}
       - name: Push docker images
-        run: yarn run ci:docker push
+        run: yarn run ci:docker push -D
         env:
           SCOPE: gcr.io/${{secrets.gcloud_project_id}}
   # TODO deploy on staging
