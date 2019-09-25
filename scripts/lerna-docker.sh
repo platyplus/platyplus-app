@@ -35,5 +35,8 @@ case "$1" in
         ;;
     *)
         echo "Command not found."
+        echo $0
+        echo $1
+        env
         ;;
 esac
