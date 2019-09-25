@@ -13,11 +13,11 @@ on:
 #       - master
 
 jobs:
-  packages-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      # TODO uncomment
+  # TODO uncomment
+  # packages-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
       # - uses: actions/setup-node@v1
       #   with:
       #     node-version: 12
@@ -32,22 +32,25 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: yarn install
-      - run: yarn run build
-      - run: yarn run ci:docker build
+      - run: echo "$IMG_PREFIX" > test && cat test
         env:
           IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
-      - run: yarn run ci:docker push
-        env:
-          IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
-      - uses: actions/gcloud/auth@master
-        env:
-          GCLOUD_AUTH: ${{ secrets.gcloud_auth }}
-      - uses: "actions/gcloud/cli@master"
-        with:
-          args: container clusters list --project ${{secrets.gcloud_project_id}}
-      - uses: "actions/gcloud/cli@master"
-        with:
-          args: "auth configure-docker --quiet --project ${{secrets.gcloud_project_id}}"
+      # - run: yarn install
+      # - run: yarn run build
+      # - run: yarn run ci:docker build
+      #   env:
+      #     IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
+      # - run: yarn run ci:docker push
+      #   env:
+      #     IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
+      # - uses: actions/gcloud/auth@master
+      #   env:
+      #     GCLOUD_AUTH: ${{ secrets.gcloud_auth }}
+      # - uses: "actions/gcloud/cli@master"
+      #   with:
+      #     args: container clusters list --project ${{secrets.gcloud_project_id}}
+      # - uses: "actions/gcloud/cli@master"
+      #   with:
+      #     args: "auth configure-docker --quiet --project ${{secrets.gcloud_project_id}}"
   # TODO deploy on staging
       
