@@ -47,17 +47,16 @@ jobs:
       - name: GCloud docker configuration
         uses: "actions/gcloud/cli@master"
         with:
-          args: components install docker-credential-gcr
-          # args: auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
-          # args: echo "$GCLOUD_AUTH" | docker login -u _json_key --password-stdin https://gcr.io
-          #args: "auth configure-docker --quiet --project platyplus-0402"
+          args: "auth configure-docker --quiet --project platyplus-0402"
         env:
           GCLOUD_AUTH: ${{ secrets.gcloud_auth }}
-      - run: docker-credential-gcr configure-docker
       - name: List registries
         uses: "actions/gcloud/cli@master"
         with:
           args: container images list --project ${{secrets.gcloud_project_id}}
+      - uses: actions/docker/cli@master
+        with:
+          args: docker pull gcr.io/platyplus-0402/authentication-service
       - name: Pull image
         run: docker pull gcr.io/platyplus-0402/authentication-service
       # - name: Build docker images
