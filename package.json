@@ -23,6 +23,7 @@
     "publish": "lerna publish from-package --yes",
     "console": "lerna run --scope @platyplus/graphql-engine console",
     "dev": "concurrently \"dotenv -- docker-compose -f docker-compose.yml -f docker-compose-dev.yml up --build\" \"yarn run console\"",
+    "lerna": "lerna",
     "ci:docker-published": "DF_SUFFIX=published TAG=true LATEST=true yarn lerna exec '$LERNA_ROOT_PATH/scripts/lerna-docker.sh'",
     "ci:docker": "yarn lerna exec '$LERNA_ROOT_PATH/scripts/lerna-docker.sh'",
     "dev:platyplus": "concurrently \"lerna run watch\" \"lerna run --scope @platyplus/platyplus dev\"",
