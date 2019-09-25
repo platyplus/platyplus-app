@@ -29,16 +29,16 @@ jobs:
     # needs: packages-test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - name: Install packages
-        run: yarn install
-      - name: Build packages
-        run: yarn run build
+      # - name: Checkout
+      #   uses: actions/checkout@v1
+      # - name: Setup Node
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: 12
+      # - name: Install packages
+      #   run: yarn install
+      # - name: Build packages
+      #   run: yarn run build
       - name: GCloud authentication
         uses: actions/gcloud/auth@master
         env:
@@ -46,14 +46,22 @@ jobs:
       - name: GCloud docker configuration
         uses: "actions/gcloud/cli@master"
         with:
-          args: "auth configure-docker --quiet --project ${{secrets.gcloud_project_id}}"
-      - name: Build docker images
-        run: yarn run ci:docker build
+          args: auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
+          # args: echo "$GCLOUD_AUTH" | docker login -u _json_key --password-stdin https://gcr.io
+          # args: "auth configure-docker --quiet --project ${{secrets.gcloud_project_id}}"
         env:
-          SCOPE: gcr.io/${{secrets.gcloud_project_id}}
-      - name: Push docker images
-        run: yarn run ci:docker push -D
-        env:
-          SCOPE: gcr.io/${{secrets.gcloud_project_id}}
+          GCLOUD_AUTH: ${{ secrets.gcloud_auth }}
+      - name: List registries
+        uses: "actions/gcloud/cli@master"
+        with:
+          args: container images list
+      # - name: Build docker images
+      #   run: yarn run ci:docker build
+      #   env:
+      #     SCOPE: docker.pkg.github.com/platyplus/platyplus
+      # - name: Push docker images
+      #   run: yarn run ci:docker push -D
+      #   env:
+      #     SCOPE: docker.pkg.github.com/platyplus/platyplus
   # TODO deploy on staging
       
