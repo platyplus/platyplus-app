@@ -37,5 +37,3 @@ case "$1" in
         echo "Command not found."
         ;;
 esac
-env
-echo "$TEST_TEST"
