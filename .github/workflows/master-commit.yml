@@ -57,6 +57,7 @@ jobs:
           args: container images list --project ${{secrets.gcloud_project_id}}
       - name: Pull image
         run: docker pull gcr.io/platyplus-0402/authentication-service
+      - run: ls
       # - name: Build docker images
       #   run: yarn run ci:docker build
       #   env:
