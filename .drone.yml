@@ -32,6 +32,7 @@ steps:
   - name: publish
     image: plugins/gcr
     settings:
+      dockerfile: backend/authentication-service/Dockerfile
       repo: platyplus-0402/authentication
       tags: ${DRONE_COMMIT_SHA:0:8}
       json_key:
