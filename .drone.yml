@@ -73,6 +73,15 @@ steps:
         - next
       json_key:
         from_secret: google_credentials
+  - name: deploy-graphql-engine
+    image: google/cloud-sdk:latest
+    commands:
+      - echo "$CREDENTIALS" > .credentials
+      - gcloud auth activate-service-account --key-file .credentials
+      - gcloud container images list
+    environment:
+      CREDENTIALS:
+        from_secret: google_credentials
 trigger:
   branch:
     - master
