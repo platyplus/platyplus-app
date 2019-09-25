@@ -27,5 +27,5 @@ jobs:
       # TODO run tests
       - run: yarn run publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
       # TODO deploy on production

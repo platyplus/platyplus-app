@@ -33,9 +33,9 @@ jobs:
           node-version: 12
       - run: yarn run docker build
         env:
-          IMG_PREFIX: gcr.io/${{gcloud_project_id}}
+          IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
       - run: yarn run docker deploy
         env:
-          IMG_PREFIX: gcr.io/${{gcloud_project_id}}
+          IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
   # TODO deploy on staging
       
