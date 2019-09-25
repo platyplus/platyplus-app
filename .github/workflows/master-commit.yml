@@ -44,6 +44,7 @@ jobs:
         uses: actions/gcloud/auth@master
         env:
           GCLOUD_AUTH: ${{ secrets.gcloud_auth }}
+      - run: docker logout
       - name: GCloud docker configuration
         uses: "actions/gcloud/cli@master"
         with:
@@ -59,9 +60,9 @@ jobs:
           args: version
       - uses: actions/docker/cli@master
         with:
-          args: pull gcr.io/platyplus-0402/authentication-service
+          args: pull gcr.io/platyplus-0402/authentication-service:07ef588
       - name: Pull image
-        run: docker pull gcr.io/platyplus-0402/authentication-service
+        run: docker pull gcr.io/platyplus-0402/authentication-service:07ef588
       # - name: Build docker images
       #   run: yarn run ci:docker build
       #   env:
