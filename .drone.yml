@@ -77,7 +77,7 @@ steps:
     depends_on: [publish-authentication-service]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && config set project platyplus-0402
+      - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
       - gcloud container images list # TODO deploy
     environment:
       CREDENTIALS:
@@ -86,7 +86,7 @@ steps:
     depends_on: [publish-functions-service]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && config set project platyplus-0402
+      - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
       - gcloud container images list # TODO deploy
     environment:
       CREDENTIALS:
@@ -98,7 +98,7 @@ steps:
       - deploy-functions-service
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && config set project platyplus-0402
+      - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
       - gcloud container images list # TODO deploy
     environment:
       CREDENTIALS:
@@ -109,7 +109,7 @@ steps:
       - deploy-graphql-engine
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && config set project platyplus-0402
+      - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
       - gcloud container images list # TODO deploy
     environment:
       CREDENTIALS:
