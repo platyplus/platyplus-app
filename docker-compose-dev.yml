@@ -64,7 +64,7 @@ services:
       - ./backend/graphql-engine/migrations:/opt/hasura-migrations
   # functions:
   #   build:
-  #     context: ./packages/functions-service
+  #     context: ./backend/functions-service
   #     args:
   #       NODE_ENV: development
   #   command: node /opt/start-dev

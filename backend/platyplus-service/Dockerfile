@@ -7,9 +7,9 @@ RUN yarn global add lerna
 COPY package.json yarn.lock lerna.json tsconfig.json tsconfig.build.json .eslintrc.js .eslintignore /app/
 
 # Packages
-COPY backend/platyplus-service/package.json backend/platyplus-service/yarn.lock backend/platyplus-service/tsconfig.build.json /app/packages/platyplus-service/
+COPY backend/platyplus-service/package.json backend/platyplus-service/yarn.lock backend/platyplus-service/tsconfig.build.json /app/backend/platyplus-service/
 COPY frontend/platyplus/package.json frontend/platyplus/yarn.lock /app/frontend/platyplus/
-COPY packages/microservice/package.json packages/microservice/yarn.lock packages/microservice/tsconfig.build.json /app/microservice/platyplus/
+COPY packages/microservice/package.json packages/microservice/yarn.lock packages/microservice/tsconfig.build.json /app/packages/microservice/platyplus/
 COPY packages/hasura-apollo-client/package.json packages/hasura-apollo-client/yarn.lock packages/hasura-apollo-client/tsconfig.build.json /app/packages/hasura-apollo-client/
 COPY packages/vuex-apollo-offline/package.json packages/vuex-apollo-offline/yarn.lock packages/vuex-apollo-offline/tsconfig.build.json /app/packages/vuex-apollo-offline/
 

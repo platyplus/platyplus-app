@@ -15,7 +15,7 @@ COPY packages/hasura-node-client/package.json packages/hasura-node-client/yarn.l
 RUN lerna bootstrap --ignore-scripts
 
 # Copy source
-COPY packages/authentication-service /app/packages/authentication-service
+COPY backend/authentication-service /app/backend/authentication-service
 COPY packages/microservice /app/packages/microservice
 COPY packages/hasura-node-client /app/packages/hasura-node-client
 
