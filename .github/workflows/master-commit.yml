@@ -31,10 +31,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: yarn run docker build
+      - run: yarn run ci:docker build
         env:
           IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
-      - run: yarn run docker deploy
+      - run: yarn run ci:docker deploy
         env:
           IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
   # TODO deploy on staging
