@@ -76,7 +76,7 @@ steps:
   - name: deploy-graphql-engine
     image: google/cloud-sdk:latest
     commands:
-      - echo "$CREDENTIALS" | base64 -D > .credentials
+      - echo "$CREDENTIALS" | base64 -d > .credentials
       - gcloud auth activate-service-account --key-file .credentials
       - rm .credentials
       - gcloud container images list
