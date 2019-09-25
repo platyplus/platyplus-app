@@ -48,6 +48,6 @@ jobs:
           args: container clusters list --project ${{secrets.gcloud_project_id}}
       - uses: "actions/gcloud/cli@master"
         with:
-          args: "auth configure-docker --quiet  --project ${{secrets.gcloud_project_id}}
+          args: "auth configure-docker --quiet --project ${{secrets.gcloud_project_id}}"
   # TODO deploy on staging
       
