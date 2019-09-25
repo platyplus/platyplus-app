@@ -46,9 +46,9 @@ jobs:
       - name: GCloud docker configuration
         uses: "actions/gcloud/cli@master"
         with:
-          args: auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
+          # args: auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
           # args: echo "$GCLOUD_AUTH" | docker login -u _json_key --password-stdin https://gcr.io
-          # args: "auth configure-docker --quiet --project ${{secrets.gcloud_project_id}}"
+          args: "auth configure-docker --quiet --project platyplus-0402"
         env:
           GCLOUD_AUTH: ${{ secrets.gcloud_auth }}
       - name: List registries
