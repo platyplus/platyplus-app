@@ -33,7 +33,7 @@ jobs:
       # - uses: actions/setup-node@v1
       #   with:
       #     node-version: 12
-      - run: echo $IMG_PREFIX | cut -c 2
+      - run: echo "$IMG_PREFIX" | cut -c 2-
         env:
           IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
       # - run: yarn install
