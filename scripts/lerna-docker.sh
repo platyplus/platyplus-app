@@ -8,10 +8,13 @@ fi
 if [ ! -e $DOCKERFILE_NAME ]; then
     exit 0
 fi
-# Removes the first character('@') of the scoped package name
-IMAGE_NAME=$(echo $LERNA_PACKAGE_NAME | cut -c 2-)
-if [ -n "IMG_PREFIX" ]; then
-    IMAGE_NAME="$IMG_PREFIX/$IMAGE_NAME"
+# Remove the first character ('@') in the package name
+PACKAGE_NAME=$(echo $LERNA_PACKAGE_NAME | cut -c 2-)
+# Image name = package name without scope
+IMAGE_NAME=$(echo $PACKAGE_NAME | cut -d "/" -f 2)
+if [ -z "$SCOPE" ]; then
+    # Scope = package scope (without the initial first character)
+    SCOPE=$(echo $PACKAGE_NAME | cut -d "/" -f 1)
 fi
 if [ -z "$TAG" ]; then
     # TAG=$(git branch | grep \* | cut -d ' ' -f2) # Branch name
@@ -24,14 +27,14 @@ fi
 
 case "$1" in
     "build")
-        docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE_NAME $LERNA_ROOT_PATH
+        docker build -t $SCOPE/$IMAGE_NAME:$TAG -f $DOCKERFILE_NAME $LERNA_ROOT_PATH
         if [ -n "$LATEST" ]; then
             # TODO Latest present. Adding a 'latest' tag
-            docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
+            docker tag $SCOPE/$IMAGE_NAME:$TAG $SCOPE/$IMAGE_NAME:latest
         fi
         ;;
     "push")
-        docker push $IMAGE_NAME:$TAG
+        docker push $SCOPE/$IMAGE_NAME:$TAG
         ;;
     *)
         echo "Command not found $1"

@@ -50,10 +50,10 @@ jobs:
       - name: Build docker images
         run: yarn run ci:docker build
         env:
-          IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
+          SCOPE: gcr.io/${{secrets.gcloud_project_id}}
       - name: Push docker images
         run: yarn run ci:docker push
         env:
-          IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
+          SCOPE: gcr.io/${{secrets.gcloud_project_id}}
   # TODO deploy on staging
       
