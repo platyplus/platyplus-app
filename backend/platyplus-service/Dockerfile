@@ -23,8 +23,5 @@ COPY packages/microservice /app/packages/microservice/platyplus
 COPY packages/hasura-apollo-client /app/packages/hasura-apollo-client
 COPY packages/vuex-apollo-offline /app/packages/vuex-apollo-offline
 
-# TODO Build packages? Multistage docker then?
-RUN lerna run build
-
 USER node
 CMD ["node", "backend/platyplus-service/lib/index.js"]
