@@ -39,6 +39,7 @@ jobs:
       #   run: yarn install
       # - name: Build packages
       #   run: yarn run build
+      - run: docker --version
       - name: GCloud authentication
         uses: actions/gcloud/auth@master
         env:
@@ -47,15 +48,14 @@ jobs:
         uses: "actions/gcloud/cli@master"
         with:
           # args: auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
-          # args: echo "$GCLOUD_AUTH" | docker login -u _json_key --password-stdin https://gcr.io
-          args: "auth configure-docker --quiet --project platyplus-0402"
+          args: echo "$GCLOUD_AUTH" | docker login -u _json_key --password-stdin https://gcr.io
+          #args: "auth configure-docker --quiet --project platyplus-0402"
         env:
           GCLOUD_AUTH: ${{ secrets.gcloud_auth }}
       - name: List registries
         uses: "actions/gcloud/cli@master"
         with:
           args: container images list --project ${{secrets.gcloud_project_id}}
-      - run: ls
       - name: Pull image
         run: docker pull gcr.io/platyplus-0402/authentication-service
       # - name: Build docker images
