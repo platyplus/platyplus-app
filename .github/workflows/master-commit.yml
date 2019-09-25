@@ -13,7 +13,7 @@ on:
 #       - master
 
 jobs:
-  build:
+  packages-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -21,7 +21,23 @@ jobs:
         with:
           node-version: 12
       - run: yarn install
-      # TODO run tests
-      - run: yarn run docker:build
-      # TODO deploy on staging
+  # TODO run tests
+      
+  docker-build:
+    needs: packages-build
+    runs-on: ubuntu-latest
+    env:
+      TEST_TEST: gcr.io/${{gcloud_project_id}}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn run docker build
+        env:
+          IMG_PREFIX: gcr.io/${{gcloud_project_id}}
+      - run: yarn run docker deploy
+        env:
+          IMG_PREFIX: gcr.io/${{gcloud_project_id}}
+  # TODO deploy on staging
       

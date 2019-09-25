@@ -23,8 +23,8 @@
     "publish": "lerna publish from-package --yes",
     "console": "lerna run --scope @platyplus/graphql-engine console",
     "dev": "concurrently \"dotenv -- docker-compose -f docker-compose.yml -f docker-compose-dev.yml up --build\" \"yarn run console\"",
-    "docker:build-published": "echo 'TODO: tag' && lerna exec 'test -e $PWD/Dockerfile-published && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-) -f $PWD/Dockerfile-published $LERNA_ROOT_PATH || exit 0'",
-    "docker:build": "lerna exec 'test -e $PWD/Dockerfile && docker build -t $(echo $LERNA_PACKAGE_NAME | cut -c 2-) -f $PWD/Dockerfile $LERNA_ROOT_PATH || exit 0'",
+    "docker-published": "DF_SUFFIX=published TAG=true LATEST=true lerna exec '$LERNA_ROOT_PATH/scripts/lerna-docker.sh'",
+    "docker": "lerna exec '$LERNA_ROOT_PATH/scripts/lerna-docker.sh'",
     "dev:platyplus": "concurrently \"lerna run watch\" \"lerna run --scope @platyplus/platyplus dev\"",
     "dev:authentication": "concurrently \"lerna run watch\" \"lerna run --scope @platyplus/authentication-service dev\""
   },
