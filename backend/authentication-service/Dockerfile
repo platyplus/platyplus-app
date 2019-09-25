@@ -19,8 +19,5 @@ COPY backend/authentication-service /app/backend/authentication-service
 COPY packages/microservice /app/packages/microservice
 COPY packages/hasura-node-client /app/packages/hasura-node-client
 
-# TODO Build packages? Multistage docker then?
-RUN lerna run build
-
 USER node
 CMD ["node", "backend/authentication-service/lib/index.js"]

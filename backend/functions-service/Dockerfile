@@ -19,9 +19,6 @@ COPY backend/functions-service /app/backend/functions-service
 COPY packages/microservice /app/packages/microservice
 COPY packages/hasura-node-client /app/packages/hasura-node-client
 
-# TODO Build packages? Multistage docker then?
-RUN lerna run build
-
 # TODO: algo in the template?
 ARG ALGORITHM=RS256
 ENV ALGORITHM $ALGORITHM

@@ -19,7 +19,7 @@ RUN lerna bootstrap --ignore-scripts
 # Copy source
 COPY backend/platyplus-service /app/backend/platyplus-service
 COPY frontend/platyplus /app/frontend/platyplus
-COPY packages/microservice /app/microservice/platyplus
+COPY packages/microservice /app/packages/microservice/platyplus
 COPY packages/hasura-apollo-client /app/packages/hasura-apollo-client
 COPY packages/vuex-apollo-offline /app/packages/vuex-apollo-offline
 
