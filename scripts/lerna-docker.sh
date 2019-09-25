@@ -34,9 +34,6 @@ case "$1" in
         echo "docker push $IMAGE_NAME:$TAG"
         ;;
     *)
-        echo "Command not found."
-        echo $0
-        echo $1
-        env
+        echo "Command not found $1"
         ;;
 esac
