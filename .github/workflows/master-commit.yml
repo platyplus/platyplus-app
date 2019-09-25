@@ -13,7 +13,7 @@ on:
 #       - master
 
 jobs:
-  packages-build:
+  packages-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -21,16 +21,20 @@ jobs:
         with:
           node-version: 12
       - run: yarn install
-  # TODO run tests
+      # TODO run tests
       
   docker-build:
-    needs: packages-build
+    needs: packages-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      # - uses: actions/gcloud/auth@master
+      #   secrets: ["GCLOUD_AUTH"]
+      - run: yarn install
+      - run: yarn run build
       - run: yarn run ci:docker build
         env:
           IMG_PREFIX: gcr.io/${{secrets.gcloud_project_id}}
