@@ -30,7 +30,7 @@ steps:
       - yarn install
       - yarn run build
   - name: publish-platyplus-service
-    depends_on: build-packages
+    depends_on: [build-packages]
     image: plugins/gcr
     settings:
       dockerfile: backend/platyplus-service/Dockerfile
@@ -41,7 +41,7 @@ steps:
       json_key:
         from_secret: google_credentials
   - name: publish-graphql-engine
-    depends_on: build-packages
+    depends_on: [build-packages]
     image: plugins/gcr
     settings:
       dockerfile: backend/graphql-engine/Dockerfile
@@ -52,7 +52,7 @@ steps:
       json_key:
         from_secret: google_credentials
   - name: publish-authentication-service
-    depends_on: build-packages
+    depends_on: [build-packages]
     image: plugins/gcr
     settings:
       dockerfile: backend/authentication-service/Dockerfile
@@ -63,7 +63,7 @@ steps:
       json_key:
         from_secret: google_credentials
   - name: publish-functions-service
-    depends_on: build-packages
+    depends_on: [build-packages]
     image: plugins/gcr
     settings:
       dockerfile: backend/functions-service/Dockerfile
