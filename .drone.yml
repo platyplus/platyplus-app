@@ -29,7 +29,7 @@ steps:
       - git config --global user.name "Drone.io CI"
       - yarn install
       - yarn run build
-  - name: Publish Platyplus Service
+  - name: publish-platyplus-service
     depends_on: build-packages
     image: plugins/gcr
     settings:
@@ -40,7 +40,7 @@ steps:
         - next
       json_key:
         from_secret: google_credentials
-  - name: Publish GraphQL Engine
+  - name: publish-graphql-engine
     depends_on: build-packages
     image: plugins/gcr
     settings:
@@ -51,7 +51,7 @@ steps:
         - next
       json_key:
         from_secret: google_credentials
-  - name: Publish Authentication Service
+  - name: publish-authentication-service
     depends_on: build-packages
     image: plugins/gcr
     settings:
@@ -62,7 +62,7 @@ steps:
         - next
       json_key:
         from_secret: google_credentials
-  - name: Publish Functions Service
+  - name: publish-functions-service
     depends_on: build-packages
     image: plugins/gcr
     settings:
