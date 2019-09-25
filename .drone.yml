@@ -1,113 +1,118 @@
+--- # ---
+# kind: pipeline
+# name: documentation
+# steps:
+#   - name: build-docs
+#     image: node:alpine
+#     commands:
+#       - apk add --no-cache git
+#       - git config --global user.email "no-reply@platy.plus"
+#       - git config --global user.name "Drone.io CI"
+#       - ./scripts/deploy-documentation.sh
+#     environment:
+#       GH_TOKEN:
+#         from_secret: GH_TOKEN
+#       GH_USER:
+#         from_secret: GH_USER
+#     when:
+#       branch: master
+
 kind: pipeline
-name: documentation
+type: docker
+name: publish
 steps:
-  - name: build-docs
+  - name: build-packages
     image: node:alpine
     commands:
       - apk add --no-cache git
       - git config --global user.email "no-reply@platy.plus"
       - git config --global user.name "Drone.io CI"
-      - ./scripts/deploy-documentation.sh
-    environment:
-      GH_TOKEN:
-        from_secret: GH_TOKEN
-      GH_USER:
-        from_secret: GH_USER
-    when:
-      branch: master
-
----
-kind: pipeline
-name: service-template-build
-steps:
-  - name: build-service-template
-    image: plugins/docker
+      - yarn install
+      - yarn run build
+  - name: publish
+    image: plugins/gcr
     settings:
-      context: services/service-template
-      dockerfile: services/service-template/Dockerfile
-      repo: platyplus/service-template
-      tags: latest
-      username:
-        from_secret: DH_USER
-      password:
-        from_secret: DH_PASSWORD
-    when:
-      branch: master
+      repo: platyplus-0402/authentication
+      tags: ${DRONE_COMMIT_SHA:0:8}
+      json_key:
+        from_secret: google_credentials
+trigger:
+  branch:
+    - master
+# ---
+# kind: pipeline
+# name: authentication-build
+# steps:
+#   - name: build-auth-service
+#     image: plugins/docker
+#     settings:
+#       context: services/authentication
+#       dockerfile: services/authentication/Dockerfile
+#       repo: platyplus/authentication
+#       tags: latest
+#       username:
+#         from_secret: DH_USER
+#       password:
+#         from_secret: DH_PASSWORD
+#     when:
+#       branch: master
+# depends_on:
+#   - service-template-build
 
----
-kind: pipeline
-name: authentication-build
-steps:
-  - name: build-auth-service
-    image: plugins/docker
-    settings:
-      context: services/authentication
-      dockerfile: services/authentication/Dockerfile
-      repo: platyplus/authentication
-      tags: latest
-      username:
-        from_secret: DH_USER
-      password:
-        from_secret: DH_PASSWORD
-    when:
-      branch: master
-depends_on:
-  - service-template-build
+# ---
+# kind: pipeline
+# name: functions-build
+# steps:
+#   - name: build-functions-service
+#     image: plugins/docker
+#     settings:
+#       context: services/functions
+#       dockerfile: services/functions/Dockerfile
+#       repo: platyplus/functions
+#       tags: latest
+#       username:
+#         from_secret: DH_USER
+#       password:
+#         from_secret: DH_PASSWORD
+#     when:
+#       branch: master
+# depends_on:
+#   - service-template-build
 
----
-kind: pipeline
-name: functions-build
-steps:
-  - name: build-functions-service
-    image: plugins/docker
-    settings:
-      context: services/functions
-      dockerfile: services/functions/Dockerfile
-      repo: platyplus/functions
-      tags: latest
-      username:
-        from_secret: DH_USER
-      password:
-        from_secret: DH_PASSWORD
-    when:
-      branch: master
-depends_on:
-  - service-template-build
+# ---
+# kind: pipeline
+# name: graphql-engine-build
+# steps:
+#   - name: build-graphql-service
+#     image: plugins/docker
+#     settings:
+#       context: services/graphql-engine
+#       dockerfile: services/graphql-engine/Dockerfile
+#       repo: platyplus/graphql-engine
+#       tags: latest
+#       username:
+#         from_secret: DH_USER
+#       password:
+#         from_secret: DH_PASSWORD
+#     when:
+#       branch: master
 
----
-kind: pipeline
-name: graphql-engine-build
-steps:
-  - name: build-graphql-service
-    image: plugins/docker
-    settings:
-      context: services/graphql-engine
-      dockerfile: services/graphql-engine/Dockerfile
-      repo: platyplus/graphql-engine
-      tags: latest
-      username:
-        from_secret: DH_USER
-      password:
-        from_secret: DH_PASSWORD
-    when:
-      branch: master
-
----
-kind: pipeline
-name: application-build
-steps:
-  - name: build-application
-    image: plugins/docker
-    settings:
-      dockerfile: server/Dockerfile
-      repo: platyplus/platyplus
-      target: production-stage
-      tags: latest
-      username:
-        from_secret: DH_USER
-      password:
-        from_secret: DH_PASSWORD
-    when:
-      branch: master
-depends_on:
-  - service-template-build
+# ---
+# kind: pipeline
+# name: application-build
+# steps:
+#   - name: build-application
+#     image: plugins/docker
+#     settings:
+#       dockerfile: server/Dockerfile
+#       repo: platyplus/platyplus
+#       target: production-stage
+#       tags: latest
+#       username:
+#         from_secret: DH_USER
+#       password:
+#         from_secret: DH_PASSWORD
+#     when:
+#       branch: master
+# depends_on:
+#   - service-template-build
