@@ -25,7 +25,8 @@ jobs:
       # TODO run tests
       
   docker-build:
-    needs: packages-test
+    # TODO uncomment
+    # needs: packages-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
