@@ -24,14 +24,14 @@ fi
 
 case "$1" in
     "build")
-        echo "docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE_NAME $LERNA_ROOT_PATH"
+        docker build -t $IMAGE_NAME:$TAG -f $DOCKERFILE_NAME $LERNA_ROOT_PATH
         if [ -n "$LATEST" ]; then
             # TODO Latest present. Adding a 'latest' tag
-            echo "docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest"
+            docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:latest
         fi
         ;;
     "push")
-        echo "docker push $IMAGE_NAME:$TAG"
+        docker push $IMAGE_NAME:$TAG
         ;;
     *)
         echo "Command not found $1"
