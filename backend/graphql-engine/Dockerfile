@@ -40,10 +40,6 @@ ENV HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT $HASURA_GRAPHQL_MIGRATIONS_SERVER_T
 ENV CLOUDSQL_INSTANCE=''
 ENV ENABLE_CLOUDSQL_PROXY="false"
 
-# * Required by the remove schemas
-ENV EVENTS_URL="${FUNCTIONS_URL}/events"
-ENV AUTH_URL="${AUTHENTICATION_URL}/graphql"
-
 COPY backend/graphql-engine/migrations /opt/hasura-migrations
 COPY backend/graphql-engine/load-env-and-migrate.sh /bin/
 
