@@ -20,6 +20,9 @@
 kind: pipeline
 type: docker
 name: publish
+trigger:
+  branch:
+    - master
 steps:
   - name: build-packages
     image: node:alpine
@@ -73,51 +76,60 @@ steps:
         - next
       json_key:
         from_secret: google_credentials
+
+---
+kind: pipeline
+type: docker
+name: deploy
+trigger:
+  branch:
+    - master
+depends_on: [publish]
+steps:
   - name: deploy-authentication-service
-    depends_on: [publish-authentication-service]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
       # TODO env and connect to other services
-      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service --connectivity=internal
+      - >
+        gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service --platform managed
+        --connectivity=internal
     environment:
       CREDENTIALS:
         from_secret: google_credentials
   - name: deploy-functions-service
-    depends_on: [publish-functions-service]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
       # TODO env and connect to other services
-      - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service --connectivity=internal
+      - >
+        gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service --platform managed
+        --connectivity=internal
     environment:
       CREDENTIALS:
         from_secret: google_credentials
   - name: deploy-graphql-engine
     depends_on:
-      - publish-graphql-engine
       - deploy-authentication-service
       - deploy-functions-service
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
       # TODO env and connect to other services
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine
+      - >
+        gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine --platform managed
     environment:
       CREDENTIALS:
         from_secret: google_credentials
   - name: deploy-platyplus-service
     depends_on:
-      - publish-platyplus-service
       - deploy-graphql-engine
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
       # TODO env
-      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service
+      - >
+        gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service --platform managed
     environment:
       CREDENTIALS:
         from_secret: google_credentials
-trigger:
-  branch:
-    - master
