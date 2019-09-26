@@ -95,6 +95,9 @@ steps:
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
+    environment:
+      CREDENTIALS:
+        from_secret: google_credentials
   - name: deploy-authentication
     depends_on: [gcloud-settings]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
@@ -104,9 +107,6 @@ steps:
       # TODO --connectivity=internal not working on managed services, only on GKE
       - >
         gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service
-    environment:
-      CREDENTIALS:
-        from_secret: google_credentials
   - name: deploy-functions
     depends_on: [gcloud-settings]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
@@ -116,9 +116,6 @@ steps:
       # TODO --connectivity=internal not working on managed services, only on GKE
       - >
         gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service
-    environment:
-      CREDENTIALS:
-        from_secret: google_credentials
   - name: deploy-graphql-engine
     depends_on: [gcloud-settings, deploy-authentication, deploy-functions]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
@@ -127,9 +124,6 @@ steps:
       # TODO env and connect to other services
       - >
         gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine
-    environment:
-      CREDENTIALS:
-        from_secret: google_credentials
   - name: deploy-platyplus
     depends_on: [gcloud-settings, deploy-graphql-engine]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
@@ -138,6 +132,3 @@ steps:
       # TODO env
       - >
         gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service
-    environment:
-      CREDENTIALS:
-        from_secret: google_credentials
