@@ -29,6 +29,10 @@ file_env() {
 
 file_env 'HASURA_GRAPHQL_ADMIN_SECRET'
 export "HASURA_GRAPHQL_MIGRATIONS_DIR"="/opt/hasura-migrations"
+export "HASURA_GRAPHQL_JWT_SECRET"="{ \"type\": \"RS256\", \"jwk_url\": \"$AUTHENTICATION_URL/jwks\"}"
+# TODO remove log
+echo $HASURA_GRAPHQL_JWT_SECRET
+echo $AUTHENTICATION_URL
 # Using a port that is not exposed to other services
 # We then can't mix the service as being ready e.g. wait-for-it or healthchecks
 prod_port=$HASURA_GRAPHQL_SERVER_PORT
