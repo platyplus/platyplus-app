@@ -104,9 +104,9 @@ steps:
       - >
         gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next
         --set-env-vars
-        PUBLIC_KEY=$PUBLIC_KEY,
-        PRIVATE_KEY=$PRIVATE_KEY,
-        HASURA_GRAPHQL_ADMIN_SECRET=$HASURA_GRAPHQL_ADMIN_SECRET
+        PUBLIC_KEY="$PUBLIC_KEY",
+        PRIVATE_KEY="$PRIVATE_KEY",
+        HASURA_GRAPHQL_ADMIN_SECRET="$HASURA_GRAPHQL_ADMIN_SECRET"
     environment:
       PUBLIC_KEY:
         from_secret: PUBLIC_KEY
