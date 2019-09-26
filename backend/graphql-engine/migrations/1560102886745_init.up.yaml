@@ -8,8 +8,7 @@
       definition:
         forward_client_headers: true
         headers: []
-        url: http://authentication:3000/graphql
-        url_from_env: null
+        url_from_env: AUTH_URL
       name: authentication
     tables:
     - array_relationships: []
