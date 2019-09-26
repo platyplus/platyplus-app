@@ -100,7 +100,7 @@ steps:
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
-      - echo $SHELL
+      - ps -ef
       # TODO --connectivity=internal not working on managed services, only on GKE
       - >
         gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next
