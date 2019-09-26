@@ -73,6 +73,7 @@ export const hasuraToSift: any = (
       else {
         const nextKey = Object.keys(object[key])[0]
         if (Object.keys(hasuraColumnKeys).includes(nextKey))
+          // prettier-ignore
           result[
             '$where'
           ] = `this.${key} ${hasuraColumnKeys[nextKey]} this.${object[key][nextKey]}`

@@ -103,6 +103,7 @@ export const actions: ActionTree<UserState, RootState> = {
                   return true
                 } else {
                   console.warn(
+                    // prettier-ignore
                     `Permission to ${permissionType} the primary key column '${colName}' on the table '${tableClass.name}' is required.`
                   )
                   return false

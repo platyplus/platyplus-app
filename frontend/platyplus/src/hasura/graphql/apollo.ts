@@ -26,10 +26,13 @@ export const dataIdFromObject = (object: IdGetterObj) => {
     case 'relationship':
       return `relationship:${obj.table_schema}.${obj.table_name}.${obj.name}`
     case 'primary_key':
+      // prettier-ignore
       return `primary_key:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
     case 'foreign_key_constraint':
+      // prettier-ignore
       return `foreign_key_constraint:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
     case 'check_constraint':
+      // prettier-ignore
       return `check_constraint:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
     default:
       return uniqueGraphQlId(obj)

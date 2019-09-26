@@ -83,6 +83,7 @@ export class ColumnProperty extends BaseProperty {
       if (defaultFunction) return defaultFunction()
       else
         throw new Error(
+          // prettier-ignore
           `Unknown function for the default value '${this.defaultValue}' of the column '${this.name}'.`
         )
     }
