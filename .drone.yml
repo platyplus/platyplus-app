@@ -97,6 +97,7 @@ steps:
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
     commands:
       - gcloud auth activate-service-account --key-file .credentials
+      - gcloud components install beta
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
@@ -119,6 +120,7 @@ steps:
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
     commands:
       - gcloud auth activate-service-account --key-file .credentials
+      - gcloud components install beta
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
@@ -132,6 +134,7 @@ steps:
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
     commands:
       - gcloud auth activate-service-account --key-file .credentials
+      - gcloud components install beta
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
@@ -143,6 +146,7 @@ steps:
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
     commands:
       - gcloud auth activate-service-account --key-file .credentials
+      - gcloud components install beta
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
