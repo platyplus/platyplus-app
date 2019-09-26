@@ -139,7 +139,7 @@ steps:
       - >
         gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next
   - name: deploy-platyplus
-    depends_on: [gcloud-settings, deploy-graphql-engine]
+    depends_on: [prepare-gcloud, deploy-graphql-engine]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - gcloud auth activate-service-account --key-file .credentials
