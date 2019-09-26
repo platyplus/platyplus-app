@@ -94,7 +94,7 @@ steps:
         from_secret: google_credentials
   - name: deploy-authentication
     depends_on: [prepare-gcloud]
-    image: google/cloud-sdk:latest-alpine-alpine # TODO create a custom docker gcloud/'deployer'?
+    image: google/cloud-sdk:latest-alpine # TODO create a custom docker gcloud/'deployer'?
     commands:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud config set project platyplus-0402
