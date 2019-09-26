@@ -136,8 +136,13 @@ steps:
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
       # TODO env and connect to other services: POSTGRES_URL
+      # TODO create SQL instance if not exists?
+      # https://medium.com/tactable-blog/building-a-serverless-graphql-app-with-next-js-hasura-and-cloudrun-fb8ca7c5e757
+      # - gcloud sql databases create hasura-master --instance platyplus || true # TODO only if it doesn't exist
+      # gcloud sql users set-password postgres --instance platyplus --password $$POSTGRES_PASSWORD # ? Useless?
+      - export CLOUDSQL_INSTANCE=`gcloud sql instances describe platyplus --format="get(connectionName)"`
       - export AUTHENTICATION_URL=`gcloud beta run services describe authentication --format="get(status.url)"`
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --set-env-vars AUTHENTICATION_URL="$$AUTHENTICATION_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET" --add-cloudsql-instances platyplus-master
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --set-env-vars POSTGRES_URL="postgres://postgres:$$POSTGRES_PASSWORD@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET" --add-cloudsql-instances platyplus --timeout 900
       # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
       - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - gcloud beta run services update authentication --set-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
@@ -146,6 +151,8 @@ steps:
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
+      POSTGRES_PASSWORD:
+        from_secret: POSTGRES_PASSWORD
   - name: deploy-platyplus
     depends_on: [prepare-gcloud, deploy-graphql-engine]
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
