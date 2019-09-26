@@ -33,6 +33,10 @@ export "HASURA_GRAPHQL_MIGRATIONS_DIR"="/opt/hasura-migrations"
 # We then can't mix the service as being ready e.g. wait-for-it or healthchecks
 prod_port=$HASURA_GRAPHQL_SERVER_PORT
 export "HASURA_GRAPHQL_SERVER_PORT"=9999
+if [ "$ENABLE_CLOUDSQL_PROXY" = true ]; then
+  log "Starting cloud sql proxy..."
+  cloud_sql_proxy -instances=$CLOUDSQL_INSTANCE=tcp:5432 &
+fi
 docker-entrypoint.sh
 export "HASURA_GRAPHQL_SERVER_PORT"=$prod_port
 exec "$@"

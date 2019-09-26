@@ -39,12 +39,19 @@ ENV HASURA_GRAPHQL_UNAUTHORIZED_ROLE $HASURA_GRAPHQL_UNAUTHORIZED_ROLE
 ARG HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT=10
 ENV HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT $HASURA_GRAPHQL_MIGRATIONS_SERVER_TIMEOUT
 
+ENV CLOUDSQL_INSTANCE=''
+ENV ENABLE_CLOUDSQL_PROXY="false"
+
 # * Required by the remove schemas
 ENV EVENTS_URL="${FUNCTIONS_URL}/events"
 ENV AUTH_URL="${AUTHENTICATION_URL}/graphql"
 
 COPY backend/graphql-engine/migrations /opt/hasura-migrations
 COPY backend/graphql-engine/load-env-and-migrate.sh /bin/
+
+RUN wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /bin/cloud_sql_proxy
+RUN chmod +x /bin/cloud_sql_proxy
+
 ENTRYPOINT ["load-env-and-migrate.sh"]
 
 HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT:-8080}/healthz || exit 1
