@@ -1,3 +1,4 @@
+# ! rename 'next' tag to the branch name i.e. master
 # ---
 # kind: pipeline
 # name: documentation
@@ -119,11 +120,12 @@ steps:
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
-      # TODO env and connect to other services
       # TODO --connectivity=internal not working on managed services, only on GKE
       # ! Uncomment the following line when the functions microservice is ready to work
-      # - >
-      #   gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:next
+      # - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:next --allow-unauthenticated --set-env-vars HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
+    environment:
+      HASURA_GRAPHQL_ADMIN_SECRET:
+        from_secret: HASURA_GRAPHQL_ADMIN_SECRET
   - name: deploy-graphql-engine
     depends_on: [prepare-gcloud, deploy-authentication, deploy-functions]
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
@@ -133,10 +135,17 @@ steps:
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
-      # TODO env and connect to other services
+      # TODO env and connect to other services: POSTGRES_URL
       - export AUTHENTICATION_URL=`gcloud beta run services describe authentication --format="get(status.url)"`
-      - echo $$AUTHENTICATION_URL
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --set-env-vars AUTHENTICATION_URL=$$(cat .authentication-url),HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --set-env-vars AUTHENTICATION_URL="$$AUTHENTICATION_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET" --add-cloudsql-instances platyplus-master
+      # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
+      - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
+      - gcloud beta run services update authentication --set-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
+      # ! Uncomment the following line when the functions microservice is ready to work
+      # - gcloud beta run services update functions --set-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
+    environment:
+      HASURA_GRAPHQL_ADMIN_SECRET:
+        from_secret: HASURA_GRAPHQL_ADMIN_SECRET
   - name: deploy-platyplus
     depends_on: [prepare-gcloud, deploy-graphql-engine]
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
@@ -146,5 +155,5 @@ steps:
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
-      # TODO env
-      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated
+      - export GRAPHQL_ENGINE_PUBLIC_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
+      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --set-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
