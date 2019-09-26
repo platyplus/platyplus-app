@@ -102,8 +102,9 @@ steps:
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
       # TODO --connectivity=internal not working on managed services, only on GKE
+      # TODO remove --allow-unauthenticated
       - >-
-        gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next
+        gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --allow-unauthenticated
          --set-env-vars 
         PUBLIC_KEY="$$PUBLIC_KEY",
         PRIVATE_KEY="$$PRIVATE_KEY",
@@ -140,7 +141,7 @@ steps:
       - gcloud config set run/region europe-west1
       # TODO env and connect to other services
       - >
-        gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next
+        gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated
   - name: deploy-platyplus
     depends_on: [prepare-gcloud, deploy-graphql-engine]
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
@@ -152,4 +153,4 @@ steps:
       - gcloud config set run/region europe-west1
       # TODO env
       - >
-        gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next
+        gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated
