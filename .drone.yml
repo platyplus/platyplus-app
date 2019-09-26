@@ -88,8 +88,8 @@ steps:
   - name: gcloud-settings
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - echo "$CREDENTIALS" | base64 -d > $HOME/.credentials
-      - gcloud auth activate-service-account --key-file $HOME/.credentials
+      - echo "$CREDENTIALS" | base64 -d > .credentials
+      - gcloud auth activate-service-account --key-file .credentials
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
@@ -100,7 +100,7 @@ steps:
     depends_on: [gcloud-settings]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - gcloud auth activate-service-account --key-file $HOME/.credentials
+      - gcloud auth activate-service-account --key-file .credentials
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
@@ -112,7 +112,7 @@ steps:
     depends_on: [gcloud-settings]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - gcloud auth activate-service-account --key-file $HOME/.credentials
+      - gcloud auth activate-service-account --key-file .credentials
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
@@ -124,7 +124,7 @@ steps:
     depends_on: [gcloud-settings]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - gcloud auth activate-service-account --key-file $HOME/.credentials
+      - gcloud auth activate-service-account --key-file .credentials
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
@@ -137,7 +137,7 @@ steps:
     depends_on: [gcloud-settings, deploy-authentication, deploy-functions]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - gcloud auth activate-service-account --key-file $HOME/.credentials
+      - gcloud auth activate-service-account --key-file .credentials
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
@@ -149,7 +149,7 @@ steps:
     depends_on: [gcloud-settings, deploy-graphql-engine]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - gcloud auth activate-service-account --key-file $HOME/.credentials
+      - gcloud auth activate-service-account --key-file .credentials
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
