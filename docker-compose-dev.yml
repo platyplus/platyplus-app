@@ -4,14 +4,10 @@ services:
     build: .
     command: ['yarn', 'dev:platyplus']
     environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       NODE_ENV: development
-      PRIVATE_KEY: '${PRIVATE_KEY}'
-      PUBLIC_KEY: '${PUBLIC_KEY}'
     healthcheck:
       disable: true
     labels:
-      - 'traefik.frontend.rule=Host:app.${DOMAIN}'
       - 'traefik.port=8080'
     restart: always
     volumes:
@@ -22,14 +18,14 @@ services:
     build: .
     command: ['yarn', 'dev:authentication']
     environment:
-      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       NODE_ENV: development
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       PRIVATE_KEY: '${PRIVATE_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
     healthcheck:
       disable: true
     labels:
-      - 'traefik.frontend.rule=Host:auth-service.${DOMAIN}'
+      - 'traefik.frontend.rule=Host:auth-service.${DOMAIN:-localhost}'
       - 'traefik.port=3000'
     ports:
       - '9229:9229'
@@ -55,7 +51,6 @@ services:
       dockerfile: ./backend/graphql-engine/Dockerfile
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
-      # HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
     command: ['graphql-engine', 'serve']
     healthcheck:
       disable: true
@@ -69,12 +64,12 @@ services:
   #       NODE_ENV: development
   #   command: node /opt/start-dev
   #   environment:
-  #     HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
   #     NODE_ENV: development
+  #     HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
   #   healthcheck:
   #     disable: true
   #   labels:
-  #     - 'traefik.frontend.rule=Host:functions.${DOMAIN}'
+  #     - 'traefik.frontend.rule=Host:functions.${DOMAIN:-localhost}'
   #     - 'traefik.port=3000'
   #   ports:
   #     - '9230:9229'
@@ -90,7 +85,7 @@ services:
     restart: always
   reverse-proxy:
     labels:
-      - 'traefik.frontend.rule=Host:traefik.${DOMAIN}'
+      - 'traefik.frontend.rule=Host:traefik.${DOMAIN:-localhost}'
       - 'traefik.port=8080'
     restart: always
 volumes:

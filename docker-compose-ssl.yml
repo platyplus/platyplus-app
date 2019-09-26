@@ -15,7 +15,7 @@ services:
       - '--acme.onHostRule=true'
       - '--acme.onDemand=false'
       - '--acme.email=admin@platy.plus'
-      - '--acme.domains=${DOMAIN}'
+      - '--acme.domains=${DOMAIN:-localhost}'
     ports:
       - '443:443'
     volumes:

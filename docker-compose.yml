@@ -4,30 +4,16 @@ services:
     # image: platyplus/platyplus-service
     # depends_on:
     #   - 'graphql-engine'
-    environment:
-      API: 'graphql.${DOMAIN}/v1/graphql' # TODO: remove /v1/graphql from the compose file
     labels:
-      - 'traefik.frontend.rule=Host:app.${DOMAIN}'
+      - 'traefik.frontend.rule=Host:app.${DOMAIN:-localhost}'
       - 'traefik.port=3000'
-  authentication:
-    # image: platyplus/authentication-service
-    environment:
-      HASURA_URL: 'http://graphql-engine:3000'
-  # functions:
-  #   image: platyplus/functions-service
-  #   environment:
-  #     HASURA_URL: 'http://graphql-engine:3000'
-  #     POSTGRES_URL: 'postgresql://postgres@postgres/postgres'
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
       - 'authentication'
       - 'postgres'
-    environment:
-      EVENTS_URL: 'http://functions:3000/events'
-      AUTH_URL: 'http://authentication:3000/graphql'
     labels:
-      - 'traefik.frontend.rule=Host:graphql.${DOMAIN}'
+      - 'traefik.frontend.rule=Host:graphql.${DOMAIN:-localhost}'
       - 'traefik.port=3000'
   postgres:
     image: mdillon/postgis:11-alpine

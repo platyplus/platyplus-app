@@ -8,7 +8,9 @@ const { router, app } = microservice()
 
 router.get('/config', async (ctx, next) => {
   ctx.body = {
-    API: process.env.API || ctx.request.header.host + '/v1/graphql'
+    API:
+      (process.env.GRAPHQL_ENGINE_PUBLIC_URL || ctx.request.origin) +
+      '/v1/graphql'
   }
   await next()
 })

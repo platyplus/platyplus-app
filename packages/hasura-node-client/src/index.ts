@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { GraphQLClient } from 'graphql-request'
 
-const HASURA_URL = `${process.env.HASURA_URL}/v1/graphql`
+const baseURL = `${process.env.GRAPHQL_ENGINE_URL ||
+  process.env.GRAPHQL_ENGINE_PUBLIC_URL}/v1/graphql`
 const ADMIN_SECRET = process.env.HASURA_GRAPHQL_ADMIN_SECRET
 let headers = {}
 if (ADMIN_SECRET) {
@@ -10,6 +11,6 @@ if (ADMIN_SECRET) {
   }
 }
 
-export const graphql = new GraphQLClient(HASURA_URL, { headers })
+export const graphql = new GraphQLClient(baseURL, { headers })
 
-export const rest = axios.create({ baseURL: HASURA_URL, headers })
+export const rest = axios.create({ baseURL, headers })

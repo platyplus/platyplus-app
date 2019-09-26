@@ -10,9 +10,11 @@ export function getConfig() {
   const configString = localStorage.getItem('config')
   if (!configString) {
     let config: Config = {
+      // ? will set a default on build or run time? What are the consequences for CI/CD
       API: process.env.API
     }
     if (process.env.PROD) {
+      console.log('In production mode :)')
       const xhr = new XMLHttpRequest() // TODO: deprecated: move to async
       xhr.open('GET', `${window.location.origin}/config`, false)
       xhr.send()

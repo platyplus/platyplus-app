@@ -79,9 +79,9 @@ module.exports = function(ctx) {
       scopeHoisting: true,
       env: {
         API: JSON.stringify(
-          ctx.dev
-            ? 'graphql.localhost/v1/graphql'
-            : 'graphql.platyplus.io/v1/graphql'
+          (process.env.GRAPHQL_ENGINE_PUBLIC_URL || ctx.dev
+            ? 'http://graphql.localhost'
+            : 'https://graphql.platyplus.io') + '/v1/graphql'
         )
       },
       vueRouterMode: 'history',

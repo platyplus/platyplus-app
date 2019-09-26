@@ -20,9 +20,7 @@ import { ApolloError } from 'apollo-client'
 import { dataIdFromObject } from 'src/hasura/graphql/apollo'
 
 export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
-  const config = getConfig()
-  const uri = `${window.location.protocol}//${config.API}`
-
+  const uri = getConfig().API
   const defaultClient = createClient({
     uri,
     getToken: () => store.getters['user/encodedToken'],

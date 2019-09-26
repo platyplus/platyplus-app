@@ -1,4 +1,4 @@
-# Authentication-service
+# @platyplus/authentication-service
 
 TODO: put in the documentation
 Simple Auth Server For Signup &amp; Login Mutation

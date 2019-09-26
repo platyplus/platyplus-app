@@ -2,6 +2,14 @@ FROM node:12-alpine
 WORKDIR /app
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
+
+ARG GRAPHQL_ENGINE_URL=http://graphql-engine:3000
+ENV GRAPHQL_ENGINE_URL $GRAPHQL_ENGINE_URL
+
+# TODO: algo in the template?
+ARG ALGORITHM=RS256
+ENV ALGORITHM $ALGORITHM
+
 RUN yarn global add lerna
 # Dependencies
 COPY package.json yarn.lock lerna.json tsconfig.json tsconfig.build.json .eslintrc.js .eslintignore /app/
@@ -18,10 +26,6 @@ RUN lerna bootstrap --ignore-scripts
 COPY backend/functions-service /app/backend/functions-service
 COPY packages/microservice /app/packages/microservice
 COPY packages/hasura-node-client /app/packages/hasura-node-client
-
-# TODO: algo in the template?
-ARG ALGORITHM=RS256
-ENV ALGORITHM $ALGORITHM
 
 USER node
 CMD ["node", "backend/functions-service/lib/index.js"]

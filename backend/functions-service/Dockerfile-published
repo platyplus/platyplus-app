@@ -1,6 +1,9 @@
 FROM node:12-alpine
 RUN yarn global add @platyplus/functions-service
 
+ARG GRAPHQL_ENGINE_URL=http://graphql-engine:3000
+ENV GRAPHQL_ENGINE_URL $GRAPHQL_ENGINE_URL
+
 # TODO: algo in the template?
 ARG ALGORITHM=RS256
 ENV ALGORITHM $ALGORITHM

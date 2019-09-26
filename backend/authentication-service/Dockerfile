@@ -2,6 +2,10 @@ FROM node:12-alpine
 WORKDIR /app
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
+
+ARG GRAPHQL_ENGINE_URL=http://graphql-engine:3000
+ENV GRAPHQL_ENGINE_URL $GRAPHQL_ENGINE_URL
+
 RUN yarn global add lerna
 # Dependencies
 COPY package.json yarn.lock lerna.json tsconfig.json tsconfig.build.json .eslintrc.js .eslintignore /app/

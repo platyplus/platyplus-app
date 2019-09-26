@@ -9,7 +9,8 @@
     "msjsdiag.debugger-for-chrome",
     "ms-azuretools.vscode-docker",
     "wix.vscode-import-cost",
-    "christian-kohler.path-intellisense"
+    "christian-kohler.path-intellisense",
+    "mikestead.dotenv"
   ],
   "unwantedRecommendations": [
     "hookyqr.beautify",

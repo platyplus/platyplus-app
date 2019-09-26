@@ -1,4 +1,4 @@
---- # ---
+# ---
 # kind: pipeline
 # name: documentation
 # steps:
@@ -78,7 +78,8 @@ steps:
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
-      - gcloud container images list # TODO deploy
+      # TODO env and connect to other services
+      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service --connectivity=internal
     environment:
       CREDENTIALS:
         from_secret: google_credentials
@@ -87,7 +88,8 @@ steps:
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
-      - gcloud container images list # TODO deploy
+      # TODO env and connect to other services
+      - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service --connectivity=internal
     environment:
       CREDENTIALS:
         from_secret: google_credentials
@@ -99,7 +101,8 @@ steps:
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
-      - gcloud container images list # TODO deploy
+      # TODO env and connect to other services
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine
     environment:
       CREDENTIALS:
         from_secret: google_credentials
@@ -110,87 +113,11 @@ steps:
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
       - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402
-      - gcloud container images list # TODO deploy
+      # TODO env
+      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service
     environment:
       CREDENTIALS:
         from_secret: google_credentials
 trigger:
   branch:
     - master
-# ---
-# kind: pipeline
-# name: authentication-build
-# steps:
-#   - name: build-auth-service
-#     image: plugins/docker
-#     settings:
-#       context: services/authentication
-#       dockerfile: services/authentication/Dockerfile
-#       repo: platyplus/authentication
-#       tags: latest
-#       username:
-#         from_secret: DH_USER
-#       password:
-#         from_secret: DH_PASSWORD
-#     when:
-#       branch: master
-# depends_on:
-#   - service-template-build
-
-# ---
-# kind: pipeline
-# name: functions-build
-# steps:
-#   - name: build-functions-service
-#     image: plugins/docker
-#     settings:
-#       context: services/functions
-#       dockerfile: services/functions/Dockerfile
-#       repo: platyplus/functions
-#       tags: latest
-#       username:
-#         from_secret: DH_USER
-#       password:
-#         from_secret: DH_PASSWORD
-#     when:
-#       branch: master
-# depends_on:
-#   - service-template-build
-
-# ---
-# kind: pipeline
-# name: graphql-engine-build
-# steps:
-#   - name: build-graphql-service
-#     image: plugins/docker
-#     settings:
-#       context: services/graphql-engine
-#       dockerfile: services/graphql-engine/Dockerfile
-#       repo: platyplus/graphql-engine
-#       tags: latest
-#       username:
-#         from_secret: DH_USER
-#       password:
-#         from_secret: DH_PASSWORD
-#     when:
-#       branch: master
-
-# ---
-# kind: pipeline
-# name: application-build
-# steps:
-#   - name: build-application
-#     image: plugins/docker
-#     settings:
-#       dockerfile: server/Dockerfile
-#       repo: platyplus/platyplus
-#       target: production-stage
-#       tags: latest
-#       username:
-#         from_secret: DH_USER
-#       password:
-#         from_secret: DH_PASSWORD
-#     when:
-#       branch: master
-# depends_on:
-#   - service-template-build
