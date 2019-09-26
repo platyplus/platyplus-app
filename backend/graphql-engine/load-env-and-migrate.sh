@@ -34,7 +34,7 @@ export "HASURA_GRAPHQL_MIGRATIONS_DIR"="/opt/hasura-migrations"
 prod_port=$HASURA_GRAPHQL_SERVER_PORT
 export "HASURA_GRAPHQL_SERVER_PORT"=9999
 if [ "$ENABLE_CLOUDSQL_PROXY" = true ]; then
-  log "Starting cloud sql proxy..."
+  echo "Starting cloud sql proxy..."
   cloud_sql_proxy -instances=$CLOUDSQL_INSTANCE=tcp:5432 &
 fi
 docker-entrypoint.sh
