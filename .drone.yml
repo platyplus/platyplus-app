@@ -1,89 +1,90 @@
 # ! rename 'next' tag to the branch name i.e. master
 # ---
-# kind: pipeline
-# name: documentation
-# steps:
-#   - name: build-docs
-#     image: node:alpine
-#     commands:
-#       - apk add --no-cache git
-#       - git config --global user.email "no-reply@platy.plus"
-#       - git config --global user.name "Drone.io CI"
-#       - ./scripts/deploy-documentation.sh
-#     environment:
-#       GH_TOKEN:
-#         from_secret: GH_TOKEN
-#       GH_USER:
-#         from_secret: GH_USER
-#     when:
-#       branch: master
+kind: pipeline
+name: documentation
+steps:
+  - name: build-docs
+    image: node:alpine
+    commands:
+      - apk add --no-cache git
+      - git config --global user.email "no-reply@platy.plus"
+      - git config --global user.name "Drone.io CI"
+      - ./scripts/deploy-documentation.sh
+    environment:
+      GH_TOKEN:
+        from_secret: GH_TOKEN
+      GH_USER:
+        from_secret: GH_USER
+    when:
+      branch: master
 
-# kind: pipeline
-# type: docker
-# name: publish
-# trigger:
-#   branch:
-#     - master
-# steps:
-#   - name: build-packages
-#     image: node:alpine
-#     commands:
-#       - apk add --no-cache git
-#       - git config --global user.email "no-reply@platy.plus"
-#       - git config --global user.name "Drone.io CI"
-#       - yarn install
-#       - yarn run build
-#   - name: publish-platyplus
-#     depends_on: [build-packages]
-#     image: plugins/gcr
-#     settings:
-#       dockerfile: backend/platyplus-service/Dockerfile
-#       repo: platyplus-0402/platyplus-service
-#       tags:
-#         - ${DRONE_COMMIT_SHA:0:8}
-#         - next
-#       json_key:
-#         from_secret: google_credentials
-#   - name: publish-graphql-engine
-#     depends_on: [build-packages]
-#     image: plugins/gcr
-#     settings:
-#       dockerfile: backend/graphql-engine/Dockerfile
-#       repo: platyplus-0402/graphql-engine
-#       tags:
-#         - ${DRONE_COMMIT_SHA:0:8}
-#         - next
-#       json_key:
-#         from_secret: google_credentials
-#   - name: publish-authentication
-#     depends_on: [build-packages]
-#     image: plugins/gcr
-#     settings:
-#       dockerfile: backend/authentication-service/Dockerfile
-#       repo: platyplus-0402/authentication-service
-#       tags:
-#         - ${DRONE_COMMIT_SHA:0:8}
-#         - next
-#       json_key:
-#         from_secret: google_credentials
-#   - name: publish-functions
-#     depends_on: [build-packages]
-#     image: plugins/gcr
-#     settings:
-#       dockerfile: backend/functions-service/Dockerfile
-#       repo: platyplus-0402/functions-service
-#       tags:
-#         - ${DRONE_COMMIT_SHA:0:8}
-#         - next
-#       json_key:
-#         from_secret: google_credentials
+kind: pipeline
+type: docker
+name: publish
+trigger:
+  branch:
+    - master
+steps:
+  - name: build-packages
+    image: node:alpine
+    commands:
+      - apk add --no-cache git
+      - git config --global user.email "no-reply@platy.plus"
+      - git config --global user.name "Drone.io CI"
+      - yarn install
+      - yarn run build
+  - name: publish-platyplus
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/platyplus-service/Dockerfile
+      repo: platyplus-0402/platyplus-service
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - next
+      json_key:
+        from_secret: google_credentials
+  - name: publish-graphql-engine
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/graphql-engine/Dockerfile
+      repo: platyplus-0402/graphql-engine
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - next
+      json_key:
+        from_secret: google_credentials
+  - name: publish-authentication
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/authentication-service/Dockerfile
+      repo: platyplus-0402/authentication-service
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - next
+      json_key:
+        from_secret: google_credentials
+  - name: publish-functions
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/functions-service/Dockerfile
+      repo: platyplus-0402/functions-service
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - next
+      json_key:
+        from_secret: google_credentials
+---
 kind: pipeline
 type: docker
 name: deploy
 trigger:
   branch:
     - master
-# depends_on: [publish]
+depends_on: [publish]
 steps:
   - name: prepare-gcloud
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
