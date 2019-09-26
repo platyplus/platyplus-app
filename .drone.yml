@@ -76,7 +76,7 @@
 #         - next
 #       json_key:
 #         from_secret: google_credentials
----
+
 kind: pipeline
 type: docker
 name: deploy
