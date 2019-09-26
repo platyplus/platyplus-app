@@ -100,14 +100,13 @@ steps:
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
-      - echo $$PUBLIC_KEY
       # TODO --connectivity=internal not working on managed services, only on GKE
       - >
         gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next
         --set-env-vars
-        PUBLIC_KEY="$(printf %q $PUBLIC_KEY)",
-        PRIVATE_KEY="$(printf %q $PRIVATE_KEY)",
-        HASURA_GRAPHQL_ADMIN_SECRET="$(printf %q $HASURA_GRAPHQL_ADMIN_SECRET)"
+        PUBLIC_KEY="$$PUBLIC_KEY",
+        PRIVATE_KEY="$$PRIVATE_KEY",
+        HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
     environment:
       PUBLIC_KEY:
         from_secret: PUBLIC_KEY
