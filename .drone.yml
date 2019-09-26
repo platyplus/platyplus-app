@@ -17,66 +17,65 @@
 #     when:
 #       branch: master
 
-kind: pipeline
-type: docker
-name: publish
-trigger:
-  branch:
-    - master
-steps:
-  - name: build-packages
-    image: node:alpine
-    commands:
-      - apk add --no-cache git
-      - git config --global user.email "no-reply@platy.plus"
-      - git config --global user.name "Drone.io CI"
-      - yarn install
-      - yarn run build
-  - name: publish-platyplus
-    depends_on: [build-packages]
-    image: plugins/gcr
-    settings:
-      dockerfile: backend/platyplus-service/Dockerfile
-      repo: platyplus-0402/platyplus-service
-      tags:
-        - ${DRONE_COMMIT_SHA:0:8}
-        - next
-      json_key:
-        from_secret: google_credentials
-  - name: publish-graphql-engine
-    depends_on: [build-packages]
-    image: plugins/gcr
-    settings:
-      dockerfile: backend/graphql-engine/Dockerfile
-      repo: platyplus-0402/graphql-engine
-      tags:
-        - ${DRONE_COMMIT_SHA:0:8}
-        - next
-      json_key:
-        from_secret: google_credentials
-  - name: publish-authentication
-    depends_on: [build-packages]
-    image: plugins/gcr
-    settings:
-      dockerfile: backend/authentication-service/Dockerfile
-      repo: platyplus-0402/authentication-service
-      tags:
-        - ${DRONE_COMMIT_SHA:0:8}
-        - next
-      json_key:
-        from_secret: google_credentials
-  - name: publish-functions
-    depends_on: [build-packages]
-    image: plugins/gcr
-    settings:
-      dockerfile: backend/functions-service/Dockerfile
-      repo: platyplus-0402/functions-service
-      tags:
-        - ${DRONE_COMMIT_SHA:0:8}
-        - next
-      json_key:
-        from_secret: google_credentials
-
+# kind: pipeline
+# type: docker
+# name: publish
+# trigger:
+#   branch:
+#     - master
+# steps:
+#   - name: build-packages
+#     image: node:alpine
+#     commands:
+#       - apk add --no-cache git
+#       - git config --global user.email "no-reply@platy.plus"
+#       - git config --global user.name "Drone.io CI"
+#       - yarn install
+#       - yarn run build
+#   - name: publish-platyplus
+#     depends_on: [build-packages]
+#     image: plugins/gcr
+#     settings:
+#       dockerfile: backend/platyplus-service/Dockerfile
+#       repo: platyplus-0402/platyplus-service
+#       tags:
+#         - ${DRONE_COMMIT_SHA:0:8}
+#         - next
+#       json_key:
+#         from_secret: google_credentials
+#   - name: publish-graphql-engine
+#     depends_on: [build-packages]
+#     image: plugins/gcr
+#     settings:
+#       dockerfile: backend/graphql-engine/Dockerfile
+#       repo: platyplus-0402/graphql-engine
+#       tags:
+#         - ${DRONE_COMMIT_SHA:0:8}
+#         - next
+#       json_key:
+#         from_secret: google_credentials
+#   - name: publish-authentication
+#     depends_on: [build-packages]
+#     image: plugins/gcr
+#     settings:
+#       dockerfile: backend/authentication-service/Dockerfile
+#       repo: platyplus-0402/authentication-service
+#       tags:
+#         - ${DRONE_COMMIT_SHA:0:8}
+#         - next
+#       json_key:
+#         from_secret: google_credentials
+#   - name: publish-functions
+#     depends_on: [build-packages]
+#     image: plugins/gcr
+#     settings:
+#       dockerfile: backend/functions-service/Dockerfile
+#       repo: platyplus-0402/functions-service
+#       tags:
+#         - ${DRONE_COMMIT_SHA:0:8}
+#         - next
+#       json_key:
+#         from_secret: google_credentials
 ---
 kind: pipeline
 type: docker
@@ -84,7 +83,7 @@ name: deploy
 trigger:
   branch:
     - master
-depends_on: [publish]
+# depends_on: [publish]
 steps:
   - name: gcloud-settings
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
@@ -100,16 +99,9 @@ steps:
     environment:
       CREDENTIALS:
         from_secret: google_credentials
-  - name: gcloud-settings
+  - name: gcloud-settings-check
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
     commands:
-      - echo "$CREDENTIALS" | base64 -d > .credentials
-      - gcloud auth activate-service-account --key-file .credentials
-      - gcloud config list
-      - rm .credentials
-      - gcloud config set project platyplus-0402
-      - gcloud config set run/platform managed
-      - gcloud config set run/region europe-west1
       - gcloud config list
     environment:
       CREDENTIALS:
@@ -122,7 +114,7 @@ steps:
       # TODO env and connect to other services
       # TODO --connectivity=internal not working on managed services, only on GKE
       - >
-        gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service
+        gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next
   - name: deploy-functions
     depends_on: [gcloud-settings]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
@@ -131,7 +123,7 @@ steps:
       # TODO env and connect to other services
       # TODO --connectivity=internal not working on managed services, only on GKE
       - >
-        gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service
+        gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:next
   - name: deploy-graphql-engine
     depends_on: [gcloud-settings, deploy-authentication, deploy-functions]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
@@ -139,7 +131,7 @@ steps:
       # - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402 && gcloud config set run/platform managed && gcloud config set run/region europe-west1
       # TODO env and connect to other services
       - >
-        gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine
+        gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next
   - name: deploy-platyplus
     depends_on: [gcloud-settings, deploy-graphql-engine]
     image: google/cloud-sdk:latest # TODO create a custom docker gcloud/'deployer'?
@@ -147,4 +139,4 @@ steps:
       # - echo "$CREDENTIALS" | base64 -d > .credentials && gcloud auth activate-service-account --key-file .credentials && rm .credentials && gcloud config set project platyplus-0402 && gcloud config set run/platform managed && gcloud config set run/region europe-west1
       # TODO env
       - >
-        gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service
+        gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next
