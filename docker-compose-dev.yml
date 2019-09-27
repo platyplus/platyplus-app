@@ -1,19 +1,19 @@
 version: '3.4'
 services:
-  # app:
-  #   build: .
-  #   command: ['yarn', 'dev:platyplus']
-  #   environment:
-  #     NODE_ENV: development
-  #   healthcheck:
-  #     disable: true
-  #   labels:
-  #     - 'traefik.port=8080'
-  #   restart: always
-  #   volumes:
-  #     - ./frontend/platyplus/src:/app/frontend/platyplus/src
-  #     - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src
-  #     - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src
+  app:
+    build: .
+    command: ['yarn', 'dev:platyplus']
+    environment:
+      NODE_ENV: development
+    healthcheck:
+      disable: true
+    labels:
+      - 'traefik.port=8080'
+    restart: always
+    volumes:
+      - ./frontend/platyplus/src:/app/frontend/platyplus/src
+      - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src
+      - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src
   authentication:
     build: .
     command: ['yarn', 'dev:authentication']

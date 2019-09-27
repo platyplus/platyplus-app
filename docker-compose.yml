@@ -1,12 +1,12 @@
 version: '3.4'
 services:
-  # app:
-  #   # image: platyplus/platyplus-service
-  #   # depends_on:
-  #   #   - 'graphql-engine'
-  #   labels:
-  #     - 'traefik.frontend.rule=Host:app.${DOMAIN:-localhost}'
-  #     - 'traefik.port=3000'
+  app:
+    image: platyplus/platyplus-service
+    # depends_on:
+    #   - 'graphql-engine'
+    labels:
+      - 'traefik.frontend.rule=Host:app.${DOMAIN:-localhost}'
+      - 'traefik.port=3000'
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:

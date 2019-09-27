@@ -1,3 +1,4 @@
+CREATE EXTENSION IF NOT EXISTS ltree;
 CREATE DOMAIN public.email AS text
 	CONSTRAINT email_check CHECK ((VALUE ~ '^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$'::text));
 CREATE FUNCTION public.first_agg(anyelement, anyelement) RETURNS anyelement
