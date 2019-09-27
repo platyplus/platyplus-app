@@ -138,7 +138,8 @@ steps:
       # TODO env and connect to other services: POSTGRES_URL
       # TODO create SQL instance if not exists?
       # https://medium.com/tactable-blog/building-a-serverless-graphql-app-with-next-js-hasura-and-cloudrun-fb8ca7c5e757
-      # - gcloud sql databases create hasura-master --instance platyplus || true # TODO only if it doesn't exist
+      # TODO only if database doesn't exist
+      - gcloud sql databases create hasura-master --instance platyplus || true
       # gcloud sql users set-password postgres --instance platyplus --password $$POSTGRES_PASSWORD # ? Useless?
       - export CLOUDSQL_INSTANCE=`gcloud sql instances describe platyplus --format="get(connectionName)"`
       - export AUTHENTICATION_URL="`gcloud beta run services describe authentication --format="get(status.url)"`"

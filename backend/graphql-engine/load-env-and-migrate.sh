@@ -31,7 +31,7 @@ file_env 'HASURA_GRAPHQL_ADMIN_SECRET'
 export "HASURA_GRAPHQL_MIGRATIONS_DIR"="/opt/hasura-migrations"
 export "HASURA_GRAPHQL_JWT_SECRET"="{ \"type\": \"RS256\", \"jwk_url\": \"$AUTHENTICATION_URL/jwks\"}"
 
-export EVENTS_URL="$FUNTIONS_URL/events"
+export EVENTS_URL="$FUNCTIONS_URL/events"
 export AUTH_URL="$AUTHENTICATION_URL/graphql"
 # TODO remove log
 echo $HASURA_GRAPHQL_JWT_SECRET
