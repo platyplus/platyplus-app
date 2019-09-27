@@ -1,7 +1,0 @@
-- args:
-    cascade: false
-    sql: "CREATE OR REPLACE VIEW \"public\".\"check_constraint\" AS \n SELECT cons.table_schema,\n
-      \   cons.table_name,\n    cons.constraint_name,\n    cons.\"check\"\n   FROM
-      (hdb_catalog.hdb_check_constraint cons\n     JOIN hdb_catalog.\"hdb_table\"
-      tab ON (((cons.table_name = tab.table_name) AND (cons.table_schema = tab.table_schema))));"
-  type: run_sql

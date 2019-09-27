@@ -1,4 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."org_unit" ADD COLUMN "created_at" timestamptz NULL
-      DEFAULT now();
-  type: run_sql

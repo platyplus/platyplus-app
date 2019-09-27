@@ -1,6 +1,0 @@
-- args:
-    sql: alter table "public"."org_unit_isolated_encounter_type" drop constraint "org_unit_isolated_encounter_type_pkey";
-  type: run_sql
-- sql: "alter table \"public\".\"org_unit_isolated_encounter_type\"\n    add constraint
-    \"org_unit_isolated_encounter_type_pkey\" \n    primary key ( \"id\" );"
-  type: run_sql

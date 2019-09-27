@@ -1,7 +1,0 @@
-- args:
-    name: encounter_type
-    new_name: type
-    table:
-      name: encounter
-      schema: public
-  type: rename_relationship

@@ -1,3 +1,0 @@
-- args:
-    sql: DROP VIEW "public"."constraint"
-  type: run_sql

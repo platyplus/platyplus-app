@@ -135,7 +135,6 @@ steps:
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
-      # TODO env and connect to other services: POSTGRES_URL
       # TODO create SQL instance if not exists?
       # https://medium.com/tactable-blog/building-a-serverless-graphql-app-with-next-js-hasura-and-cloudrun-fb8ca7c5e757
       # TODO only if database doesn't exist

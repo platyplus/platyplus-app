@@ -1,7 +1,0 @@
-- args:
-    cascade: false
-    sql: "CREATE OR REPLACE VIEW \"public\".\"permission\" AS \n SELECT table_schema,\n
-      \   table_name,\n    role_name,\n    (permissions -> 'select'::text) AS select,\n
-      \   (permissions -> 'insert'::text) AS insert,\n    (permissions -> 'update'::text)
-      AS update,\n    (permissions -> 'delete'::text) AS delete\n   FROM hdb_catalog.hdb_permission_agg\n"
-  type: run_sql

@@ -1,6 +1,0 @@
-- args:
-    relationship: table
-    table:
-      name: primary_key
-      schema: public
-  type: drop_relationship

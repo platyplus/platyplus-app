@@ -1,6 +1,0 @@
-- args:
-    relationship: mappings
-    table:
-      name: concept
-      schema: public
-  type: drop_relationship

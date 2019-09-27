@@ -1,5 +1,5 @@
-CREATE EXTENSION IF NOT EXISTS ltree;
-SET xmloption = content;
+CREATE DOMAIN public.email AS text
+	CONSTRAINT email_check CHECK ((VALUE ~ '^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$'::text));
 CREATE FUNCTION public.first_agg(anyelement, anyelement) RETURNS anyelement
     LANGUAGE sql IMMUTABLE STRICT
     AS $_$
@@ -10,6 +10,17 @@ CREATE FUNCTION public.last_agg(anyelement, anyelement) RETURNS anyelement
     AS $_$
         SELECT $2;
 $_$;
+CREATE FUNCTION public.set_current_timestamp_updated_at() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+  _new record;
+BEGIN
+  _new := NEW;
+  _new."updated_at" = NOW();
+  RETURN _new;
+END;
+$$;
 CREATE FUNCTION public.set_default_path() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
@@ -76,7 +87,7 @@ begin
   else -- Creates the entity and gets its entity type schema
     select entity_type.id, entity_type."schema"
       into entity_type_id, entity_type_schema
-      from encounter_type, entity_type where encounter_type.id = new.encounter_type and encounter_type.entity_type_id = entity_type.id;
+      from encounter_type, entity_type where encounter_type.id = new.type.id and encounter_type.entity_type_id = entity_type.id;
     if entity_type_id is not null then
       insert into entity (type_id) values (entity_type_id) returning id into new.entity_id;
     end if;
@@ -143,23 +154,13 @@ CREATE AGGREGATE public.last(anyelement) (
     SFUNC = public.last_agg,
     STYPE = anyelement
 );
-CREATE TABLE public."user" (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    username character varying(255) NOT NULL,
-    password character varying(255) NOT NULL,
-    token character varying(255),
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    attributes jsonb DEFAULT '{}'::jsonb,
-    active boolean DEFAULT true NOT NULL,
-    preferred_org_unit_id uuid,
-    locale text DEFAULT 'en-uk'::text
-);
 CREATE TABLE public.encounter_type (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     name text,
     entity_type_id uuid,
     title_create text,
-    encounter_schema jsonb DEFAULT '{}'::jsonb NOT NULL
+    encounter_schema jsonb DEFAULT '{}'::jsonb NOT NULL,
+    encounter_title text
 );
 CREATE TABLE public.encounter_type_action (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
@@ -174,12 +175,13 @@ CREATE TABLE public.entity_type (
 CREATE TABLE public.org_unit (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     type_id uuid,
-    name text,
+    name text NOT NULL,
     path public.ltree,
-    parent_id uuid
+    parent_id uuid,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now()
 );
 CREATE TABLE public.org_unit_isolated_encounter_type (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     org_unit_id uuid NOT NULL,
     encounter_type_id uuid NOT NULL
 );
@@ -191,6 +193,10 @@ CREATE TABLE public.org_unit_type_mapping (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     from_id uuid NOT NULL,
     to_id uuid NOT NULL
+);
+CREATE TABLE public.org_unit_workflow (
+    org_unit_id uuid NOT NULL,
+    workflow_id uuid NOT NULL
 );
 CREATE TABLE public.role (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
@@ -214,8 +220,19 @@ CREATE TABLE public.stage_transition (
     previous_id uuid,
     next_id uuid
 );
-CREATE TABLE public.user_org_unit (
+CREATE TABLE public."user" (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    username character varying(255) NOT NULL,
+    password character varying(255) NOT NULL,
+    token character varying(255),
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    attributes jsonb DEFAULT '{}'::jsonb,
+    active boolean DEFAULT true NOT NULL,
+    preferred_org_unit_id uuid,
+    locale text DEFAULT 'en-uk'::text,
+    CONSTRAINT check_min_length CHECK ((length((username)::text) >= 2))
+);
+CREATE TABLE public.user_org_unit (
     user_id uuid NOT NULL,
     org_unit_id uuid NOT NULL
 );
@@ -231,6 +248,13 @@ CREATE TABLE public.workflow (
     entity_type_id uuid,
     parent_id uuid
 );
+CREATE VIEW public.check_constraint AS
+ SELECT cons.table_schema,
+    cons.table_name,
+    cons.constraint_name,
+    cons."check"
+   FROM (hdb_catalog.hdb_check_constraint cons
+     JOIN hdb_catalog.hdb_table tab ON (((cons.table_name = tab.table_name) AND (cons.table_schema = tab.table_schema))));
 CREATE TABLE public.concept (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     class_id uuid,
@@ -278,6 +302,17 @@ CREATE TABLE public.entity_type_concept (
     entity_type_id uuid NOT NULL,
     concept_id uuid NOT NULL
 );
+CREATE VIEW public.foreign_key_constraint AS
+ SELECT cons.table_schema,
+    cons.table_name,
+    cons.constraint_name,
+    cons.ref_table AS ref_table_name,
+    cons.ref_table_table_schema AS ref_table_schema,
+    cons.column_mapping,
+    cons.on_update,
+    cons.on_delete
+   FROM (hdb_catalog.hdb_foreign_key_constraint cons
+     JOIN hdb_catalog.hdb_table tab ON (((cons.table_name = tab.table_name) AND (cons.table_schema = tab.table_schema))));
 CREATE TABLE public.mapping (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     from_id uuid NOT NULL,
@@ -297,11 +332,30 @@ CREATE VIEW public.org_unit_tree WITH (security_barrier='false') AS
     n2.parent_id
    FROM (public.org_unit n1
      LEFT JOIN public.org_unit n2 ON (((n1.path OPERATOR(public.<@) n2.path) AND (n1.id <> n2.id))));
-CREATE TABLE public.org_unit_workflow (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    org_unit_id uuid NOT NULL,
-    workflow_id uuid NOT NULL
-);
+CREATE VIEW public.permission AS
+ SELECT hdb_permission_agg.table_schema,
+    hdb_permission_agg.table_name,
+    hdb_permission_agg.role_name,
+    (hdb_permission_agg.permissions -> 'select'::text) AS "select",
+    (hdb_permission_agg.permissions -> 'insert'::text) AS insert,
+    (hdb_permission_agg.permissions -> 'update'::text) AS update,
+    (hdb_permission_agg.permissions -> 'delete'::text) AS delete
+   FROM hdb_catalog.hdb_permission_agg;
+CREATE VIEW public.primary_key AS
+ SELECT pk.table_schema,
+    pk.table_name,
+    pk.constraint_name,
+    pk.columns
+   FROM hdb_catalog.hdb_primary_key pk;
+CREATE VIEW public.relationship AS
+ SELECT hdb_relationship.table_schema,
+    hdb_relationship.table_name,
+    hdb_relationship.rel_name AS name,
+    hdb_relationship.rel_type AS type,
+    hdb_relationship.rel_def AS definition,
+    hdb_relationship.comment
+   FROM hdb_catalog.hdb_relationship
+  WHERE (hdb_relationship.is_system_defined IS FALSE);
 CREATE TABLE public.state (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     entity_id uuid,
@@ -311,6 +365,35 @@ CREATE TABLE public.state (
     date_start timestamp with time zone DEFAULT now() NOT NULL,
     date_end timestamp with time zone
 );
+CREATE VIEW public."table" AS
+ SELECT tables.table_name,
+    tables.table_schema,
+    COALESCE(columns.columns, '[]'::json) AS columns,
+    COALESCE(pk.columns, '[]'::json) AS primary_key_columns,
+    COALESCE(constraints.constraints, '[]'::json) AS constraints,
+    COALESCE(views.view_info, 'null'::json) AS view_info
+   FROM (((((information_schema.tables tables
+     LEFT JOIN ( SELECT c.table_name,
+            c.table_schema,
+            json_agg(json_build_object('name', c.column_name, 'type', c.udt_name, 'domain', c.domain_name, 'default', c.column_default, 'is_nullable', (c.is_nullable)::boolean)) AS columns
+           FROM information_schema.columns c
+          GROUP BY c.table_schema, c.table_name) columns ON ((((tables.table_schema)::text = (columns.table_schema)::text) AND ((tables.table_name)::text = (columns.table_name)::text))))
+     LEFT JOIN ( SELECT hdb_primary_key.table_schema,
+            hdb_primary_key.table_name,
+            hdb_primary_key.constraint_name,
+            hdb_primary_key.columns
+           FROM hdb_catalog.hdb_primary_key) pk ON ((((tables.table_schema)::text = (pk.table_schema)::text) AND ((tables.table_name)::text = (pk.table_name)::text))))
+     LEFT JOIN ( SELECT c.table_schema,
+            c.table_name,
+            json_agg(c.constraint_name) AS constraints
+           FROM information_schema.table_constraints c
+          WHERE (((c.constraint_type)::text = 'UNIQUE'::text) OR ((c.constraint_type)::text = 'PRIMARY KEY'::text))
+          GROUP BY c.table_schema, c.table_name) constraints ON ((((tables.table_schema)::text = (constraints.table_schema)::text) AND ((tables.table_name)::text = (constraints.table_name)::text))))
+     LEFT JOIN ( SELECT v.table_schema,
+            v.table_name,
+            json_build_object('is_updatable', ((v.is_updatable)::boolean OR (v.is_trigger_updatable)::boolean), 'is_deletable', ((v.is_updatable)::boolean OR (v.is_trigger_deletable)::boolean), 'is_insertable', ((v.is_insertable_into)::boolean OR (v.is_trigger_insertable_into)::boolean)) AS view_info
+           FROM information_schema.views v) views ON ((((tables.table_schema)::text = (views.table_schema)::text) AND ((tables.table_name)::text = (views.table_name)::text))))
+     JOIN hdb_catalog.hdb_table ON ((((tables.table_schema)::text = hdb_table.table_schema) AND ((tables.table_name)::text = hdb_table.table_name) AND (hdb_table.is_system_defined IS FALSE))));
 CREATE TABLE public.terminology_collection (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     org_unit_id uuid
@@ -329,6 +412,18 @@ CREATE TABLE public.terminology_source (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     org_unit_id uuid
 );
+CREATE TABLE public.test (
+    id integer NOT NULL
+);
+CREATE SEQUENCE public.test_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE public.test_id_seq OWNED BY public.test.id;
+ALTER TABLE ONLY public.test ALTER COLUMN id SET DEFAULT nextval('public.test_id_seq'::regclass);
 ALTER TABLE ONLY public.concept_aggregation
     ADD CONSTRAINT concept_aggregation_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.concept_class
@@ -358,7 +453,7 @@ ALTER TABLE ONLY public.mapping
 ALTER TABLE ONLY public.mapping_type
     ADD CONSTRAINT mapping_type_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.org_unit_isolated_encounter_type
-    ADD CONSTRAINT org_unit_isolated_encounter_type_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT org_unit_isolated_encounter_type_pkey PRIMARY KEY (org_unit_id, encounter_type_id);
 ALTER TABLE ONLY public.org_unit
     ADD CONSTRAINT org_unit_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.org_unit_type_mapping
@@ -366,7 +461,7 @@ ALTER TABLE ONLY public.org_unit_type_mapping
 ALTER TABLE ONLY public.org_unit_type
     ADD CONSTRAINT org_unit_type_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.org_unit_workflow
-    ADD CONSTRAINT org_unit_workflow_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT org_unit_workflow_pkey PRIMARY KEY (org_unit_id, workflow_id);
 ALTER TABLE ONLY public.role_attribution
     ADD CONSTRAINT role_attribution_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.role
@@ -387,8 +482,10 @@ ALTER TABLE ONLY public.terminology_collection
     ADD CONSTRAINT terminology_collection_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.terminology_source
     ADD CONSTRAINT terminology_source_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.test
+    ADD CONSTRAINT test_pkey PRIMARY KEY (id);
 ALTER TABLE ONLY public.user_org_unit
-    ADD CONSTRAINT user_orgunit_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT user_org_unit_pkey PRIMARY KEY (user_id, org_unit_id);
 ALTER TABLE ONLY public."user"
     ADD CONSTRAINT user_pk PRIMARY KEY (id);
 ALTER TABLE ONLY public.user_role
@@ -432,9 +529,8 @@ CREATE INDEX terminology_source_org_unit_id_idx ON public.terminology_source USI
 CREATE INDEX user_active_idx ON public."user" USING btree (active);
 CREATE INDEX user_token_idx ON public."user" USING btree (token);
 CREATE TRIGGER after_set_state_dates AFTER INSERT OR UPDATE OF date_start ON public.state FOR EACH ROW EXECUTE PROCEDURE public.trigger_after_set_state_dates();
-CREATE TRIGGER process_org_unit_descendants AFTER INSERT OR UPDATE ON public.org_unit FOR EACH ROW WHEN ((pg_trigger_depth() = 0)) EXECUTE PROCEDURE public.set_org_unit_descendants();
-CREATE TRIGGER process_org_unit_path BEFORE INSERT OR UPDATE ON public.org_unit FOR EACH ROW EXECUTE PROCEDURE public.set_default_path();
-CREATE TRIGGER set_entity_data BEFORE INSERT OR UPDATE ON public.encounter FOR EACH ROW EXECUTE PROCEDURE public.trigger_set_entity_data();
+CREATE TRIGGER set_public_org_unit_updated_at BEFORE UPDATE ON public.org_unit FOR EACH ROW EXECUTE PROCEDURE public.set_current_timestamp_updated_at();
+COMMENT ON TRIGGER set_public_org_unit_updated_at ON public.org_unit IS 'trigger to set value of column "updated_at" to current timestamp on row update';
 CREATE TRIGGER set_state_dates BEFORE INSERT OR DELETE OR UPDATE OF date_start ON public.state FOR EACH ROW EXECUTE PROCEDURE public.trigger_set_state_dates();
 CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.encounter FOR EACH ROW EXECUTE PROCEDURE public.trigger_set_timestamp();
 ALTER TABLE ONLY public.concept_aggregation
@@ -488,7 +584,7 @@ ALTER TABLE ONLY public.org_unit_isolated_encounter_type
 ALTER TABLE ONLY public.org_unit_isolated_encounter_type
     ADD CONSTRAINT org_unit_isolated_encounter_type_org_unit_id_fkey FOREIGN KEY (org_unit_id) REFERENCES public.org_unit(id);
 ALTER TABLE ONLY public.org_unit
-    ADD CONSTRAINT org_unit_parent_fkey FOREIGN KEY (parent_id) REFERENCES public.org_unit(id);
+    ADD CONSTRAINT org_unit_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES public.org_unit(id) ON UPDATE CASCADE ON DELETE CASCADE;
 ALTER TABLE ONLY public.org_unit
     ADD CONSTRAINT org_unit_type_id_fkey FOREIGN KEY (type_id) REFERENCES public.org_unit_type(id);
 ALTER TABLE ONLY public.org_unit_type_mapping

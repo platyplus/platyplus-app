@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."org_unit_workflow" DROP COLUMN "id" CASCADE
-  type: run_sql

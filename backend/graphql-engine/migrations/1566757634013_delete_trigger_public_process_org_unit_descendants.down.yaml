@@ -1,6 +1,0 @@
-- args:
-    sql: |-
-      CREATE TRIGGER "process_org_unit_descendants"
-      AFTER UPDATE ON "public"."org_unit"
-      FOR EACH ROW EXECUTE PROCEDURE set_org_unit_descendants();
-  type: run_sql

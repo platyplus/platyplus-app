@@ -1,3 +1,0 @@
-- args:
-    sql: DROP VIEW "public"."hdb_permission_agg"
-  type: run_sql

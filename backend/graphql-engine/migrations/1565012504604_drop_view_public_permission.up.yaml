@@ -1,3 +1,0 @@
-- args:
-    sql: DROP VIEW "public"."permission"
-  type: run_sql

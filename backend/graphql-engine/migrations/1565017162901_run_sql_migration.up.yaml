@@ -1,9 +1,0 @@
-- args:
-    cascade: false
-    sql: "CREATE OR REPLACE VIEW \"public\".\"relationship\" AS \n SELECT *\n from
-      hdb_catalog.hdb_relationship\n    "
-  type: run_sql
-- args:
-    name: relationship
-    schema: public
-  type: add_existing_table_or_view

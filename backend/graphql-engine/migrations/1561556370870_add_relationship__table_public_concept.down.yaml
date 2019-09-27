@@ -1,6 +1,0 @@
-- args:
-    relationship: encounter_type_concepts
-    table:
-      name: concept
-      schema: public
-  type: drop_relationship

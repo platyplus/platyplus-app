@@ -1,3 +1,0 @@
-- args:
-    sql: DROP VIEW "public"."check_constraint"
-  type: run_sql

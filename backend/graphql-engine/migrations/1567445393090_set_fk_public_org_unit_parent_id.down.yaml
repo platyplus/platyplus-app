@@ -1,6 +1,0 @@
-- args:
-    sql: "\n          alter table \"public\".\"org_unit\" drop constraint \"org_unit_parent_id_fkey\",\n
-      \         add constraint \"org_unit_parent_fkey\" \n          foreign key (\"parent_id\")
-      \n          references \"public\".\"org_unit\"\n          (\"id\") \n          on
-      update no action\n          on delete no action;\n        "
-  type: run_sql

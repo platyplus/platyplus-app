@@ -1,6 +1,0 @@
-- args:
-    sql: |-
-      CREATE TRIGGER "process_org_unit_path"
-      BEFORE UPDATE ON "public"."org_unit"
-      FOR EACH ROW EXECUTE PROCEDURE set_default_path();
-  type: run_sql

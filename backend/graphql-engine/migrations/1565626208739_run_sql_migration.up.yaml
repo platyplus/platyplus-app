@@ -1,6 +1,0 @@
-- args:
-    cascade: false
-    sql: "CREATE OR REPLACE VIEW \"public\".\"primary_key\" AS \n SELECT pk.table_schema,\n
-      \   pk.table_name,\n    pk.constraint_name,\n    pk.columns\n   FROM hdb_catalog.hdb_primary_key
-      pk"
-  type: run_sql

@@ -1,6 +1,0 @@
-- args:
-    relationship: terminology_collection_concepts
-    table:
-      name: concept
-      schema: public
-  type: drop_relationship

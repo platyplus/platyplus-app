@@ -2,12 +2,13 @@
     allowlist: []
     functions: []
     query_collections: []
-    query_templates: []
     remote_schemas:
     - comment: null
       definition:
         forward_client_headers: true
         headers: []
+        timeout_seconds: null
+        url: null
         url_from_env: AUTH_URL
       name: authentication
     tables:
@@ -27,6 +28,7 @@
           - org_unit_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: encounter_type
@@ -42,7 +44,6 @@
           allow_aggregations: false
           columns:
           - encounter_type_id
-          - id
           - org_unit_id
           filter: {}
         role: user
@@ -56,10 +57,84 @@
           filter: {}
           set: {}
         role: user
+    - array_relationships:
+      - comment: null
+        name: permissions
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: permission
+      - comment: null
+        name: check_constraints
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: check_constraint
+      - comment: null
+        name: relationships
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: relationship
+      - comment: null
+        name: foreign_keys
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: foreign_key_constraint
+      delete_permissions: []
+      event_triggers: []
+      insert_permissions: []
+      is_enum: false
+      object_relationships:
+      - comment: null
+        name: primary_key
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: primary_key
+      select_permissions:
+      - comment: null
+        permission:
+          allow_aggregations: false
+          columns:
+          - columns
+          - constraints
+          - primary_key_columns
+          - table_name
+          - table_schema
+          - view_info
+          filter:
+            permissions:
+              role_name:
+                _in: X-Hasura-roles
+        role: user
+      table: table
+      update_permissions: []
     - array_relationships: []
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
+      object_relationships: []
+      select_permissions: []
+      table: test
+      update_permissions: []
+    - array_relationships: []
+      delete_permissions: []
+      event_triggers: []
+      insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: mapping_type
@@ -68,6 +143,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: entity_type_concept
@@ -114,11 +190,13 @@
         permission:
           check: {}
           columns:
+          - id
           - name
           - parent_id
           - type_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: parent
@@ -131,13 +209,14 @@
       select_permissions:
       - comment: null
         permission:
-          allow_aggregations: false
+          allow_aggregations: true
           columns:
+          - created_at
           - id
-          - type_id
           - name
-          - path
           - parent_id
+          - type_id
+          - updated_at
           filter: {}
         role: user
       table: org_unit
@@ -160,6 +239,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships:
       - comment: null
         name: type
@@ -198,9 +278,11 @@
         permission:
           check: {}
           columns:
+          - id
           - name
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: entity_type
@@ -215,18 +297,45 @@
         permission:
           allow_aggregations: false
           columns:
-          - id
           - name
+          - entity_type_id
+          - id
+          - parent_id
           filter: {}
         role: user
       table: workflow
-      update_permissions:
+      update_permissions: []
+    - array_relationships: []
+      delete_permissions: []
+      event_triggers: []
+      insert_permissions: []
+      is_enum: false
+      object_relationships:
+      - comment: null
+        name: role
+        using:
+          manual_configuration:
+            column_mapping:
+              role_name: name
+            remote_table: role
+      select_permissions:
       - comment: null
         permission:
+          allow_aggregations: false
           columns:
-          - name
-          filter: {}
+          - table_schema
+          - table_name
+          - role_name
+          - select
+          - insert
+          - update
+          - delete
+          filter:
+            role_name:
+              _in: x-hasura-roles
         role: user
+      table: permission
+      update_permissions: []
     - array_relationships:
       - comment: null
         name: next
@@ -251,10 +360,12 @@
         permission:
           check: {}
           columns:
+          - id
           - name
           - workflow_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: workflow
@@ -284,6 +395,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: encounter_type_permission
@@ -306,9 +418,11 @@
         permission:
           check: {}
           columns:
+          - id
           - name
           set: {}
         role: user
+      is_enum: false
       object_relationships: []
       select_permissions:
       - comment: null
@@ -361,6 +475,7 @@
           - name
           set: {}
         role: user
+      is_enum: false
       object_relationships: []
       select_permissions:
       - comment: null
@@ -380,6 +495,103 @@
           - name
           filter: {}
         role: user
+    - array_relationships: []
+      delete_permissions: []
+      event_triggers: []
+      insert_permissions: []
+      is_enum: false
+      object_relationships:
+      - comment: null
+        name: table
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: table
+      select_permissions:
+      - comment: null
+        permission:
+          allow_aggregations: false
+          columns:
+          - table_schema
+          - table_name
+          - constraint_name
+          - check
+          filter:
+            table:
+              permissions:
+                role_name:
+                  _in: x-hasura-roles
+        role: user
+      table: check_constraint
+      update_permissions: []
+    - array_relationships: []
+      delete_permissions: []
+      event_triggers: []
+      insert_permissions: []
+      is_enum: false
+      object_relationships:
+      - comment: null
+        name: table
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: table
+      select_permissions:
+      - comment: null
+        permission:
+          allow_aggregations: false
+          columns:
+          - table_schema
+          - table_name
+          - constraint_name
+          - columns
+          filter:
+            table:
+              permissions:
+                role_name:
+                  _in: x-hasura-roles
+        role: user
+      table: primary_key
+      update_permissions: []
+    - array_relationships: []
+      delete_permissions: []
+      event_triggers: []
+      insert_permissions: []
+      is_enum: false
+      object_relationships:
+      - comment: null
+        name: table
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: table
+      select_permissions:
+      - comment: null
+        permission:
+          allow_aggregations: false
+          columns:
+          - table_schema
+          - table_name
+          - constraint_name
+          - ref_table_name
+          - ref_table_schema
+          - column_mapping
+          - on_update
+          - on_delete
+          filter:
+            table:
+              permissions:
+                role_name:
+                  _in: x-hasura-roles
+        role: user
+      table: foreign_key_constraint
+      update_permissions: []
     - array_relationships:
       - comment: null
         name: role_attributions
@@ -387,6 +599,13 @@
           foreign_key_constraint_on:
             column: role_id
             table: role_attribution
+      - comment: null
+        name: permissions
+        using:
+          manual_configuration:
+            column_mapping:
+              name: role_name
+            remote_table: permission
       delete_permissions:
       - comment: null
         permission:
@@ -399,9 +618,11 @@
           check: {}
           columns:
           - global
+          - id
           - name
           set: {}
         role: user
+      is_enum: false
       object_relationships: []
       select_permissions:
       - comment: null
@@ -434,10 +655,12 @@
         permission:
           check: {}
           columns:
+          - id
           - next_id
           - previous_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: next
@@ -470,6 +693,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: terminology_collection_mapping
@@ -487,9 +711,11 @@
           check: {}
           columns:
           - encounter_type_id
+          - id
           - stage_transition_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: encounter_type
@@ -523,6 +749,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: concept_class
@@ -531,6 +758,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: encounter_type_concept
@@ -548,9 +776,11 @@
           check: {}
           columns:
           - from_id
+          - id
           - to_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: from
@@ -608,6 +838,7 @@
           timeout_sec: 60
         webhook_from_env: EVENTS_URL
       insert_permissions: []
+      is_enum: false
       object_relationships:
       - comment: null
         name: org_unit
@@ -618,21 +849,70 @@
         using:
           foreign_key_constraint_on: provider_id
       - comment: null
-        name: type
-        using:
-          foreign_key_constraint_on: type_id
-      - comment: null
         name: entity
         using:
           foreign_key_constraint_on: entity_id
+      - comment: null
+        name: type
+        using:
+          foreign_key_constraint_on: type_id
       select_permissions: []
       table: encounter
       update_permissions: []
-    - array_relationships: []
+    - array_relationships:
+      - comment: null
+        name: entity_type_concepts
+        using:
+          foreign_key_constraint_on:
+            column: concept_id
+            table: entity_type_concept
+      - comment: null
+        name: encounter_type_concepts
+        using:
+          foreign_key_constraint_on:
+            column: concept_id
+            table: encounter_type_concept
+      - comment: null
+        name: terminology_collection_concepts
+        using:
+          foreign_key_constraint_on:
+            column: concept_id
+            table: terminology_collection_concept
+      - comment: null
+        name: concept_aggregations
+        using:
+          foreign_key_constraint_on:
+            column: concept_id
+            table: concept_aggregation
+      - comment: null
+        name: mappings
+        using:
+          foreign_key_constraint_on:
+            column: to_id
+            table: mapping
+      - comment: null
+        name: mappingsByFromId
+        using:
+          foreign_key_constraint_on:
+            column: from_id
+            table: mapping
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
-      object_relationships: []
+      is_enum: false
+      object_relationships:
+      - comment: null
+        name: concept_class
+        using:
+          foreign_key_constraint_on: class_id
+      - comment: null
+        name: terminology_source
+        using:
+          foreign_key_constraint_on: source_id
+      - comment: null
+        name: data_type
+        using:
+          foreign_key_constraint_on: data_type_id
       select_permissions: []
       table: concept
       update_permissions: []
@@ -641,21 +921,24 @@
       - comment: null
         permission:
           filter:
-            user_id:
-              _eq: X-HASURA-USER-ID
+            user:
+              id:
+                _eq: X-Hasura-User-Id
         role: user
       event_triggers: []
       insert_permissions:
       - comment: null
         permission:
           check:
-            user_id:
-              _eq: X-HASURA-USER-ID
+            user:
+              id:
+                _eq: X-Hasura-User-Id
           columns:
           - org_unit_id
           - user_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: org_unit
@@ -670,12 +953,12 @@
         permission:
           allow_aggregations: false
           columns:
-          - id
           - org_unit_id
           - user_id
           filter:
-            user_id:
-              _eq: X-HASURA-USER-ID
+            user:
+              id:
+                _eq: X-Hasura-User-Id
         role: user
       table: user_org_unit
       update_permissions: []
@@ -683,6 +966,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: terminology_collection_concept
@@ -691,6 +975,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: concept_aggregation
@@ -699,6 +984,40 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
+      object_relationships:
+      - comment: null
+        name: table
+        using:
+          manual_configuration:
+            column_mapping:
+              table_name: table_name
+              table_schema: table_schema
+            remote_table: table
+      select_permissions:
+      - comment: null
+        permission:
+          allow_aggregations: false
+          columns:
+          - definition
+          - comment
+          - name
+          - table_name
+          - table_schema
+          - type
+          filter:
+            table:
+              permissions:
+                role_name:
+                  _in: x-hasura-roles
+        role: user
+      table: relationship
+      update_permissions: []
+    - array_relationships: []
+      delete_permissions: []
+      event_triggers: []
+      insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: mapping
@@ -722,11 +1041,7 @@
           foreign_key_constraint_on:
             column: user_id
             table: user_role
-      delete_permissions:
-      - comment: null
-        permission:
-          filter: {}
-        role: manager
+      delete_permissions: []
       event_triggers: []
       insert_permissions:
       - comment: null
@@ -741,20 +1056,7 @@
           - preferred_org_unit_id
           set: {}
         role: user
-      - comment: null
-        permission:
-          check: {}
-          columns:
-          - active
-          - attributes
-          - created_at
-          - locale
-          - password
-          - preferred_org_unit_id
-          - token
-          - username
-          set: {}
-        role: manager
+      is_enum: false
       object_relationships:
       - comment: null
         name: preferred_org_unit
@@ -777,21 +1079,6 @@
             id:
               _eq: X-HASURA-USER-ID
         role: user
-      - comment: null
-        permission:
-          allow_aggregations: false
-          columns:
-          - active
-          - attributes
-          - created_at
-          - id
-          - locale
-          - password
-          - preferred_org_unit_id
-          - token
-          - username
-          filter: {}
-        role: manager
       table: user
       update_permissions:
       - comment: null
@@ -804,23 +1091,11 @@
             id:
               _eq: X-HASURA-USER-ID
         role: user
-      - comment: null
-        permission:
-          columns:
-          - active
-          - attributes
-          - created_at
-          - locale
-          - password
-          - preferred_org_unit_id
-          - token
-          - username
-          filter: {}
-        role: manager
     - array_relationships: []
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: terminology_source
@@ -829,6 +1104,7 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: terminology_collection
@@ -845,10 +1121,12 @@
         permission:
           check: {}
           columns:
+          - id
           - role_id
           - user_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: role
@@ -889,11 +1167,13 @@
         permission:
           check: {}
           columns:
+          - id
           - org_unit_id
           - role_id
           - user_id
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: org_unit
@@ -932,14 +1212,28 @@
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships: []
       select_permissions: []
       table: data_type
       update_permissions: []
     - array_relationships: []
-      delete_permissions: []
+      delete_permissions:
+      - comment: null
+        permission:
+          filter: {}
+        role: user
       event_triggers: []
-      insert_permissions: []
+      insert_permissions:
+      - comment: null
+        permission:
+          check: {}
+          columns:
+          - org_unit_id
+          - workflow_id
+          set: {}
+        role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: org_unit
@@ -949,13 +1243,30 @@
         name: workflow
         using:
           foreign_key_constraint_on: workflow_id
-      select_permissions: []
+      select_permissions:
+      - comment: null
+        permission:
+          allow_aggregations: false
+          columns:
+          - org_unit_id
+          - workflow_id
+          filter: {}
+        role: user
       table: org_unit_workflow
-      update_permissions: []
+      update_permissions:
+      - comment: null
+        permission:
+          columns:
+          - org_unit_id
+          - workflow_id
+          filter: {}
+          set: {}
+        role: user
     - array_relationships: []
       delete_permissions: []
       event_triggers: []
       insert_permissions: []
+      is_enum: false
       object_relationships:
       - comment: null
         name: entity
@@ -998,10 +1309,12 @@
           columns:
           - encounter_schema
           - entity_type_id
+          - id
           - name
           - title_create
           set: {}
         role: user
+      is_enum: false
       object_relationships:
       - comment: null
         name: entity_type

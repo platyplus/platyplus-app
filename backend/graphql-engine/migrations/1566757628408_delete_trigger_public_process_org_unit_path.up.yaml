@@ -1,3 +1,0 @@
-- args:
-    sql: DROP TRIGGER "process_org_unit_path" ON "public"."org_unit";
-  type: run_sql

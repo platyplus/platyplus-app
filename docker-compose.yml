@@ -1,20 +1,23 @@
 version: '3.4'
 services:
-  app:
-    # image: platyplus/platyplus-service
-    # depends_on:
-    #   - 'graphql-engine'
-    labels:
-      - 'traefik.frontend.rule=Host:app.${DOMAIN:-localhost}'
-      - 'traefik.port=3000'
+  # app:
+  #   # image: platyplus/platyplus-service
+  #   # depends_on:
+  #   #   - 'graphql-engine'
+  #   labels:
+  #     - 'traefik.frontend.rule=Host:app.${DOMAIN:-localhost}'
+  #     - 'traefik.port=3000'
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:
       - 'authentication'
       - 'postgres'
     labels:
-      - 'traefik.frontend.rule=Host:graphql.${DOMAIN:-localhost}'
-      - 'traefik.port=3000'
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.graphql-engine.rule=Host(`graphql.${DOMAIN:-localhost}`)'
+      - 'traefik.http.routers.graphql-engine.entrypoints=web'
+      - 'traefik.http.services.graphql-engine.loadbalancer.server.port=3000'
+      # - 'traefik.port=3000'
   postgres:
     image: mdillon/postgis:11-alpine
     volumes:
@@ -22,9 +25,10 @@ services:
   reverse-proxy:
     image: traefik # The official Traefik docker image
     command:
-      - '--api'
-      - '--docker'
-      - '--web'
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
     ports:
       - '80:80' # The HTTP port
     volumes:

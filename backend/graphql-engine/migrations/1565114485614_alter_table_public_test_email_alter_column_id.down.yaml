@@ -1,6 +1,0 @@
-- args:
-    sql: ALTER TABLE ONLY "public"."test_email" ALTER COLUMN "id" SET DEFAULT gen_random_uuid();
-  type: run_sql
-- args:
-    sql: COMMENT ON COLUMN "public"."test_email"."id" IS 'null'
-  type: run_sql

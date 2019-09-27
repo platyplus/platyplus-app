@@ -1,3 +1,0 @@
-- args:
-    sql: alter table "public"."test_email" drop constraint "test_email_pkey";
-  type: run_sql

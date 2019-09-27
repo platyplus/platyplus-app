@@ -1,9 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."org_unit_workflow" ADD COLUMN "id" uuid
-  type: run_sql
-- args:
-    sql: ALTER TABLE "public"."org_unit_workflow" ALTER COLUMN "id" DROP NOT NULL
-  type: run_sql
-- args:
-    sql: ALTER TABLE "public"."org_unit_workflow" ALTER COLUMN "id" SET DEFAULT gen_random_uuid()
-  type: run_sql

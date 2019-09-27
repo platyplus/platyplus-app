@@ -1,3 +1,0 @@
-- args:
-    sql: DROP VIEW "public"."relationship"
-  type: run_sql

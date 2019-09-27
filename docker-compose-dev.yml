@@ -1,19 +1,19 @@
 version: '3.4'
 services:
-  app:
-    build: .
-    command: ['yarn', 'dev:platyplus']
-    environment:
-      NODE_ENV: development
-    healthcheck:
-      disable: true
-    labels:
-      - 'traefik.port=8080'
-    restart: always
-    volumes:
-      - ./frontend/platyplus/src:/app/frontend/platyplus/src
-      - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src
-      - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src
+  # app:
+  #   build: .
+  #   command: ['yarn', 'dev:platyplus']
+  #   environment:
+  #     NODE_ENV: development
+  #   healthcheck:
+  #     disable: true
+  #   labels:
+  #     - 'traefik.port=8080'
+  #   restart: always
+  #   volumes:
+  #     - ./frontend/platyplus/src:/app/frontend/platyplus/src
+  #     - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src
+  #     - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src
   authentication:
     build: .
     command: ['yarn', 'dev:authentication']
@@ -25,8 +25,10 @@ services:
     healthcheck:
       disable: true
     labels:
-      - 'traefik.frontend.rule=Host:auth-service.${DOMAIN:-localhost}'
-      - 'traefik.port=3000'
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.authentication.rule=Host(`authentication.${DOMAIN:-localhost}`)'
+      - 'traefik.http.routers.authentication.entrypoints=web'
+      - 'traefik.http.services.authentication.loadbalancer.server.port=3000'
     ports:
       - '9229:9229'
     restart: always
@@ -69,8 +71,10 @@ services:
   #   healthcheck:
   #     disable: true
   #   labels:
-  #     - 'traefik.frontend.rule=Host:functions.${DOMAIN:-localhost}'
-  #     - 'traefik.port=3000'
+  # - 'traefik.enable=true'
+  # - 'traefik.http.routers.functions.rule=Host(`functions.${DOMAIN:-localhost}`)'
+  # - 'traefik.http.routers.functions.entrypoints=web'
+  # - 'traefik.http.services.functions.loadbalancer.server.port=3000'
   #   ports:
   #     - '9230:9229'
   #   restart: always
@@ -85,8 +89,10 @@ services:
     restart: always
   reverse-proxy:
     labels:
-      - 'traefik.frontend.rule=Host:traefik.${DOMAIN:-localhost}'
-      - 'traefik.port=8080'
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN:-localhost}`)'
+      - 'traefik.http.routers.traefik.entrypoints=web'
+      - 'traefik.http.services.traefik.loadbalancer.server.port=8080'
     restart: always
 volumes:
   configuration:
