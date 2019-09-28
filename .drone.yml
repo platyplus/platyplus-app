@@ -153,7 +153,7 @@ steps:
       # ! Change this when functions works
       # - export FUNCTIONS_URL="`gcloud beta run services describe functions --format="get(status.url)"`"
       - export FUNCTIONS_URL="http://functions:3000"
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true" --timeout 900
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true"
       # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
       # - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - export GRAPHQL_ENGINE_URL="http://graphql-engine:3000"
