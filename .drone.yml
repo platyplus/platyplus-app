@@ -100,7 +100,8 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
-      - gcloud config set run/platform managed
+      - gcloud config set run/platform gke
+      - gcloud config set run/cluster platyplus
       - gcloud config set run/region europe-west1
       # TODO --connectivity=internal not working on managed services, only on GKE
       - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --allow-unauthenticated --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
@@ -118,7 +119,8 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
-      - gcloud config set run/platform managed
+      - gcloud config set run/platform gke
+      - gcloud config set run/cluster platyplus
       - gcloud config set run/region europe-west1
       # TODO --connectivity=internal not working on managed services, only on GKE
       # ! Uncomment the following line when the functions microservice is ready to work
@@ -133,7 +135,8 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
-      - gcloud config set run/platform managed
+      - gcloud config set run/platform gke
+      - gcloud config set run/cluster platyplus
       - gcloud config set run/region europe-west1
       # TODO create SQL instance if not exists?
       # https://medium.com/tactable-blog/building-a-serverless-graphql-app-with-next-js-hasura-and-cloudrun-fb8ca7c5e757
@@ -163,7 +166,8 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
-      - gcloud config set run/platform managed
+      - gcloud config set run/platform gke
+      - gcloud config set run/cluster platyplus
       - gcloud config set run/region europe-west1
       - export GRAPHQL_ENGINE_PUBLIC_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --set-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
