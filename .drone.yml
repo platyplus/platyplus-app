@@ -99,12 +99,11 @@ steps:
       - gcloud components install beta
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform gke
-      - gcloud config set run/cluster platyplus-main
+      - gcloud config set run/cluster platyplus
       - gcloud config set run/cluster_location europe-west1-d
-      - gcloud config set run/namespace master
-      # - gcloud container clusters get-credentials platyplus-main
+      # - gcloud container clusters get-credentials platyplus
       # TODO --connectivity=internal not working on managed services, only on GKE
-      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
+      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET" --namespace master
     environment:
       PUBLIC_KEY:
         from_secret: PUBLIC_KEY
@@ -120,13 +119,12 @@ steps:
       - gcloud components install beta
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform gke
-      - gcloud config set run/cluster platyplus-main
+      - gcloud config set run/cluster platyplus
       - gcloud config set run/cluster_location europe-west1-d
-      - gcloud config set run/namespace master
-      # - gcloud container clusters get-credentials platyplus-main
+      # - gcloud container clusters get-credentials platyplus
       # TODO --connectivity=internal not working on managed services, only on GKE
       # ! Uncomment the following line when the functions microservice is ready to work
-      # - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:next --set-env-vars HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
+      # - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:next --set-env-vars HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET" --namespace master
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
@@ -138,10 +136,9 @@ steps:
       - gcloud components install beta
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform gke
-      - gcloud config set run/cluster platyplus-main
+      - gcloud config set run/cluster platyplus
       - gcloud config set run/cluster_location europe-west1-d
-      - gcloud config set run/namespace master
-      # - gcloud container clusters get-credentials platyplus-main
+      # - gcloud container clusters get-credentials platyplus
       # TODO create SQL instance if not exists?
       # https://medium.com/tactable-blog/building-a-serverless-graphql-app-with-next-js-hasura-and-cloudrun-fb8ca7c5e757
       # TODO only if database doesn't exist
@@ -153,7 +150,7 @@ steps:
       # ! Change this when functions works
       # - export FUNCTIONS_URL="`gcloud beta run services describe functions --format="get(status.url)"`"
       - export FUNCTIONS_URL="http://functions:3000"
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true"
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true" --namespace master
       # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
       # - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - export GRAPHQL_ENGINE_URL="http://graphql-engine:3000"
@@ -173,9 +170,8 @@ steps:
       - gcloud components install beta
       - gcloud config set project platyplus-0402
       - gcloud config set run/platform gke
-      - gcloud config set run/cluster platyplus-main
+      - gcloud config set run/cluster platyplus
       - gcloud config set run/cluster_location europe-west1-d
-      - gcloud config set run/namespace master
-      # - gcloud container clusters get-credentials platyplus-main
+      # - gcloud container clusters get-credentials platyplus
       - export GRAPHQL_ENGINE_PUBLIC_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
-      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --set-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
+      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --set-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL" --namespace master
