@@ -31,8 +31,6 @@ steps:
       - git config --global user.name "Drone.io CI"
       - yarn install
       - yarn run build
-      - ls packages/microservice/*
-      - ls backend/authentication-service/*
   - name: publish-platyplus
     depends_on: [build-packages]
     image: plugins/gcr
