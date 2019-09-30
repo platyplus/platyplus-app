@@ -2,8 +2,9 @@ FROM node:12-alpine
 WORKDIR /app
 ARG NODE_ENV=production
 ENV NODE_ENV $NODE_ENV
-ARG GRAPHQL_ENGINE_PUBLIC_URL=https://grapqhl.platyplus.io
-ENV GRAPHQL_ENGINE_PUBLIC_URL $GRAPHQL_ENGINE_PUBLIC_URL
+
+ENV GRAPHQL_ENGINE_PUBLIC_URL=https://grapqhl.platyplus.io
+ENV PLATYPLUS_DIST=../../frontend/platyplus/dist/pwa
 RUN yarn global add lerna
 # Dependencies
 COPY package.json yarn.lock lerna.json tsconfig.json tsconfig.build.json .eslintrc.js .eslintignore /app/

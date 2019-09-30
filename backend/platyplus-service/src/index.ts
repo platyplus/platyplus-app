@@ -15,6 +15,8 @@ router.get('/config', async (ctx, next) => {
   await next()
 })
 
-app.use(serveStatic(process.env.PLATYPLUS_DIST || '../platyplus/dist/pwa'))
+app.use(
+  serveStatic(process.env.PLATYPLUS_DIST || '../../frontend/platyplus/dist/pwa')
+)
 
 app.use(history())
