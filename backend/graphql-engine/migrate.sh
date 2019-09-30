@@ -12,7 +12,7 @@ log() {
 DEFAULT_MIGRATIONS_DIR="/hasura-migrations"
 TEMP_MIGRATIONS_DIR="/tmp/hasura-migrations"
 
-# check server port and ser default as 8080
+# check server port and ser default as 3000
 if [ -z ${HASURA_GRAPHQL_SERVER_PORT+x} ]; then
     HASURA_GRAPHQL_SERVER_PORT=8080
 fi

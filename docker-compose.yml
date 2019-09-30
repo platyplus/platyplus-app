@@ -16,8 +16,7 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.graphql-engine.rule=Host(`graphql.${DOMAIN:-localhost}`)'
       - 'traefik.http.routers.graphql-engine.entrypoints=web'
-      - 'traefik.http.services.graphql-engine.loadbalancer.server.port=3000'
-      # - 'traefik.port=3000'
+      - 'traefik.http.services.graphql-engine.loadbalancer.server.port=8080'
   postgres:
     image: mdillon/postgis:11-alpine
     volumes:
