@@ -1,22 +1,21 @@
 # ! rename 'next' tag to the branch name i.e. master
-kind: pipeline
-name: documentation
-steps:
-  - name: build-docs
-    image: node:alpine
-    commands:
-      - apk add --no-cache git
-      - git config --global user.email "no-reply@platy.plus"
-      - git config --global user.name "Drone.io CI"
-      - ./scripts/deploy-documentation.sh
-    environment:
-      GH_TOKEN:
-        from_secret: GH_TOKEN
-      GH_USER:
-        from_secret: GH_USER
-    when:
-      branch: master
-
+# kind: pipeline
+# name: documentation
+# steps:
+#   - name: build-docs
+#     image: node:alpine
+#     commands:
+#       - apk add --no-cache git
+#       - git config --global user.email "no-reply@platy.plus"
+#       - git config --global user.name "Drone.io CI"
+#       - ./scripts/deploy-documentation.sh
+#     environment:
+#       GH_TOKEN:
+#         from_secret: GH_TOKEN
+#       GH_USER:
+#         from_secret: GH_USER
+#     when:
+#       branch: master
 kind: pipeline
 type: docker
 name: publish
@@ -32,6 +31,8 @@ steps:
       - git config --global user.name "Drone.io CI"
       - yarn install
       - yarn run build
+      - ls packages/microservice/*
+      - ls backend/authentication-service/*
   - name: publish-platyplus
     depends_on: [build-packages]
     image: plugins/gcr
