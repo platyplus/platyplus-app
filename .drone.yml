@@ -1,88 +1,89 @@
 # ! rename 'next' tag to the branch name i.e. master
-# kind: pipeline
-# name: documentation
-# steps:
-#   - name: build-docs
-#     image: node:alpine
-#     commands:
-#       - apk add --no-cache git
-#       - git config --global user.email "no-reply@platy.plus"
-#       - git config --global user.name "Drone.io CI"
-#       - ./scripts/deploy-documentation.sh
-#     environment:
-#       GH_TOKEN:
-#         from_secret: GH_TOKEN
-#       GH_USER:
-#         from_secret: GH_USER
-#     when:
-#       branch: master
+kind: pipeline
+name: documentation
+steps:
+  - name: build-docs
+    image: node:alpine
+    commands:
+      - apk add --no-cache git
+      - git config --global user.email "no-reply@platy.plus"
+      - git config --global user.name "Drone.io CI"
+      - ./scripts/deploy-documentation.sh
+    environment:
+      GH_TOKEN:
+        from_secret: GH_TOKEN
+      GH_USER:
+        from_secret: GH_USER
+    when:
+      branch: master
 
-# kind: pipeline
-# type: docker
-# name: publish
-# trigger:
-#   branch:
-#     - master
-# steps:
-#   - name: build-packages
-#     image: node:alpine
-#     commands:
-#       - apk add --no-cache git
-#       - git config --global user.email "no-reply@platy.plus"
-#       - git config --global user.name "Drone.io CI"
-#       - yarn install
-#       - yarn run build
-#   - name: publish-platyplus
-#     depends_on: [build-packages]
-#     image: plugins/gcr
-#     settings:
-#       dockerfile: backend/platyplus-service/Dockerfile
-#       repo: platyplus-0402/platyplus-service
-#       tags:
-#         - ${DRONE_COMMIT_SHA:0:8}
-#         - next
-#       json_key:
-#         from_secret: google_credentials
-#   - name: publish-graphql-engine
-#     depends_on: [build-packages]
-#     image: plugins/gcr
-#     settings:
-#       dockerfile: backend/graphql-engine/Dockerfile
-#       repo: platyplus-0402/graphql-engine
-#       tags:
-#         - ${DRONE_COMMIT_SHA:0:8}
-#         - next
-#       json_key:
-#         from_secret: google_credentials
-#   - name: publish-authentication
-#     depends_on: [build-packages]
-#     image: plugins/gcr
-#     settings:
-#       dockerfile: backend/authentication-service/Dockerfile
-#       repo: platyplus-0402/authentication-service
-#       tags:
-#         - ${DRONE_COMMIT_SHA:0:8}
-#         - next
-#       json_key:
-#         from_secret: google_credentials
-#   - name: publish-functions
-#     depends_on: [build-packages]
-#     image: plugins/gcr
-#     settings:
-#       dockerfile: backend/functions-service/Dockerfile
-#       repo: platyplus-0402/functions-service
-#       tags:
-#         - ${DRONE_COMMIT_SHA:0:8}
-#         - next
-#       json_key:
-#         from_secret: google_credentials
+kind: pipeline
+type: docker
+name: publish
+trigger:
+  branch:
+    - master
+steps:
+  - name: build-packages
+    image: node:alpine
+    commands:
+      - apk add --no-cache git
+      - git config --global user.email "no-reply@platy.plus"
+      - git config --global user.name "Drone.io CI"
+      - yarn install
+      - yarn run build
+  - name: publish-platyplus
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/platyplus-service/Dockerfile
+      repo: platyplus-0402/platyplus-service
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - next
+      json_key:
+        from_secret: google_credentials
+  - name: publish-graphql-engine
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/graphql-engine/Dockerfile
+      repo: platyplus-0402/graphql-engine
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - next
+      json_key:
+        from_secret: google_credentials
+  - name: publish-authentication
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/authentication-service/Dockerfile
+      repo: platyplus-0402/authentication-service
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - next
+      json_key:
+        from_secret: google_credentials
+  - name: publish-functions
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/functions-service/Dockerfile
+      repo: platyplus-0402/functions-service
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - next
+      json_key:
+        from_secret: google_credentials
+---
 kind: pipeline
 type: docker
 name: deploy
 trigger:
   branch:
     - master
-# depends_on: [publish]
+depends_on: [publish]
 steps:
   - name: prepare-gcloud
     image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
@@ -98,12 +99,11 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
-      - gcloud config set run/platform gke
-      - gcloud config set run/cluster platyplus
-      - gcloud config set run/cluster_location europe-west1-d
+      - gcloud config set run/platform managed
+      - gcloud config set run/region europe-west1
       # - gcloud container clusters get-credentials platyplus
       # TODO --connectivity=internal not working on managed services, only on GKE
-      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET" --namespace master
+      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --allow-unauthenticated --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET" --namespace master
     environment:
       PUBLIC_KEY:
         from_secret: PUBLIC_KEY
@@ -118,9 +118,8 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
-      - gcloud config set run/platform gke
-      - gcloud config set run/cluster platyplus
-      - gcloud config set run/cluster_location europe-west1-d
+      - gcloud config set run/platform managed
+      - gcloud config set run/region europe-west1
       # - gcloud container clusters get-credentials platyplus
       # TODO --connectivity=internal not working on managed services, only on GKE
       # ! Uncomment the following line when the functions microservice is ready to work
@@ -135,9 +134,8 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
-      - gcloud config set run/platform gke
-      - gcloud config set run/cluster platyplus
-      - gcloud config set run/cluster_location europe-west1-d
+      - gcloud config set run/platform managed
+      - gcloud config set run/region europe-west1
       # - gcloud container clusters get-credentials platyplus
       # TODO create SQL instance if not exists?
       # https://medium.com/tactable-blog/building-a-serverless-graphql-app-with-next-js-hasura-and-cloudrun-fb8ca7c5e757
@@ -145,15 +143,13 @@ steps:
       - gcloud sql databases create hasura-master --instance platyplus || true
       # gcloud sql users set-password postgres --instance platyplus --password $$POSTGRES_PASSWORD # ? Useless?
       - export CLOUDSQL_INSTANCE=`gcloud sql instances describe platyplus --format="get(connectionName)"`
-      # - export AUTHENTICATION_URL="`gcloud beta run services describe authentication --format="get(status.url)"`"
-      - export AUTHENTICATION_URL="http://authentication:3000"
+      - export AUTHENTICATION_URL="`gcloud beta run services describe authentication --format="get(status.url)"`"
       # ! Change this when functions works
       # - export FUNCTIONS_URL="`gcloud beta run services describe functions --format="get(status.url)"`"
       - export FUNCTIONS_URL="http://functions:3000"
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true" --namespace master
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true" --namespace master
       # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
-      # - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
-      - export GRAPHQL_ENGINE_URL="http://graphql-engine:3000"
+      - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - gcloud beta run services update authentication --set-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
       # ! Uncomment the following line when the functions microservice is ready to work
       # - gcloud beta run services update functions --set-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
@@ -169,9 +165,7 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
-      - gcloud config set run/platform gke
-      - gcloud config set run/cluster platyplus
-      - gcloud config set run/cluster_location europe-west1-d
-      # - gcloud container clusters get-credentials platyplus
+      - gcloud config set run/platform managed
+      - gcloud config set run/region europe-west1
       - export GRAPHQL_ENGINE_PUBLIC_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
-      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --set-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL" --namespace master
+      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --set-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL" --namespace master
