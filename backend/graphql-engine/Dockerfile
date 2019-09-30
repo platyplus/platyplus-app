@@ -32,6 +32,6 @@ RUN chmod +x /bin/cloud_sql_proxy ./entrypoint.sh ./migrate.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
 
-HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT}/healthz || exit 1
+# HEALTHCHECK  --interval=30s --timeout=3s CMD wget --quiet --spider http://localhost:${HASURA_GRAPHQL_SERVER_PORT}/healthz || exit 1
 
 CMD /bin/env
