@@ -99,11 +99,13 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
+      - gcloud config set compute/region europe-west1
+      - gcloud config set compute/zone europe-west1-b
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
       # - gcloud container clusters get-credentials platyplus
       # TODO --connectivity=internal not working on managed services, only on GKE
-      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --allow-unauthenticated --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
+      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --allow-unauthenticated --timeout 900 --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
     environment:
       PUBLIC_KEY:
         from_secret: PUBLIC_KEY
@@ -118,6 +120,8 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
+      - gcloud config set compute/region europe-west1
+      - gcloud config set compute/zone europe-west1-b
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
       # - gcloud container clusters get-credentials platyplus
@@ -134,6 +138,8 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
+      - gcloud config set compute/region europe-west1
+      - gcloud config set compute/zone europe-west1-b
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
       # - gcloud container clusters get-credentials platyplus
@@ -147,7 +153,7 @@ steps:
       # ! Change this when functions works
       # - export FUNCTIONS_URL="`gcloud beta run services describe functions --format="get(status.url)"`"
       - export FUNCTIONS_URL="http://functions:3000"
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true"
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --timeout 900 --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@127.0.0.1:5432/hasura-master",CLOUDSQL_INSTANCE="$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true"
       # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
       - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - gcloud beta run services update authentication --set-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
@@ -165,7 +171,9 @@ steps:
       - gcloud auth activate-service-account --key-file .credentials
       - gcloud components install beta
       - gcloud config set project platyplus-0402
+      - gcloud config set compute/region europe-west1
+      - gcloud config set compute/zone europe-west1-b
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
       - export GRAPHQL_ENGINE_PUBLIC_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
-      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --set-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
+      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --timeout 900 --set-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
