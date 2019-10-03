@@ -1,5 +1,9 @@
 version: '3.4'
 services:
+  platyplus:
+    image: platyplus/platyplus-service
+    labels:
+      - 'traefik.http.services.platyplus.loadbalancer.server.port=3000'
   authentication:
     deploy:
       replicas: 1

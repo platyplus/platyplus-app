@@ -1,19 +1,19 @@
 version: '3.4'
 services:
-  app:
+  platyplus:
     build: .
     command: ['yarn', 'dev:platyplus']
     environment:
       NODE_ENV: development
     healthcheck:
       disable: true
-    labels:
-      - 'traefik.port=8080'
     restart: always
     volumes:
       - ./frontend/platyplus/src:/app/frontend/platyplus/src
       - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src
       - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src
+    labels:
+      - 'traefik.http.services.platyplus.loadbalancer.server.port=8080'
   authentication:
     build: .
     command: ['yarn', 'dev:authentication']
@@ -53,12 +53,14 @@ services:
       dockerfile: ./backend/graphql-engine/Dockerfile
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
+      POSTGRES_HOST: 'postgres'
+      ENABLE_CLOUDSQL_PROXY: 'false'
     command: ['graphql-engine', 'serve']
     healthcheck:
       disable: true
     restart: always
     volumes:
-      - ./backend/graphql-engine/migrations:/opt/hasura-migrations
+      - ./backend/graphql-engine/migrations:/hasura-migrations
   # functions:
   #   build:
   #     context: ./backend/functions-service
@@ -96,6 +98,5 @@ services:
     restart: always
 volumes:
   configuration:
-  notused_app:
   notused_auth:
   notused_functions:

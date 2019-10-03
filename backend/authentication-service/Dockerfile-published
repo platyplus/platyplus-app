@@ -1,5 +1,5 @@
 FROM node:12-alpine
-ARG GRAPHQL_ENGINE_URL=http://graphql-engine:3000
+ARG GRAPHQL_ENGINE_URL=http://graphql-engine:8080
 ENV GRAPHQL_ENGINE_URL $GRAPHQL_ENGINE_URL
 
 RUN yarn global add @platyplus/authentication-service

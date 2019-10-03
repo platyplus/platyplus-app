@@ -1,12 +1,12 @@
 version: '3.4'
 services:
-  app:
-    image: platyplus/platyplus-service
-    # depends_on:
-    #   - 'graphql-engine'
+  platyplus:
+    depends_on:
+      - 'graphql-engine'
     labels:
-      - 'traefik.frontend.rule=Host:app.${DOMAIN:-localhost}'
-      - 'traefik.port=3000'
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.platyplus.rule=Host(`app.${DOMAIN:-localhost}`)'
+      - 'traefik.http.routers.platyplus.entrypoints=web'
   graphql-engine:
     image: platyplus/graphql-engine
     depends_on:

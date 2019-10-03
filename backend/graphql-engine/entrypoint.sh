@@ -62,6 +62,7 @@ if [ "$ENABLE_CLOUDSQL_PROXY" = true ]; then
   cloud_sql_proxy -instances=$CLOUDSQL_INSTANCE=tcp:5432 &
 fi
 
+# TODO get rid of 5432 and $POSTGRES_HOST and parse the $HASURA_GRAPHQL_DATABASE_URL variable instead
 wait_for_port 5432 $POSTGRES_HOST
 
 if [ "$ENABLE_MIGRATIONS" = true ]; then
@@ -69,10 +70,10 @@ if [ "$ENABLE_MIGRATIONS" = true ]; then
   ./migrate.sh &
 fi
 
-if [ "$ENABLE_CONSOLE" = true ]; then
-  log "Running console in background"
-  ./console.sh &
-fi
+# if [ "$ENABLE_CONSOLE" = true ]; then
+#   log "Running console in background"
+#   ./console.sh &
+# fi
 
 log "Starting graphql engine on port $HASURA_GRAPHQL_SERVER_PORT"
 exec graphql-engine serve

@@ -3,7 +3,7 @@ WORKDIR /app
 ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
 
-ARG GRAPHQL_ENGINE_URL=http://graphql-engine:3000
+ARG GRAPHQL_ENGINE_URL=http://graphql-engine:8080
 ENV GRAPHQL_ENGINE_URL $GRAPHQL_ENGINE_URL
 
 RUN yarn global add lerna
