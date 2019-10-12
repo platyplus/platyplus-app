@@ -14,7 +14,7 @@ import { PageMixin } from 'src/mixins'
 @Component
 export default class Index extends Mixins(PageMixin) {
   get title() {
-    return 'Home' // TODO i18n
+    return this.$t('index.title')
   }
 }
 </script>

@@ -16,6 +16,9 @@ export default {
     title: 'Confirmation',
     label: 'Are you sure to delete the {tableLabel} "{label}"?'
   },
+  index: {
+    title: 'Home'
+  },
   location: {
     message: 'You are in {location}.',
     select: 'Select your location:',
