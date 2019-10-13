@@ -9,14 +9,7 @@ q-toolbar(color="primary")
     map-options
     :options="$locales"
     v-model="$locale")
-  q-btn(v-if="$authenticated" flat dense round icon="fas fa-sign-out-alt" @click="dialog = true")
-  q-dialog(v-model="dialog" persistent)
-    q-card
-      q-card-section(class="row items-center")
-        span(class="q-ml-sm") {{ $t('logout.message') }}
-      q-card-actions(align="right")
-        q-btn(flat :label="$t('no')" color="primary" v-close-popup)
-        q-btn(flat :label="$t('yes')" color="primary" @click="logout")
+  q-btn(v-if="$authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
 </template>
 
 <script lang="ts">
@@ -24,8 +17,6 @@ import { Component, Mixins } from 'vue-property-decorator'
 import { HasuraMixin } from 'src/mixins'
 @Component
 export default class UserHeader extends Mixins(HasuraMixin) {
-  dialog = false
-
   get title() {
     return this.tableName
       ? this.$i18n.t(this.tableName + '.label_plural')
@@ -36,10 +27,16 @@ export default class UserHeader extends Mixins(HasuraMixin) {
     this.$store.dispatch('navigation/toggleDrawer')
   }
   async logout() {
-    // TODO use the Dialog plugin, not the q-dialog component
-    this.$store.dispatch('user/signout')
-    this.dialog = false
-    this.$router.replace('/public')
+    this.$q
+      .dialog({
+        message: this.$t('logout.message'),
+        cancel: true,
+        persistent: true
+      })
+      .onOk(() => {
+        this.$store.dispatch('user/signout')
+        this.$router.replace('/public')
+      })
   }
 }
 </script>
