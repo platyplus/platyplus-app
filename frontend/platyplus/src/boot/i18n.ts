@@ -3,18 +3,30 @@ import messages from 'src/i18n'
 import { QuasarBootOptions } from 'src/types/quasar'
 
 export const locales = [
-  { label: '🇬🇧', value: 'en' },
+  { label: '🇬🇧', value: 'en-us' },
   { label: '🇫🇷', value: 'fr' }
 ]
+
+/**
+ * * Returns the simplified language code that is supported by Quasar and the application
+ * E.g. Quasar uses 'en-us' but not 'en', and uses 'fr' but not 'fr-fr'
+ * @param code the ISO language code e.g. fr-be, en, en-US
+ */
+const languageCode = (code: string) => {
+  code = code.toLocaleLowerCase()
+  if (code.startsWith('en')) return 'en-us'
+  if (code.startsWith('fr')) return 'fr'
+  return code
+}
 
 // TODO use Vuex, and link the user locale somehow
 export default ({ app, Vue }: QuasarBootOptions) => {
   Vue.use(VueI18n)
   // Set i18n instance on app
   app.i18n = new VueI18n({
-    locale: navigator.language.substring(0, 2),
+    locale: languageCode(navigator.language),
     sync: true,
-    fallbackLocale: 'en',
+    fallbackLocale: 'en-us',
     messages // TODO: only load the messages of the desired language?
   })
 

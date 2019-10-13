@@ -4,7 +4,7 @@ const hasuraTableUserComponents = () => ({
   header: () => import('layouts/user/Header.vue'),
   menu: () => import('layouts/user/Menu.vue')
 })
-console.log(navigator)
+
 const routes: RouteConfig[] = [
   // { path: '/', redirect: '/en/' }, // TODO: locale from the client's browser navigator.language.substring(0,2)
   {
