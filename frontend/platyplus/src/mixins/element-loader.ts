@@ -72,7 +72,6 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
         persistent: true
       })
       .onOk(async () => {
-        // TODO ask confirmation
         if (this.$ability.can('delete', this.element)) {
           const mutation = deleteMutation(this.tableClass, this.$ability)
           // TODO catch errors

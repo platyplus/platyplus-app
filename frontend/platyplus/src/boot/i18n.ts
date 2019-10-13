@@ -3,7 +3,7 @@ import messages from 'src/i18n'
 import { QuasarBootOptions } from 'src/types/quasar'
 
 export const locales = [
-  { label: '🇬🇧', value: 'en-us' },
+  { label: '🇬🇧', value: 'en' },
   { label: '🇫🇷', value: 'fr' }
 ]
 
@@ -12,9 +12,9 @@ export default ({ app, Vue }: QuasarBootOptions) => {
   Vue.use(VueI18n)
   // Set i18n instance on app
   app.i18n = new VueI18n({
-    locale: 'en-us',
+    locale: navigator.language.substring(0, 2),
     sync: true,
-    fallbackLocale: 'en-us',
+    fallbackLocale: 'en',
     messages // TODO: only load the messages of the desired language?
   })
 
