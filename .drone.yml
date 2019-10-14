@@ -1,3 +1,4 @@
+---
 # ! rename 'next' tag to the branch name i.e. master
 # kind: pipeline
 # name: documentation
@@ -174,3 +175,8 @@ steps:
       - gcloud config set run/region europe-west1
       - export GRAPHQL_ENGINE_PUBLIC_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --timeout 900 --update-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
+---
+kind: signature
+hmac: a4a1ea6b4735869a792a082598ae7c75ad40b36bcc8e479c7b42754d430287cc
+
+...
