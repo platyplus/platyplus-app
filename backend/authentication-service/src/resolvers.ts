@@ -8,6 +8,25 @@ import { graphql } from '@platyplus/hasura-node-client'
 import { ALGORITHM, PUBLIC_KEY, PRIVATE_KEY } from './config'
 import { ME, SIGNUP, LOGIN } from './queries'
 import { User, Token, LoginPayload } from './types'
+const createToken = (
+  id: string,
+  defaultRole: string,
+  roles: string[] = [defaultRole]
+) =>
+  jwt.sign(
+    {
+      id: id,
+      'https://hasura.io/jwt/claims': {
+        'x-hasura-allowed-roles': roles,
+        'x-hasura-default-role': defaultRole,
+        'x-hasura-user-id': id,
+        // * See: https://docs.hasura.io/1.0/graphql/manual/auth/authorization/roles-variables.html
+        'x-hasura-roles': '{' + roles.map(r => `${r}`).join(',') + '}' // * roles expressed as a postgres array
+      }
+    },
+    PRIVATE_KEY,
+    { algorithm: ALGORITHM }
+  )
 
 export const resolvers: IResolvers = {
   Query: {
@@ -34,50 +53,17 @@ export const resolvers: IResolvers = {
       const user = await graphql
         .request(print(SIGNUP), { username, password: hashedPassword })
         .then(data => data.insert_user.returning[0])
-
-      const token = jwt.sign(
-        {
-          id: user.id,
-          'https://hasura.io/jwt/claims': {
-            'x-hasura-allowed-roles': ['user'],
-            'x-hasura-default-role': 'user',
-            'x-hasura-user-id': user.id
-          }
-        },
-        PRIVATE_KEY,
-        { algorithm: ALGORITHM }
-      )
-
-      return { id: user.id, token }
+      return { id: user.id, token: createToken(user.id, 'user') }
     },
     // TODO: test if active user
     login: async (_, { username, password }) => {
       const user: User = await graphql
         .request(print(LOGIN), { username })
         .then(data => data.user[0])
-
       if (!user) throw new Error('No such user found.')
-
-      const valid = await bcrypt.compare(password, user.password)
-      if (valid) {
+      if (await bcrypt.compare(password, user.password)) {
         const roles = user.roles.map(node => node.role.name)
-        // * See: https://docs.hasura.io/1.0/graphql/manual/auth/authorization/roles-variables.html
-        const postgresRoles = '{' + roles.map(role => `${role}`).join(',') + '}'
-        const token = jwt.sign(
-          {
-            id: user.id,
-            'https://hasura.io/jwt/claims': {
-              'x-hasura-allowed-roles': roles, //! Required by Hasura but doesn't work for permissions
-              // TODO: return highest role level
-              'x-hasura-default-role': roles[0], //! Required by Hasura
-              'x-hasura-user-id': user.id,
-              'x-hasura-roles': postgresRoles
-            }
-          },
-          PRIVATE_KEY,
-          { algorithm: ALGORITHM }
-        )
-        return { id: user.id, token }
+        return { id: user.id, token: createToken(user.id, roles[0], roles) }
       } else {
         throw new Error('Invalid password.')
       }

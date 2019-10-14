@@ -13,8 +13,8 @@ import { PageMixin } from 'src/mixins'
 
 @Component
 export default class Index extends Mixins(PageMixin) {
-  get title() {
-    return this.$t('index.title')
+  get title(): string {
+    return this.$t('index.title') as string
   }
 }
 </script>

@@ -17,9 +17,9 @@ import { Component, Mixins } from 'vue-property-decorator'
 import { HasuraMixin } from 'src/mixins'
 @Component
 export default class UserHeader extends Mixins(HasuraMixin) {
-  get title() {
+  get title(): string {
     return this.tableName
-      ? this.$i18n.t(this.tableName + '.label_plural')
+      ? (this.$t(this.tableName + '.label_plural') as string)
       : 'Platyplus'
   }
 
@@ -29,7 +29,7 @@ export default class UserHeader extends Mixins(HasuraMixin) {
   async logout() {
     this.$q
       .dialog({
-        message: this.$t('logout.message'),
+        message: this.$t('logout.message') as string,
         cancel: true,
         persistent: true
       })
