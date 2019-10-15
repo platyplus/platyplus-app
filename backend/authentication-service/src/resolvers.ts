@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 
 import { graphql } from '@platyplus/hasura-node-client'
 
-import { ALGORITHM, PUBLIC_KEY, PRIVATE_KEY } from './config'
+import { ALGORITHM, PUBLIC_KEY, PRIVATE_KEY, EXPIRES_IN } from './config'
 import { ME, SIGNUP, LOGIN } from './queries'
 import { User, Token, LoginPayload } from './types'
 const createToken = (
@@ -25,7 +25,7 @@ const createToken = (
       }
     },
     PRIVATE_KEY,
-    { algorithm: ALGORITHM }
+    { algorithm: ALGORITHM, expiresIn: EXPIRES_IN }
   )
 
 export const resolvers: IResolvers = {
@@ -67,6 +67,10 @@ export const resolvers: IResolvers = {
       } else {
         throw new Error('Invalid password.')
       }
+    },
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    refresh_token: async (_parent, _args, ctx) => {
+      console.log(ctx)
     }
   }
 }
