@@ -1,5 +1,7 @@
+import fr from 'vee-validate/dist/locale/fr.json'
 /*eslint-disable @typescript-eslint/camelcase */
 export default {
+  validation: fr.messages,
   yes: 'Oui',
   no: 'Non',
   ok: 'OK',
@@ -15,12 +17,16 @@ export default {
     change: "Changez d'emplacement"
   },
   language: 'Langue',
+  login: {
+    button: 'Se connecter'
+  },
   logout: {
     message: 'Êtes-vous sûr de vouloir vous déconnecter?'
   },
   user: {
     labels: {
       username: "Nom d'utilisateur",
+      password: 'Mot de passe',
       created_at: 'Membre depuis',
       roles: 'Roles globaux',
       membership: 'Membre des emplacements',
@@ -31,8 +37,14 @@ export default {
       }
     },
     helpers: {
-      membership: 'Choisir des emplacements',
-      preferred_org_unit: 'Choisir un emplacement'
+      username: "Nom d'utilisateur",
+      password: 'Mot de passe',
+      roles: 'Rôles globaux',
+      membership: 'Emplacements',
+      language: 'Langue',
+      preferred_org_unit: 'Choisir un emplacement',
+      first_name: 'Prénom',
+      last_name: 'Nom de famille'
     },
     profile: {
       title: 'Profil'

@@ -7,10 +7,7 @@ import { elementAsOption, optionAsElement } from 'src/hasura/graphql/common'
 
 import { FieldMixin } from './field'
 
-extend('required', {
-  ...required,
-  message: 'The {_field_} is required' // TODO i18n https://codesandbox.io/s/veevalidate-30-vuei18n-integration-9vs4l?from-embed
-})
+extend('required', required)
 
 @Component
 export class FieldEditMixin extends Mixins(FieldMixin) {

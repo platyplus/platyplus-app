@@ -1,6 +1,7 @@
 import VueI18n from 'vue-i18n'
 import messages from 'src/i18n'
 import { QuasarBootOptions } from 'src/types/quasar'
+import { configure } from 'vee-validate'
 
 export const locales = [
   { label: '🇬🇧', value: 'en-us' },
@@ -23,11 +24,21 @@ const languageCode = (code: string) => {
 export default ({ app, Vue }: QuasarBootOptions) => {
   Vue.use(VueI18n)
   // Set i18n instance on app
-  app.i18n = new VueI18n({
+  const i18n = new VueI18n({
     locale: languageCode(navigator.language),
     sync: true,
     fallbackLocale: 'en-us',
     messages // TODO: only load the messages of the desired language?
+  })
+  app.i18n = i18n
+
+  configure({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    defaultMessage: (field: string, values: any) => {
+      // override the field name.
+      values._field_ = `"${i18n.t(field)}"`
+      return i18n.t(`validation.${values._rule_}`, values) as string
+    }
   })
 
   Object.defineProperty(Vue.prototype, '$locale', {

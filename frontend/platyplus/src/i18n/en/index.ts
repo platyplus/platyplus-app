@@ -1,5 +1,7 @@
+import en from 'vee-validate/dist/locale/en.json'
 /*eslint-disable @typescript-eslint/camelcase */
 export default {
+  validation: en.messages,
   yes: 'Yes',
   no: 'No',
   ok: 'OK',
@@ -25,6 +27,9 @@ export default {
     change: 'Change location'
   },
   language: 'Language',
+  login: {
+    button: 'Sign in'
+  },
   logout: {
     message: 'Are you sure to want to sign out?'
   },

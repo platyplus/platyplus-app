@@ -2,14 +2,14 @@
 div
   slot(name="before-field" :property="property" :element="element")
   slot(name="field" :property="property"  :element="element")
-    validation-provider(v-slot="{ errors, invalid }" :rules="rules" slim)
-      q-input(:label="$t(tableName +'.labels.'+name)"
+    validation-provider(:name="tableName+'.labels.'+name" v-slot="{ errors, invalid, touched, validated }" :rules="rules" slim)
+      q-input(:label="$t(tableName+'.labels.'+name)"
         filled
         :key="name"
         :name="name"
         v-model="formValue"
         :error-message="errors[0]"
-        :error="invalid")
+        :error="(touched || validated) && invalid")
   slot(name="after-field" :property="property" :element="element")
 </template>
 
