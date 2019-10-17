@@ -14,7 +14,6 @@ import { User } from 'src/types/user'
 import { createClient } from '@platyplus/hasura-apollo-client'
 import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
 import MenuItem from 'src/components/MenuItem.vue'
-import Input from 'src/components/Input.vue'
 import { getConfig } from 'src/helpers'
 import { ApolloError } from 'apollo-client'
 import { dataIdFromObject } from 'src/hasura/graphql/apollo'
@@ -105,7 +104,6 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
     return next()
   })
 
-  Vue.component('p-input', Input)
   Vue.component('p-menu-item', MenuItem)
 }
 
