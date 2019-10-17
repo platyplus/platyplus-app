@@ -67,6 +67,10 @@ export const resolvers: IResolvers = {
       } else {
         throw new Error('Invalid password.')
       }
+    },
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    refresh_token: async (_parent, _args, ctx) => {
+      console.log(ctx)
     }
   }
 }
