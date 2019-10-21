@@ -7,7 +7,7 @@ import {
   IdGetter
 } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
-import { split } from 'apollo-link'
+import { split, ApolloLink } from 'apollo-link'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
 import { WebSocketLink } from 'apollo-link-ws'
@@ -18,12 +18,14 @@ interface CreateApolloClientOptions {
   uri: string
   getToken: () => string
   dataIdFromObject: IdGetter
+  errorsLink?: ApolloLink
 }
 
 export const createClient = ({
   uri,
   getToken,
-  dataIdFromObject
+  dataIdFromObject,
+  errorsLink
 }: CreateApolloClientOptions) => {
   const cache = new InMemoryCache({ dataIdFromObject })
   const httpLink = createHttpLink({ uri })
@@ -57,7 +59,7 @@ export const createClient = ({
   }))
   // using the ability to split links, you can send data to each link
   // depending on what kind of operation is being sent
-  const link = split(
+  let link = split(
     // split based on operation type
     ({ query }) => {
       const result = getMainDefinition(query)
@@ -70,12 +72,14 @@ export const createClient = ({
     authLink.concat(httpLink)
   )
 
+  if (errorsLink) link = ApolloLink.from([errorsLink, link])
+
   // Create the apollo client
   apolloClient = new ApolloClient({
     link,
-    cache,
+    cache
     // shouldBatch: true, // https://blog.apollographql.com/query-batching-in-apollo-63acfd859862 // TODO when available in Hasura
-    connectToDevTools: true // * automatic in development, option for production
+    // connectToDevTools: true // * automatic in development, option for production
   })
   return apolloClient
 }

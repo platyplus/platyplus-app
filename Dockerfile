@@ -16,6 +16,7 @@ COPY frontend/platyplus/package.json frontend/platyplus/yarn.lock /app/frontend/
 COPY backend/authentication-service/package.json backend/authentication-service/yarn.lock backend/authentication-service/tsconfig.build.json /app/backend/authentication-service/
 COPY backend/functions-service/package.json backend/functions-service/yarn.lock backend/functions-service/tsconfig.build.json /app/backend/functions-service/
 COPY packages/microservice/package.json packages/microservice/yarn.lock packages/microservice/tsconfig.build.json /app/packages/microservice/
+COPY packages/errors/package.json packages/errors/yarn.lock packages/errors/tsconfig.build.json /app/packages/errors/
 COPY packages/hasura-apollo-client/package.json packages/hasura-apollo-client/yarn.lock packages/hasura-apollo-client/tsconfig.build.json /app/packages/hasura-apollo-client/
 COPY packages/hasura-node-client/package.json packages/hasura-node-client/yarn.lock packages/hasura-node-client/tsconfig.build.json /app/packages/hasura-node-client/
 COPY packages/vuex-apollo-offline/package.json packages/vuex-apollo-offline/yarn.lock packages/vuex-apollo-offline/tsconfig.build.json /app/packages/vuex-apollo-offline/
@@ -28,6 +29,7 @@ COPY frontend/platyplus /app/frontend/platyplus
 COPY backend/authentication-service  /app/backend/authentication-service
 COPY backend/functions-service /app/backend/functions-service
 COPY packages/microservice /app/packages/microservice
+COPY packages/errors /app/packages/errors
 COPY packages/hasura-apollo-client /app/packages/hasura-apollo-client
 COPY packages/hasura-node-client /app/packages/hasura-node-client
 COPY packages/vuex-apollo-offline /app/packages/vuex-apollo-offline

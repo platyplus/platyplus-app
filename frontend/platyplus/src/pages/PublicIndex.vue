@@ -6,7 +6,9 @@ q-page(class="flex flex-center")
 <style></style>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Mixins, Component } from 'vue-property-decorator'
+import { PageMixin } from '../mixins'
+
 @Component
-export default class PagePublicIndex extends Vue {}
+export default class PagePublicIndex extends Mixins(PageMixin) {}
 </script>

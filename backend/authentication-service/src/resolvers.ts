@@ -1,9 +1,10 @@
 import { print } from 'graphql/language/printer'
-import { IResolvers } from 'apollo-server-koa'
+import { IResolvers, AuthenticationError } from 'apollo-server-koa'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 import { graphql } from '@platyplus/hasura-node-client'
+import { InputError } from '@platyplus/errors'
 
 import { ALGORITHM, PUBLIC_KEY, PRIVATE_KEY, EXPIRES_IN } from './config'
 import { ME, SIGNUP, LOGIN } from './queries'
@@ -42,7 +43,7 @@ export const resolvers: IResolvers = {
           .then(data => data.user[0])
         return { ...user }
       } else {
-        throw new Error('Not logged in.')
+        throw new AuthenticationError('unauthenticated')
       }
     }
   },
@@ -60,12 +61,23 @@ export const resolvers: IResolvers = {
       const user: User = await graphql
         .request(print(LOGIN), { username })
         .then(data => data.user[0])
-      if (!user) throw new Error('No such user found.')
+      if (!user)
+        throw new InputError(
+          'authentication',
+          'username',
+          'not_found',
+          'User not found'
+        )
       if (await bcrypt.compare(password, user.password)) {
         const roles = user.roles.map(node => node.role.name)
         return { id: user.id, token: createToken(user.id, roles[0], roles) }
       } else {
-        throw new Error('Invalid password.')
+        throw new InputError(
+          'authentication',
+          'password',
+          'invalid',
+          'Invalid password'
+        )
       }
     }
   }

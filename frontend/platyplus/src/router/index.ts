@@ -11,7 +11,7 @@ export let router: VueRouter
  * directly export the Router instantiation
  */
 export default (/* { store, ssrContext } */) => {
-  const newRouter = new VueRouter({
+  router = new VueRouter({
     scrollBehavior: () => ({ y: 0, x: 0 }),
     routes,
     // Leave these as is and change from quasar.conf.js instead!
@@ -20,6 +20,5 @@ export default (/* { store, ssrContext } */) => {
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
-  router = newRouter
-  return newRouter
+  return router
 }

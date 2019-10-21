@@ -33,7 +33,7 @@ const routes: RouteConfig[] = [
             },
             props: {
               header: {
-                title: 'Signin' // TODO i18n
+                title: 'authentication.title'
               }
             }
           }

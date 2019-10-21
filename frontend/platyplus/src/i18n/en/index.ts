@@ -1,6 +1,7 @@
 import en from 'vee-validate/dist/locale/en.json'
 /*eslint-disable @typescript-eslint/camelcase */
 export default {
+  title: 'Platyplus',
   validation: en.messages,
   yes: 'Yes',
   no: 'No',
@@ -212,6 +213,25 @@ export default {
       create: 'Create a new stage'
     }
   },
+  authentication: {
+    title: 'Authentification',
+    labels: {
+      username: '@:user.labels.username',
+      password: '@:user.labels.password'
+    },
+    helpers: {
+      username: '@:user.helpers.username',
+      password: '@:user.helpers.password'
+    },
+    errors: {
+      username: {
+        not_found: 'User does not exist'
+      },
+      password: {
+        invalid: 'Invalid password'
+      }
+    }
+  },
   user: {
     label: 'User',
     labels: {
@@ -236,15 +256,6 @@ export default {
       preferred_org_unit: 'Pick an org unit',
       first_name: 'Enter a first name',
       last_name: 'Enter a last name'
-    },
-    error: 'Invalid user',
-    errors: {
-      username: 'User name is required',
-      password: 'Password is required',
-      first_name: 'Invalid first name',
-      last_name: 'Invalid last name',
-      language: 'You must select a language',
-      preferred_org_unit: 'You must select a preferred org uni'
     },
     actions: {
       role_attributions: {

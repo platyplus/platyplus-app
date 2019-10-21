@@ -1,6 +1,7 @@
 import fr from 'vee-validate/dist/locale/fr.json'
 /*eslint-disable @typescript-eslint/camelcase */
 export default {
+  title: 'Platyplus',
   validation: fr.messages,
   yes: 'Oui',
   no: 'Non',
@@ -11,6 +12,9 @@ export default {
   create: 'Créer',
   remove: 'Supprimer',
   select: 'Sélectionner',
+  index: {
+    title: 'Accueil'
+  },
   location: {
     message: 'Votre emplacement: {location}.',
     select: 'Choisissez votre emplacement:',
@@ -22,6 +26,25 @@ export default {
   },
   logout: {
     message: 'Êtes-vous sûr de vouloir vous déconnecter?'
+  },
+  authentication: {
+    title: 'Identification',
+    labels: {
+      username: '@:user.labels.username',
+      password: '@:user.labels.password'
+    },
+    helpers: {
+      username: '@:user.helpers.username',
+      password: '@:user.helpers.password'
+    },
+    errors: {
+      username: {
+        not_found: 'Utilisateur introuvable'
+      },
+      password: {
+        invalid: 'Mot de passe incorrect'
+      }
+    }
   },
   user: {
     labels: {

@@ -15,7 +15,7 @@ export function getConfig() {
     }
     if (process.env.PROD) {
       console.log('In production mode :)')
-      const xhr = new XMLHttpRequest() // TODO: deprecated: move to async
+      const xhr = new XMLHttpRequest() // TODO: deprecated: move to async: Promise.resolve()? (found an example in https://kazupon.github.io/vue-i18n/guide/lazy-loading.html)
       xhr.open('GET', `${window.location.origin}/config`, false)
       xhr.send()
       if (xhr.status === 200) {

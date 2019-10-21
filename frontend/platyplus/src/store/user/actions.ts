@@ -15,18 +15,23 @@ import { Rule } from 'src/types/rule'
 
 export const actions: ActionTree<UserState, RootState> = {
   async signin({ commit, dispatch }, { username, password }) {
-    // TODO handle errors
-    const { data } = await apolloClient.mutate({
-      mutation: LOGIN_MUTATION,
-      variables: {
-        username,
-        password
-      }
-    })
-    commit('setToken', data.login)
-    // Triggers global Vuex actions that are required to use the application as an authenticated user.
-    // In particular the user profile (in the Vuex user module) and the tables schema (in this Vuex hasura module).
-    await dispatch('loadUserContext', null, { root: true })
+    // TODO dispatch errors reset rather when the navigation changes?
+    commit('errors/reset', null, { root: true })
+    try {
+      const { data } = await apolloClient.mutate({
+        mutation: LOGIN_MUTATION,
+        variables: {
+          username,
+          password
+        }
+      })
+      commit('setToken', data.login)
+      // Triggers global Vuex actions that are required to use the application as an authenticated user.
+      // In particular the user profile (in the Vuex user module) and the tables schema (in this Vuex hasura module).
+      await dispatch('loadUserContext', null, { root: true })
+    } catch (error) {
+      //eslint-ignoe-next-line no-empty
+    }
   },
 
   /**

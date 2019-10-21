@@ -6,8 +6,10 @@ q-page(v-if="$authenticated" padding class="justify-center")
 <style></style>
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { PageMixin } from 'src/mixins'
+import { PageMixin } from '../mixins'
 
 @Component
-export default class Profile extends Mixins(PageMixin) {}
+export default class Profile extends Mixins(PageMixin) {
+  readonly title = 'user.profile.title'
+}
 </script>

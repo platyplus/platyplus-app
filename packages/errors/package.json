@@ -1,6 +1,6 @@
 {
-  "name": "@platyplus/hasura-apollo-client",
-  "version": "0.0.4-alpha.0",
+  "name": "@platyplus/errors",
+  "version": "0.0.1-alpha.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -32,21 +32,14 @@
   "bugs": {
     "url": "https://github.com/platyplus/platyplus/issues"
   },
-  "devDependencies": {
-    "@types/clone": "^0.1.30",
-    "@types/ws": "^6.0.3"
-  },
   "dependencies": {
-    "apollo-cache-inmemory": "^1.6.3",
-    "apollo-client": "^2.6.4",
-    "apollo-link": "^1.2.13",
-    "apollo-link-context": "^1.0.19",
-    "apollo-link-http": "^1.5.16",
-    "apollo-link-ws": "^1.0.19",
-    "apollo-utilities": "^1.3.2",
-    "clone": "^2.1.2",
-    "graphql": "^14.5.4",
-    "subscriptions-transport-ws": "^0.9.16"
-  },
-  "gitHead": "26c08ca54b080b61cde2c174d52e74d7b516cb2a"
+    "apollo-link-error": "^1.1.12",
+    "apollo-server-errors": "^2.3.3",
+    "class-transformer": "^0.2.3",
+    "graphql": "^14.5.8",
+    "object-path": "^0.11.4",
+    "object-path-immutable": "^4.0.2",
+    "reflect-metadata": "^0.1.13",
+    "vuex": "^3.1.1"
+  }
 }

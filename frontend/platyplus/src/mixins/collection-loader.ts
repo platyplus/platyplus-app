@@ -18,9 +18,7 @@ import { get } from 'object-path'
   }
 })
 export class CollectionLoaderMixin extends Mixins(HasuraMixin, PageMixin) {
-  public list = []
+  readonly title = this.tableClass.name + '.label_plural'
 
-  public get title() {
-    return this.$i18n.t(this.tableName + '.label_plural').toString()
-  }
+  public list = []
 }

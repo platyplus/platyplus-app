@@ -9,13 +9,11 @@ q-page(v-if="$authenticated" padding class="justify-center")
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { PageMixin } from 'src/mixins'
+import { PageMixin } from '../mixins'
 
 @Component
 export default class Index extends Mixins(PageMixin) {
-  get title(): string {
-    return this.$t('index.title') as string
-  }
+  readonly title = 'index.title'
 }
 </script>
 

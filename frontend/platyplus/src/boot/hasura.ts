@@ -5,46 +5,52 @@ import { Mixins } from 'vue-property-decorator'
 import { Route } from 'vue-router'
 import { mapGetters } from 'vuex'
 
-import { ability } from 'src/hasura/ability'
+import { ErrorsPlugin, errorsLink } from '@platyplus/errors'
+import { createClient } from '@platyplus/hasura-apollo-client'
+import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
 
+import { ability } from 'src/hasura/ability'
 import { ApolloMixin, RouterMixin } from 'src/mixins'
 import { ObjectMap } from 'src/types/common'
 import { QuasarBootOptions } from 'src/types/quasar'
 import { User } from 'src/types/user'
-import { createClient } from '@platyplus/hasura-apollo-client'
-import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
 import MenuItem from 'src/components/MenuItem.vue'
 import { getConfig } from 'src/helpers'
-import { ApolloError } from 'apollo-client'
 import { dataIdFromObject } from 'src/hasura/graphql/apollo'
 
+import { configure } from 'vee-validate'
+import { I18nPlugin } from 'src/modules/i18n'
+import messages from 'src/i18n'
+
 export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
-  const uri = getConfig().API
+  // TODO: only load the messages of the desired language?
+  Vue.use(I18nPlugin, app, { messages })
+
+  configure({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    defaultMessage: (field: string, values: any) => {
+      // override the field name.
+      values._field_ = `"${app.i18n.t(field)}"`
+      return app.i18n.t(`validation.${values._rule_}`, values) as string
+    }
+  })
+
+  Vue.use(ErrorsPlugin, store, { i18n: app.i18n })
+
+  // TODO include in a new Vue module?
   const defaultClient = createClient({
-    uri,
+    uri: getConfig().API,
     getToken: () => store.getters['user/encodedToken'],
-    dataIdFromObject
+    dataIdFromObject,
+    errorsLink
   })
   await persistApolloCache(defaultClient.cache)
-
   Vue.use(VueApollo)
   app.apolloProvider = new VueApollo({
     defaultClient,
     defaultOptions: {
       $query: {
         loadingKey: 'loadingQueries' // * Cannot use a key starting with a dollar
-      }
-    },
-    errorHandler({ graphQLErrors, networkError }: ApolloError) {
-      if (graphQLErrors) {
-        graphQLErrors.map(({ message, locations, path }) =>
-          console.warn(
-            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-          )
-        )
-      }
-      if (networkError) {
-        console.warn(`[Network error]: ${networkError}`)
       }
     }
   })
@@ -92,6 +98,10 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
       }
     } else {
       const user = store.getters['user/profile']
+      if (!user)
+        console.warn(
+          'Non existing user while the user/unauthenticated return true!!!'
+        ) // TODO weird error
       if (
         !user.preferred_org_unit &&
         !to.matched.some(route => route.meta.withoutPreferredOrgUnit)
@@ -113,6 +123,8 @@ declare module 'vue/types/vue' {
     $from?: Route
     $q: QVueGlobals
     $profile: User
+    $error: boolean
+    $errors: Error[]
     $authenticated: boolean
     $token: ObjectMap // TODO define the token type?
   }

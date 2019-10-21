@@ -9,9 +9,15 @@ services:
       disable: true
     restart: always
     volumes:
-      - ./frontend/platyplus/src:/app/frontend/platyplus/src
-      - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src
-      - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src
+      - ./frontend/platyplus:/app/frontend/platyplus
+      - /app/frontend/platyplus/node_modules
+      - /app/frontend/platyplus/.quasar
+      - /app/frontend/platyplus/dist
+      - ./packages/errors:/app/packages/errors
+      - /app/packages/errors/node_modules
+      - /app/packages/errors/dist
+      - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src # TODO include ALL subdirectories but exclude node_modules etc
+      - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src # TODO include ALL subdirectories but exclude node_modules etc
     labels:
       - 'traefik.http.services.platyplus.loadbalancer.server.port=8080'
   authentication:
@@ -32,9 +38,10 @@ services:
     ports:
       - '9229:9229'
     restart: always
-    volumes:
+    volumes: # TODO include ALL subdirectories but exclude node_modules etc
       - ./backend/authentication-service/src:/app/backend/authentication-service/src
       - ./packages/microservice/src:/app/packages/microservice/src
+      - ./packages/errors/src:/app/packages/errors/src
       - ./packages/hasura-node-client/src:/app/packages/hasura-node-client/src
   # configuration: # TODO: revoir
   #   image: k8s.gcr.io/git-sync:v3.1.2

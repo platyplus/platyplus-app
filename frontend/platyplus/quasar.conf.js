@@ -10,9 +10,8 @@ module.exports = function(ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
-      'hasura',
+      'hasura'
       // 'moment', // ! Do not use. Use rather the built-in quasar helpers
-      'i18n'
     ],
     css: ['app.styl'],
     extras: [
@@ -94,6 +93,20 @@ module.exports = function(ctx) {
       // extractCSS: false,
       extendWebpack(cfg) {
         cfg.devtool = 'inline-module-source-map'
+        // cfg.resolve.extensions = [
+        //   '*',
+        //   '.mjs',
+        //   '.js',
+        //   '.vue',
+        //   '.json',
+        //   '.gql',
+        //   '.graphql'
+        // ]
+        cfg.module.rules.push({
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: 'javascript/auto'
+        })
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,

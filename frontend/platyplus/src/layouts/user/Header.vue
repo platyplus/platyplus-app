@@ -14,14 +14,12 @@ q-toolbar(color="primary")
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { HasuraMixin } from 'src/mixins'
+import { HasuraMixin } from '../../mixins'
 @Component
 export default class UserHeader extends Mixins(HasuraMixin) {
-  get title(): string {
-    return this.tableName
-      ? (this.$t(this.tableName + '.label_plural') as string)
-      : 'Platyplus'
-  }
+  // get title(): string {
+  //   return this.tableName || 'title'
+  // }
 
   toggleDrawer() {
     this.$store.dispatch('navigation/toggleDrawer')

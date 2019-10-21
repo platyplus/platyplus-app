@@ -2,7 +2,7 @@
   q-drawer(v-if="$authenticated" v-model="drawer" side="left" bordered)
     q-list(no-border link inset-delimiter)
       q-item-label(header) Main
-      p-menu-item(to="/" icon="home") Home
+      p-menu-item(to="/" icon="home") {{$t('index.title')}}
       p-menu-item(to="/profile" icon="user-circle") {{$t('user.profile.title')}}
 
       template(v-if="$profile.preferred_org_unit")

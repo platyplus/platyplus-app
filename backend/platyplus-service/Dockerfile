@@ -12,7 +12,8 @@ COPY package.json yarn.lock lerna.json tsconfig.json tsconfig.build.json .eslint
 # Packages
 COPY backend/platyplus-service/package.json backend/platyplus-service/yarn.lock backend/platyplus-service/tsconfig.build.json /app/backend/platyplus-service/
 COPY frontend/platyplus/package.json frontend/platyplus/yarn.lock /app/frontend/platyplus/
-COPY packages/microservice/package.json packages/microservice/yarn.lock packages/microservice/tsconfig.build.json /app/packages/microservice/platyplus/
+COPY packages/microservice/package.json packages/microservice/yarn.lock packages/microservice/tsconfig.build.json /app/packages/microservice/
+COPY packages/errors/package.json packages/errors/yarn.lock packages/errors/tsconfig.build.json /app/packages/errors/
 COPY packages/hasura-apollo-client/package.json packages/hasura-apollo-client/yarn.lock packages/hasura-apollo-client/tsconfig.build.json /app/packages/hasura-apollo-client/
 COPY packages/vuex-apollo-offline/package.json packages/vuex-apollo-offline/yarn.lock packages/vuex-apollo-offline/tsconfig.build.json /app/packages/vuex-apollo-offline/
 
@@ -23,6 +24,7 @@ RUN lerna bootstrap --ignore-scripts
 COPY backend/platyplus-service /app/backend/platyplus-service
 COPY frontend/platyplus /app/frontend/platyplus
 COPY packages/microservice /app/packages/microservice
+COPY packages/errors /app/packages/errors
 COPY packages/hasura-apollo-client /app/packages/hasura-apollo-client
 COPY packages/vuex-apollo-offline /app/packages/vuex-apollo-offline
 

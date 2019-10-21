@@ -7,5 +7,5 @@ export interface NavigationState {
 export const state: NavigationState = {
   routePath: undefined,
   drawer: false,
-  title: 'Platyplus'
+  title: 'title'
 }
