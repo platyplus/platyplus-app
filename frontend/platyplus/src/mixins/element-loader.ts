@@ -142,6 +142,9 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
 
   @Watch('element', { deep: true })
   public onElementChange() {
-    this.$store.commit('navigation/setTitle', this.label)
+    this.$store.commit('navigation/setTitle', {
+      label: this.label,
+      translate: false
+    })
   }
 }

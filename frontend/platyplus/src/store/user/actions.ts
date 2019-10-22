@@ -12,6 +12,7 @@ import {
 import { RootState } from '..'
 import { UserState } from './state'
 import { Rule } from '../../types/rule'
+import { getProfile } from '../../boot/hasura'
 
 export const actions: ActionTree<UserState, RootState> = {
   async signin({ commit, dispatch }, { username, password }) {
@@ -53,6 +54,16 @@ export const actions: ActionTree<UserState, RootState> = {
           id: state.token.id
         }
       })
+    }
+  },
+
+  setLocale: {
+    root: true,
+    handler: async (_context, locale) => {
+      const profile = getProfile()
+      if (profile && profile.locale && profile.locale !== locale)
+        // TODO update the locale through a mutation
+        console.log('TODO: update the locale in hasura')
     }
   },
 
@@ -129,9 +140,12 @@ export const actions: ActionTree<UserState, RootState> = {
     commit('addRules', newRules)
   },
 
-  signout({ commit }) {
-    commit('signout')
-    apolloClient.resetStore()
-    // TODO reset the Vuex stores e.g. rules and ability, table schema etc.
+  signout: {
+    root: true,
+    handler: async ({ commit }) => {
+      commit('reset')
+      apolloClient.resetStore()
+      // TODO reset the Vuex stores e.g. rules and ability, table schema etc.
+    }
   }
 }

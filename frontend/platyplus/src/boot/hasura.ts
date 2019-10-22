@@ -3,15 +3,14 @@ import { QVueGlobals } from 'quasar'
 import VueApollo from 'vue-apollo'
 import { Mixins } from 'vue-property-decorator'
 import { Route } from 'vue-router'
-import { mapGetters } from 'vuex'
+import { mapGetters, Store } from 'vuex'
 
 import { ErrorsPlugin, errorsLink } from '@platyplus/errors'
-import { createClient } from '@platyplus/hasura-apollo-client'
+import { createClient, apolloClient } from '@platyplus/hasura-apollo-client'
 import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
 
 import { ability } from '../hasura/ability'
 import { ApolloMixin, RouterMixin } from '../mixins'
-import { ObjectMap } from '../types/common'
 import { QuasarBootOptions } from '../types/quasar'
 import { User } from '../types/user'
 import MenuItem from '../components/MenuItem.vue'
@@ -21,10 +20,29 @@ import { dataIdFromObject } from '../hasura/graphql/apollo'
 import { configure } from 'vee-validate'
 import { I18nPlugin } from '../modules/i18n'
 import messages from '../i18n'
+import { get } from 'object-path'
+import { PROFILE_QUERY } from '../hasura/graphql/profile'
+import { RootState } from '../store'
+
+let vuexStore: Store<RootState>
+
+export const getProfile = () => {
+  try {
+    const result = apolloClient.readQuery({
+      query: PROFILE_QUERY,
+      variables: {
+        id: vuexStore.getters['user/id']
+      }
+    })
+    return get(result, ['user', '0'])
+  } catch {
+    return {}
+  }
+}
 
 export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
   // TODO: only load the messages of the desired language?
-  Vue.use(I18nPlugin, app, store, { messages })
+  Vue.use(I18nPlugin, { app, store, messages })
 
   configure({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,6 +56,7 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
   Vue.use(ErrorsPlugin, store, { i18n: app.i18n })
 
   // TODO include in a new Vue module?
+  vuexStore = store // * only required by getProfile
   const defaultClient = createClient({
     uri: getConfig().API,
     getToken: () => store.getters['user/encodedToken'],
@@ -60,12 +79,15 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
   Vue.use(abilitiesPlugin, ability)
   Vue.mixin({
     // * https://vuex.vuejs.org/guide/getters.html#the-mapgetters-helper
-    computed: mapGetters({
-      $authenticated: 'user/authenticated',
-      $profile: 'user/profile',
-      $token: 'user/token',
-      $title: 'navigation/title'
-    })
+    computed: {
+      $profile() {
+        return getProfile()
+      },
+      ...mapGetters({
+        $authenticated: 'user/authenticated',
+        $title: 'navigation/title'
+      })
+    }
   })
 
   /**
@@ -97,7 +119,7 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
         return next('/public/auth/signin')
       }
     } else {
-      const user = store.getters['user/profile']
+      const user = getProfile()
       if (!user)
         console.warn(
           'Non existing user while the user/unauthenticated return true!!!'
@@ -123,9 +145,6 @@ declare module 'vue/types/vue' {
     $from?: Route
     $q: QVueGlobals
     $profile: User
-    $error: boolean
-    $errors: Error[]
     $authenticated: boolean
-    $token: ObjectMap // TODO define the token type?
   }
 }

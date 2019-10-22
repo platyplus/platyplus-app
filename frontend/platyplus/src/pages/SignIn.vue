@@ -61,6 +61,9 @@ export default class PageSignIn extends Mixins(PageMixin) {
       // this.submitted = true // TODO: loading button
       await this.$store.dispatch('user/signin', { username, password })
       if (!this.$error) {
+        if (this.$profile.locale) {
+          this.$locale = this.$profile.locale
+        }
         await this.$store.dispatch(
           'navigation/route',
           { path: '/' },

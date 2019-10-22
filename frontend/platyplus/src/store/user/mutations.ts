@@ -42,7 +42,7 @@ export const mutations: MutationTree<UserState> = {
     state.encodedToken = token
   },
 
-  signout(state) {
+  reset(state) {
     state.encodedToken = undefined
     state.token = undefined
     state.rules = initialRules()

@@ -1,26 +1,18 @@
 <template lang="pug">
-q-toolbar(color="primary")
-  q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
-    q-icon(name="fas fa-bars")
-  q-toolbar-title {{ $title }}
-  q-select(
-    hide-underline
-    emit-value
-    map-options
-    :options="$locales"
-    v-model="$locale")
-  q-btn(v-if="$authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
+header-bar
+  template(v-slot:left)
+    q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
+      q-icon(name="fas fa-bars")
+  template(v-slot:right)
+    q-btn(v-if="$authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
-import { HasuraMixin } from '../../mixins'
-@Component
-export default class UserHeader extends Mixins(HasuraMixin) {
-  // get title(): string {
-  //   return this.tableName || 'title'
-  // }
+import { Component, Vue } from 'vue-property-decorator'
+import HeaderBar from '../../components/HeaderBar.vue'
 
+@Component({ components: { HeaderBar } })
+export default class UserHeader extends Vue {
   toggleDrawer() {
     this.$store.dispatch('navigation/toggleDrawer')
   }
@@ -32,7 +24,7 @@ export default class UserHeader extends Mixins(HasuraMixin) {
         persistent: true
       })
       .onOk(() => {
-        this.$store.dispatch('user/signout')
+        this.$store.dispatch('signout')
         this.$router.replace('/public')
       })
   }

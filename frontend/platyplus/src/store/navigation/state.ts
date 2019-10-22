@@ -1,11 +1,11 @@
 export interface NavigationState {
   routePath?: string
   drawer?: boolean
-  title: string
+  title: { label: string; translate: boolean }
 }
 
 export const state: NavigationState = {
   routePath: undefined,
   drawer: false,
-  title: 'title'
+  title: { label: 'title', translate: true }
 }

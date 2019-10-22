@@ -18,7 +18,7 @@ const routes: RouteConfig[] = [
         path: '',
         components: {
           default: () => import('pages/PublicIndex.vue'),
-          header: () => import('layouts/public/Header.vue')
+          header: () => import('components/HeaderBar.vue')
         }
       },
       {
@@ -29,12 +29,7 @@ const routes: RouteConfig[] = [
             path: 'signin',
             components: {
               default: () => import('pages/SignIn.vue'),
-              header: () => import('layouts/public/Header.vue')
-            },
-            props: {
-              header: {
-                title: 'authentication.title'
-              }
+              header: () => import('components/HeaderBar.vue')
             }
           }
         ]
@@ -61,7 +56,7 @@ const routes: RouteConfig[] = [
         },
         props: {
           default: () => ({
-            id: store.getters['user/token'].id,
+            id: store.getters['user/id'],
             tableClass: store.getters['hasura/class']('user')
           })
         }
@@ -75,7 +70,7 @@ const routes: RouteConfig[] = [
         },
         props: () => ({
           editFlag: true,
-          id: store.getters['user/token'].id,
+          id: store.getters['user/id'],
           table: 'user'
         }),
         meta: {
