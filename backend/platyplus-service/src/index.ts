@@ -2,7 +2,7 @@
 import microservice from '@platyplus/microservice'
 import serveStatic from 'koa-static'
 
-import history from 'koa-history-api-fallback'
+import history from 'koa2-connect-history-api-fallback'
 
 const { router, app } = microservice()
 
@@ -15,8 +15,7 @@ router.get('/config', async (ctx, next) => {
   await next()
 })
 
+app.use(history({ whiteList: ['/config'] }))
 app.use(
   serveStatic(process.env.PLATYPLUS_DIST || 'frontend/platyplus/dist/pwa')
 )
-
-app.use(history({ index: '/' }))
