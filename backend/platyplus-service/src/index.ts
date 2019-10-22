@@ -19,4 +19,4 @@ app.use(
   serveStatic(process.env.PLATYPLUS_DIST || 'frontend/platyplus/dist/pwa')
 )
 
-app.use(history())
+app.use(history({ index: '/' }))
