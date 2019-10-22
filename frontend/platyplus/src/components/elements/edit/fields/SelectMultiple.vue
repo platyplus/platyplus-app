@@ -30,9 +30,9 @@ div
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { FieldEditMixin, FieldOptionsMixin } from 'src/mixins'
-import { ObjectMap } from 'src/types/common'
-import { optionAsElement } from 'src/hasura/graphql/common'
+import { FieldEditMixin, FieldOptionsMixin } from '../../../../mixins'
+import { ObjectMap } from '../../../../types/common'
+import { optionAsElement } from '../../../../hasura/graphql/common'
 
 @Component
 export default class SelectMultiple extends Mixins(

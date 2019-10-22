@@ -2,8 +2,8 @@ import { Component, Prop, Mixins } from 'vue-property-decorator'
 import { extend } from 'vee-validate'
 import { required } from 'vee-validate/dist/rules'
 
-import { GenericObject } from 'src/types/common'
-import { elementAsOption, optionAsElement } from 'src/hasura/graphql/common'
+import { GenericObject } from '../types/common'
+import { elementAsOption, optionAsElement } from '../hasura/graphql/common'
 
 import { FieldMixin } from './field'
 

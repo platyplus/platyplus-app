@@ -1,8 +1,8 @@
 import { MutationTree } from 'vuex'
 import jwtDecode from 'jwt-decode'
 
-import { ability, initialRules } from 'src/hasura/ability'
-import { ObjectMap } from 'src/types/common'
+import { ability, initialRules } from '../../hasura/ability'
+import { ObjectMap } from '../../types/common'
 
 import { UserState } from './state'
 

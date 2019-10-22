@@ -1,6 +1,6 @@
 import { Component, Prop, Mixins } from 'vue-property-decorator'
 
-import { ObjectMap } from 'src/types/common'
+import { ObjectMap } from '../types/common'
 
 import { ElementMixin } from './element'
 

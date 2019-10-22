@@ -1,10 +1,10 @@
 import { Route } from 'vue-router'
 import { Component, Mixins, Watch } from 'vue-property-decorator'
 
-import { pick } from 'src/helpers'
-import { RelationshipProperty } from 'src/hasura/schema/properties'
-import { saveMutation } from 'src/hasura/graphql/operations'
-import { ObjectMap } from 'src/types/common'
+import { pick } from '../helpers'
+import { RelationshipProperty } from '../hasura/schema/properties'
+import { saveMutation } from '../hasura/graphql/operations'
+import { ObjectMap } from '../types/common'
 
 import { ElementLoaderMixin } from './element-loader'
 

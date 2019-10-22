@@ -18,7 +18,7 @@ div
 
 <script lang="ts">
 import { Mixins, Component } from 'vue-property-decorator'
-import { ElementLoaderMixin } from 'src/mixins'
+import { ElementLoaderMixin } from '../../../mixins'
 import Text from './fields/Text.vue'
 import BooleanField from './fields/Boolean.vue'
 import ManyToManyField from './fields/ManyToMany.vue'

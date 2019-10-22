@@ -1,7 +1,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 
-import { ability } from 'src/hasura/ability'
-import { listQuery } from 'src/hasura/graphql'
+import { ability } from '../hasura/ability'
+import { listQuery } from '../hasura/graphql'
 
 import { PageMixin } from './page'
 import { HasuraMixin } from './hasura'

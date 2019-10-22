@@ -1,15 +1,15 @@
 import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { permittedFieldsOf } from '@casl/ability/extra'
 
-import { elementQuery, deleteMutation } from 'src/hasura/graphql'
-import { ability } from 'src/hasura/ability'
+import { elementQuery, deleteMutation } from '../hasura/graphql'
+import { ability } from '../hasura/ability'
 import {
   BaseProperty,
   ColumnProperty,
   RelationshipProperty
-} from 'src/hasura/schema'
-import { ObjectMap } from 'src/types/common'
-import { pick } from 'src/helpers'
+} from '../hasura/schema'
+import { ObjectMap } from '../types/common'
+import { pick } from '../helpers'
 
 import { ElementMixin } from './element'
 import { get } from 'object-path'

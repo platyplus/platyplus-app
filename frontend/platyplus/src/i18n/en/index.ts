@@ -214,7 +214,7 @@ export default {
     }
   },
   authentication: {
-    title: 'Authentification',
+    title: 'Authentication',
     labels: {
       username: '@:user.labels.username',
       password: '@:user.labels.password'

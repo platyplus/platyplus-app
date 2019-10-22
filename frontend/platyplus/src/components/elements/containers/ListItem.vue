@@ -6,7 +6,7 @@ div(v-else) Element does not exist
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { ElementContainerMixin } from 'src/mixins'
+import { ElementContainerMixin } from '../../../mixins'
 
 @Component
 export default class HasuraTableElement extends Mixins(ElementContainerMixin) {}

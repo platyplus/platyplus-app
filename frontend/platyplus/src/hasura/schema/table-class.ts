@@ -1,14 +1,14 @@
 import Handlebars from 'handlebars'
 
-import { getHandlebarsVars } from 'src/helpers'
-import { ObjectMap } from 'src/types/common'
+import { getHandlebarsVars } from '../../helpers'
+import { ObjectMap } from '../../types/common'
 import {
   TableDefinition,
   RelationshipForeignKeyDefinition,
   RelationshipManualDefinition,
   TableRef,
   ColumnRef
-} from 'src/types/tables'
+} from '../../types/tables'
 
 import Schema from './schema'
 import {

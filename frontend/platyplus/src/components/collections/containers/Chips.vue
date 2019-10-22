@@ -10,7 +10,7 @@ div(v-else)
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { CollectionContainerMixin } from 'src/mixins'
+import { CollectionContainerMixin } from '../../../mixins'
 import ListItem from '../../elements/containers/ListItem.vue'
 import Chip from '../../elements/containers/Chip.vue'
 

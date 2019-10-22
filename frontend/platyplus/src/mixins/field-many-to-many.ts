@@ -1,7 +1,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 
-import { ObjectMap, ObjectArray } from 'src/types/common'
-import { elementAsOption, optionAsElement } from 'src/hasura/graphql/common'
+import { ObjectMap, ObjectArray } from '../types/common'
+import { elementAsOption, optionAsElement } from '../hasura/graphql/common'
 
 import { FieldRelationshipMixin } from './field-relationship'
 import { FieldEditMixin } from './field-edit'

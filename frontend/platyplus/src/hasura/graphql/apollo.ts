@@ -1,6 +1,6 @@
 import { IdGetterObj } from 'apollo-cache-inmemory'
 
-import { ObjectMap } from 'src/types/common'
+import { ObjectMap } from '../../types/common'
 
 import { uniqueGraphQlId } from './common'
 

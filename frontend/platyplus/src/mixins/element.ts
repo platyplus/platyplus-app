@@ -1,7 +1,7 @@
 import { Component, Mixins } from 'vue-property-decorator'
 
-import { ObjectMap } from 'src/types/common'
-import { pick } from 'src/helpers'
+import { ObjectMap } from '../types/common'
+import { pick } from '../helpers'
 
 import { HasuraMixin } from './hasura'
 

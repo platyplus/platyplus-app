@@ -9,22 +9,22 @@ import { ErrorsPlugin, errorsLink } from '@platyplus/errors'
 import { createClient } from '@platyplus/hasura-apollo-client'
 import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
 
-import { ability } from 'src/hasura/ability'
-import { ApolloMixin, RouterMixin } from 'src/mixins'
-import { ObjectMap } from 'src/types/common'
-import { QuasarBootOptions } from 'src/types/quasar'
-import { User } from 'src/types/user'
-import MenuItem from 'src/components/MenuItem.vue'
-import { getConfig } from 'src/helpers'
-import { dataIdFromObject } from 'src/hasura/graphql/apollo'
+import { ability } from '../hasura/ability'
+import { ApolloMixin, RouterMixin } from '../mixins'
+import { ObjectMap } from '../types/common'
+import { QuasarBootOptions } from '../types/quasar'
+import { User } from '../types/user'
+import MenuItem from '../components/MenuItem.vue'
+import { getConfig } from '../helpers'
+import { dataIdFromObject } from '../hasura/graphql/apollo'
 
 import { configure } from 'vee-validate'
-import { I18nPlugin } from 'src/modules/i18n'
-import messages from 'src/i18n'
+import { I18nPlugin } from '../modules/i18n'
+import messages from '../i18n'
 
 export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
   // TODO: only load the messages of the desired language?
-  Vue.use(I18nPlugin, app, { messages })
+  Vue.use(I18nPlugin, app, store, { messages })
 
   configure({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

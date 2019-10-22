@@ -23,7 +23,7 @@ div
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { FieldEditMixin, FieldOptionsMixin } from 'src/mixins'
+import { FieldEditMixin, FieldOptionsMixin } from '../../../../mixins'
 
 @Component
 export default class Select extends Mixins(FieldEditMixin, FieldOptionsMixin) {}

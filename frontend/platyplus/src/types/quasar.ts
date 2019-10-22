@@ -1,7 +1,7 @@
 import Vue, { VueConstructor } from 'vue'
 import VueRouter from 'vue-router'
 import { Store } from 'vuex'
-import { RootState } from 'src/store'
+import { RootState } from '../store'
 
 export interface QuasarBootOptions {
   app: Vue

@@ -15,7 +15,7 @@ div
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { FieldEditMixin } from 'src/mixins'
+import { FieldEditMixin } from '../../../../mixins'
 import { ValidationProvider } from 'vee-validate'
 
 @Component({

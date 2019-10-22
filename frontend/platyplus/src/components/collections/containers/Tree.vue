@@ -12,7 +12,7 @@ div(v-else)
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { CollectionContainerMixin } from 'src/mixins'
+import { CollectionContainerMixin } from '../../../mixins'
 
 // TODO review the way the graphql query is built to get children's children (e.g. org unit)
 // TODO: OR: scan the list through a computed field and add the missing children properties = []

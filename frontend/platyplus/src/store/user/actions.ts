@@ -2,16 +2,16 @@ import { ActionTree } from 'vuex'
 import { get, coalesce } from 'object-path'
 
 import { apolloClient } from '@platyplus/hasura-apollo-client'
-import { hasuraToSift } from 'src/hasura/ability'
+import { hasuraToSift } from '../../hasura/ability'
 import {
   LOGIN_MUTATION,
   PROFILE_QUERY,
   UPDATE_PREFERRED_ORG_UNIT
-} from 'src/hasura/graphql/profile'
+} from '../../hasura/graphql/profile'
 
 import { RootState } from '..'
 import { UserState } from './state'
-import { Rule } from 'src/types/rule'
+import { Rule } from '../../types/rule'
 
 export const actions: ActionTree<UserState, RootState> = {
   async signin({ commit, dispatch }, { username, password }) {

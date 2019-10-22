@@ -3,7 +3,7 @@ import { GetterTree } from 'vuex'
 import { RootState } from '..'
 import { UserState } from './state'
 import { apolloClient } from '@platyplus/hasura-apollo-client'
-import { PROFILE_QUERY } from 'src/hasura/graphql/profile'
+import { PROFILE_QUERY } from '../../hasura/graphql/profile'
 import { get } from 'object-path'
 
 export const getters: GetterTree<UserState, RootState> = {

@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex'
 
-import Schema from 'src/hasura/schema/schema'
-import { TableDefinition } from 'src/types/tables'
+import Schema from '../../hasura/schema/schema'
+import { TableDefinition } from '../../types/tables'
 
 import { HasuraState } from './state'
 

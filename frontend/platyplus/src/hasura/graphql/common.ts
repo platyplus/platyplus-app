@@ -2,8 +2,8 @@ import { VariableType } from 'json-to-graphql-query'
 import { Ability } from '@casl/ability'
 import { permittedFieldsOf } from '@casl/ability/extra'
 import { TableClass } from '../schema'
-import { ObjectMap, GenericObject, ObjectArray } from 'src/types/common'
-import { store } from 'src/store'
+import { ObjectMap, GenericObject, ObjectArray } from '../../types/common'
+import { store } from '../../store'
 import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 
 const graphQlTypes: Record<string, string> = {

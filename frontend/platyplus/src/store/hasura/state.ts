@@ -1,4 +1,4 @@
-import Schema from 'src/hasura/schema/schema'
+import Schema from '../../hasura/schema/schema'
 
 export interface HasuraState {
   schema: Schema

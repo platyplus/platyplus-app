@@ -5,7 +5,7 @@ q-chip(:to="linkToElement()")
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { ElementContainerMixin } from 'src/mixins'
+import { ElementContainerMixin } from '../../../mixins'
 
 @Component
 export default class Chip extends Mixins(ElementContainerMixin) {}

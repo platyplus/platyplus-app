@@ -1,7 +1,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 
-import { BaseProperty } from 'src/hasura/schema/properties'
-import { ObjectMap } from 'src/types/common'
+import { BaseProperty } from '../hasura/schema/properties'
+import { ObjectMap } from '../types/common'
 
 @Component
 export class FieldMixin extends Vue {

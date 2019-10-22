@@ -1,6 +1,6 @@
 import { Component } from 'vue-property-decorator'
 
-import { RelationshipProperty } from 'src/hasura/schema/properties'
+import { RelationshipProperty } from '../hasura/schema/properties'
 
 import { FieldMixin } from './field'
 

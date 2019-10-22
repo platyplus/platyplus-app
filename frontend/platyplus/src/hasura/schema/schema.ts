@@ -1,4 +1,4 @@
-import { TableDefinition } from 'src/types/tables'
+import { TableDefinition } from '../../types/tables'
 
 import TableClass from './table-class'
 

@@ -11,7 +11,7 @@ import {
   filteredJsonObject,
   graphQlType
 } from './common'
-import { ObjectMap } from 'src/types/common'
+import { ObjectMap } from '../../types/common'
 import { ability } from '../ability'
 import { apolloClient } from '@platyplus/hasura-apollo-client'
 

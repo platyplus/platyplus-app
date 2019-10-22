@@ -38,6 +38,7 @@ export const errorsLink = onError(({ graphQLErrors, networkError }) => {
     graphQLErrors.forEach(error => {
       if (get(error, 'extensions.exception.table'))
         store.commit('errors/add', plainToClass(InputError, graphQLErrors))
+      //? get rid of plain to class?
       else console.log(error) // TODO other errors such as the Hasura ones
     })
 

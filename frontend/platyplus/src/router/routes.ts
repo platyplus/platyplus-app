@@ -1,5 +1,5 @@
 import { RouteConfig } from 'vue-router'
-import { store } from 'src/store'
+import { store } from '../store'
 const hasuraTableUserComponents = () => ({
   header: () => import('layouts/user/Header.vue'),
   menu: () => import('layouts/user/Menu.vue')

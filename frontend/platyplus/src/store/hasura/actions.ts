@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex'
 
 import { apolloClient } from '@platyplus/hasura-apollo-client'
-import { configTablesQuery } from 'src/hasura/graphql'
+import { configTablesQuery } from '../../hasura/graphql'
 
 import { RootState } from '..'
 import { HasuraState } from './state'

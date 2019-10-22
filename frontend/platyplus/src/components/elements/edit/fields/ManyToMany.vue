@@ -25,7 +25,7 @@ div
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { FieldManyToManyMixin, FieldOptionsMixin } from 'src/mixins'
+import { FieldManyToManyMixin, FieldOptionsMixin } from '../../../../mixins'
 
 @Component
 export default class EditManyToManyField extends Mixins(

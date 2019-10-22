@@ -22,7 +22,7 @@ q-form(autofocus @reset="reset" @submit="submit")
 <script lang="ts">
 import { Mixins, Component } from 'vue-property-decorator'
 import { ValidationObserver } from 'vee-validate'
-import { FormManagerMixin } from 'src/mixins'
+import { FormManagerMixin } from '../../../mixins'
 import Text from './fields/Text.vue'
 import BooleanField from './fields/Boolean.vue'
 import ManyToManyField from './fields/ManyToMany.vue'

@@ -7,7 +7,7 @@ div
 
 <script lang="ts">
 import { Mixins, Component } from 'vue-property-decorator'
-import { CollectionLoaderMixin } from 'src/mixins'
+import { CollectionLoaderMixin } from '../../mixins'
 import Dispatcher from './Dispatcher.vue'
 
 @Component({

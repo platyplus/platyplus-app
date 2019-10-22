@@ -4,7 +4,7 @@ component(:is="componentName" :tableClass="tableClass" :list="list")
 
 <script lang="ts">
 import { Mixins, Component, Prop } from 'vue-property-decorator'
-import { CollectionContainerMixin } from 'src/mixins'
+import { CollectionContainerMixin } from '../../mixins'
 import SimpleList from './containers/SimpleList.vue'
 import Tree from './containers/Tree.vue'
 import Chips from './containers/Chips.vue'

@@ -1,8 +1,8 @@
 import { ActionTree } from 'vuex'
 
-import { createRoutes } from 'src/hasura/routes'
-import { Schema } from 'src/hasura/schema'
-import { router } from 'src/router'
+import { createRoutes } from '../../hasura/routes'
+import { Schema } from '../../hasura/schema'
+import { router } from '../../router'
 
 import { RootState } from '..'
 import { NavigationState } from './state'

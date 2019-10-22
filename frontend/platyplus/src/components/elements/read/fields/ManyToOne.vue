@@ -10,7 +10,7 @@ div
 
 <script lang="ts">
 import { Component, Mixins } from 'vue-property-decorator'
-import { FieldMixin } from 'src/mixins'
+import { FieldMixin } from '../../../../mixins'
 import Chip from '../../containers/Chip.vue'
 
 @Component({
