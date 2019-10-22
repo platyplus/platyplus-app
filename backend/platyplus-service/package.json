@@ -38,8 +38,7 @@
   },
   "dependencies": {
     "@platyplus/microservice": "^0.0.4-alpha.0",
-    "koa-history-api-fallback": "^1.0.0",
-    "koa-static": "^5.0.0"
+    "koa2-connect-history-api-fallback": "^0.1.2"
   },
   "devDependencies": {
     "@types/koa-static": "^4.0.1"
