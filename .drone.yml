@@ -177,4 +177,6 @@ steps:
       - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --timeout 900 --update-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
 ---
 kind: signature
-hmac: 9b25309a560f73b08802b357618378c788fa0ae792afc0e7bee4ecdafa63a06f
+hmac: 691f7c8b938baa2e1e901a6f2d90515f5af0ef55f08e6c65fdd4d9870bec97d7
+
+...

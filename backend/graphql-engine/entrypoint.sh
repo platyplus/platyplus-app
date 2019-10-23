@@ -63,7 +63,8 @@ export AUTH_URL="$AUTHENTICATION_URL/graphql"
 # fi
 
 # TODO get rid of 5432 and $POSTGRES_HOST and parse the $HASURA_GRAPHQL_DATABASE_URL variable instead
-wait_for_port 5432 $POSTGRES_HOST
+# TODO do not wait when connecting through unix sockets (e.g. gcloud sql)
+# wait_for_port 5432 $POSTGRES_HOST
 
 if [ "$ENABLE_MIGRATIONS" = true ]; then
   log "Running migrations in background"
