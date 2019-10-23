@@ -46,7 +46,7 @@ steps:
       repo: platyplus-0402/platyplus-service
       tags:
         - ${DRONE_COMMIT_SHA:0:8}
-        - next
+        - ${DRONE_BRANCH}
       json_key:
         from_secret: google_credentials
   - name: publish-docker-graphql-engine
@@ -68,7 +68,7 @@ steps:
       repo: platyplus-0402/authentication-service
       tags:
         - ${DRONE_COMMIT_SHA:0:8}
-        - next
+        - ${DRONE_BRANCH}
       json_key:
         from_secret: google_credentials
   - name: publish-docker-functions
@@ -79,7 +79,7 @@ steps:
       repo: platyplus-0402/functions-service
       tags:
         - ${DRONE_COMMIT_SHA:0:8}
-        - next
+        - ${DRONE_BRANCH}
       json_key:
         from_secret: google_credentials
 ---
@@ -109,7 +109,7 @@ steps:
       - gcloud config set compute/zone europe-west1-b
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
-      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:next --allow-unauthenticated --timeout 900 --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
+      - gcloud beta run deploy authentication --image gcr.io/platyplus-0402/authentication-service:$${DRONE_COMMIT_SHA:0:8} --allow-unauthenticated --timeout 900 --set-env-vars PUBLIC_KEY="$$PUBLIC_KEY",PRIVATE_KEY="$$PRIVATE_KEY",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
     environment:
       PUBLIC_KEY:
         from_secret: PUBLIC_KEY
@@ -129,7 +129,7 @@ steps:
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
       # ! Uncomment the following line when the functions microservice is ready to work
-      # - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:next --set-env-vars HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
+      # - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:$${DRONE_COMMIT_SHA:0:8} --set-env-vars HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
@@ -151,7 +151,7 @@ steps:
       # ! Change this when functions works
       # - export FUNCTIONS_URL="`gcloud beta run services describe functions --format="get(status.url)"`"
       - export FUNCTIONS_URL="http://functions:3000"
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --timeout 900 --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@/hasura-${DRONE_BRANCH}?host=/cloudsql/$${CLOUDSQL_INSTANCE}",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true"
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:$${DRONE_COMMIT_SHA:0:8} --allow-unauthenticated --timeout 900 --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@/hasura-${DRONE_BRANCH}?host=/cloudsql/$${CLOUDSQL_INSTANCE}",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true"
       # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
       - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - gcloud beta run services update authentication --update-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
@@ -174,9 +174,9 @@ steps:
       - gcloud config set run/platform managed
       - gcloud config set run/region europe-west1
       - export GRAPHQL_ENGINE_PUBLIC_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
-      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --timeout 900 --update-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
+      - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:$${DRONE_COMMIT_SHA:0:8} --allow-unauthenticated --timeout 900 --update-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
 ---
 kind: signature
-hmac: 691f7c8b938baa2e1e901a6f2d90515f5af0ef55f08e6c65fdd4d9870bec97d7
+hmac: 2b99ca476884617f5919e89799ed30316fe73a9cb26383cf1dcaa6e884b39404
 
 ...
