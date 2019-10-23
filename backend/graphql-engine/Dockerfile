@@ -1,4 +1,4 @@
-FROM hasura/graphql-engine:v1.0.0-beta.6.cli-migrations
+FROM hasura/graphql-engine:v1.0.0-beta.8.cli-migrations
 # * See https://gitlab.com/tactable.io/graphql-next-app/
 WORKDIR /hasura
 
@@ -21,14 +21,14 @@ ENV AUTHENTICATION_URL=http://authentication:3000
 ENV FUNCTIONS_URL=http://functions:3000
 ENV AUTH_ALGORITHM=RS256
 
-ENV CLOUDSQL_INSTANCE=''
-ENV ENABLE_CLOUDSQL_PROXY="true"
+# ENV CLOUDSQL_INSTANCE=''
+# ENV ENABLE_CLOUDSQL_PROXY="true"
 ENV ENABLE_MIGRATIONS="true"
 ENV ENABLE_CONSOLE="false"
 
 # download the cloudsql proxy binary
-ADD https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 /bin/cloud_sql_proxy
-RUN chmod +x /bin/cloud_sql_proxy ./entrypoint.sh ./migrate.sh
+# ADD https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 /bin/cloud_sql_proxy
+# RUN chmod +x /bin/cloud_sql_proxy ./entrypoint.sh ./migrate.sh
 
 ENTRYPOINT ["./entrypoint.sh"]
 

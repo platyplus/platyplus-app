@@ -57,10 +57,10 @@ export EVENTS_URL="$FUNCTIONS_URL/events"
 export AUTH_URL="$AUTHENTICATION_URL/graphql"
 
 
-if [ "$ENABLE_CLOUDSQL_PROXY" = true ]; then
-  log "Starting cloud sql proxy..."
-  cloud_sql_proxy -instances=$CLOUDSQL_INSTANCE=tcp:5432 &
-fi
+# if [ "$ENABLE_CLOUDSQL_PROXY" = true ]; then
+#   log "Starting cloud sql proxy..."
+#   cloud_sql_proxy -instances=$CLOUDSQL_INSTANCE=tcp:5432 &
+# fi
 
 # TODO get rid of 5432 and $POSTGRES_HOST and parse the $HASURA_GRAPHQL_DATABASE_URL variable instead
 wait_for_port 5432 $POSTGRES_HOST
