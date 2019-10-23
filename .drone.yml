@@ -151,7 +151,7 @@ steps:
       # ! Change this when functions works
       # - export FUNCTIONS_URL="`gcloud beta run services describe functions --format="get(status.url)"`"
       - export FUNCTIONS_URL="http://functions:3000"
-      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --timeout 900 --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@/hasura-${DRONE_BRANCH}?host=/cloudsql/$$CLOUDSQL_INSTANCE",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true"
+      - gcloud beta run deploy graphql-engine --image gcr.io/platyplus-0402/graphql-engine:next --allow-unauthenticated --timeout 900 --set-env-vars HASURA_GRAPHQL_DATABASE_URL="postgres://postgres:$${POSTGRES_PASSWORD}@/hasura-${DRONE_BRANCH}?host=/cloudsql/$${CLOUDSQL_INSTANCE}",AUTHENTICATION_URL="$$AUTHENTICATION_URL",FUNCTIONS_URL="$$FUNCTIONS_URL",HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET",ENABLE_CLOUDSQL_PROXY="true"
       # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
       - export GRAPHQL_ENGINE_URL=`gcloud beta run services describe graphql-engine --format="get(status.url)"`
       - gcloud beta run services update authentication --update-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
@@ -177,4 +177,4 @@ steps:
       - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:next --allow-unauthenticated --timeout 900 --update-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
 ---
 kind: signature
-hmac: a4a1ea6b4735869a792a082598ae7c75ad40b36bcc8e479c7b42754d430287cc
+hmac: 9b25309a560f73b08802b357618378c788fa0ae792afc0e7bee4ecdafa63a06f
