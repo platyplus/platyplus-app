@@ -108,22 +108,24 @@ steps:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
     settings:
+      credentials:
+        from_secret: google_credentials
       config:
-        - project: platyplus-0402
-        - compute/region: europe-west1
-        - compute/zone: europe-west1-b
-        - run/platform: managed
-        - run/region: europe-west1
+        project: platyplus-0402
+        compute/region: europe-west1
+        compute/zone: europe-west1-b
+        run/platform: managed
+        run/region: europe-west1
       commands:
-        - command: gcloud beta run deploy authentication
+        - command: beta run deploy authentication
           flags:
             - image: gcr.io/platyplus-0402/authentication-service:$${DRONE_COMMIT_SHA:0:8}
             - allow-unauthenticated
-            - timeout 900
+            - timeout: 900
             - set-env-vars:
-                - PUBLIC_KEY: '$$PUBLIC_KEY'
-                - PRIVATE_KEY: '$$PRIVATE_KEY'
-                - HASURA_GRAPHQL_ADMIN_SECRET: '$$HASURA_GRAPHQL_ADMIN_SECRET'
+                PUBLIC_KEY: '$$PUBLIC_KEY'
+                PRIVATE_KEY: '$$PRIVATE_KEY'
+                HASURA_GRAPHQL_ADMIN_SECRET: '$$HASURA_GRAPHQL_ADMIN_SECRET'
   # - name: deploy-authentication
   #   depends_on: [prepare-gcloud]
   #   image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
