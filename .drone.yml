@@ -168,6 +168,7 @@ steps:
             - image: gcr.io/platyplus-0402/graphql-engine:$${DRONE_COMMIT_SHA:0:8}
             - allow-unauthenticated
             - timeout: 900
+            - set-cloudsql-instances: $${CLOUDSQL_INSTANCE}
             - set-env-vars:
                 HASURA_GRAPHQL_DATABASE_URL: '"postgres://postgres:$${POSTGRES_PASSWORD}@/hasura-${DRONE_BRANCH}?host=/cloudsql/$${CLOUDSQL_INSTANCE}"'
                 AUTHENTICATION_URL: '"$$AUTHENTICATION_URL"'
@@ -203,4 +204,4 @@ steps:
             - update-env-vars: GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
 ---
 kind: signature
-hmac: 5f253d706099f1f93d562618f2f1c610defd097b100268754d4bb6dadd7f69cf
+hmac: 11dfa6c83ffdb01b8cb3828d176b479afbfb8191845c6f060b8098c4e843c54c
