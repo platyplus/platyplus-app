@@ -123,9 +123,9 @@ steps:
             - allow-unauthenticated
             - timeout: 900
             - set-env-vars:
-                PUBLIC_KEY: '$$PUBLIC_KEY'
-                PRIVATE_KEY: '$$PRIVATE_KEY'
-                HASURA_GRAPHQL_ADMIN_SECRET: '$$HASURA_GRAPHQL_ADMIN_SECRET'
+                PUBLIC_KEY: '"$$PUBLIC_KEY"'
+                PRIVATE_KEY: '"$$PRIVATE_KEY"'
+                HASURA_GRAPHQL_ADMIN_SECRET: '"$$HASURA_GRAPHQL_ADMIN_SECRET"'
   # - name: deploy-authentication
   #   depends_on: [prepare-gcloud]
   #   image: google/cloud-sdk:alpine # TODO create a custom docker gcloud/'deployer'?
@@ -205,4 +205,4 @@ steps:
       - gcloud beta run deploy platyplus --image gcr.io/platyplus-0402/platyplus-service:$${DRONE_COMMIT_SHA:0:8} --allow-unauthenticated --timeout 900 --update-env-vars GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
 ---
 kind: signature
-hmac: 2b99ca476884617f5919e89799ed30316fe73a9cb26383cf1dcaa6e884b39404
+hmac: 07ceb02ed3d7c7e07dd70b68e00e849b9772b99c66ccd343c07038f089667951
