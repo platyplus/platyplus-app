@@ -1,5 +1,4 @@
 ---
-# ! rename 'next' tag to the branch name i.e. master
 # kind: pipeline
 # name: documentation
 # steps:
@@ -120,6 +119,7 @@ steps:
                 PRIVATE_KEY: '"$$PRIVATE_KEY"'
                 HASURA_GRAPHQL_ADMIN_SECRET: '"$$HASURA_GRAPHQL_ADMIN_SECRET"'
   - name: deploy-functions
+    image: platyplus/drone-gcloud:latest
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
@@ -135,8 +135,8 @@ steps:
       # ! Set when the functions microservice is ready to work
       # - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:$${DRONE_COMMIT_SHA:0:8} --set-env-vars HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
   - name: deploy-graphql-engine
-    depends_on: [deploy-authentication, deploy-functions]
     image: platyplus/drone-gcloud:latest
+    depends_on: [deploy-authentication, deploy-functions]
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
@@ -181,6 +181,7 @@ steps:
       # ! Set the following line when the functions microservice is ready to work
       # - gcloud beta run services update functions --update-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
   - name: deploy-platyplus
+    image: platyplus/drone-gcloud:latest
     depends_on: [deploy-graphql-engine]
     settings:
       credentials:
@@ -202,4 +203,4 @@ steps:
             - update-env-vars: GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
 ---
 kind: signature
-hmac: ec132f2a10c3a65426f258dc668c90ae4cf49a5bd295bf6904e44574376254b4
+hmac: 5f253d706099f1f93d562618f2f1c610defd097b100268754d4bb6dadd7f69cf
