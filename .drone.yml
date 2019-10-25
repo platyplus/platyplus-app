@@ -103,7 +103,6 @@ steps:
       credentials:
         from_secret: google_credentials
       config:
-        project: platyplus-0402
         compute/region: europe-west1
         compute/zone: europe-west1-b
         run/platform: managed
@@ -127,7 +126,6 @@ steps:
       credentials:
         from_secret: google_credentials
       config:
-        project: platyplus-0402
         compute/region: europe-west1
         compute/zone: europe-west1-b
         run/platform: managed
@@ -148,7 +146,6 @@ steps:
       credentials:
         from_secret: google_credentials
       config:
-        project: platyplus-0402
         compute/region: europe-west1
         compute/zone: europe-west1-b
         run/platform: managed
@@ -188,7 +185,6 @@ steps:
       credentials:
         from_secret: google_credentials
       config:
-        project: platyplus-0402
         compute/region: europe-west1
         compute/zone: europe-west1-b
         run/platform: managed
