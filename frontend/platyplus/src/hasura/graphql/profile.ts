@@ -62,3 +62,14 @@ export const UPDATE_PREFERRED_ORG_UNIT = gql`
   }
   ${preferredOrgUnitFragment}
 `
+
+export const UPDATE_LOCALE = gql`
+  mutation update_locale($userId: uuid!, $locale: String!) {
+    update_user(where: { id: { _eq: $userId } }, _set: { locale: $locale }) {
+      returning {
+        id
+        locale
+      }
+    }
+  }
+`

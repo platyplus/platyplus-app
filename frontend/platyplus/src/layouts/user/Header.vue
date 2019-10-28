@@ -10,6 +10,7 @@ header-bar
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import HeaderBar from '../../components/HeaderBar.vue'
+import { languageCode } from '../../modules/i18n/helpers'
 
 @Component({ components: { HeaderBar } })
 export default class UserHeader extends Vue {
@@ -24,7 +25,7 @@ export default class UserHeader extends Vue {
         persistent: true
       })
       .onOk(() => {
-        this.$store.dispatch('signout')
+        this.$locale = languageCode(navigator.language)
         this.$router.replace('/public')
       })
   }

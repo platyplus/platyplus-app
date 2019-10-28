@@ -6,7 +6,8 @@ import { hasuraToSift } from '../../hasura/ability'
 import {
   LOGIN_MUTATION,
   PROFILE_QUERY,
-  UPDATE_PREFERRED_ORG_UNIT
+  UPDATE_PREFERRED_ORG_UNIT,
+  UPDATE_LOCALE
 } from '../../hasura/graphql/profile'
 
 import { RootState } from '..'
@@ -62,8 +63,14 @@ export const actions: ActionTree<UserState, RootState> = {
     handler: async (_context, locale) => {
       const profile = getProfile()
       if (profile && profile.locale && profile.locale !== locale)
-        // TODO update the locale through a mutation
-        console.log('TODO: update the locale in hasura')
+        // * update the locale through a mutation
+        await apolloClient.mutate({
+          mutation: UPDATE_LOCALE,
+          variables: {
+            userId: profile.id,
+            locale
+          }
+        })
     }
   },
 
@@ -77,8 +84,6 @@ export const actions: ActionTree<UserState, RootState> = {
           orgUnitId: id
         }
       })
-      // TODO write into cache?
-      // commit('setProfile', get(result, 'data.update_user.returning.0'))
     }
   },
 
