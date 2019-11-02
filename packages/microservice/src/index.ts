@@ -15,6 +15,9 @@ export const server = http.createServer(app.callback())
 // TODO don't add terminus if on dev mode
 terminus(server)
 
+// TODO koa-compress
+// TODO options = {port: processenv or 3000, terminus=true, compress=false} (or processenv preferrably)
+// TODO 1. option, 2. processenv, 3. default
 export default (port = process.env.PORT || 3000) => {
   server.listen(port, () => {
     console.log(`🚀 Server ready and listening on port ${port}`)
