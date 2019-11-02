@@ -1,11 +1,9 @@
 import { MutationTree } from 'vuex'
 import jwtDecode from 'jwt-decode'
 
-import { ability, initialRules } from '../../hasura/ability'
-import { ObjectMap } from '../../types/common'
-
 import { UserState } from './state'
-
+import { ObjectMap } from '../types'
+import { initialRules, ability } from '../../authorization'
 /**
  * * Workaround for https://docs.hasura.io/1.0/graphql/manual/auth/authorization/roles-variables.html
  * Converts the values of the string properties of an object that are formated as a

@@ -10,7 +10,6 @@ import Vuex, {
 import createPersistedState from 'vuex-persistedstate'
 
 import { alert } from './alert'
-import { user } from './user'
 import { hasura } from './hasura'
 import { navigation } from './navigation'
 
@@ -39,12 +38,14 @@ export default function(/* { ssrContext } */) {
   const Store: StoreOptions<RootState> = new Vuex.Store<RootState>({
     modules: {
       alert,
-      user,
       hasura,
       navigation
     },
     // ? A bit overshooting as only the token really needs to be persisted for now
-    plugins: [createPersistedState({ paths: ['user', 'navigation', 'alert'] })]
+    // TODO upgrade to v2.7.0 and register modules afterwards: https://github.com/robinvdvleuten/vuex-persistedstate/pull/225
+    plugins: [
+      createPersistedState({ paths: ['authentication', 'navigation', 'alert'] })
+    ]
   })
   store = Store as Store<RootState>
   return Store

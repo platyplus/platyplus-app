@@ -14,6 +14,8 @@ export interface I18nOptions extends _I18nOptions {
   store: Store<{}>
 }
 
+export let i18n: VueI18n
+
 export function I18nPlugin(Vue: typeof _Vue, options: I18nOptions) {
   const { app, store, ...i18nOptions } = options
 
@@ -21,14 +23,15 @@ export function I18nPlugin(Vue: typeof _Vue, options: I18nOptions) {
   store.registerModule('i18n', i18nModule)
 
   const defaultOptions = {
-    locale: store.getters['i18n/locale'],
+    // locale: store.getters['i18n/locale'],
     sync: true,
     fallbackLocale: 'en-us'
   }
-  app.i18n = new VueI18n({
+  i18n = new VueI18n({
     ...defaultOptions,
     ...i18nOptions
   })
+  app.i18n = i18n
 
   Object.defineProperty(Vue.prototype, '$locale', {
     get: function() {
@@ -36,17 +39,11 @@ export function I18nPlugin(Vue: typeof _Vue, options: I18nOptions) {
     },
     set: function(locale) {
       this.$store.dispatch('setLocale', locale)
-      this.$i18n.locale = locale
-      if (this.$q) {
-        // dynamic import, so loading on demand only
-        import(`quasar/lang/${locale}`).then(({ default: messages }) => {
-          this.$q.lang.set(messages)
-        })
-      }
-      // this.$i18n.setLocaleMessage(locale, messages)
     }
   })
   Vue.prototype.$locales = locales
+
+  store.dispatch('setLocale', store.getters['i18n/locale'])
 }
 
 declare module 'vue/types/vue' {

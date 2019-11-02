@@ -15,7 +15,7 @@ export const actions: ActionTree<HasuraState, RootState> = {
    * * This exception is justified due to the fact that any other query/mutation/subscription
    * * may depend on this configuration data.
    */
-  loadUserContext: {
+  onAuthenticated: {
     root: true,
     handler: async ({ dispatch, commit }) => {
       const {
@@ -25,7 +25,7 @@ export const actions: ActionTree<HasuraState, RootState> = {
       })
       commit('initSchema', tablesDefinition)
       dispatch('navigation/loadRoutes', null, { root: true })
-      dispatch('user/addUserRules', null, { root: true })
+      dispatch('authentication/addUserRules', null, { root: true })
     }
     // TODO once done, trigger the asynchronous loading of the 'metadata' (e.g. org units and org unit types) into the apollo cache.
   }

@@ -2,7 +2,7 @@ import { Component, Mixins, Watch } from 'vue-property-decorator'
 import { permittedFieldsOf } from '@casl/ability/extra'
 
 import { elementQuery, deleteMutation } from '../hasura/graphql'
-import { ability } from '../hasura/ability'
+import { ability } from '../modules/authorization'
 import {
   BaseProperty,
   ColumnProperty,

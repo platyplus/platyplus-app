@@ -56,7 +56,7 @@ const routes: RouteConfig[] = [
         },
         props: {
           default: () => ({
-            id: store.getters['user/id'],
+            id: store.getters['authentication/id'],
             tableClass: store.getters['hasura/class']('user')
           })
         }
@@ -70,7 +70,7 @@ const routes: RouteConfig[] = [
         },
         props: () => ({
           editFlag: true,
-          id: store.getters['user/id'],
+          id: store.getters['authentication/id'],
           table: 'user'
         }),
         meta: {

@@ -1,6 +1,6 @@
 import { Component, Mixins } from 'vue-property-decorator'
 
-import { ability } from '../hasura/ability'
+import { ability } from '../modules/authorization'
 import { listQuery } from '../hasura/graphql'
 
 import { PageMixin } from './page'

@@ -2,20 +2,20 @@ import { ActionTree } from 'vuex'
 import { get, coalesce } from 'object-path'
 
 import { apolloClient } from '@platyplus/hasura-apollo-client'
-import { hasuraToSift } from '../../hasura/ability'
+
+import { UserState } from './state'
+
 import {
   LOGIN_MUTATION,
   PROFILE_QUERY,
-  UPDATE_PREFERRED_ORG_UNIT,
-  UPDATE_LOCALE
-} from '../../hasura/graphql/profile'
+  UPDATE_LOCALE,
+  UPDATE_PREFERRED_ORG_UNIT
+} from '../graphql'
+import { getProfile } from '..'
+import { Rule } from '../../authorization/types'
+import { hasuraToSift } from '../../authorization'
 
-import { RootState } from '..'
-import { UserState } from './state'
-import { Rule } from '../../types/rule'
-import { getProfile } from '../../boot/hasura'
-
-export const actions: ActionTree<UserState, RootState> = {
+export const actions: ActionTree<UserState, {}> = {
   async signin({ commit, dispatch }, { username, password }) {
     // TODO dispatch errors reset rather when the navigation changes?
     commit('errors/reset', null, { root: true })
@@ -30,7 +30,7 @@ export const actions: ActionTree<UserState, RootState> = {
       commit('setToken', data.login)
       // Triggers global Vuex actions that are required to use the application as an authenticated user.
       // In particular the user profile (in the Vuex user module) and the tables schema (in this Vuex hasura module).
-      await dispatch('loadUserContext', null, { root: true })
+      await dispatch('onAuthenticated', null, { root: true })
     } catch (error) {
       //eslint-ignoe-next-line no-empty
     }
@@ -44,7 +44,7 @@ export const actions: ActionTree<UserState, RootState> = {
    * * This exception is justified due to the fact that any other query/mutation/subscription
    * * may depend on this configuration data.
    */
-  loadUserContext: {
+  onAuthenticated: {
     root: true,
     handler: async ({ state }) => {
       // TODO handle errors
@@ -62,7 +62,7 @@ export const actions: ActionTree<UserState, RootState> = {
     root: true,
     handler: async (_context, locale) => {
       const profile = getProfile()
-      if (profile && profile.locale && profile.locale !== locale)
+      if (profile.locale && profile.locale !== locale)
         // * update the locale through a mutation
         await apolloClient.mutate({
           mutation: UPDATE_LOCALE,

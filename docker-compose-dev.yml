@@ -15,7 +15,7 @@ services:
       - /app/frontend/platyplus/dist
       - ./packages/errors:/app/packages/errors
       - /app/packages/errors/node_modules
-      - /app/packages/errors/dist
+      - /app/packages/errors/lib
       - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src # TODO include ALL subdirectories but exclude node_modules etc
       - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src # TODO include ALL subdirectories but exclude node_modules etc
     labels:

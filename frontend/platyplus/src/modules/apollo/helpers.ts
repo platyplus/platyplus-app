@@ -1,8 +1,7 @@
 import { IdGetterObj } from 'apollo-cache-inmemory'
 
 import { ObjectMap } from '../../types/common'
-
-import { uniqueGraphQlId } from './common'
+import { uniqueGraphQlId } from '../../hasura/graphql/common'
 
 /** // TODO code the cache operations e.g.:
  * update org_unit.children when another org_unit.parent_id has been changed

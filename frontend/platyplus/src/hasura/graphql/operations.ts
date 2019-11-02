@@ -12,7 +12,7 @@ import {
   graphQlType
 } from './common'
 import { ObjectMap } from '../../types/common'
-import { ability } from '../ability'
+import { ability } from '../../modules/authorization'
 import { apolloClient } from '@platyplus/hasura-apollo-client'
 
 // TODO it became useless to add the foreign key columns to the queries. Think about removing them

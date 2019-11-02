@@ -1,6 +1,6 @@
-import { initialRules } from '../../hasura/ability'
-import { ObjectMap } from '../../types/common'
-import { Rule } from '../../types/rule'
+import { initialRules } from '../../authorization'
+import { ObjectMap } from '../types'
+import { Rule } from '../../authorization/types'
 
 export interface UserState {
   rules: Rule[]

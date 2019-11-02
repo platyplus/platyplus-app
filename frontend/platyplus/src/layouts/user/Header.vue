@@ -24,7 +24,8 @@ export default class UserHeader extends Vue {
         cancel: true,
         persistent: true
       })
-      .onOk(() => {
+      .onOk(async () => {
+        await this.$store.dispatch('signout')
         this.$locale = languageCode(navigator.language)
         this.$router.replace('/public')
       })

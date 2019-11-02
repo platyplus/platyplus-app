@@ -59,7 +59,10 @@ export default class PageSignIn extends Mixins(PageMixin) {
     if (await observer.validate()) {
       const { username, password } = this
       // this.submitted = true // TODO: loading button
-      await this.$store.dispatch('user/signin', { username, password })
+      await this.$store.dispatch('authentication/signin', {
+        username,
+        password
+      })
       if (!this.$error) {
         if (this.$profile.locale) {
           this.$locale = this.$profile.locale

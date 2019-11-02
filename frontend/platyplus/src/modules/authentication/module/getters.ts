@@ -1,9 +1,8 @@
 import { GetterTree } from 'vuex'
 
-import { RootState } from '..'
 import { UserState } from './state'
 
-export const getters: GetterTree<UserState, RootState> = {
+export const getters: GetterTree<UserState, {}> = {
   authenticated(state) {
     return !!state.token && !!state.token.id
   },

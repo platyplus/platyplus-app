@@ -1,4 +1,3 @@
-export { ApolloMixin } from './apollo'
 export { CollectionContainerMixin } from './collection-container'
 export { CollectionLoaderMixin } from './collection-loader'
 export { ElementContainerMixin } from './element-container'

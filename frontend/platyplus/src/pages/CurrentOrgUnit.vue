@@ -17,7 +17,7 @@ import { get } from 'object-path'
 @Component
 export default class PageCurrentOrgUnit extends Vue {
   async selectOrgUnit(id: string) {
-    await this.$store.dispatch('user/udpatePreferredOrgUnit', id)
+    await this.$store.dispatch('authentication/udpatePreferredOrgUnit', id)
     this.$store.dispatch('navigation/route', {
       path: this.$from ? this.$from.path : '/profile/current-org-unit'
     })

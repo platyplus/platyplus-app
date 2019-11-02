@@ -27,6 +27,7 @@ export const createClient = ({
   dataIdFromObject,
   errorsLink
 }: CreateApolloClientOptions) => {
+  if (apolloClient) return apolloClient
   const cache = new InMemoryCache({ dataIdFromObject })
   const httpLink = createHttpLink({ uri })
 
