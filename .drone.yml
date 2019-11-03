@@ -100,7 +100,6 @@ steps:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
     settings:
-      log_level: verbose
       credentials:
         from_secret: google_credentials
       config:
@@ -124,7 +123,6 @@ steps:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
     settings:
-      log_level: verbose
       credentials:
         from_secret: google_credentials
       config:
@@ -145,7 +143,6 @@ steps:
       # ! Remove this when functions work
       FUNCTIONS_URL: http://functions:3000
     settings:
-      log_level: verbose
       credentials:
         from_secret: google_credentials
       config:
@@ -185,7 +182,6 @@ steps:
     image: platyplus/drone-gcloud:latest
     depends_on: [deploy-graphql-engine]
     settings:
-      log_level: verbose
       credentials:
         from_secret: google_credentials
       config:
@@ -204,4 +200,4 @@ steps:
             - update-env-vars: GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
 ---
 kind: signature
-hmac: f18bbd3b5dfc9545972b705e4cca6f8a0948455d8e7fe021c7f32a27e6481727
+hmac: 0a1f6b76ade861da0b9617ab3d9840a7c0d423c4296b6f175a53b3679bca2ddb
