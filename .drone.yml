@@ -151,10 +151,10 @@ steps:
         run/platform: managed
         run/region: europe-west1
       commands:
-        - command: sql databases create hasura-${DRONE_BRANCH} --instance platyplus
+        - command: sql databases create hasura-${DRONE_BRANCH} --instance platyplus-main
           skipError: true
         # gcloud sql users set-password postgres --instance platyplus --password $$POSTGRES_PASSWORD # ? Useless?
-        - command: sql instances describe platyplus --format "get(connectionName)"
+        - command: sql instances describe platyplus-main --format "get(connectionName)"
           export: CLOUDSQL_INSTANCE
         - command: beta run services describe authentication --format "get(status.url)"
           export: AUTHENTICATION_URL
@@ -200,4 +200,4 @@ steps:
             - update-env-vars: GRAPHQL_ENGINE_PUBLIC_URL="$$GRAPHQL_ENGINE_PUBLIC_URL"
 ---
 kind: signature
-hmac: 0a1f6b76ade861da0b9617ab3d9840a7c0d423c4296b6f175a53b3679bca2ddb
+hmac: d9887fbf0d90e9d111f8680076a834749a9a94861a641abe853e9e686265b321
