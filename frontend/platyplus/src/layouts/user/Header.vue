@@ -4,33 +4,27 @@ header-bar
     q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
       q-icon(name="fas fa-bars")
   template(v-slot:right)
-    q-btn(v-if="$authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
+    q-btn(v-if="authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import HeaderBar from '../../components/HeaderBar.vue'
-import { languageCode } from '../../modules/i18n/helpers'
+import { createComponent } from '@vue/composition-api'
 
-@Component({ components: { HeaderBar } })
-export default class UserHeader extends Vue {
-  toggleDrawer() {
-    this.$store.dispatch('navigation/toggleDrawer')
+import HeaderBar from '../../components/HeaderBar.vue'
+import { useToggleDrawer } from '../../composables/navigation'
+import { useLogout, useAuthenticated } from '../../composables/authentication'
+
+export default createComponent({
+  name: 'UserHeader',
+  components: { HeaderBar },
+  setup() {
+    return {
+      toggleDrawer: useToggleDrawer(),
+      logout: useLogout(),
+      authenticated: useAuthenticated()
+    }
   }
-  async logout() {
-    this.$q
-      .dialog({
-        message: this.$t('logout.message') as string,
-        cancel: true,
-        persistent: true
-      })
-      .onOk(async () => {
-        await this.$store.dispatch('signout')
-        this.$locale = languageCode(navigator.language)
-        this.$router.replace('/public')
-      })
-  }
-}
+})
 </script>
 
 <style></style>

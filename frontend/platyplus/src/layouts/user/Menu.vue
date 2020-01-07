@@ -30,28 +30,20 @@
 </template>
 
 <script lang="ts">
-import { Prop, Component, Vue } from 'vue-property-decorator'
-@Component
-export default class UserMenu extends Vue {
-  @Prop(String) readonly icon?: string
-  @Prop(Boolean) readonly to?: string
+import { createComponent } from '@vue/composition-api'
+import { useDrawer } from '../../composables/navigation'
 
-  get drawer() {
-    return this.$store.getters['navigation/drawer']
+export default createComponent({
+  name: 'Page',
+  props: {
+    icon: String,
+    to: String
+  },
+  setup() {
+    const drawer = useDrawer()
+    return { drawer }
   }
-
-  set drawer(value) {
-    this.$store.dispatch('navigation/setDrawer', { value })
-  }
-
-  created() {
-    if (this.$store.getters['navigation/drawer'] === null) {
-      this.$store.dispatch('navigation/setDrawer', {
-        value: this.$q.platform.is.desktop
-      })
-    }
-  }
-}
+})
 </script>
 
 <style></style>

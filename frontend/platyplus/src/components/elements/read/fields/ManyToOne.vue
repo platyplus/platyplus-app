@@ -1,22 +1,24 @@
 <template lang="pug">
 div
-  slot(name="before-field" :property="property" :element="element")
-  slot(name="field" :property="property"  :element="element")
-    q-field(:label="$t(tableName +'.labels.'+name)" :key="name" :name="name" stack-label)
+  slot(name="before-field" :table="table" :property="property" :element="element")
+  slot(name="field" :table="table" :property="property" :element="element")
+    q-field(:label="$t(table +'.labels.'+property)" :key="property" :name="property" stack-label)
       template(v-slot:control)
-        h-chip(v-if="element[property.name]" :tableClass="property.reference" :element="element[property.name]")
-  slot(name="after-field" :property="property" :element="element")
+        h-chip(v-if="value" :table="table" :element="value")
+  slot(name="after-field" :table="table" :property="property" :element="element")
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
-import { FieldMixin } from '../../../../mixins'
+// TODO :table="property.reference"
+import { createComponent } from '@vue/composition-api'
 import Chip from '../../containers/Chip.vue'
+import { fieldComponent } from '../../../../composables/metadata'
 
-@Component({
+export default createComponent({
+  ...fieldComponent,
+  name: 'ReadManyToOneField',
   components: {
     'h-chip': Chip
   }
 })
-export default class ReadManyToOneField extends Mixins(FieldMixin) {}
 </script>

@@ -1,0 +1,9 @@
+- args:
+    cascade: false
+    sql: alter table "public"."user" drop constraint "check_min_length"
+  type: run_sql
+- args:
+    cascade: false
+    sql: alter table "public"."user" add constraint "check_min_length" check (CHECK
+      (length(username::text) >= 2))
+  type: run_sql

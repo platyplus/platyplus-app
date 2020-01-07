@@ -1,0 +1,9 @@
+- args:
+    sql: ALTER TABLE "public"."user_role" ADD COLUMN "id" uuid
+  type: run_sql
+- args:
+    sql: ALTER TABLE "public"."user_role" ALTER COLUMN "id" DROP NOT NULL
+  type: run_sql
+- args:
+    sql: ALTER TABLE "public"."user_role" ALTER COLUMN "id" SET DEFAULT gen_random_uuid()
+  type: run_sql

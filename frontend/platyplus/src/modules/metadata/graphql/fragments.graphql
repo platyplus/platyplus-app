@@ -1,0 +1,35 @@
+fragment ruleFragment on Rule {
+  type
+  parameters
+  paths
+}
+fragment columnFragment on Column {
+  name
+  type
+  domain
+  insertDefault
+  insertReadonly
+  insertRules {
+    ...ruleFragment
+  }
+  updateDefault
+  updateReadonly
+  updateRules {
+    ...ruleFragment
+  }
+}
+fragment mappingFragment on ColumnMapping {
+  from {
+    ...columnFragment
+  }
+  to {
+    ...columnFragment
+  }
+}
+#  TODO relationship permissions
+fragment targetFragment on Table {
+  id
+  name
+  schema
+  listQuery #  TODO remove and add optionsQuery to Relationship
+}

@@ -1,13 +1,9 @@
 import _Vue from 'vue'
 import { Store, mapGetters } from 'vuex'
-import { get } from 'object-path'
-import ApolloClient from 'apollo-client'
-import { NormalizedCacheObject } from 'apollo-cache-inmemory'
 import VueRouter from 'vue-router'
 
 import { userModule } from './module'
 import { User } from './types'
-import { PROFILE_QUERY } from './graphql'
 
 export interface UserOptions {
   store: Store<{}>
@@ -18,23 +14,6 @@ export interface UserOptions {
   loginPath?: string
 }
 
-let storeLink: Store<{}>
-let apolloClientLink: ApolloClient<NormalizedCacheObject>
-
-export const getProfile = () => {
-  try {
-    const result = apolloClientLink.readQuery({
-      query: PROFILE_QUERY,
-      variables: {
-        id: storeLink.getters['authentication/id']
-      }
-    })
-    return get(result, ['user', '0'])
-  } catch (error) {
-    return {}
-  }
-}
-
 const defaultOptions: Partial<UserOptions> = {
   publicPath: '/public',
   authPath: '/profile/current-org-unit',
@@ -42,8 +21,6 @@ const defaultOptions: Partial<UserOptions> = {
 }
 
 export function AuthenticationPlugin(Vue: typeof _Vue, options: UserOptions) {
-  storeLink = options.store
-  apolloClientLink = options.app.apolloProvider.defaultClient
   const { store, router, publicPath, authPath, loginPath } = {
     ...defaultOptions,
     ...options
@@ -53,10 +30,8 @@ export function AuthenticationPlugin(Vue: typeof _Vue, options: UserOptions) {
   Vue.mixin({
     // * https://vuex.vuejs.org/guide/getters.html#the-mapgetters-helper
     computed: {
-      $profile() {
-        return getProfile()
-      },
       ...mapGetters({
+        $profile: 'authentication/profile',
         $authenticated: 'authentication/authenticated'
       })
     }
@@ -83,16 +58,16 @@ export function AuthenticationPlugin(Vue: typeof _Vue, options: UserOptions) {
         return next(loginPath)
       }
     } else {
-      const user = getProfile()
+      const user = store.getters['authentication/profile']
       if (!user.id)
         console.warn(
           'Non existing user (no id) while the authentication/unauthenticated return true!!!'
-        ) // TODO weird error
+        ) // * weird error
       if (
         !user.preferred_org_unit &&
         !to.matched.some(route => route.meta.withoutPreferredOrgUnit)
       ) {
-        // TODO weird error: when loading app.localhost/data/org_unit/edit with no preferred org_unit
+        // ? weird error: when loading app.localhost/data/org_unit/edit with no preferred org_unit
         store.dispatch('navigation/routeRequest', { path: to.fullPath })
         return next(authPath)
       }

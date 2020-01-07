@@ -1,0 +1,3 @@
+- args:
+    sql: DROP VIEW "public"."table"
+  type: run_sql

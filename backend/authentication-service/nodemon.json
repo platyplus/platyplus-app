@@ -1,0 +1,18 @@
+{
+  "restartable": "rs",
+  "ignore": [".git", "node_modules", "lib"],
+  "verbose": true,
+  "execMap": {
+    "ts": "node --require ts-node/register --require tsconfig-paths/register"
+  },
+  "watch": [
+    "src/",
+    "../../packages/errors/src/",
+    "../../packages/microservice/src/",
+    "../../packages/hasura-node-client/src/"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,json,ts"
+}

@@ -1,10 +1,12 @@
 version: '3.4'
 services:
   platyplus:
-    build: .
-    command: ['yarn', 'dev:platyplus']
-    environment:
-      NODE_ENV: development
+    build:
+      context: .
+      # TODO use the custom Dockerfile
+      args:
+        NODE_ENV: development
+    command: yarn run watch
     healthcheck:
       disable: true
     restart: always
@@ -16,18 +18,26 @@ services:
       - ./packages/errors:/app/packages/errors
       - /app/packages/errors/node_modules
       - /app/packages/errors/lib
-      - ./packages/hasura-apollo-client/src:/app/packages/hasura-apollo-client/src # TODO include ALL subdirectories but exclude node_modules etc
-      - ./packages/vuex-apollo-offline/src:/app/packages/vuex-apollo-offline/src # TODO include ALL subdirectories but exclude node_modules etc
+      - ./packages/hasura-apollo-client:/app/packages/hasura-apollo-client
+      - /app/packages/hasura-apollo-client/node_modules
+      - /app/packages/hasura-apollo-client/lib
+      - ./packages/vuex-apollo-offline:/app/packages/vuex-apollo-offline
+      - /app/packages/vuex-apollo-offline/node_modules
+      - /app/packages/vuex-apollo-offline/lib
     labels:
       - 'traefik.http.services.platyplus.loadbalancer.server.port=8080'
   authentication:
-    build: .
-    command: ['yarn', 'dev:authentication']
+    build:
+      context: .
+      # TODO use the custom Dockerfile
+      args:
+        NODE_ENV: development
+    command: lerna run --scope @platyplus/authentication-service dev
     environment:
-      NODE_ENV: development
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       PRIVATE_KEY: '${PRIVATE_KEY}'
       PUBLIC_KEY: '${PUBLIC_KEY}'
+      EXPIRES_IN: 2h # *
     healthcheck:
       disable: true
     labels:
@@ -43,7 +53,7 @@ services:
       - ./packages/microservice/src:/app/packages/microservice/src
       - ./packages/errors/src:/app/packages/errors/src
       - ./packages/hasura-node-client/src:/app/packages/hasura-node-client/src
-  # configuration: # TODO: revoir
+  # configuration: # TODO: review
   #   image: k8s.gcr.io/git-sync:v3.1.2
   #   environment: # See https://github.com/kubernetes/git-sync/blob/master/cmd/git-sync/main.go
   #     GIT_SYNC_REPO: https://github.com/platyplus/configuration
@@ -62,7 +72,7 @@ services:
       HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       POSTGRES_HOST: 'postgres'
       ENABLE_CLOUDSQL_PROXY: 'false'
-    command: ['graphql-engine', 'serve']
+    command: ['graphql-engine', 'serve'] # TODO remove? duplicate from Dockerfile / entrypoint?
     healthcheck:
       disable: true
     restart: always
@@ -70,28 +80,47 @@ services:
       - ./backend/graphql-engine/migrations:/hasura-migrations
   # functions:
   #   build:
-  #     context: ./backend/functions-service
+  #     context: .
   #     args:
   #       NODE_ENV: development
-  #   command: node /opt/start-dev
+  #   command: lerna run --scope @platyplus/functions-service dev
   #   environment:
-  #     NODE_ENV: development
   #     HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
+  #     AUTHENTICATION_URL: http://authentication:3000
   #   healthcheck:
   #     disable: true
   #   labels:
-  # - 'traefik.enable=true'
-  # - 'traefik.http.routers.functions.rule=Host(`functions.${DOMAIN:-localhost}`)'
-  # - 'traefik.http.routers.functions.entrypoints=web'
-  # - 'traefik.http.services.functions.loadbalancer.server.port=3000'
+  #     - 'traefik.enable=true'
+  #     - 'traefik.http.routers.functions.rule=Host(`functions.${DOMAIN:-localhost}`)'
+  #     - 'traefik.http.routers.functions.entrypoints=web'
+  #     - 'traefik.http.services.functions.loadbalancer.server.port=3000'
   #   ports:
   #     - '9230:9229'
   #   restart: always
   #   volumes:
-  #     - ./services/functions:/opt/app:delegated
-  #     - ./services/functions/package.json:/opt/package.json
-  #     - ./services/functions/package-lock.json:/opt/package-lock.json
-  #     - notused_functions:/opt/app/node_modules
+  #     - ./backend/functions-service/src:/app/backend/functions-service/src
+  #     - ./packages/microservice/src:/app/packages/microservice/src
+  #     - ./packages/hasura-node-client/src:/app/packages/hasura-node-client/src
+  metadata:
+    build:
+      context: .
+      # TODO use the custom Dockerfile
+      args:
+        NODE_ENV: development
+    command: lerna run --scope @platyplus/metadata-service dev
+    healthcheck:
+      disable: true
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.metadata.rule=Host(`metadata.${DOMAIN:-localhost}`)'
+      - 'traefik.http.routers.metadata.entrypoints=web'
+      - 'traefik.http.services.metadata.loadbalancer.server.port=3000'
+    ports:
+      - '9231:9229'
+    restart: always
+    volumes:
+      - ./backend/metadata-service/src:/app/backend/metadata-service/src
+      - ./packages/microservice/src:/app/packages/microservice/src
   postgres:
     ports:
       - '5432:5432'
@@ -105,5 +134,3 @@ services:
     restart: always
 volumes:
   configuration:
-  notused_auth:
-  notused_functions:

@@ -12,6 +12,8 @@ This repository contains the following packages:
 
 ### [@platyplus/functions-service](https://github.com/platyplus/platyplus/tree/master/backend/functions-service)
 
+### [@platyplus/metadata-service](https://github.com/platyplus/platyplus/tree/master/backend/metadata-service)
+
 ### [@platyplus/platyplus-service](https://github.com/platyplus/platyplus/tree/master/backend/platyplus-service)
 
 ### [@platyplus/graphql-engine](https://github.com/platyplus/platyplus/tree/master/backend/graphql-engine)

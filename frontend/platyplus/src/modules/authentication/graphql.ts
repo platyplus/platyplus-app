@@ -21,8 +21,8 @@ const preferredOrgUnitFragment = gql`
 
 // TODO complete and fragment
 export const PROFILE_QUERY = gql`
-  query user_profile($id: uuid) {
-    user(where: { id: { _eq: $id } }) {
+  query user_profile($id: uuid!) {
+    profile: user_by_pk(id: $id) {
       id
       username
       attributes

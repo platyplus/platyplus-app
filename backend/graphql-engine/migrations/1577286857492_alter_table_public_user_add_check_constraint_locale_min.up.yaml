@@ -1,0 +1,4 @@
+- args:
+    cascade: false
+    sql: alter table "public"."user" add constraint "locale_min" check (length(locale)>=2)
+  type: run_sql

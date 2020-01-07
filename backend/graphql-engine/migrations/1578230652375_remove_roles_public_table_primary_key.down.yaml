@@ -1,0 +1,19 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - table_schema
+      - table_name
+      - constraint_name
+      - columns
+      computed_fields: []
+      filter:
+        table:
+          permissions:
+            role_name:
+              _in: x-hasura-roles
+    role: user
+    table:
+      name: primary_key
+      schema: public
+  type: create_select_permission

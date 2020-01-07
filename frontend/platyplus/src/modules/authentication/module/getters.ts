@@ -17,5 +17,8 @@ export const getters: GetterTree<UserState, {}> = {
   },
   encodedToken(state) {
     return state.encodedToken
+  },
+  profile(state) {
+    return state.profile || {}
   }
 }

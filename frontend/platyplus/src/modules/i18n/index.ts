@@ -2,6 +2,7 @@ import _Vue from 'vue'
 import VueI18n, { I18nOptions as _I18nOptions, Locale } from 'vue-i18n'
 import { Store } from 'vuex'
 import { i18nModule } from './module'
+import { provide, inject } from '@vue/composition-api'
 
 // TODO split the following const into 1. all the possible locales, and 2. the locales used by the application
 export const locales = [
@@ -52,4 +53,18 @@ declare module 'vue/types/vue' {
     $locale: Locale
     $locales: Locale[]
   }
+}
+
+const I18nSymbol = Symbol()
+
+export function provideI18n() {
+  provide(I18nSymbol, i18n)
+}
+
+export function useI18n() {
+  const i18n = inject(I18nSymbol)
+  if (!i18n) {
+    // throw error, no store provided
+  }
+  return i18n as VueI18n
 }

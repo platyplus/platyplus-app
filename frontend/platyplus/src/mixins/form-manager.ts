@@ -1,9 +1,6 @@
 import { Route } from 'vue-router'
 import { Component, Mixins, Watch } from 'vue-property-decorator'
 
-import { pick } from '../helpers'
-import { RelationshipProperty } from '../hasura/schema/properties'
-import { saveMutation } from '../hasura/graphql/operations'
 import { ObjectMap } from '../types/common'
 
 import { ElementLoaderMixin } from './element-loader'
@@ -29,8 +26,8 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
 
   public get canSave() {
     if (this.isNew) {
-      return this.$can('insert', this.tableName)
-    } else return this.$can('update', this.element)
+      return this.metadata.canInsert
+    } else return this.metadata.canUpdate
   }
 
   /**
@@ -67,14 +64,15 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
     if (!!validator && !(await validator.validate())) return
     const changes = this.changes
     if (Object.keys(changes).length > 0) {
-      const data = await saveMutation(
-        this.tableClass,
-        this.element,
-        this.form,
-        changes
-      )
-      this.reset() // Reset is required to then check if any field changed in the beforeRouteLeave hook
-      this.read(pick(data, this.tableClass.idColumnNames))
+      console.warn('IMPLEMENT SAVE') // TODO recode
+      // const data = await saveMutation(
+      //   this.tableClass,
+      //   this.element,
+      //   this.form,
+      //   changes
+      // )
+      // this.reset() // Reset is required to then check if any field changed in the beforeRouteLeave hook
+      // this.read(pick(data, this.tableClass.idColumnNames))
     } else this.read()
   }
 
@@ -120,36 +118,37 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
    */
   public get changes(): ObjectMap {
     const newValue: ObjectMap = {}
-    for (const property of this.fields(this.action)) {
-      const name = property.name
-      if (property.isColumn) {
-        if (this.form[name] !== this.element[name])
-          newValue[name] = this.form[name]
-      } else {
-        const relationship = property as RelationshipProperty
-        if (relationship.isMultiple) {
-          const oldArray = (this.element[name] || []) as ObjectMap[]
-          const newArray = (this.form[name] || []) as ObjectMap[]
-          const oldStrArray = oldArray.map(item => JSON.stringify(item))
-          const newStrArray = newArray.map(item => JSON.stringify(item))
-          const _add = newStrArray
-            .filter(item => !oldStrArray.includes(item))
-            .map(item => JSON.parse(item))
-          const _remove = oldStrArray
-            .filter(item => !newStrArray.includes(item))
-            .map(item => JSON.parse(item))
-          if (_add.length || _remove.length) {
-            newValue[name] = { _add, _remove }
-          }
-        } else {
-          if (
-            JSON.stringify(this.element[name]) !==
-            JSON.stringify(this.form[name])
-          )
-            newValue[name] = this.form[name]
-        }
-      }
-    }
+    // TODO recode
+    // for (const property of this.fields(this.action)) {
+    //   const name = property.name
+    //   if (property.isColumn) {
+    //     if (this.form[name] !== this.element[name])
+    //       newValue[name] = this.form[name]
+    //   } else {
+    //     const relationship = property as RelationshipProperty
+    //     if (relationship.isMultiple) {
+    //       const oldArray = (this.element[name] || []) as ObjectMap[]
+    //       const newArray = (this.form[name] || []) as ObjectMap[]
+    //       const oldStrArray = oldArray.map(item => JSON.stringify(item))
+    //       const newStrArray = newArray.map(item => JSON.stringify(item))
+    //       const _add = newStrArray
+    //         .filter(item => !oldStrArray.includes(item))
+    //         .map(item => JSON.parse(item))
+    //       const _remove = oldStrArray
+    //         .filter(item => !newStrArray.includes(item))
+    //         .map(item => JSON.parse(item))
+    //       if (_add.length || _remove.length) {
+    //         newValue[name] = { _add, _remove }
+    //       }
+    //     } else {
+    //       if (
+    //         JSON.stringify(this.element[name]) !==
+    //         JSON.stringify(this.form[name])
+    //       )
+    //         newValue[name] = this.form[name]
+    //     }
+    //   }
+    // }
     return newValue
   }
 

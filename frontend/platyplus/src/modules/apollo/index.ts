@@ -20,7 +20,7 @@ export function ApolloPlugin(Vue: typeof _Vue, options: ApolloOptions) {
   const apolloClient = createClient({
     uri,
     getToken,
-    dataIdFromObject,
+    dataIdFromObject, // TODO interdependent with metadata, find a way to break the dependency
     errorsLink
   })
 

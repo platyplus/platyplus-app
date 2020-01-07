@@ -1,4 +1,4 @@
-FROM hasura/graphql-engine:v1.0.0-beta.8.cli-migrations
+FROM hasura/graphql-engine:latest.cli-migrations
 # * See https://gitlab.com/tactable.io/graphql-next-app/
 WORKDIR /hasura
 
@@ -8,6 +8,7 @@ COPY ./backend/graphql-engine/entrypoint.sh ./backend/graphql-engine/migrate.sh 
 # Use the local console assets so console can work while offline
 ENV HASURA_GRAPHQL_CONSOLE_ASSETS_DIR=/srv/console-assets
 # Disable the metrics sent to Hasura
+# TODO use a postgresql password
 ENV HASURA_GRAPHQL_ENABLE_TELEMETRY=false
 ENV HASURA_GRAPHQL_ENABLE_CONSOLE="false"
 ENV HASURA_GRAPHQL_ENABLED_LOG_TYPES="startup,query-log"
@@ -19,6 +20,7 @@ ENV HASURA_GRAPHQL_UNAUTHORIZED_ROLE='anonymous'
 # Platyplus-related environment variables
 ENV AUTHENTICATION_URL=http://authentication:3000
 ENV FUNCTIONS_URL=http://functions:3000
+ENV METADATA_URL=http://metadata:3000
 ENV AUTH_ALGORITHM=RS256
 
 # ENV CLOUDSQL_INSTANCE=''

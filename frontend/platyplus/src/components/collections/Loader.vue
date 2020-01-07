@@ -1,19 +1,29 @@
 <template lang="pug">
 div
-  h-collection-dispatcher(:tableClass="tableClass" :list="list")
+  h-collection-dispatcher(:table="table" :list="list")
   q-page-sticky(position="bottom-right" :offset="[18, 18]")
-    q-btn(v-if="$can('insert', tableClass.name)" :to="tableClass.name+'/create'" fab icon="fas fa-plus" color="primary" )
+    q-btn(v-if="metadata.canInsert" :to="table+'/create'" fab icon="fas fa-plus" color="primary" )
 </template>
 
 <script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator'
-import { CollectionLoaderMixin } from '../../mixins'
 import Dispatcher from './Dispatcher.vue'
+import { createComponent } from '@vue/composition-api'
+import { setTitle } from '../../composables/navigation'
+import { tableProps, useMetadata, useList } from '../../composables/metadata'
 
-@Component({
+export default createComponent({
+  name: 'HeaderBar',
   components: {
     'h-collection-dispatcher': Dispatcher
+  },
+  props: {
+    ...tableProps
+  },
+  setup(props) {
+    setTitle(props.table + '.label_plural')
+    const metadata = useMetadata(props)
+    const list = useList(props)
+    return { list, metadata }
   }
 })
-export default class CollectionLoader extends Mixins(CollectionLoaderMixin) {}
 </script>

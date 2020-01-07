@@ -1,5 +1,4 @@
 import { ActionTree } from 'vuex'
-import { get, coalesce } from 'object-path'
 
 import { apolloClient } from '@platyplus/hasura-apollo-client'
 
@@ -11,9 +10,8 @@ import {
   UPDATE_LOCALE,
   UPDATE_PREFERRED_ORG_UNIT
 } from '../graphql'
-import { getProfile } from '..'
-import { Rule } from '../../authorization/types'
-import { hasuraToSift } from '../../authorization'
+
+import { User } from '../types'
 
 export const actions: ActionTree<UserState, {}> = {
   async signin({ commit, dispatch }, { username, password }) {
@@ -27,12 +25,15 @@ export const actions: ActionTree<UserState, {}> = {
           password
         }
       })
+      dispatch('loading/start', 'Authentication', { root: true })
       commit('setToken', data.login)
       // Triggers global Vuex actions that are required to use the application as an authenticated user.
       // In particular the user profile (in the Vuex user module) and the tables schema (in this Vuex hasura module).
       await dispatch('onAuthenticated', null, { root: true })
     } catch (error) {
-      //eslint-ignoe-next-line no-empty
+      console.error(error) // TODO handle this
+    } finally {
+      dispatch('loading/stop', null, { root: true })
     }
   },
 
@@ -46,23 +47,27 @@ export const actions: ActionTree<UserState, {}> = {
    */
   onAuthenticated: {
     root: true,
-    handler: async ({ state }) => {
+    handler: async ({ state, commit, dispatch }) => {
       // TODO handle errors
       if (!(state.token && state.token.id)) return // TODO handle this error
-      await apolloClient.query({
+      const {
+        data: { profile }
+      }: { data: { profile: User } } = await apolloClient.query({
         query: PROFILE_QUERY,
         variables: {
           id: state.token.id
         }
       })
+      commit('setProfile', profile)
+      await dispatch('setLocale', profile.locale, { root: true })
     }
   },
 
   setLocale: {
     root: true,
-    handler: async (_context, locale) => {
-      const profile = getProfile()
-      if (profile.locale && profile.locale !== locale)
+    handler: async ({ getters }, locale) => {
+      const profile = getters['profile']
+      if (profile.locale && profile.locale !== locale) {
         // * update the locale through a mutation
         await apolloClient.mutate({
           mutation: UPDATE_LOCALE,
@@ -71,6 +76,7 @@ export const actions: ActionTree<UserState, {}> = {
             locale
           }
         })
+      }
     }
   },
 
@@ -87,70 +93,14 @@ export const actions: ActionTree<UserState, {}> = {
     }
   },
 
-  /**
-   * TODO document
-   */
-  addUserRules: async ({ commit, getters, rootGetters }) => {
-    // TODO Add the rule that once cannot insert an element if they cannot insert all the PK columns
-    const hasuraClaims = getters['claims']
-    if (!hasuraClaims) return // TODO handle this error?
-    const schema = rootGetters['hasura/schema']
-    const newRules: Rule[] = []
-    const permissionTypes = ['delete', 'insert', 'update', 'select']
-    for (const tableClass of schema.classes) {
-      for (const permission of tableClass.table.permissions) {
-        for (const permissionType of permissionTypes) {
-          if (get(permission, permissionType)) {
-            const rule: Rule = {
-              actions: permissionType,
-              subject: tableClass.name
-            }
-            const fields: string[] = get(
-              permission,
-              `${permissionType}.columns`,
-              []
-            )
-            const filter = coalesce(
-              permission,
-              [`${permissionType}.filter`, `${permissionType}.check`],
-              {}
-            )
-            // TODO raise warnings when on enough permission to read the label?
-            if (
-              // No permission no insert/select if no permission to insert/select all the pk columns
-              ['insert', 'select'].includes(permissionType) &&
-              !tableClass.idColumnNames.every((colName: string) => {
-                if (fields.includes(colName)) {
-                  return true
-                } else {
-                  console.warn(
-                    // prettier-ignore
-                    `Permission to ${permissionType} the primary key column '${colName}' on the table '${tableClass.name}' is required.`
-                  )
-                  return false
-                }
-              })
-            ) {
-              rule.inverted = true
-            } else {
-              if (fields.length) rule.fields = fields
-              if (Object.keys(filter).length)
-                rule.conditions = hasuraToSift(filter, hasuraClaims)
-            }
-            newRules.push(rule)
-          }
-        }
-      }
-    }
-    commit('addRules', newRules)
-  },
-
   signout: {
     root: true,
-    handler: async ({ commit }) => {
+    handler: async ({ commit, dispatch }) => {
+      dispatch('loading/start', 'Signout', { root: true }) // TODO translate
       commit('reset')
       apolloClient.resetStore()
-      // TODO reset the Vuex stores e.g. rules and ability, table schema etc.
+      // ? reset other Vuex modules?
+      dispatch('loading/stop', 'Signout', { root: true }) // TODO translate
     }
   }
 }

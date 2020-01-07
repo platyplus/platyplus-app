@@ -1,0 +1,21 @@
+overwrite: true
+schema:
+  - http://127.0.0.1/graphql:
+      headers:
+        Host: metadata.localhost
+documents: null
+generates:
+  src/modules/metadata/types/objects.ts:
+    plugins:
+      - add:
+          content:
+            - '//! |=============================================| '
+            - '//! |== AUTO-GENERATED FILE !!! DO NOT MODIFY ====|'
+            - '//! |=============================================|'
+            - '/* eslint-disable @typescript-eslint/array-type */'
+      - 'typescript'
+config:
+  declarationKind: 'interface'
+  namingConvention:
+    transformUnderscore: true
+# TODO run with watch, concurrently with yarn dev

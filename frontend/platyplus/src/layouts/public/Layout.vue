@@ -7,9 +7,11 @@ q-layout(view="lHh Lpr lFf")
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-@Component
-export default class PublicLayout extends Vue {}
+import { createComponent } from '@vue/composition-api'
+
+export default createComponent({
+  name: 'PublicLayout'
+})
 </script>
 
 <style></style>

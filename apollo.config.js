@@ -18,7 +18,16 @@ module.exports = {
       },
       skipSSLValidation: true
     },
-    excludes: ['node_modules/**/*'],
-    includes: ['./src/**/*.{ts,gql,tsx,js,jsx,graphql,vue}']
+
+    excludes: [
+      '**/node_modules/**/*',
+      '**/lib/**/*',
+      '**/dist/**/*',
+      './backend/metadata-service/src/schema.graphql',
+      './backend/authentication-service/**/type-definitions.{ts,js}'
+    ],
+    includes: [
+      './{frontend,packages,backend}/*/src/**/*.{ts,gql,tsx,js,jsx,graphql,vue}'
+    ]
   }
 }

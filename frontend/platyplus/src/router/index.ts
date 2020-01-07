@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
+import { provide, inject } from '@vue/composition-api'
 
 Vue.use(VueRouter)
 
@@ -21,4 +22,18 @@ export default (/* { store, ssrContext } */) => {
     base: process.env.VUE_ROUTER_BASE
   })
   return router
+}
+
+const RouterSymbol = Symbol()
+
+export function provideRouter() {
+  provide(RouterSymbol, router)
+}
+
+export function useRouter() {
+  const router = inject(RouterSymbol)
+  if (!router) {
+    // throw error, no store provided
+  }
+  return router as VueRouter
 }

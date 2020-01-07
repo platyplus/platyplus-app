@@ -54,8 +54,8 @@ file_env() {
 file_env 'HASURA_GRAPHQL_ADMIN_SECRET'
 export "HASURA_GRAPHQL_JWT_SECRET"="{ \"type\": \"RS256\", \"jwk_url\": \"$AUTHENTICATION_URL/jwks\"}"
 export EVENTS_URL="$FUNCTIONS_URL/events"
-export AUTH_URL="$AUTHENTICATION_URL/graphql"
-
+export AUTH_URL="$AUTHENTICATION_URL/graphql" # TODO rename AUTH_URL to AUTHENTICATION_ENDPOINT
+export METADATA_ENDPOINT="$METADATA_URL/graphql"
 
 # if [ "$ENABLE_CLOUDSQL_PROXY" = true ]; then
 #   log "Starting cloud sql proxy..."

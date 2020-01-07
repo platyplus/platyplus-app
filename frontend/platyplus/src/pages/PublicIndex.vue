@@ -6,9 +6,13 @@ q-page(class="flex flex-center")
 <style></style>
 
 <script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator'
-import { PageMixin } from '../mixins'
+import { createComponent } from '@vue/composition-api'
 
-@Component
-export default class PagePublicIndex extends Mixins(PageMixin) {}
+import { setTitle } from '../composables/navigation'
+
+export default createComponent({
+  setup() {
+    setTitle('title')
+  }
+})
 </script>

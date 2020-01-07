@@ -6,8 +6,9 @@
 <style></style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { createComponent } from '@vue/composition-api'
 
-@Component
-export default class PageOrgUnit extends Vue {}
+export default createComponent({
+  name: 'Page'
+})
 </script>

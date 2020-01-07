@@ -8,9 +8,11 @@ q-layout(view="lHh Lpr lFf")
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-@Component
-export default class UserLayout extends Vue {}
+import { createComponent } from '@vue/composition-api'
+
+export default createComponent({
+  name: 'UserLayout'
+})
 </script>
 
 <style></style>

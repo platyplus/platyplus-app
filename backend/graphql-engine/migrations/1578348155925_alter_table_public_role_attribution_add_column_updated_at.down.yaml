@@ -1,0 +1,5 @@
+- args:
+    sql: |-
+      DROP TRIGGER IF EXISTS "set_public_role_attribution_updated_at" ON "public"."role_attribution";
+      ALTER TABLE "public"."role_attribution" DROP COLUMN "updated_at";
+  type: run_sql

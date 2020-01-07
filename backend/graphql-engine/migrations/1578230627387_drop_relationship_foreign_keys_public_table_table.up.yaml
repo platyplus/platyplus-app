@@ -1,0 +1,6 @@
+- args:
+    relationship: foreign_keys
+    table:
+      name: table
+      schema: public
+  type: drop_relationship

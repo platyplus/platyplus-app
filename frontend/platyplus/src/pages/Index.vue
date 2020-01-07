@@ -8,13 +8,14 @@ q-page(v-if="$authenticated" padding class="justify-center")
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
-import { PageMixin } from '../mixins'
-
-@Component
-export default class Index extends Mixins(PageMixin) {
-  readonly title = 'index.title'
-}
+import { createComponent } from '@vue/composition-api'
+import { setTitle } from '../composables/navigation'
+export default createComponent({
+  name: 'Index',
+  setup() {
+    setTitle('index.title')
+  }
+})
 </script>
 
 <style></style>

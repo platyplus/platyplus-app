@@ -1,13 +1,11 @@
-import { abilitiesPlugin } from '@casl/vue'
 import { Mixins } from 'vue-property-decorator'
 import { Route } from 'vue-router'
 import { mapGetters } from 'vuex'
 import { configure } from 'vee-validate'
+import VueCompositionApi from '@vue/composition-api'
 
-import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
 import { ErrorsPlugin } from '@platyplus/errors'
 
-import { ability } from '../modules/authorization'
 import { I18nPlugin } from '../modules/i18n'
 import { QuasarPlugin } from '../modules/quasar'
 import { AuthenticationPlugin } from '../modules/authentication'
@@ -18,8 +16,10 @@ import { QuasarBootOptions } from '../types/quasar'
 import MenuItem from '../components/MenuItem.vue'
 import messages from '../i18n'
 import { getConfig } from '../helpers'
+import { MetadataPlugin } from '../modules/metadata'
 
 export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
+  Vue.use(VueCompositionApi)
   Vue.use(QuasarPlugin, { store })
   // ? only load the messages of the desired language?
   Vue.use(I18nPlugin, { app, store, messages })
@@ -41,11 +41,12 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
     uri: getConfig().API
   })
 
-  await persistApolloCache(app.apolloProvider.defaultClient.cache)
+  // TODO uncomment
+  // await persistApolloCache(app.apolloProvider.defaultClient.cache)
 
-  Vue.use(abilitiesPlugin, ability)
+  // Vue.use(abilitiesPlugin, ability)
   Vue.use(AuthenticationPlugin, { app, store, router })
-
+  Vue.use(MetadataPlugin, { store })
   /**
    * * Loads the user data (profile, table classes, permissions) from Apollo
    * ! Cannot be put in the authentication plugin as Vue.use does not work asynchronously

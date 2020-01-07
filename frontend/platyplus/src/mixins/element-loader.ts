@@ -1,26 +1,21 @@
 import { Component, Mixins, Watch } from 'vue-property-decorator'
-import { permittedFieldsOf } from '@casl/ability/extra'
+import { get } from 'object-path'
+import gql from 'graphql-tag'
 
-import { elementQuery, deleteMutation } from '../hasura/graphql'
-import { ability } from '../modules/authorization'
-import {
-  BaseProperty,
-  ColumnProperty,
-  RelationshipProperty
-} from '../hasura/schema'
+import { Data } from '../modules/metadata/types/queries'
 import { ObjectMap } from '../types/common'
-import { pick } from '../helpers'
+import { isEmpty } from '../core'
+import { GenericField } from '../modules/metadata/types/objects'
 
 import { ElementMixin } from './element'
-import { get } from 'object-path'
 
 @Component({
   apollo: {
     element: {
       query() {
-        return elementQuery(this.tableClass, ability)
+        return gql(this.metadata.elementQuery)
       },
-      update: data => get(data, [Object.keys(data)[0], 0]), // TODO handle the case of non-existing element
+      update: ({ result }: Data) => result, // TODO handle the case of non-existing element
       variables() {
         return this.id
       },
@@ -34,16 +29,22 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
   public element: ObjectMap = {}
 
   protected get isNew() {
-    return Object.keys(this.id).length == 0
+    return isEmpty(this.id)
   }
 
   protected get id() {
-    return pick(this.$route.query, this.tableClass.idColumnNames)
+    return this.metadata.idFields.reduce(
+      (aggr, field) => ({
+        ...aggr,
+        [field.name]: this.$route.query[field.name]
+      }),
+      {}
+    )
   }
 
   private navigate(action: string, id: ObjectMap) {
     this.$router.replace({
-      path: `/data/${this.tableName}/${action}`,
+      path: `/data/${this.table}/${action}`,
       query: id as Record<string, string | (string | null)[] | null | undefined>
     })
   }
@@ -57,7 +58,7 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
   }
 
   public remove() {
-    const tableLabel = this.$i18n.t(`${this.tableName}.label`).toString()
+    const tableLabel = this.$i18n.t(`${this.table}.label`).toString()
     const message = this.$i18n
       .t('delete.label', {
         tableLabel: tableLabel,
@@ -72,24 +73,26 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
         persistent: true
       })
       .onOk(async () => {
-        if (this.$ability.can('delete', this.element)) {
-          const mutation = deleteMutation(this.tableClass, this.$ability)
-          // TODO catch errors
-          await this.$apollo.mutate({
-            mutation,
-            variables: this.id
-          })
-          // TODO remove in the cached list
-          this.$router.replace(`/data/${this.tableName}`)
+        if (this.$can('delete', this.element)) {
+          // TODO recode
+          // const mutation = deleteMutation(this.tableClass, this.$ability)
+          // // TODO catch errors
+          // await this.$apollo.mutate({
+          //   mutation,
+          //   variables: this.id
+          // })
+          // // TODO remove in the cached list
+          this.$router.replace(`/data/${this.table}`)
         }
       })
   }
 
-  protected componentName(property: BaseProperty, prefix: string) {
+  protected componentName(property: GenericField, prefix: string) {
     // TODO allow custom component name per property
-    const possibleComponentName = `${prefix}-${property.componentKind}`
-    if (get(this.$options.components as ObjectMap, possibleComponentName))
+    const possibleComponentName = `${prefix}-${property.kind}`
+    if (get(this.$options.components as ObjectMap, possibleComponentName)) {
       return possibleComponentName
+    }
     // TODO or else?
   }
 
@@ -100,44 +103,7 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
    * TODO move to a mixin so it can be used at field level as well?
    */
   protected fields(action: string) {
-    const tableClass = this.tableClass
-    if (tableClass && Object.keys(this.element).length) {
-      const permittedColumns = permittedFieldsOf(
-        this.$ability,
-        action,
-        tableClass.name
-      )
-      const result: BaseProperty[] = []
-      for (const property of tableClass.properties) {
-        if (property.isColumn) {
-          const columnProperty = property as ColumnProperty
-          if (
-            permittedColumns.includes(columnProperty.name) &&
-            !columnProperty.isReference &&
-            !columnProperty.isId
-          ) {
-            result.push(columnProperty)
-          }
-        } else {
-          const relationshipProperty = property as RelationshipProperty
-          // TODO if can 'action' reference label fieds (or other fields as well?)
-          // const subject =
-          //   // TODO a bit too much: such permission filter may be delegated to the array/object sub-component
-          //   (relationshipProperty.isMultiple
-          //     ? get(this.element, `${relationshipProperty.name}.0`)
-          //     : get(this.element, relationshipProperty.name)) ||
-          //   relationshipProperty.tableClass.name
-          // if (this.$can(action, subject)) result.push(relationshipProperty)
-          if (
-            this.$can('insert', relationshipProperty.tableClass.name) ||
-            this.$can('update', relationshipProperty.tableClass.name)
-          ) {
-            result.push(relationshipProperty)
-          }
-        }
-      }
-      return result
-    } else return []
+    return this.metadata.fields // TODO filter according to the action
   }
 
   @Watch('element', { deep: true })

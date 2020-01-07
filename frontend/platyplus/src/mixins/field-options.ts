@@ -1,26 +1,26 @@
 import { Component, Watch } from 'vue-property-decorator'
 
 import { ObjectMap } from '../types/common'
-import { optionsQuery } from '../hasura/graphql/operations'
-import { elementAsOption } from '../hasura/graphql/common'
-import { ability } from '../modules/authorization'
+import { elementAsOption } from '../modules/metadata'
+import { Data } from '../modules/metadata/types/queries'
 
 import { FieldRelationshipMixin } from './field-relationship'
-import { get } from 'object-path'
+import gql from 'graphql-tag'
 
 @Component({
   apollo: {
     initialOptions: {
       query() {
-        return optionsQuery(this.property, ability)
+        return gql(this.optionsQuery)
       },
-      update(data: Record<string, ObjectMap[]>) {
-        const tableClass = this.relationship.through
-          ? this.relationship.through.reference
-          : this.property.reference
-        return get(data, [Object.keys(data)[0], 'nodes'], [])
+      update({ result: { nodes } }: Data) {
+        // TODO recode: many to many
+        // const tableClass = this.relationship.through
+        //   ? this.relationship.through.reference
+        //   : this.property.reference
+        return nodes
           .filter(item => this.$can('insert', item))
-          .map(item => elementAsOption(item, tableClass))
+          .map(item => elementAsOption(item, this.table))
       }
     }
   }
@@ -28,6 +28,11 @@ import { get } from 'object-path'
 export class FieldOptionsMixin extends FieldRelationshipMixin {
   public options: ObjectMap[] = []
   private initialOptions: ObjectMap[] = []
+  public get optionsQuery() {
+    // TODO code optionsQuery in the metadata backend
+    // TODO this.relationship.through if many to many!!!
+    return this.relationship.target.listQuery
+  }
 
   public filterOptions(val: string, update: Function, abort: Function) {
     update(() => {

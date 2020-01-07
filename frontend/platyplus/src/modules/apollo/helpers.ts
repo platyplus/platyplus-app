@@ -1,7 +1,7 @@
 import { IdGetterObj } from 'apollo-cache-inmemory'
+import { defaultDataIdFromObject } from 'apollo-cache-inmemory'
 
-import { ObjectMap } from '../../types/common'
-import { uniqueGraphQlId } from '../../hasura/graphql/common'
+import { ObjectMap } from './types'
 
 /** // TODO code the cache operations e.g.:
  * update org_unit.children when another org_unit.parent_id has been changed
@@ -16,24 +16,14 @@ import { uniqueGraphQlId } from '../../hasura/graphql/common'
  * - Use the default generated ID otherwise.
  */
 export const dataIdFromObject = (object: IdGetterObj) => {
-  const obj = object as ObjectMap
-  switch (object.__typename) {
-    case 'table':
-      return `table:${obj.table_schema}.${obj.table_name}`
-    case 'permission':
-      return `permission:${obj.table_schema}.${obj.table_name}.${obj.role_name}`
-    case 'relationship':
-      return `relationship:${obj.table_schema}.${obj.table_name}.${obj.name}`
-    case 'primary_key':
-      // prettier-ignore
-      return `primary_key:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
-    case 'foreign_key_constraint':
-      // prettier-ignore
-      return `foreign_key_constraint:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
-    case 'check_constraint':
-      // prettier-ignore
-      return `check_constraint:${obj.table_schema}.${obj.table_name}.${obj.constraint_name}`
-    default:
-      return uniqueGraphQlId(obj)
+  if (typeof object.__typename === 'string' && !object.id) {
+    const subIds = Object.keys(object).filter(key => key.endsWith('_id'))
+    if (subIds.length > 0)
+      return `${object.__typename}:${subIds
+        .map(key => (object as ObjectMap)[key])
+        .join('.')}`
+    // if ((object as ObjectMap).name)
+    //   return `${object.__typename}:${(object as ObjectMap).name}`
   }
+  return defaultDataIdFromObject(object)
 }

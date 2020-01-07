@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import { graphql } from '@platyplus/hasura-node-client'
 import { InputError } from '@platyplus/errors'
 
-import { ALGORITHM, PUBLIC_KEY, PRIVATE_KEY, EXPIRES_IN } from './config'
+import { ALGORITHM, PUBLIC_KEY, PRIVATE_KEY, EXPIRES_IN, KID } from './config'
 import { ME, SIGNUP, LOGIN } from './queries'
 import { User, Token, LoginPayload } from './types'
 const createToken = (
@@ -26,7 +26,11 @@ const createToken = (
       }
     },
     PRIVATE_KEY,
-    { algorithm: ALGORITHM, expiresIn: EXPIRES_IN }
+    {
+      algorithm: ALGORITHM,
+      expiresIn: EXPIRES_IN,
+      keyid: KID
+    }
   )
 
 export const resolvers: IResolvers = {

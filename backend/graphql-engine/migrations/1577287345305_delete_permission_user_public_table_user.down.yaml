@@ -1,0 +1,19 @@
+- args:
+    permission:
+      check:
+        id:
+          _eq: X-HASURA-USER-ID
+      columns:
+      - attributes
+      - id
+      - locale
+      - preferred_org_unit_id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: user
+      schema: public
+  type: create_insert_permission

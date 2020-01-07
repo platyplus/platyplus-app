@@ -1,0 +1,21 @@
+- args:
+    role: user
+    table:
+      name: role_attribution
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - org_unit_id
+      - role_id
+      - user_id
+      computed_fields: []
+      filter: {}
+    role: user
+    table:
+      name: role_attribution
+      schema: public
+  type: create_select_permission

@@ -1,0 +1,4 @@
+- args:
+    cascade: false
+    sql: alter table "public"."user" drop constraint "locale_min"
+  type: run_sql

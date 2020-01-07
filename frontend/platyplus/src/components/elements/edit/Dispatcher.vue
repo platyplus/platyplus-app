@@ -6,16 +6,16 @@ q-form(autofocus @reset="reset" @submit="submit")
       component(v-for="property, key in fields(action)"
         :key="'field-'+key"
         :is="componentName(property, 'h-edit-field')"
-        :property="property"
+        :property="property.name"
         :element="element"
-        :tableClass="property.class"
+        :table="table"
         v-model="form[property.name]")
     slot(name="after-fields" :element="element")
     slot(name="before-actions" :element="element")
     slot(name="actions" :element="element")
-      q-btn(v-if="canSave" v-t="'save'" type="submit")
-      q-btn(v-t="'reset'" type="reset")
-      q-btn(v-if="true" v-t="'cancel'" @click="previous()")
+      q-btn(v-if="canSave" :label="$t('save')" type="submit")
+      q-btn(:label="$t('reset')" type="reset")
+      q-btn(v-if="true" :label="$t('cancel')" @click="previous()")
     slot(name="after-actions" :element="element")
 </template>
 

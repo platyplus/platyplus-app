@@ -3,7 +3,7 @@ import { extend } from 'vee-validate'
 import { required } from 'vee-validate/dist/rules'
 
 import { GenericObject } from '../types/common'
-import { elementAsOption, optionAsElement } from '../hasura/graphql/common'
+import { elementAsOption, optionAsElement } from '../modules/metadata'
 
 import { FieldMixin } from './field'
 
@@ -15,17 +15,15 @@ export class FieldEditMixin extends Mixins(FieldMixin) {
   public readonly value?: GenericObject
 
   public get formValue() {
-    return elementAsOption(
-      this.value,
-      this.property && this.property.tableClass
-    )
+    return elementAsOption(this.value, this.table)
   }
   public set formValue(newValue) {
     this.$emit('input', optionAsElement(newValue))
   }
   public get rules() {
     return {
-      required: this.property.required
+      // TODO recode
+      // required: this.property.required
     }
   }
 }

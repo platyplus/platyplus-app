@@ -62,7 +62,7 @@ module.exports = function(ctx) {
       directives: ['Ripple', 'ClosePopup'],
 
       // Quasar plugins
-      plugins: ['Notify', 'Loading', 'Dialog'],
+      plugins: ['Notify', 'Loading', 'Dialog', 'LoadingBar'],
 
       iconSet: 'fontawesome-v5',
       lang: 'en-us', // Quasar language
@@ -117,18 +117,30 @@ module.exports = function(ctx) {
           test: /\.pug$/,
           loader: 'pug-plain-loader'
         })
-        cfg.resolve.alias = {
-          ...cfg.resolve.alias, // This adds the existing alias
-          handlebars: 'handlebars/dist/handlebars.min.js'
-        }
+        cfg.module.rules.push({
+          test: /\.graphql?$/,
+          use: [
+            {
+              loader: 'webpack-graphql-loader',
+              options: {
+                // validate: true,
+                // schema: "./path/to/schema.json",
+                output: 'document',
+                removeUnusedFragments: true,
+                minify: true
+              }
+            }
+          ]
+        })
       }
     },
 
     devServer: {
-      public: '0.0.0.0:80',
+      public: '0.0.0.0:8080',
       // https: true,
-      // port: 8080,
+      port: 8080,
       open: false // opens browser window automatically
+      // TODO configure Webpack to watch package dependencies e.g. https://www.npmjs.com/package/filewatcher-webpack-plugin
     },
 
     // animations: 'all', // --- includes all animations

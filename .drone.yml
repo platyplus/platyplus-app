@@ -81,6 +81,17 @@ steps:
         - ${DRONE_BRANCH}
       json_key:
         from_secret: google_credentials
+  - name: publish-docker-metadata
+    depends_on: [build-packages]
+    image: plugins/gcr
+    settings:
+      dockerfile: backend/metadata-service/Dockerfile
+      repo: platyplus-0402/metadata-service
+      tags:
+        - ${DRONE_COMMIT_SHA:0:8}
+        - ${DRONE_BRANCH}
+      json_key:
+        from_secret: google_credentials
 ---
 kind: pipeline
 type: docker
@@ -119,6 +130,7 @@ steps:
                 HASURA_GRAPHQL_ADMIN_SECRET: '"$$HASURA_GRAPHQL_ADMIN_SECRET"'
   - name: deploy-functions
     image: platyplus/drone-gcloud:latest
+    depends_on: [deploy-authentication]
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
@@ -130,11 +142,46 @@ steps:
         compute/zone: europe-west1-b
         run/platform: managed
         run/region: europe-west1
-      # ! Set when the functions microservice is ready to work
-      # - gcloud beta run deploy functions --image gcr.io/platyplus-0402/functions-service:$${DRONE_COMMIT_SHA:0:8} --set-env-vars HASURA_GRAPHQL_ADMIN_SECRET="$$HASURA_GRAPHQL_ADMIN_SECRET"
+      commands:
+        - command: beta run services describe authentication --format "get(status.url)"
+          export: AUTHENTICATION_URL
+        # ! Set when the functions microservice is ready to work
+        # - command: beta run deploy functions
+        #   flags:
+        #     - image: gcr.io/platyplus-0402/metadata-service:$${DRONE_COMMIT_SHA:0:8}
+        #     - allow-unauthenticated
+        #     - timeout: 900
+        #     - set-env-vars:
+        #         HASURA_GRAPHQL_ADMIN_SECRET: '"$$HASURA_GRAPHQL_ADMIN_SECRET"'
+        #         AUTHENTICATION_URL: '"$$AUTHENTICATION_URL"'
+  - name: deploy-metadata
+    image: platyplus/drone-gcloud:latest
+    depends_on: [deploy-authentication]
+    environment:
+      HASURA_GRAPHQL_ADMIN_SECRET:
+        from_secret: HASURA_GRAPHQL_ADMIN_SECRET
+    settings:
+      credentials:
+        from_secret: google_credentials
+      config:
+        compute/region: europe-west1
+        compute/zone: europe-west1-b
+        run/platform: managed
+        run/region: europe-west1
+      commands:
+        - command: beta run services describe authentication --format "get(status.url)"
+          export: AUTHENTICATION_URL
+        - command: beta run deploy metadata
+          flags:
+            - image: gcr.io/platyplus-0402/metadata-service:$${DRONE_COMMIT_SHA:0:8}
+            - allow-unauthenticated
+            - timeout: 900
+            - set-env-vars:
+                HASURA_GRAPHQL_ADMIN_SECRET: '"$$HASURA_GRAPHQL_ADMIN_SECRET"'
+                AUTHENTICATION_URL: '"$$AUTHENTICATION_URL"'
   - name: deploy-graphql-engine
     image: platyplus/drone-gcloud:latest
-    depends_on: [deploy-authentication, deploy-functions]
+    depends_on: [deploy-authentication, deploy-functions, deploy-metadata]
     environment:
       HASURA_GRAPHQL_ADMIN_SECRET:
         from_secret: HASURA_GRAPHQL_ADMIN_SECRET
@@ -159,7 +206,10 @@ steps:
         - command: beta run services describe authentication --format "get(status.url)"
           export: AUTHENTICATION_URL
         # ! Set this when functions works
-        # - export FUNCTIONS_URL="`gcloud beta run services describe functions --format="get(status.url)"`"
+        # - command: beta run services describe functions --format "get(status.url)"
+        #   export: FUNCTIONS_URL
+        - command: beta run services describe metadata --format "get(status.url)"
+          export: METADATA_URL
         - command: beta run deploy graphql-engine
           flags:
             - image: gcr.io/platyplus-0402/graphql-engine:$${DRONE_COMMIT_SHA:0:8}
@@ -170,14 +220,17 @@ steps:
                 HASURA_GRAPHQL_DATABASE_URL: '"postgres://postgres:$${POSTGRES_PASSWORD}@/hasura-${DRONE_BRANCH}?host=/cloudsql/$${CLOUDSQL_INSTANCE}"'
                 AUTHENTICATION_URL: '"$$AUTHENTICATION_URL"'
                 FUNCTIONS_URL: '"$$FUNCTIONS_URL"'
+                METADATA_URL: '"$$METADATA_URL"'
                 HASURA_GRAPHQL_ADMIN_SECRET: '"$$HASURA_GRAPHQL_ADMIN_SECRET"'
                 # ENABLE_CLOUDSQL_PROXY: '"true"'
         # * The following services need to have the graphql-engine to send him requests, but graphql-engine needed them first
         - command: beta run services describe graphql-engine --format="get(status.url)"
           export: GRAPHQL_ENGINE_URL
         - beta run services update authentication --update-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
-      # ! Set the following line when the functions microservice is ready to work
-      # - gcloud beta run services update functions --update-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
+        # ! Set the following line when the functions microservice is ready to work
+        # - beta run services update functions --update-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
+        # ! Set the following line when the metadata microservice is ready to work
+        - beta run services update metadata --update-env-vars GRAPHQL_ENGINE_URL="$$GRAPHQL_ENGINE_URL"
   - name: deploy-platyplus
     image: platyplus/drone-gcloud:latest
     depends_on: [deploy-graphql-engine]

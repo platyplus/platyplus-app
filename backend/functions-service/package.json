@@ -30,7 +30,7 @@
     "prebuild": "yarn run clean",
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "dev": "ts-node-dev ./src/index.ts"
+    "dev": "nodemon ./src/index.ts"
   },
   "bugs": {
     "url": "https://github.com/platyplus/platyplus/issues"
@@ -38,9 +38,11 @@
   "dependencies": {
     "@platyplus/hasura-node-client": "^0.0.4-alpha.0",
     "@platyplus/microservice": "^0.0.4-alpha.0",
-    "graphql": "14.5.4"
+    "graphql": "14.5.8"
   },
   "devDependencies": {
-    "ts-node-dev": "^1.0.0-pre.42"
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0"
   }
 }

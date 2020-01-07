@@ -3,9 +3,10 @@ import jwtDecode from 'jwt-decode'
 
 import { UserState } from './state'
 import { ObjectMap } from '../types'
-import { initialRules, ability } from '../../authorization'
+
 /**
  * * Workaround for https://docs.hasura.io/1.0/graphql/manual/auth/authorization/roles-variables.html
+ * TODO put in common helpers
  * Converts the values of the string properties of an object that are formated as a
  * PostgreSQL list into Javascript arrays.
  * @param from the initial object with possible properties such as "{something,something-else}"
@@ -33,9 +34,9 @@ export const mutations: MutationTree<UserState> = {
     // * See the above workaround.
     // * It is quite important to translate the 'postgrest lists' into JS arrays as they are
     // * later used by the permissions system.
-    newToken['https://hasura.io/jwt/claims'] = transformSqlLists(newToken[
-      'https://hasura.io/jwt/claims'
-    ] as ObjectMap)
+    newToken['https://hasura.io/jwt/claims'] = transformSqlLists(
+      newToken['https://hasura.io/jwt/claims'] as ObjectMap
+    )
     state.token = newToken
     state.encodedToken = token
   },
@@ -43,12 +44,10 @@ export const mutations: MutationTree<UserState> = {
   reset(state) {
     state.encodedToken = undefined
     state.token = undefined
-    state.rules = initialRules()
-    ability.update(state.rules)
+    state.profile = undefined
   },
 
-  addRules(state, rules) {
-    if (rules) state.rules.push(...rules)
-    ability.update(state.rules)
+  setProfile(state, profile) {
+    state.profile = profile
   }
 }

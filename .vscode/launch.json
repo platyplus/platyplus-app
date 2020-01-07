@@ -25,6 +25,16 @@
             "protocol": "inspector"
         },
         {
+            "type": "node",
+            "request": "attach",
+            "name": "Debug: Metadata",
+            "port": 9230,
+            "address": "localhost",
+            "localRoot": "${workspaceFolder}/backend/metadata-service",
+            "remoteRoot": "/opt/app",
+            "protocol": "inspector"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Debug Quasar",

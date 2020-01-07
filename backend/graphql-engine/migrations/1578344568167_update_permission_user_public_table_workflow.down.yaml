@@ -1,0 +1,21 @@
+- args:
+    role: user
+    table:
+      name: workflow
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - name
+      - entity_type_id
+      - id
+      - parent_id
+      computed_fields: []
+      filter: {}
+    role: user
+    table:
+      name: workflow
+      schema: public
+  type: create_select_permission

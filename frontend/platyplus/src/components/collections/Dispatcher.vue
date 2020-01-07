@@ -1,38 +1,40 @@
 <template lang="pug">
-component(:is="componentName" :tableClass="tableClass" :list="list")
+component(:is="componentName" :table="table" :list="list")
 </template>
 
 <script lang="ts">
-import { Mixins, Component, Prop } from 'vue-property-decorator'
-import { CollectionContainerMixin } from '../../mixins'
 import SimpleList from './containers/SimpleList.vue'
 import Tree from './containers/Tree.vue'
 import Chips from './containers/Chips.vue'
 
-@Component({
+import { createComponent, computed } from '@vue/composition-api'
+import { listProps } from '../../composables/metadata'
+
+export default createComponent({
+  name: 'CollectionDispatcher',
   components: {
     'h-simple-list': SimpleList,
     'h-tree': Tree,
     'h-chips': Chips
+  },
+  props: {
+    ...listProps,
+    type: { type: String, default: 'simple-list' }
+  },
+  setup(props, context) {
+    const componentName = computed(() => {
+      const possibleComponentName = `h-${props.type}-${props.table}`
+      if (
+        context.root.$options.components &&
+        Object.keys(context.root.$options.components).includes(
+          possibleComponentName
+        )
+      )
+        return possibleComponentName
+      // TODO if type is tree then return 'h-tree'
+      return `h-${props.type}`
+    })
+    return { componentName }
   }
 })
-export default class CollectionDispatcher extends Mixins(
-  CollectionContainerMixin
-) {
-  @Prop({ type: String, default: 'simple-list' }) public readonly type!: string
-
-  /**
-   * Returns the component name to use to render the list.
-   */
-  get componentName() {
-    const possibleComponentName = `h-${this.type}-${this.tableName}`
-    if (this.$options.components) {
-      const components = Object.keys(this.$options.components)
-      if (components.includes(possibleComponentName))
-        return possibleComponentName
-    }
-    // TODO if type is tree then return 'h-tree'
-    return `h-${this.type}`
-  }
-}
 </script>

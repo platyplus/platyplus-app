@@ -57,7 +57,7 @@ const routes: RouteConfig[] = [
         props: {
           default: () => ({
             id: store.getters['authentication/id'],
-            tableClass: store.getters['hasura/class']('user')
+            table: 'user'
           })
         }
       },

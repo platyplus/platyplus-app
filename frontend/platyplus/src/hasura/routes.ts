@@ -1,7 +1,5 @@
 import { RouteConfig } from 'vue-router'
 
-import { ability } from '../modules/authorization'
-import { Schema } from '../hasura/schema'
 import CollectionLoader from '../components/collections/Loader.vue'
 import ReadElementDispatcher from '../components/elements/read/Dispatcher.vue'
 import EditElementDispatcher from '../components/elements/edit/Dispatcher.vue'
@@ -9,78 +7,67 @@ import PageLayout from 'layouts/Page.vue'
 import UserLayout from 'layouts/user/Layout.vue'
 import UserHeader from 'layouts/user/Header.vue'
 import UserMenu from 'layouts/user/Menu.vue'
+import { tablesMetadata } from '../modules/metadata'
 
-// ! This is a prototype function that should be implemented asap
-export const createRoutes = (schema: Schema) => {
+// TODO where to put this function? How to decouple the UI components from the metadata logic?
+export const createRoutes = () => {
   return [
     {
       path: '/data/',
       component: UserLayout,
-      children: schema.classes.map(tableClass => ({
-        path: tableClass.name,
+      children: tablesMetadata().map(table => ({
+        path: table.name || '',
         components: {
           default: PageLayout,
           header: UserHeader,
           menu: UserMenu
         },
         props: {
-          default: { tableClass },
-          header: { tableClass }
+          default: { table: table.name },
+          header: { table: table.name }
         },
         children: [
           {
             path: '',
             component: CollectionLoader,
-            props: { tableClass },
+            props: { table: table.name },
             beforeEnter: (to, from, next) => {
-              if (ability.can('select', tableClass.name)) next()
-              else {
-                // TODO not implemented
-                return next('/unauthorized')
-              }
+              if (table.canSelect) next()
+              // TODO not implemented
+              else return next('/unauthorized')
             }
           },
           {
             path: 'read',
             component: ReadElementDispatcher,
-            props: { tableClass },
+            props: { table: table.name },
             beforeEnter: (to, from, next) => {
               // TODO not ideal as this ability check is done before fetching the data
-              if (ability.can('select', tableClass.name)) next()
-              else {
-                // TODO not implemented
-                return next('/unauthorized')
-              }
+              if (table.canSelect) next()
+              // TODO not implemented
+              else return next('/unauthorized')
             }
           },
           {
             path: 'edit',
             component: EditElementDispatcher,
-            props: { tableClass },
+            props: { table: table.name },
             beforeEnter: (to, from, next) => {
               // TODO not ideal as this ability check is done before fetching the data
-              if (
-                !tableClass.idColumnNames.every(
-                  columnName => !!to.query[columnName]
-                )
-              ) {
-                return next(`/data/${tableClass.name}`)
-              }
-              if (ability.can('update', tableClass.name)) next()
-              else {
-                return next('/error') // TODO not implemented
-              }
+              if (!table.idFields?.every(field => !!to.query[field.name]))
+                return next(`/data/${table.name}`)
+              if (table.canUpdate) next()
+              // TODO not implemented
+              else return next('/error')
             }
           },
           {
             path: 'create',
             component: EditElementDispatcher,
-            props: { tableClass },
+            props: { table: table.name },
             beforeEnter: (to, from, next) => {
-              if (ability.can('insert', tableClass.name)) next()
-              else {
-                return next('/error') // TODO not implemented
-              }
+              if (table.canInsert) next()
+              else return next('/error') // TODO not implemented
             }
           }
         ]

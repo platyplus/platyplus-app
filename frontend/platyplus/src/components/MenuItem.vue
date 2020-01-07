@@ -7,12 +7,15 @@
 </template>
 
 <script lang="ts">
-import { Prop, Component, Vue } from 'vue-property-decorator'
-@Component
-export default class MenuItem extends Vue {
-  @Prop(String) readonly icon?: string
-  @Prop(String) readonly to?: string
-}
+import { createComponent } from '@vue/composition-api'
+
+export default createComponent({
+  name: 'MenuItem',
+  props: {
+    icon: String,
+    to: String
+  }
+})
 </script>
 
 <style></style>

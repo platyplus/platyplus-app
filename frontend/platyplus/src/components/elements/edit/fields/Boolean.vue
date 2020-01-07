@@ -1,11 +1,11 @@
 <template lang="pug">
 div
-  slot(name="before-field" :property="property" :element="element")
-  slot(name="field" :property="property"  :element="element")
-    q-field(:label="$t(tableName +'.labels.'+name)" :key="name" :name="name" stack-label filled)
+  slot(name="before-field" :table="table" :property="property" :element="element")
+  slot(name="field" :table="table" :property="property" :element="element")
+    q-field(:label="$t(table +'.labels.'+property)" :key="property" :name="property" stack-label filled)
       template(v-slot:control)
         q-toggle(v-model="formValue")
-  slot(name="after-field" :property="property" :element="element")
+  slot(name="after-field" :table="table" :property="property" :element="element")
 </template>
 
 <script lang="ts">

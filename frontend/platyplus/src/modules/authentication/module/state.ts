@@ -1,15 +1,13 @@
-import { initialRules } from '../../authorization'
-import { ObjectMap } from '../types'
-import { Rule } from '../../authorization/types'
+import { ObjectMap, User } from '../types'
 
 export interface UserState {
-  rules: Rule[]
   token?: ObjectMap
   encodedToken?: string
+  profile?: User
 }
 
 export const state: UserState = {
-  rules: initialRules(),
   token: undefined,
-  encodedToken: undefined
+  encodedToken: undefined,
+  profile: undefined
 }

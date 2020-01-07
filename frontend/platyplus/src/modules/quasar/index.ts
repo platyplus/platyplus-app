@@ -2,6 +2,7 @@ import _Vue from 'vue'
 import { Store } from 'vuex'
 import { quasarModule } from './module'
 import { QVueGlobals } from 'quasar'
+import { inject, provide } from '@vue/composition-api'
 
 export interface QuasarOptions {
   store: Store<{}>
@@ -16,4 +17,18 @@ declare module 'vue/types/vue' {
   interface Vue {
     $q: QVueGlobals
   }
+}
+
+const QuasarSymbol = Symbol()
+
+export function provideQuasar(quasar: QVueGlobals) {
+  provide(QuasarSymbol, quasar)
+}
+
+export function useQuasar() {
+  const quasar = inject(QuasarSymbol)
+  if (!quasar) {
+    // throw error, no store provided
+  }
+  return quasar as QVueGlobals
 }

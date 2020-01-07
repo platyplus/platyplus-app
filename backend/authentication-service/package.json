@@ -30,16 +30,15 @@
     "prebuild": "yarn run clean",
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "dev": "ts-node-dev ./src/index.ts"
+    "dev": "nodemon ./src/index.ts"
   },
   "bugs": {
     "url": "https://github.com/platyplus/platyplus/issues"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/jsonwebtoken": "^8.3.3",
-    "@types/rasha": "^1.2.0",
-    "ts-node-dev": "^1.0.0-pre.42"
+    "nodemon": "^2.0.2",
+    "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0"
   },
   "dependencies": {
     "@platyplus/errors": "^0.0.1-alpha.0",
@@ -47,7 +46,6 @@
     "@platyplus/microservice": "^0.0.4-alpha.0",
     "apollo-server-koa": "^2.9.3",
     "bcryptjs": "^2.4.3",
-    "dotenv-cli": "^2.0.1",
     "graphql": "^14.5.5",
     "jsonwebtoken": "^8.5.1",
     "rasha": "^1.2.5"

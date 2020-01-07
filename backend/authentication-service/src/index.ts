@@ -5,7 +5,7 @@ import microservice from '@platyplus/microservice'
 
 import { resolvers } from './resolvers'
 import { typeDefs } from './type-definitions'
-import { PUBLIC_KEY, ALGORITHM } from './config'
+import { PUBLIC_KEY, ALGORITHM, KID } from './config'
 
 // TODO: if roles change, the JWT shoud be regenerated! How to do it in the most seamless way?
 // We could invalidate it?
@@ -31,7 +31,7 @@ rasha
           ...jwk,
           alg: ALGORITHM,
           use: 'sig',
-          kid: '97fcbca368fe77808830c8100121ec7bde22cf0e' // TODO customize?
+          kid: KID
         }
       ]
     }
