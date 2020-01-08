@@ -7,6 +7,7 @@ import { ObjectMap } from '../../types/common'
 import { tableMetadata } from '../../modules/metadata'
 
 import { fieldProps } from './props'
+import { DataObject } from '../../modules/metadata/types/queries'
 
 export const useFieldMetadata = ({
   table,
@@ -20,7 +21,7 @@ export const useFieldMetadata = ({
 export const useFieldValue = (props: ExtractPropTypes<typeof fieldProps>) => {
   const propertyMetadata = useFieldMetadata(props)
   return computed(() => {
-    const value = props.element[props.property]
+    const value = (props.element as DataObject)[props.property] // TODO ugly
     if (value && propertyMetadata.value?.component === 'many-to-many') {
       const relationship = propertyMetadata.value as Partial<
         ManyToManyRelationship

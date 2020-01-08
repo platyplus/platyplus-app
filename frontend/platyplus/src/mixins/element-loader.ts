@@ -1,5 +1,4 @@
 import { Component, Mixins, Watch } from 'vue-property-decorator'
-import { get } from 'object-path'
 import gql from 'graphql-tag'
 
 import { Data } from '../modules/metadata/types/queries'

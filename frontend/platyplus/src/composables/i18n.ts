@@ -1,12 +1,12 @@
+import { computed } from '@vue/composition-api'
+import { Values } from 'vue-i18n'
 import { useI18n } from '../modules/i18n'
+import { useStore } from '../store'
 
 export const useTranslator = () => {
   const i18n = useI18n()
-  return (path: string) => i18n.t(path) as string
+  return (path: string, values?: Values) => i18n.t(path, values) as string
 }
-
-import { computed } from '@vue/composition-api'
-import { useStore } from '../store'
 
 export const useLocale = () => {
   const store = useStore()

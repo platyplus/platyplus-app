@@ -4,8 +4,10 @@ import { ObjectMap } from '../../types/common'
 import { label, tableMetadata } from '../../modules/metadata'
 import { ExtractPropTypes } from '@vue/composition-api/dist/component/componentProps'
 import { tableProps } from './props'
+import { useRouterQuery } from '../router'
+import { DataObject } from '../../modules/metadata/types/queries'
 
-export const useLabel = (metadata: Partial<Table>, element: ObjectMap) =>
+export const useLabel = (metadata: Partial<Table>, element: DataObject) =>
   computed(() => label(metadata, element))
 
 export const useMetadata = ({
@@ -13,3 +15,17 @@ export const useMetadata = ({
   schema
 }: ExtractPropTypes<typeof tableProps>) =>
   computed(() => tableMetadata(table, schema))
+
+export const useElementId = (props: ExtractPropTypes<typeof tableProps>) => {
+  const routerQuery = useRouterQuery()
+  const metadata = useMetadata(props)
+  return computed(() =>
+    metadata.value.idFields?.reduce<ObjectMap>(
+      (aggr, field) => ({
+        ...aggr,
+        [field.name]: routerQuery.value[field.name]
+      }),
+      {}
+    )
+  )
+}

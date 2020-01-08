@@ -4,28 +4,58 @@ div
   slot(name="fields" :element="element")
     component(v-for="property in metadata.fields"
       :key="'field-'+property.name"
-      :is="componentName(property, 'h-read-field')"
+      :is="componentName(property)"
       :property="property.name"
       :element="element"
       :table="table")
   slot(name="after-fields" :element="element")
   slot(name="before-actions" :element="element")
   slot(name="actions" :element="element")
-    q-btn(v-if="$can('update', element)" :label="$t('edit')" @click="edit()")
-    q-btn(v-if="$can('delete', element)" :label="$t('remove')" @click="remove()")
+    q-btn(v-if="$can('update', element)" :label="translate('edit')" @click="edit()")
+    q-btn(v-if="$can('delete', element)" :label="translate('remove')" @click="remove()")
   slot(name="after-actions" :element="element")
 </template>
 
 <script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator'
-import { ElementLoaderMixin } from '../../../mixins'
+/** // TODO
+ * - element composable: navigate to read, edit etc.
+ * - mutations composable: useDelete
+ */
 
-// Component.registerHooks([
-//   'beforeRouteEnter',
-//   'beforeRouteLeave',
-//   'beforeRouteUpdate'
-// ])
+import { createComponent, watch } from '@vue/composition-api'
 
-@Component
-export default class ReadElementDispatcher extends Mixins(ElementLoaderMixin) {}
+import { useTranslator } from '../../../composables/i18n'
+import {
+  useMetadata,
+  tableProps,
+  useComponentName,
+  useElementId,
+  useElementLoader,
+  useCanDelete,
+  useDeleteElement
+} from '../../../composables/metadata'
+import { useStore } from '../../../store'
+import { label } from '../../../modules/metadata'
+
+export default createComponent({
+  props: {
+    ...tableProps
+  },
+  setup(props) {
+    const metadata = useMetadata(props)
+    const element = useElementLoader(props, useElementId(props))
+    const componentName = useComponentName('read')
+    const translate = useTranslator()
+    const canDelete = useCanDelete(element)
+    const remove = useDeleteElement(props, element)
+    const store = useStore()
+    watch(() => {
+      store.commit('navigation/setTitle', {
+        label: label(metadata.value, element.value),
+        translate: false
+      })
+    })
+    return { metadata, element, componentName, translate, remove, canDelete }
+  }
+})
 </script>

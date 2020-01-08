@@ -15,8 +15,8 @@ export default createComponent({
   props: {
     ...elementProps
   },
-  setup({ table, element }) {
-    const { label, readLink } = useElementContainer(element, table)
+  setup(props) {
+    const { label, readLink } = useElementContainer(props)
     return { label, readLink }
   }
 })

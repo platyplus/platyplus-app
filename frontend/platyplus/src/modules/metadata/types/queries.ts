@@ -8,8 +8,8 @@ export interface TableQuery {
   _metadataTable: Partial<Table>
 }
 
-export type Node = ObjectMap & {
-  __typename: string
+export type DataObject = ObjectMap & {
+  __typename?: string
 }
 export type Result = {
   aggregate: {
@@ -18,7 +18,7 @@ export type Result = {
       __typename: string
     }
   }
-  nodes: Node[]
+  nodes: DataObject[]
   __typename: string
 }
 export type Data = {
