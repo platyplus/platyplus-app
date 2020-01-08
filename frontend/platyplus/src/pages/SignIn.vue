@@ -27,7 +27,6 @@ import { useStore } from '../store'
 extend('required', required)
 
 export default createComponent({
-  name: 'Index',
   components: {
     ValidationProvider,
     ValidationObserver

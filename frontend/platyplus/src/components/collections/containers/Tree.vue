@@ -16,7 +16,6 @@ import { createComponent, ref } from '@vue/composition-api'
 // TODO review the way the graphql query is built to get children's children (e.g. org unit)
 // TODO: OR: scan the list through a computed field and add the missing children properties = []
 export default createComponent({
-  name: 'Tree',
   props: {
     list: { type: Array, default: () => [] }
   },

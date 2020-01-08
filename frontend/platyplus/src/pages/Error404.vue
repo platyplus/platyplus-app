@@ -5,10 +5,4 @@ div(class="fixed-center text-center")
   p(class="text-faded") Sorry, nothing here...<strong>(404)</strong>
   q-btn(color="secondary" style="width:200px;" @click="$router.push('/')") Go back
 </template>
-
-<script lang="ts">
-import { createComponent } from '@vue/composition-api'
-export default createComponent({
-  name: 'Error404'
-})
-</script>
+// TODO $router.push -> composition api

@@ -12,14 +12,9 @@ div(v-else)
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 
-import ListItem from '../../elements/containers/ListItem.vue'
 import { listProps } from '../../../composables/metadata'
 
 export default createComponent({
-  name: 'SimpleList',
-  components: {
-    'h-list-item': ListItem
-  },
   props: {
     ...listProps
   }

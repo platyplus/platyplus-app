@@ -15,7 +15,6 @@ import { provideRouter } from './router'
 import { provideI18n } from './modules/i18n'
 
 export default createComponent({
-  name: 'App',
   setup(props, context) {
     // ? find a way to put this elsewhere?
     provideStore()

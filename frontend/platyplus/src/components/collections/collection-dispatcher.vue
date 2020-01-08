@@ -3,20 +3,10 @@ component(:is="componentName" :table="table" :list="list")
 </template>
 
 <script lang="ts">
-import SimpleList from './containers/SimpleList.vue'
-import Tree from './containers/Tree.vue'
-import Chips from './containers/Chips.vue'
-
 import { createComponent, computed } from '@vue/composition-api'
 import { listProps } from '../../composables/metadata'
 
 export default createComponent({
-  name: 'CollectionDispatcher',
-  components: {
-    'h-simple-list': SimpleList,
-    'h-tree': Tree,
-    'h-chips': Chips
-  },
   props: {
     ...listProps,
     type: { type: String, default: 'simple-list' }

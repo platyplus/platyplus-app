@@ -19,11 +19,6 @@ div
 <script lang="ts">
 import { Mixins, Component } from 'vue-property-decorator'
 import { ElementLoaderMixin } from '../../../mixins'
-import Text from './fields/Text.vue'
-import BooleanField from './fields/Boolean.vue'
-import ManyToManyField from './fields/ManyToMany.vue'
-import OneToManyField from './fields/OneToMany.vue'
-import ManyToOneField from './fields/ManyToOne.vue'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -31,20 +26,6 @@ Component.registerHooks([
   'beforeRouteUpdate'
 ])
 
-@Component({
-  components: {
-    'h-read-field-text': Text,
-    'h-read-field-many-to-many': ManyToManyField,
-    'h-read-field-nested-many-to-many': ManyToManyField, // TODO
-    'h-read-field-complete-many-to-many': ManyToManyField, // TODO
-    'h-read-field-one-to-many': OneToManyField,
-    'h-read-field-nested-one-to-many': OneToManyField, // TODO
-    'h-read-field-complete-one-to-many': OneToManyField, // TODO
-    'h-read-field-many-to-one': ManyToOneField,
-    'h-read-field-nested-many-to-one': ManyToOneField, // TODO
-    'h-read-field-complete-many-to-one': ManyToOneField, // TODO
-    'h-read-field-bool': BooleanField
-  }
-})
+@Component
 export default class ReadElementDispatcher extends Mixins(ElementLoaderMixin) {}
 </script>

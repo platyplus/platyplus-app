@@ -11,7 +11,6 @@ import {
 } from '../../../composables/metadata'
 
 export default createComponent({
-  name: 'Chip',
   props: {
     ...elementProps
   },

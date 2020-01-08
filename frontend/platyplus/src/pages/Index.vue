@@ -11,7 +11,6 @@ q-page(v-if="$authenticated" padding class="justify-center")
 import { createComponent } from '@vue/composition-api'
 import { setTitle } from '../composables/navigation'
 export default createComponent({
-  name: 'Index',
   setup() {
     setTitle('index.title')
   }

@@ -59,7 +59,7 @@ export interface RawRelationship {
 interface RelationshipInterface {
   table: Table
   name: string
-  kind: string
+  component: string
   target: Table
   mapping: ColumnMapping[]
   comment?: string
@@ -87,12 +87,12 @@ export abstract class Relationship extends GenericField {
   constructor({
     table,
     name,
-    kind,
+    component,
     target,
     mapping,
     comment
   }: RelationshipInterface) {
-    super(table, name, kind)
+    super(table, name, component)
     this.target = target
     this.mapping = mapping
     this.comment = comment
@@ -266,7 +266,7 @@ export const createRelationships = (table: Table, tables: Table[]) =>
       // TODO kind: one-to-one
       return new SingleRelationship({
         table,
-        kind: 'many-to-one',
+        component: 'many-to-one',
         ...flatRelationship
       })
     else {
@@ -293,7 +293,7 @@ export const createRelationships = (table: Table, tables: Table[]) =>
           return new ManyToManyRelationship({
             table,
             name: flatRelationship.name,
-            kind: 'many-to-many', // TODO nested-many-to-many as well
+            component: 'many-to-many', // TODO nested-many-to-many as well
             target: flatTargetRelationship.target,
             through,
             mapping: flatTargetRelationship.mapping,
@@ -305,7 +305,7 @@ export const createRelationships = (table: Table, tables: Table[]) =>
 
       return new OneToManyRelationship({
         table,
-        kind: 'one-to-many',
+        component: 'one-to-many',
         ...flatRelationship,
         target: through
       })

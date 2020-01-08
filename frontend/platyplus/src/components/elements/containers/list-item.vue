@@ -12,7 +12,6 @@ import {
 } from '../../../composables/metadata'
 
 export default createComponent({
-  name: 'HasuraTableElement',
   props: {
     ...elementProps
   },

@@ -4,21 +4,11 @@ div
   slot(name="field" :table="table" :property="property" :element="element")
     q-field(:label="$t(table +'.labels.'+property)" :key="property" :name="property" stack-label)
       template(v-slot:control)
-        h-chip(v-if="value" :table="table" :element="value")
+        q-toggle(v-model="value" disable)
   slot(name="after-field" :table="table" :property="property" :element="element")
 </template>
 
 <script lang="ts">
-// TODO :table="property.reference"
-import { createComponent } from '@vue/composition-api'
-import Chip from '../../containers/Chip.vue'
 import { fieldComponent } from '../../../../composables/metadata'
-
-export default createComponent({
-  ...fieldComponent,
-  name: 'ReadManyToOneField',
-  components: {
-    'h-chip': Chip
-  }
-})
+export default fieldComponent()
 </script>

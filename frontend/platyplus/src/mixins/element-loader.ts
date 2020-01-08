@@ -89,11 +89,8 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
 
   protected componentName(property: GenericField, prefix: string) {
     // TODO allow custom component name per property
-    const possibleComponentName = `${prefix}-${property.kind}`
-    if (get(this.$options.components as ObjectMap, possibleComponentName)) {
-      return possibleComponentName
-    }
-    // TODO or else?
+    return `${prefix}-${property.component}`
+    // TODO check if the component is registered, and if not, emit a warning
   }
 
   /**

@@ -21,7 +21,7 @@ export const useFieldValue = (props: ExtractPropTypes<typeof fieldProps>) => {
   const propertyMetadata = useFieldMetadata(props)
   return computed(() => {
     const value = props.element[props.property]
-    if (value && propertyMetadata.value?.kind === 'many-to-many') {
+    if (value && propertyMetadata.value?.component === 'many-to-many') {
       const relationship = propertyMetadata.value as Partial<
         ManyToManyRelationship
       >
@@ -34,10 +34,14 @@ export const useFieldValue = (props: ExtractPropTypes<typeof fieldProps>) => {
   })
 }
 
-export const fieldComponent = createComponent({
-  props: { ...fieldProps },
-  setup(props) {
-    const value = useFieldValue(props)
-    return { value }
-  }
-})
+// TODO generic <T> that gives the field type. T by default is GenericField
+// TODO -> export const fieldComponent = <T = GenericField>() => createComponent(... useFieldValue<T>(props) ...)
+// TODO and then use fieldComponent<ManyToManyRelationship>()
+export const fieldComponent = () =>
+  createComponent({
+    props: { ...fieldProps },
+    setup(props) {
+      const value = useFieldValue(props)
+      return { value }
+    }
+  })

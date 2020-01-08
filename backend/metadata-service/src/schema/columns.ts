@@ -25,6 +25,12 @@ const graphQLTypes = new Map([
 ])
 const graphQLType = (type: string) => graphQLTypes.get(type) || 'String'
 
+const componentKinds = new Map([
+  ['uuid', 'text'],
+  ['text', 'text'],
+  ['bool', 'boolean']
+])
+const componentKind = (type: string) => componentKinds.get(type) || 'text'
 @ObjectType({
   implements: GenericField,
   description: 'Columns of an SQL table'
@@ -34,7 +40,7 @@ export class Column extends GenericField {
     table: Table,
     { name, type, domain, default: defaultValue, nullable }: RawColumn
   ) {
-    super(table, name, type) // TODO revoir component kind
+    super(table, name, componentKind(type))
     this.type = graphQLType(type)
     this.domain = domain
     this.default = defaultValue

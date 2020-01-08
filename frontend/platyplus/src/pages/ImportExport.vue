@@ -16,7 +16,6 @@ import { createComponent } from '@vue/composition-api'
 import { setTitle } from '../composables/navigation'
 
 export default createComponent({
-  name: 'ImportExport',
   setup() {
     setTitle('import-export')
   }

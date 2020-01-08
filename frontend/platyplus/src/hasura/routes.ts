@@ -1,8 +1,8 @@
 import { RouteConfig } from 'vue-router'
 
-import CollectionLoader from '../components/collections/Loader.vue'
-import ReadElementDispatcher from '../components/elements/read/Dispatcher.vue'
-import EditElementDispatcher from '../components/elements/edit/Dispatcher.vue'
+import CollectionLoader from '../components/collections/collection-loader.vue'
+import ReadElementDispatcher from '../components/elements/read/read-element-dispatcher.vue'
+import EditElementDispatcher from '../components/elements/edit/edit-element-dispatcher.vue'
 import PageLayout from 'layouts/Page.vue'
 import UserLayout from 'layouts/user/Layout.vue'
 import UserHeader from 'layouts/user/Header.vue'

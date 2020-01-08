@@ -24,11 +24,11 @@ export abstract class GenericField implements GraphQLNode {
   name: string
 
   @Field()
-  kind: string
+  component: string
 
-  constructor(table: Table, name: string, kind: string) {
+  constructor(table: Table, name: string, component: string) {
     this.table = table
     this.name = name
-    this.kind = kind
+    this.component = component
   }
 }

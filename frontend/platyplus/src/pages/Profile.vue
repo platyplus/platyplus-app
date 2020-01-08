@@ -10,7 +10,6 @@ import { createComponent } from '@vue/composition-api'
 import { setTitle } from '../composables/navigation'
 
 export default createComponent({
-  name: 'Profile',
   setup() {
     setTitle('user.profile.title')
   }

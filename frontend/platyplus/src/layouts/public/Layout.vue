@@ -5,13 +5,3 @@ q-layout(view="lHh Lpr lFf")
   q-page-container
     router-view
 </template>
-
-<script lang="ts">
-import { createComponent } from '@vue/composition-api'
-
-export default createComponent({
-  name: 'PublicLayout'
-})
-</script>
-
-<style></style>

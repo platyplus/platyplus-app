@@ -28,7 +28,7 @@ query tableQuery($id: String!) {
     fields {
       id
       name
-      kind
+      component
       ... on Column {
         ...columnFragment
       }

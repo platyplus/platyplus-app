@@ -3,6 +3,8 @@ import { Route } from 'vue-router'
 import { mapGetters } from 'vuex'
 import { configure } from 'vee-validate'
 import VueCompositionApi from '@vue/composition-api'
+import upperFirst from 'lodash/upperFirst'
+import camelCase from 'lodash/camelCase'
 
 import { ErrorsPlugin } from '@platyplus/errors'
 
@@ -13,10 +15,15 @@ import { ApolloPlugin } from '../modules/apollo'
 
 import { RouterMixin } from '../mixins'
 import { QuasarBootOptions } from '../types/quasar'
-import MenuItem from '../components/MenuItem.vue'
 import messages from '../i18n'
 import { getConfig } from '../helpers'
 import { MetadataPlugin } from '../modules/metadata'
+
+const requireComponent = require.context(
+  '../components',
+  true, // sub-directories
+  /(-?[a-z]*)\.(vue)$/ // any camel-case .vue file
+)
 
 export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
   Vue.use(VueCompositionApi)
@@ -63,8 +70,22 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
   })
 
   Vue.mixin(Mixins(RouterMixin))
-
-  Vue.component('p-menu-item', MenuItem)
+  // * Register all components from the ../components directory
+  // * See https://vuejs.org/v2/guide/components-registration.html
+  requireComponent.keys().forEach(fileName => {
+    const componentConfig = requireComponent(fileName)
+    const componentName =
+      'H' +
+      upperFirst(
+        camelCase(
+          fileName
+            .split('/')
+            .pop()
+            ?.replace(/\.\w+$/, '')
+        )
+      )
+    Vue.component(componentName, componentConfig.default || componentConfig)
+  })
 }
 
 declare module 'vue/types/vue' {

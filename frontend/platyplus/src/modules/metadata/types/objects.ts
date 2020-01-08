@@ -18,7 +18,7 @@ export interface Column extends GenericField {
   __typename?: 'Column'
   id: Scalars['ID']
   name: Scalars['String']
-  kind: Scalars['String']
+  component: Scalars['String']
   type: Scalars['String']
   domain?: Maybe<Scalars['String']>
   nullable: Scalars['Boolean']
@@ -40,7 +40,7 @@ export interface ColumnMapping {
 export interface GenericField {
   id: Scalars['ID']
   name: Scalars['String']
-  kind: Scalars['String']
+  component: Scalars['String']
 }
 
 export interface Label {
@@ -52,7 +52,7 @@ export interface ManyToManyRelationship extends Relationship, GenericField {
   __typename?: 'ManyToManyRelationship'
   id: Scalars['ID']
   name: Scalars['String']
-  kind: Scalars['String']
+  component: Scalars['String']
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
@@ -60,11 +60,11 @@ export interface ManyToManyRelationship extends Relationship, GenericField {
   throughMapping: Array<ColumnMapping>
 }
 
-export interface ManyToOneRelationship extends Relationship, GenericField {
-  __typename?: 'ManyToOneRelationship'
+export interface OneToManyRelationship extends Relationship, GenericField {
+  __typename?: 'OneToManyRelationship'
   id: Scalars['ID']
   name: Scalars['String']
-  kind: Scalars['String']
+  component: Scalars['String']
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
@@ -90,7 +90,7 @@ export interface QueryMetadataTableArgs {
 export interface Relationship {
   id: Scalars['ID']
   name: Scalars['String']
-  kind: Scalars['String']
+  component: Scalars['String']
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
@@ -108,7 +108,7 @@ export interface SingleRelationship extends Relationship, GenericField {
   __typename?: 'SingleRelationship'
   id: Scalars['ID']
   name: Scalars['String']
-  kind: Scalars['String']
+  component: Scalars['String']
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
@@ -131,8 +131,8 @@ export interface Table {
   singleRelationships: Array<SingleRelationship>
   /** List of array relationships (OneToMany and ManyToMany) defined for the table. */
   multipleRelationships: Array<Relationship>
-  /** List of ManyToOne relationships defined for the table. */
-  manyToOneRelationships: Array<ManyToOneRelationship>
+  /** List of OneToMany relationships defined for the table. */
+  manyToOneRelationships: Array<OneToManyRelationship>
   /** List of ManyToMany relationships defined for the table. */
   manyToManyRelationships: Array<ManyToManyRelationship>
   /**

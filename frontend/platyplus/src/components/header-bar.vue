@@ -19,8 +19,6 @@ import { useTitle } from '../composables/navigation'
 import { locales } from '../modules/i18n'
 
 export default createComponent({
-  name: 'HeaderBar',
-
   setup() {
     const translate = useTranslator()
     const locale = useLocale()

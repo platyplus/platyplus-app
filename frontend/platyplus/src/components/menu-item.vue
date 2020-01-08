@@ -10,7 +10,6 @@
 import { createComponent } from '@vue/composition-api'
 
 export default createComponent({
-  name: 'MenuItem',
   props: {
     icon: String,
     to: String

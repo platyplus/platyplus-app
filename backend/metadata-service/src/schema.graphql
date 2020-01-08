@@ -7,7 +7,7 @@
 type Column implements GenericField {
   id: ID!
   name: String!
-  kind: String!
+  component: String!
   type: String!
   domain: String
   nullable: Boolean!
@@ -28,7 +28,7 @@ type ColumnMapping {
 interface GenericField {
   id: ID!
   name: String!
-  kind: String!
+  component: String!
 }
 
 type Label {
@@ -38,7 +38,7 @@ type Label {
 type ManyToManyRelationship implements Relationship & GenericField {
   id: ID!
   name: String!
-  kind: String!
+  component: String!
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
@@ -49,7 +49,7 @@ type ManyToManyRelationship implements Relationship & GenericField {
 type OneToManyRelationship implements Relationship & GenericField {
   id: ID!
   name: String!
-  kind: String!
+  component: String!
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
@@ -66,7 +66,7 @@ type Query {
 interface Relationship {
   id: ID!
   name: String!
-  kind: String!
+  component: String!
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
@@ -82,7 +82,7 @@ type Rule {
 type SingleRelationship implements Relationship & GenericField {
   id: ID!
   name: String!
-  kind: String!
+  component: String!
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!

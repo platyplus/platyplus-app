@@ -18,7 +18,7 @@ const routes: RouteConfig[] = [
         path: '',
         components: {
           default: () => import('pages/PublicIndex.vue'),
-          header: () => import('components/HeaderBar.vue')
+          header: () => import('components/header-bar.vue')
         }
       },
       {
@@ -29,7 +29,7 @@ const routes: RouteConfig[] = [
             path: 'signin',
             components: {
               default: () => import('pages/SignIn.vue'),
-              header: () => import('components/HeaderBar.vue')
+              header: () => import('components/header-bar.vue')
             }
           }
         ]

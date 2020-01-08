@@ -4,13 +4,12 @@ div
   slot(name="field" :table="table" :property="property" :element="element")
     q-field(:label="$t(table +'.labels.'+property)" :key="property" :name="property" stack-label)
       template(v-slot:control)
-        q-toggle(v-model="value" disable)
+        h-collection-dispatcher(type="chips" :table="table" :list="value")
   slot(name="after-field" :table="table" :property="property" :element="element")
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+// TODO :table="property.through.reference"
 import { fieldComponent } from '../../../../composables/metadata'
-
-export default createComponent({ ...fieldComponent, name: 'ReadBooleanField' })
+export default fieldComponent()
 </script>

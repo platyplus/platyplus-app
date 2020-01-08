@@ -9,18 +9,10 @@ div(v-else)
 </template>
 
 <script lang="ts">
-import ListItem from '../../elements/containers/ListItem.vue'
-import Chip from '../../elements/containers/Chip.vue'
-
 import { createComponent } from '@vue/composition-api'
 import { listProps } from '../../../composables/metadata'
 
 export default createComponent({
-  name: 'Chips',
-  components: {
-    'h-list-item': ListItem,
-    'h-chip': Chip
-  },
   props: {
     ...listProps
   }

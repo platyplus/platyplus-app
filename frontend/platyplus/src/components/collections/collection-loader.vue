@@ -6,16 +6,11 @@ div
 </template>
 
 <script lang="ts">
-import Dispatcher from './Dispatcher.vue'
 import { createComponent } from '@vue/composition-api'
 import { setTitle } from '../../composables/navigation'
 import { tableProps, useMetadata, useList } from '../../composables/metadata'
 
 export default createComponent({
-  name: 'HeaderBar',
-  components: {
-    'h-collection-dispatcher': Dispatcher
-  },
   props: {
     ...tableProps
   },

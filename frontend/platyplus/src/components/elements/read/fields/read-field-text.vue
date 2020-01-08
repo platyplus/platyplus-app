@@ -9,11 +9,6 @@ div
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
 import { fieldComponent } from '../../../../composables/metadata'
-
-export default createComponent({
-  ...fieldComponent,
-  name: 'ReadTextField'
-})
+export default fieldComponent()
 </script>

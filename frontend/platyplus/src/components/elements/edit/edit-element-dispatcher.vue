@@ -23,26 +23,10 @@ q-form(autofocus @reset="reset" @submit="submit")
 import { Mixins, Component } from 'vue-property-decorator'
 import { ValidationObserver } from 'vee-validate'
 import { FormManagerMixin } from '../../../mixins'
-import Text from './fields/Text.vue'
-import BooleanField from './fields/Boolean.vue'
-import ManyToManyField from './fields/ManyToMany.vue'
-import Select from './fields/Select.vue'
-import SelectMultiple from './fields/SelectMultiple.vue'
 
 @Component({
   components: {
-    ValidationObserver,
-    'h-edit-field-text': Text,
-    'h-edit-field-many-to-many': ManyToManyField,
-    'h-edit-field-nested-many-to-many': ManyToManyField, // TODO
-    'h-edit-field-complete-many-to-many': ManyToManyField, // TODO
-    'h-edit-field-one-to-many': SelectMultiple,
-    'h-edit-field-nested-one-to-many': SelectMultiple, // TODO
-    'h-edit-field-complete-one-to-many': SelectMultiple, // TODO
-    'h-edit-field-many-to-one': Select,
-    'h-edit-field-nested-many-to-one': Select, // TODO
-    'h-edit-field-complete-many-to-one': Select, // TODO
-    'h-edit-field-bool': BooleanField
+    ValidationObserver
   }
 })
 export default class EditElementDispatcher extends Mixins(FormManagerMixin) {
