@@ -2,7 +2,7 @@
 div
   slot(name="before-fields" :element="element")
   slot(name="fields" :element="element")
-    component(v-for="property in fields('select')"
+    component(v-for="property in metadata.fields"
       :key="'field-'+property.name"
       :is="componentName(property, 'h-read-field')"
       :property="property.name"
@@ -20,11 +20,11 @@ div
 import { Mixins, Component } from 'vue-property-decorator'
 import { ElementLoaderMixin } from '../../../mixins'
 
-Component.registerHooks([
-  'beforeRouteEnter',
-  'beforeRouteLeave',
-  'beforeRouteUpdate'
-])
+// Component.registerHooks([
+//   'beforeRouteEnter',
+//   'beforeRouteLeave',
+//   'beforeRouteUpdate'
+// ])
 
 @Component
 export default class ReadElementDispatcher extends Mixins(ElementLoaderMixin) {}

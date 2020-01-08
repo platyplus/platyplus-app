@@ -87,10 +87,9 @@ export class ElementLoaderMixin extends Mixins(ElementMixin) {
       })
   }
 
-  protected componentName(property: GenericField, prefix: string) {
-    // TODO allow custom component name per property
-    return `${prefix}-${property.component}`
-    // TODO check if the component is registered, and if not, emit a warning
+  protected componentName({ component }: GenericField, prefix: string) {
+    if (component === 'hidden') return null
+    return `${prefix}-${component}`
   }
 
   /**

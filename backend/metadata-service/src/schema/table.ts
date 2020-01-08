@@ -121,7 +121,7 @@ export class Table implements GraphQLNode {
   get fields() {
     // TODO sort the fields according to an order defined somewhere in the platyplus database schema
     // TODO relationships should implement genericfield
-    return [...this.idFields, ...this.basicFields, ...this.relationships]
+    return [...this.basicFields, ...this.relationships]
   }
 
   private _relationships: Relationship[]

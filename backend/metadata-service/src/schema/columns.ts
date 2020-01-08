@@ -21,16 +21,23 @@ export interface RawColumn {
 const graphQLTypes = new Map([
   ['uuid', 'uuid'],
   ['text', 'String'],
-  ['bool', 'Boolean']
+  ['bool', 'Boolean'],
+  ['ltree', 'String']
 ])
-const graphQLType = (type: string) => graphQLTypes.get(type) || 'String'
+const graphQLType = (type: string) => graphQLTypes.get(type) || type
 
 const componentKinds = new Map([
-  ['uuid', 'text'],
+  ['uuid', 'text'], // ? Keep that way ?
   ['text', 'text'],
-  ['bool', 'boolean']
+  ['bool', 'boolean'],
+  ['timestamptz', 'datetime'],
+  ['ltree', 'text']
 ])
-const componentKind = (type: string) => componentKinds.get(type) || 'text'
+
+const componentKind = ({ name, type }: RawColumn) => {
+  if (['created_at', 'updated_at'].includes(name)) return 'hidden'
+  return componentKinds.get(type) || type
+}
 @ObjectType({
   implements: GenericField,
   description: 'Columns of an SQL table'
@@ -40,7 +47,11 @@ export class Column extends GenericField {
     table: Table,
     { name, type, domain, default: defaultValue, nullable }: RawColumn
   ) {
-    super(table, name, componentKind(type))
+    super(
+      table,
+      name,
+      componentKind({ name, type, domain, default: defaultValue, nullable })
+    )
     this.type = graphQLType(type)
     this.domain = domain
     this.default = defaultValue
