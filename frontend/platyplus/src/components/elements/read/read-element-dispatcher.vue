@@ -11,7 +11,7 @@ div
   slot(name="after-fields" :element="element")
   slot(name="before-actions" :element="element")
   slot(name="actions" :element="element")
-    q-btn(v-if="$can('update', element)" :label="translate('edit')" @click="edit()")
+    q-btn(v-if="edit.permission" :label="edit.label.value" @click="edit.action()")
     q-btn(v-if="remove.permission" :label="remove.label.value" @click="remove.action()")
   slot(name="after-actions" :element="element")
 </template>
@@ -32,6 +32,7 @@ import {
   useElementId,
   useElementLoader,
   useDeleteElement,
+  useEditElement,
   elementLabel
 } from '../../../composables/metadata'
 import { useStore } from '../../../store'
@@ -45,6 +46,7 @@ export default createComponent({
     const element = useElementLoader(props, useElementId(props))
     const componentName = useComponentName('read')
     const translate = useTranslator()
+    const edit = useEditElement(element)
     const remove = useDeleteElement(element)
     const store = useStore()
     watch(() => {
@@ -53,7 +55,7 @@ export default createComponent({
         translate: false
       })
     })
-    return { metadata, element, componentName, translate, remove }
+    return { metadata, element, componentName, translate, edit, remove }
   }
 })
 </script>

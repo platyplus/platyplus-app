@@ -1,5 +1,5 @@
 <template lang="pug">
-q-item(v-if="element" :to="readLink" exact)
+q-item(v-if="element" :clickable="true" @click="read()" exact)
     q-item-section {{label}}
 div(v-else) Element does not exist
 </template>
@@ -7,7 +7,8 @@ div(v-else) Element does not exist
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 import {
-  useElementContainer,
+  useReadElement,
+  useElementLabel,
   elementProps
 } from '../../../composables/metadata'
 
@@ -16,8 +17,9 @@ export default createComponent({
     ...elementProps
   },
   setup({ element }) {
-    const { label, readLink } = useElementContainer(element)
-    return { label, readLink }
+    const { action: read } = useReadElement(element)
+    const label = useElementLabel(element)
+    return { read, label }
   }
 })
 </script>

@@ -1,28 +1,46 @@
-import { useElementReadLink } from './navigation'
-import { GenericField } from '../../modules/metadata/types/objects'
+import { GenericField, Table } from '../../modules/metadata/types/objects'
 import { RefOr, unwrap } from '../common'
 import { DataObject } from '../../modules/metadata/types/queries'
 import { tableMetadata } from '../../modules/metadata'
 import { template } from 'lodash'
 import { computed } from '@vue/composition-api'
+import { pick } from 'lodash'
+
+type WrappedData = RefOr<DataObject>
 
 // ? What is the typename given by Hasura when there are multiple schemas?
-export const elementMetadata = (element: RefOr<DataObject>) => {
+export const elementMetadata = (element: WrappedData) => {
   const tableName = unwrap(element).__typename
   if (tableName) return tableMetadata(unwrap(element).__typename)
 }
 
-export const elementLabel = (element: RefOr<DataObject>) =>
+export const elementLabel = (element: WrappedData) =>
   template(elementMetadata(element)?.label?.template)(unwrap(element))
 
-export const useElementLabel = (element: RefOr<DataObject>) =>
-  computed(() => elementLabel(element))
-
-export const useElementContainer = (element: RefOr<DataObject>) => {
-  const readLink = useElementReadLink(element)
-  const label = useElementLabel(element)
-  return { readLink, label }
+// * Picks the id fields from an object based on a table metadata
+export const pickId = (data: WrappedData, metadata?: RefOr<Partial<Table>>) => {
+  const md = elementMetadata(data) || unwrap(metadata)
+  if (md?.idFields)
+    return pick(
+      unwrap(data),
+      unwrap(md).idFields?.map(field => field.name) || []
+    ) as DataObject
+  else return {} // as DataObject
 }
+
+export const elementLink = (
+  element: WrappedData,
+  action: 'read' | 'edit' = 'read'
+) => {
+  const metadata = elementMetadata(element)
+  return {
+    path: '/data/' + metadata?.name + '/' + action,
+    query: pickId(element)
+  }
+}
+
+export const useElementLabel = (element: WrappedData) =>
+  computed(() => elementLabel(element))
 
 export const useComponentName = (action: 'read' | 'edit') => (
   property: RefOr<GenericField>

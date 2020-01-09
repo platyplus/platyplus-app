@@ -1,5 +1,5 @@
 <template lang="pug">
-q-chip(:to="readLink")
+q-chip(:clickable="true" @click="read()")
     div {{label}}
 </template>
 
@@ -7,7 +7,8 @@ q-chip(:to="readLink")
 import { createComponent } from '@vue/composition-api'
 import {
   elementProps,
-  useElementContainer
+  useReadElement,
+  useElementLabel
 } from '../../../composables/metadata'
 
 export default createComponent({
@@ -15,8 +16,9 @@ export default createComponent({
     ...elementProps
   },
   setup({ element }) {
-    const { label, readLink } = useElementContainer(element)
-    return { label, readLink }
+    const { action: read } = useReadElement(element)
+    const label = useElementLabel(element)
+    return { read, label }
   }
 })
 </script>
