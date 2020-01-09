@@ -1,29 +1,35 @@
 import { useTranslator } from '../i18n'
 import { tableProps } from './props'
-import { ExtractPropTypes } from '@vue/composition-api/dist/component/componentProps'
-import { label } from '../../modules/metadata'
-import { useMetadata } from './table'
 import { useQuasar } from '../../modules/quasar'
-import { Ref } from '@vue/composition-api'
+import { Ref, computed } from '@vue/composition-api'
 import { useRouter } from '../../router'
 import { useCanDelete } from './permissions'
 import { DataObject } from '../../modules/metadata/types/queries'
+import { elementLabel, elementMetadata } from './element'
 
-// ? Move to a 'navigation' submodule ?
-export const useDeleteElement = (
-  { table, schema }: ExtractPropTypes<typeof tableProps>,
-  element: Ref<DataObject>
+type ActionComposable<T, U> = (
+  data: Ref<U>
 ) => {
+  action: () => void
+  permission: Readonly<Ref<boolean>>
+  label?: Readonly<Ref<string>>
+}
+
+// ? Move to a 'navigation' composable submodule ?
+export const useDeleteElement: ActionComposable<
+  typeof tableProps,
+  DataObject
+> = element => {
   const translate = useTranslator()
   const quasar = useQuasar()
-  const metadata = useMetadata({ table, schema })
   const router = useRouter()
-  const canDelete = useCanDelete(element)
-
-  return () => {
+  const permission = useCanDelete(element)
+  const label = computed(() => translate('remove'))
+  const action = () => {
+    const table = elementMetadata(element)
     const message = translate('delete.label', {
-      tableLabel: translate(`${table}.label`),
-      label: label(metadata.value, element.value)
+      tableLabel: translate(`${table?.name}.label`),
+      label: elementLabel(element.value)
     })
     quasar
       .dialog({
@@ -34,7 +40,7 @@ export const useDeleteElement = (
       })
       .onOk(async () => {
         // TODO recode
-        if (canDelete.value) {
+        if (permission.value) {
           console.log('TODO recode')
           router.replace(`/data/${table}`)
         }
@@ -49,4 +55,5 @@ export const useDeleteElement = (
         //   }
       })
   }
+  return { label, action, permission }
 }

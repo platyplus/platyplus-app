@@ -12,7 +12,7 @@ div
   slot(name="before-actions" :element="element")
   slot(name="actions" :element="element")
     q-btn(v-if="$can('update', element)" :label="translate('edit')" @click="edit()")
-    q-btn(v-if="canDelete" :label="translate('remove')" @click="remove()")
+    q-btn(v-if="remove.permission" :label="remove.label.value" @click="remove.action()")
   slot(name="after-actions" :element="element")
 </template>
 
@@ -31,11 +31,10 @@ import {
   useComponentName,
   useElementId,
   useElementLoader,
-  useCanDelete,
-  useDeleteElement
+  useDeleteElement,
+  elementLabel
 } from '../../../composables/metadata'
 import { useStore } from '../../../store'
-import { label } from '../../../modules/metadata'
 
 export default createComponent({
   props: {
@@ -46,16 +45,15 @@ export default createComponent({
     const element = useElementLoader(props, useElementId(props))
     const componentName = useComponentName('read')
     const translate = useTranslator()
-    const canDelete = useCanDelete(element)
-    const remove = useDeleteElement(props, element)
+    const remove = useDeleteElement(element)
     const store = useStore()
     watch(() => {
       store.commit('navigation/setTitle', {
-        label: label(metadata.value, element.value),
+        label: elementLabel(element.value),
         translate: false
       })
     })
-    return { metadata, element, componentName, translate, remove, canDelete }
+    return { metadata, element, componentName, translate, remove }
   }
 })
 </script>

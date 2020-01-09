@@ -14,8 +14,8 @@ export default createComponent({
   props: {
     ...elementProps
   },
-  setup(props) {
-    const { label, readLink } = useElementContainer(props)
+  setup({ element }) {
+    const { label, readLink } = useElementContainer(element)
     return { label, readLink }
   }
 })

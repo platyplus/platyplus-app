@@ -1,23 +1,21 @@
 import { computed } from '@vue/composition-api'
-import { Table } from '../../modules/metadata/types/objects'
-import { ObjectMap } from '../../types/common'
+import { RefOr, unwrap } from '../common'
+import { elementMetadata } from './element'
+import { DataObject } from '../../modules/metadata/types/queries'
 
-// TODO simplify when the metadata service uses the table name as __typename
-const elementLink = (
-  metadata: Partial<Table>,
-  element: ObjectMap,
-  action = 'read'
-) => {
+const elementLink = (element: RefOr<DataObject>, action = 'read') => {
+  const metadata = elementMetadata(element)
   return {
-    path: '/data/' + metadata.name + '/' + action,
-    query: metadata.idFields?.reduce(
-      (aggr, field) => ({ ...aggr, [field.name]: element[field.name] }),
+    path: '/data/' + metadata?.name + '/' + action,
+    query: metadata?.idFields?.reduce(
+      (aggr, field) => ({
+        ...aggr,
+        [field.name]: unwrap(element)[field.name]
+      }),
       {}
     )
   }
 }
 
-export const useElementReadLink = (
-  metadata: Partial<Table>,
-  element: ObjectMap
-) => computed(() => elementLink(metadata, element))
+export const useElementReadLink = (element: RefOr<DataObject>) =>
+  computed(() => elementLink(element))

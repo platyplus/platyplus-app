@@ -1,14 +1,7 @@
-import template from 'lodash/template'
-
 import { ObjectMap, GenericObject, ObjectArray } from '../../types/common'
 
-import { Table } from './types/objects'
 import { tableMetadata } from './getters'
-
-export const label = (table: Partial<Table>, element: ObjectMap) => {
-  const compiledTemplate = template(table.label?.template)
-  return compiledTemplate(element)
-}
+import { elementLabel } from '../../composables/metadata'
 
 const uniqueGraphQlId = (object: ObjectMap) => {
   if (typeof object.__typename === 'string') {
@@ -43,17 +36,15 @@ const uniqueGraphQlId = (object: ObjectMap) => {
  * @param property
  */
 export const elementAsOption = (
-  element?: GenericObject,
-  table?: string,
-  schema = 'public'
+  element?: GenericObject
 ): GenericObject | undefined => {
   if (Array.isArray(element)) {
-    return element.map(item => elementAsOption(item, table)) as ObjectArray
-  } else if (element && typeof element === 'object' && table) {
+    return element.map(item => elementAsOption(item)) as ObjectArray
+  } else if (element && typeof element === 'object') {
     return {
       ...element,
       _id: uniqueGraphQlId(element),
-      _label: label(tableMetadata(table, schema), element)
+      _label: elementLabel(element)
     }
   }
   return element

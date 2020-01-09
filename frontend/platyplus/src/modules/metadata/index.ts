@@ -8,7 +8,7 @@ import { tableMetadata } from './getters'
 import { Table } from './types/objects'
 
 export { tableNamesList, tableMetadata, tablesMetadata } from './getters'
-export { label, elementAsOption, optionAsElement } from './helpers'
+export { elementAsOption, optionAsElement } from './helpers'
 
 export interface MetadataOptions {
   store: Store<{}>
