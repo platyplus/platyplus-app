@@ -5,12 +5,11 @@ import { tableMetadata } from '../../modules/metadata'
 import { template } from 'lodash'
 import { computed } from '@vue/composition-api'
 import { pick } from 'lodash'
-
-type WrappedData = RefOr<DataObject>
+import { WrappedData } from './common'
 
 // ? What is the typename given by Hasura when there are multiple schemas?
 export const elementMetadata = (element: WrappedData) => {
-  const tableName = unwrap(element).__typename
+  const tableName = unwrap(element)?.__typename
   if (tableName) return tableMetadata(unwrap(element).__typename)
 }
 

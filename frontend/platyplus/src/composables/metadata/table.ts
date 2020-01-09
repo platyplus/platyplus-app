@@ -5,11 +5,8 @@ import { tableProps } from './props'
 import { useRouterQuery } from '../router'
 import { pickId } from './element'
 
-export const useMetadata = ({
-  table,
-  schema
-}: ExtractPropTypes<typeof tableProps>) =>
-  computed(() => tableMetadata(table, schema))
+export const useMetadata = (props: ExtractPropTypes<typeof tableProps>) =>
+  computed(() => tableMetadata(props.table, props.schema))
 
 // * Gets the element Id from the route query
 export const useElementId = (props: ExtractPropTypes<typeof tableProps>) => {

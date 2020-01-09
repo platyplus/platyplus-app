@@ -7,13 +7,18 @@ import { tableProps } from './props'
 import { useMetadata } from './table'
 import gql from 'graphql-tag'
 import { ObjectMap } from '../../modules/authentication/types'
-import { Ref } from '@vue/composition-api'
+import { Ref, computed } from '@vue/composition-api'
 
 // TODO rename to useListLoader
 export const useList = (props: ExtractPropTypes<typeof tableProps>) => {
   const metadata = useMetadata(props)
-  const { result } = useQuery(gql(metadata.value.listQuery))
-  return useResult(result, [], (data: Data) => data.result.nodes)
+  return computed(() => {
+    const { result } = useQuery(gql(metadata.value.listQuery), null, () => ({
+      // enabled: metadata.value.canSelect
+    }))
+    // return useResult(result, [], (data: Data) => data.result.nodes).value
+    return result.value?.result?.nodes || []
+  })
 }
 
 export const useElementLoader = (
@@ -21,6 +26,14 @@ export const useElementLoader = (
   id: Readonly<Ref<Readonly<ObjectMap> | undefined>>
 ) => {
   const metadata = useMetadata(props)
-  const { result } = useQuery(gql(metadata.value.elementQuery), id?.value, {})
-  return useResult(result, {}, data => data.result)
+  return computed(() => {
+    const { result } = useQuery<Data>(
+      gql(metadata.value.elementQuery),
+      id?.value,
+      () => ({
+        // enabled: metadata.value.canSelect
+      })
+    )
+    return result.value?.result || {}
+  })
 }
