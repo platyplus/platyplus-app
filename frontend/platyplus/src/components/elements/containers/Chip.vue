@@ -15,9 +15,9 @@ export default createComponent({
   props: {
     ...elementProps
   },
-  setup({ element }) {
-    const { action: read } = useReadElement(element)
-    const label = useElementLabel(element)
+  setup(props) {
+    const { action: read } = useReadElement(props.element) // TODO arg: reactive props
+    const label = useElementLabel(props.element) // TODO arg: reactive props
     return { read, label }
   }
 })

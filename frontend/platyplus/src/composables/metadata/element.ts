@@ -6,6 +6,7 @@ import { template } from 'lodash'
 import { computed } from '@vue/composition-api'
 import { pick } from 'lodash'
 import { WrappedData } from './common'
+import { Location } from 'vue-router'
 
 // ? What is the typename given by Hasura when there are multiple schemas?
 export const elementMetadata = (element: WrappedData) => {
@@ -32,10 +33,10 @@ export const elementLink = (
   action: 'read' | 'edit' = 'read'
 ) => {
   const metadata = elementMetadata(element)
-  return {
+  return computed<Location>(() => ({
     path: '/data/' + metadata?.name + '/' + action,
     query: pickId(element)
-  }
+  }))
 }
 
 export const useElementLabel = (element: WrappedData) =>

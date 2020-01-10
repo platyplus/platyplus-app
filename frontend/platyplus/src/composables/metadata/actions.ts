@@ -61,7 +61,7 @@ export const useEditElement: ActionComposable<DataObject> = element => {
   const router = useRouter()
   const permission = useCanEdit(element)
   const label = computed(() => translate('edit'))
-  const action = () => router.replace(elementLink(element, 'edit'))
+  const action = () => router.replace(elementLink(element, 'edit').value)
   return { permission, label, action }
 }
 
@@ -70,6 +70,6 @@ export const useReadElement: ActionComposable<DataObject> = element => {
   const router = useRouter()
   const permission = ref(true)
   const label = computed(() => translate('read'))
-  const action = () => router.push(elementLink(element, 'read'))
+  const action = () => router.push(elementLink(element, 'read').value)
   return { permission, label, action }
 }

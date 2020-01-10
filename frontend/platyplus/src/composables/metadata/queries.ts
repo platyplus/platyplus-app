@@ -1,4 +1,4 @@
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import { ExtractPropTypes } from '@vue/composition-api/dist/component/componentProps'
 
 import { Data } from '../../modules/metadata/types/queries'
