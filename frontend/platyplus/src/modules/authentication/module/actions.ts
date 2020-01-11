@@ -65,7 +65,7 @@ export const actions: ActionTree<UserState, {}> = {
 
   setLocale: {
     root: true,
-    handler: async ({ getters }, locale) => {
+    handler: async ({ getters, commit }, locale) => {
       const profile = getters['profile']
       if (profile.locale && profile.locale !== locale) {
         // * update the locale through a mutation
@@ -76,6 +76,7 @@ export const actions: ActionTree<UserState, {}> = {
             locale
           }
         })
+        commit('setLocale', locale)
       }
     }
   },

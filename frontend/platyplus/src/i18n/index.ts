@@ -1,4 +1,4 @@
-import en from './en'
-import fr from './fr'
+import en from './en.json'
+import fr from './fr.json'
 
 export default { 'en-us': en, fr }

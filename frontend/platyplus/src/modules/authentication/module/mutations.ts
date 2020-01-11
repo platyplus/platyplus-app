@@ -49,5 +49,9 @@ export const mutations: MutationTree<UserState> = {
 
   setProfile(state, profile) {
     state.profile = profile
+  },
+
+  setLocale(state, locale) {
+    if (state.profile) state.profile.locale = locale
   }
 }
