@@ -39,12 +39,12 @@ export default class SelectMultiple extends Mixins(
   FieldEditMixin,
   FieldOptionsMixin
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canRemove(option: ObjectMap) {
     // TODO: on peut supprimer un org_unit.child quand parent_id est modifiable et nullable
     // TODO: bloquer l'icône 'x' dans le chip ne suffit pas: il faut aussi désactiver la déselection dans le dropdown
     // TODO recode
     // return this.$can('update', optionAsElement(option), 'parent_id')
-    console.log(option)
     return true
   }
 }

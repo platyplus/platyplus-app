@@ -24,11 +24,12 @@
     "url": "https://github.com/platyplus/platyplus/issues"
   },
   "devDependencies": {
-    "@vuepress/plugin-active-header-links": "1.2.0",
-    "@vuepress/plugin-back-to-top": "1.2.0",
-    "@vuepress/plugin-google-analytics": "1.2.0",
-    "@vuepress/plugin-nprogress": "1.2.0",
-    "@vuepress/plugin-pwa": "1.2.0",
-    "vuepress": "1.2.0"
+    "@vuepress/plugin-active-header-links": "^1.2.0",
+    "@vuepress/plugin-back-to-top": "^1.2.0",
+    "@vuepress/plugin-google-analytics": "^1.2.0",
+    "@vuepress/plugin-nprogress": "^1.2.0",
+    "@vuepress/plugin-pwa": "^1.2.0",
+    "cache-loader": "^4.1.0",
+    "vuepress": "^1.2.0"
   }
 }

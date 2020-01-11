@@ -18,7 +18,10 @@ export default createComponent({
   props: { ...fieldProps },
   setup(props) {
     const value = computed(() =>
-      date.formatDate(props.element[props.property], 'DD/MM/YYYY HH:mm:ss')
+      date.formatDate(
+        props.element[props.property] as string,
+        'DD/MM/YYYY HH:mm:ss'
+      )
     )
     return { value }
   }

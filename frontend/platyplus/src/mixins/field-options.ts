@@ -1,8 +1,6 @@
 import { Component, Watch } from 'vue-property-decorator'
 
 import { ObjectMap } from '../types/common'
-import { elementAsOption } from '../modules/metadata'
-import { Data } from '../modules/metadata/types/queries'
 
 import { FieldRelationshipMixin } from './field-relationship'
 import gql from 'graphql-tag'
@@ -12,16 +10,16 @@ import gql from 'graphql-tag'
     initialOptions: {
       query() {
         return gql(this.optionsQuery)
-      },
-      update({ result: { nodes } }: Data) {
-        // TODO recode: many to many
-        // const tableClass = this.relationship.through
-        //   ? this.relationship.through.reference
-        //   : this.property.reference
-        return nodes
-          .filter(item => this.$can('insert', item))
-          .map(item => elementAsOption(item, this.table))
       }
+      // TODO recode: many to many
+      // update({ result: { nodes } }: Data) {
+      // const tableClass = this.relationship.through
+      //   ? this.relationship.through.reference
+      //   : this.property.reference
+      // return nodes
+      //   .filter(item => this.$can('insert', item))
+      //   .map(item => elementAsOption(item, this.table))
+      // }
     }
   }
 })

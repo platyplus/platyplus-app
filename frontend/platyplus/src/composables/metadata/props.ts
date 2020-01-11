@@ -14,7 +14,7 @@ export const elementProps = {
   element: {
     type: Object as PropType<DataObject>,
     required: true,
-    default: () => ({})
+    default: () => ({} as DataObject)
   }
 }
 export const fieldProps = {

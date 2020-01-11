@@ -19,6 +19,7 @@
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore ./"
   },
   "dependencies": {
+    "@graphql-codegen/fragment-matcher": "^1.11.2",
     "@platyplus/errors": "^0.0.1-alpha.0",
     "@platyplus/hasura-apollo-client": "^0.0.4-alpha.0",
     "@platyplus/vuex-apollo-offline": "^0.0.4-alpha.0",

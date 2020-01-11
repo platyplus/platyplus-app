@@ -1,0 +1,39 @@
+{
+  "__schema": {
+    "types": [
+      {
+        "kind": "INTERFACE",
+        "name": "GenericField",
+        "possibleTypes": [
+          {
+            "name": "Column"
+          },
+          {
+            "name": "SingleRelationship"
+          },
+          {
+            "name": "OneToManyRelationship"
+          },
+          {
+            "name": "ManyToManyRelationship"
+          }
+        ]
+      },
+      {
+        "kind": "INTERFACE",
+        "name": "Relationship",
+        "possibleTypes": [
+          {
+            "name": "SingleRelationship"
+          },
+          {
+            "name": "OneToManyRelationship"
+          },
+          {
+            "name": "ManyToManyRelationship"
+          }
+        ]
+      }
+    ]
+  }
+}

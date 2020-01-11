@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import { Mixins } from 'vue-property-decorator'
 import { Route } from 'vue-router'
 import { mapGetters } from 'vuex'
@@ -19,6 +20,13 @@ import messages from '../i18n'
 import { getConfig } from '../helpers'
 import { MetadataPlugin } from '../modules/metadata'
 
+/*
+ * require.context is webpack-related and does not exist in node.
+ * However @types/node and @types/webpack-env are conflicting,
+ * and lerna makes it difficult to seggregate them (no-hoist)
+ * The simplest way is then to ignore the error. */
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 const requireComponent = require.context(
   '../components',
   true, // sub-directories
@@ -72,6 +80,9 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
   Vue.mixin(Mixins(RouterMixin))
   // * Register all components from the ../components directory
   // * See https://vuejs.org/v2/guide/components-registration.html
+  // * Ignore the TS error. See the comment on require.context
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
   requireComponent.keys().forEach(fileName => {
     const componentConfig = requireComponent(fileName)
     const componentName =

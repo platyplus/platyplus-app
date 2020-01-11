@@ -14,6 +14,9 @@ generates:
             - '//! |=============================================|'
             - '/* eslint-disable @typescript-eslint/array-type */'
       - 'typescript'
+  src/modules/metadata/fragmentTypes.json:
+    plugins:
+      - fragment-matcher
 config:
   declarationKind: 'interface'
   namingConvention:

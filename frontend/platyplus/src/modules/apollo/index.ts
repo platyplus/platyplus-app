@@ -5,6 +5,8 @@ import VueApollo from 'vue-apollo'
 import { createClient } from '@platyplus/hasura-apollo-client'
 import { errorsLink } from '@platyplus/errors'
 
+import introspectionQueryResultData from '../metadata/fragmentTypes.json'
+
 import { ApolloMixin } from './mixin'
 import { dataIdFromObject } from './helpers'
 
@@ -21,6 +23,7 @@ export function ApolloPlugin(Vue: typeof _Vue, options: ApolloOptions) {
     uri,
     getToken,
     dataIdFromObject, // TODO interdependent with metadata, find a way to break the dependency
+    introspectionQueryResultData, // TODO interdependent with metadata, find a way to break the dependency
     errorsLink
   })
 

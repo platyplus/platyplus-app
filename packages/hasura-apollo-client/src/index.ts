@@ -5,7 +5,8 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
   IdGetter,
-  IntrospectionFragmentMatcher
+  IntrospectionFragmentMatcher,
+  IntrospectionResultData
 } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { split, ApolloLink } from 'apollo-link'
@@ -20,23 +21,23 @@ interface CreateApolloClientOptions {
   getToken: () => string
   dataIdFromObject: IdGetter
   errorsLink?: ApolloLink
+  introspectionQueryResultData?: IntrospectionResultData
 }
 
 export const createClient = ({
   uri,
   getToken,
   dataIdFromObject,
-  errorsLink
+  errorsLink,
+  introspectionQueryResultData
 }: CreateApolloClientOptions) => {
   if (apolloClient) return apolloClient
   // ! https://github.com/apollographql/apollo-client/issues/3397
-  const fragmentMatcher = new IntrospectionFragmentMatcher({
-    introspectionQueryResultData: {
-      __schema: {
-        types: [] // no types provided
-      }
-    }
-  })
+  const fragmentMatcher = introspectionQueryResultData
+    ? new IntrospectionFragmentMatcher({
+        introspectionQueryResultData
+      })
+    : undefined
   const cache = new InMemoryCache({ dataIdFromObject, fragmentMatcher })
   const httpLink = createHttpLink({ uri })
 
