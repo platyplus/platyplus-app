@@ -31,7 +31,8 @@ const componentKinds = new Map([
   ['text', 'text'],
   ['bool', 'boolean'],
   ['timestamptz', 'datetime'],
-  ['ltree', 'text']
+  ['ltree', 'text'],
+  ['jsonb', 'json']
 ])
 
 const componentKind = ({ name, type }: RawColumn) => {
