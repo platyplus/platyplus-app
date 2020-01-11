@@ -10,7 +10,8 @@
     "ms-azuretools.vscode-docker",
     "wix.vscode-import-cost",
     "christian-kohler.path-intellisense",
-    "mikestead.dotenv"
+    "mikestead.dotenv",
+    "antfu.i18n-ally"
   ],
   "unwantedRecommendations": [
     "hookyqr.beautify",

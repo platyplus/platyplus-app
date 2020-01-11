@@ -4,10 +4,7 @@
     "javascript",
     "javascriptreact",
     "typescript",
-    {
-      "language": "vue",
-      "autoFix": true
-    }
+    "vue"
   ],
   "eslint.packageManager": "yarn",
   "npm.packageManager": "yarn",
@@ -23,5 +20,8 @@
   "javascript.preferences.quoteStyle": "single",
   "typescript.preferences.quoteStyle": "single",
   "javascript.format.semicolons": "remove",
-  "typescript.format.semicolons": "remove"
+  "typescript.format.semicolons": "remove",
+  "i18n-ally.localesPaths": ["frontend/platyplus/src/i18n"],
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.sortKeys": true,
 }
