@@ -6,6 +6,7 @@ import { configure } from 'vee-validate'
 import VueCompositionApi from '@vue/composition-api'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import { ValidationObserver } from 'vee-validate'
 
 import { ErrorsPlugin } from '@platyplus/errors'
 
@@ -97,6 +98,8 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
       )
     Vue.component(componentName, componentConfig.default || componentConfig)
   })
+
+  Vue.component('ValidationProvider', ValidationObserver) // ? Put in a distinct module?
 }
 
 declare module 'vue/types/vue' {
