@@ -1,6 +1,5 @@
 query listTables {
   _metadata {
     name
-    schema
   }
 }

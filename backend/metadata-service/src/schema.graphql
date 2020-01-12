@@ -57,10 +57,10 @@ type OneToManyRelationship implements Relationship & GenericField {
 
 type Query {
   """Get the metadata"""
-  _metadata(table: String, schema: String): [Table!]!
+  _metadata(name: String): [Table!]!
 
   """Get the metadata of one single table, per ID"""
-  _metadataTable(id: String!): Table
+  _metadataTable(name: String!): Table
 }
 
 interface Relationship {
@@ -90,8 +90,7 @@ type SingleRelationship implements Relationship & GenericField {
 
 """The table model"""
 type Table {
-  name: String!
-  schema: String!
+  name: ID!
 
   """
   Available fields (columns and relationships) that are in use in the table

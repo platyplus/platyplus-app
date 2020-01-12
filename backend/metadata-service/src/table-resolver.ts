@@ -9,13 +9,11 @@ export class TableResolver {
   @Query(returns => [Table], { description: 'Get the metadata' })
   async _metadata(
     @Ctx() context: Context,
-    @Arg('schema', { nullable: true }) schema?: string,
-    @Arg('table', { nullable: true }) table?: string
+    @Arg('name', { nullable: true }) name?: string
   ): Promise<Table[]> {
     const role = getRole(context)
     let tables = await loadRawMetadata()
-    if (schema) tables = tables.filter(cursor => cursor.schema === schema)
-    if (table) tables = tables.filter(cursor => cursor.name === table)
+    if (name) tables = tables.filter(cursor => cursor.name === name)
     tables = tables.filter(cursor =>
       cursor.permissions.find(permission => permission.role === role)
     )
@@ -27,9 +25,8 @@ export class TableResolver {
   })
   async _metadataTable(
     @Ctx() context: Context,
-    @Arg('id') id: string
+    @Arg('name') name: string
   ): Promise<Table> {
-    const [schema, table] = id.split('.')
-    return (await this._metadata(context, schema, table))[0]
+    return (await this._metadata(context, name))[0]
   }
 }

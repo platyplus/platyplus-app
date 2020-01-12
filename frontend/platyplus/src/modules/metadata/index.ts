@@ -21,13 +21,12 @@ export function MetadataPlugin(Vue: typeof _Vue, options: MetadataOptions) {
 
   Vue.mixin({
     methods: {
-      $metadata(table: string, schema = 'public') {
-        return tableMetadata(table, schema)
+      $metadata(table: string) {
+        return tableMetadata(table)
       },
       $can(
         action: 'select' | 'insert' | 'update' | 'delete',
-        context: string | ObjectMap,
-        schema = 'public'
+        context: string | ObjectMap
       ) {
         let tableName: string
         if (typeof context === 'string') {
@@ -38,7 +37,7 @@ export function MetadataPlugin(Vue: typeof _Vue, options: MetadataOptions) {
           tableName = context.__typename as string
         }
         if (!tableName) return false
-        const metadata = tableMetadata(tableName, schema)
+        const metadata = tableMetadata(tableName)
         switch (action) {
           case 'select':
             return metadata.canSelect

@@ -32,12 +32,10 @@ export const actions: ActionTree<MetadataState, {}> = {
             },
             { root: true }
           )
-          for (const { name, schema } of tableList) {
+          for (const { name } of tableList) {
             await apolloClient.query<TableQuery>({
               query: tableQuery,
-              variables: {
-                id: `${schema}.${name}`
-              }
+              variables: { name }
             })
             dispatch('loading/incrementProgress', 'metadata', { root: true })
           }

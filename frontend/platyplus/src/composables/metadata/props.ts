@@ -2,8 +2,7 @@ import { DataObject } from '../../modules/metadata/types/queries'
 import { PropType } from '@vue/composition-api'
 
 export const tableProps = {
-  table: { type: String, default: '' },
-  schema: { type: String, default: 'public' }
+  table: { type: String, default: '' }
 }
 export const listProps = {
   ...tableProps,

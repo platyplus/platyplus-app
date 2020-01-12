@@ -11,11 +11,10 @@ import { DataObject } from '../../modules/metadata/types/queries'
 
 export const useFieldMetadata = ({
   table,
-  schema,
   property
 }: ExtractPropTypes<typeof fieldProps>) =>
   computed(() =>
-    tableMetadata(table, schema).fields?.find(field => field.name === property)
+    tableMetadata(table).fields?.find(field => field.name === property)
   )
 
 export const useFieldValue = (props: ExtractPropTypes<typeof fieldProps>) => {

@@ -21,7 +21,6 @@ registerEnumType(Action, {
 export class ForeignKey {
   table: Table
   ref_name: string
-  ref_schema: string
   @Field(type => Action, { name: 'onUpdate' })
   on_update: Action
   @Field(type => Action, { name: 'onDelete' })
@@ -33,8 +32,7 @@ export class ForeignKey {
   get reference() {
     if (!this._reference) {
       this._reference = tables.find(
-        table =>
-          table.schema === this.ref_schema && table.name === this.ref_name
+        table => table.name === this.ref_name
       ) as Table
     }
     return this._reference
@@ -42,6 +40,6 @@ export class ForeignKey {
 
   @Field(type => ID)
   get id(): string {
-    return `${this.table.id}.${this.ref_schema}.${this.ref_name}`
+    return `${this.table.name}.${this.ref_name}`
   }
 }

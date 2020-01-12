@@ -197,37 +197,25 @@ export const flatRelationships = (table: Table, tables: Table[]) =>
           typeof fkColumn.table === 'string'
             ? fkColumn.table
             : fkColumn.table.name
-        const fkTableSchema =
-          typeof fkColumn.table === 'string'
-            ? table.schema
-            : fkColumn.table.schema
-        lookupTable = tables.find(
-          table => table.name === fkTableName && table.schema === fkTableSchema
-        ) as Table // * Trick: pass the not found test
+        lookupTable = tables.find(table => table.name === fkTableName) as Table // * Trick: pass the not found test
         fkColumn = fkColumn.column
       }
       const foreignKey = lookupTable.foreignKeys.find(fk =>
         Object.entries(fk.mapping).some(([from, to]) => from === fkColumn)
       ) as ForeignKey // * 'as' trick: will raise an error next if no foreign key is found
-      const [refSchema, refTable] = isArray
-        ? [foreignKey.table.schema, foreignKey.table.name]
-        : [foreignKey.ref_schema, foreignKey.ref_name]
-      target = tables.find(
-        table => table.schema === refSchema && table.name === refTable
-      ) as Table // * 'as' trick: will raise an error next if no table is found
+      const refTable = isArray ? foreignKey.table.name : foreignKey.ref_name
+      target = tables.find(table => table.name === refTable) as Table // * 'as' trick: will raise an error next if no table is found
       columnMapping = foreignKey.mapping // Select the column mapping of the foreign key
     } else {
       // * Case of an object relationship based on manual configuration
       // TODO case of an array relationship based on manual configuration
       const configuration = relationship.definition
         .manual_configuration as ManualRelationshipConfiguration // * 'as' trick: will raise an error next if no manual_configuration is found
-      const { name, schema } =
+      const { name } =
         typeof configuration.remote_table === 'string'
-          ? { name: configuration.remote_table, schema: table.schema }
+          ? { name: configuration.remote_table }
           : configuration.remote_table
-      target = tables.find(
-        table => table.schema === schema && table.name === name
-      ) as Table // * 'as' trick: will raise an error next if no target is found
+      target = tables.find(table => table.name === name) as Table // * 'as' trick: will raise an error next if no target is found
       columnMapping = isArray // Select the column mapping defined in the manual configuration
         ? objectFlip(configuration.column_mapping) // inversed mapping when array mapping
         : configuration.column_mapping

@@ -15,25 +15,18 @@ export const tableNamesList = (): Partial<Table>[] => {
   }
 }
 
-export const tableMetadata = (
-  table?: string,
-  schema = 'public'
-): Partial<Table> => {
+export const tableMetadata = (name?: string): Partial<Table> => {
   try {
     const result = apolloClient.readQuery<TableQuery>({
       query: tableQuery,
-      variables: { id: `${schema}.${table}` }
+      variables: { name }
     })
     if (result) return result._metadataTable
-    else throw Error(`Metadata for ${schema}.${table} not found from the cache`)
+    else throw Error(`Metadata for ${name} not found from the cache`)
   } catch {
-    throw Error(
-      `Unable to fetch metadata for ${schema}.${table} from the cache`
-    )
+    throw Error(`Unable to fetch metadata for ${name} from the cache`)
   }
 }
 
 export const tablesMetadata = () =>
-  tableNamesList().map(tableName =>
-    tableMetadata(tableName.name, tableName.schema)
-  )
+  tableNamesList().map(tableName => tableMetadata(tableName.name))

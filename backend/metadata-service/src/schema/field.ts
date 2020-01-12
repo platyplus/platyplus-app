@@ -17,7 +17,7 @@ export abstract class GenericField implements GraphQLNode {
 
   @Field(type => ID)
   get id(): string {
-    return `${this.table.schema}.${this.table.name}.${this.name}`
+    return `${this.table.name}.${this.name}`
   }
 
   @Field()

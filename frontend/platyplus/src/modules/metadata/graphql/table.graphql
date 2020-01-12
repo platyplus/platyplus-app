@@ -1,9 +1,7 @@
 #import "./fragments.graphql"
-query tableQuery($id: String!) {
-  _metadataTable(id: $id) {
-    id
+query tableQuery($name: String!) {
+  _metadataTable(name: $name) {
     name
-    schema
     label {
       template
     }

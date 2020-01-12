@@ -79,12 +79,11 @@ export interface Query {
 }
 
 export interface QueryMetadataArgs {
-  table?: Maybe<Scalars['String']>
-  schema?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
 }
 
 export interface QueryMetadataTableArgs {
-  id: Scalars['String']
+  name: Scalars['String']
 }
 
 export interface Relationship {
@@ -117,8 +116,7 @@ export interface SingleRelationship extends Relationship, GenericField {
 /** The table model */
 export interface Table {
   __typename?: 'Table'
-  name: Scalars['String']
-  schema: Scalars['String']
+  name: Scalars['ID']
   /** Available fields (columns and relationships) that are in use in the table */
   fields: Array<GenericField>
   label: Label

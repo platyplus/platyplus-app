@@ -47,10 +47,8 @@ export interface RawTable {
 
 @ObjectType({ description: 'The table model' })
 export class Table implements GraphQLNode {
-  @Field()
+  @Field(type => ID)
   readonly name: string
-  @Field()
-  readonly schema: string
   @Field(type => [Column], { name: 'fields' })
   readonly columns: Column[]
   // primaryKeyColumns: string[] // ? Remove definitely?
@@ -83,8 +81,7 @@ export class Table implements GraphQLNode {
     checks,
     permissions
   }: RawTable) {
-    this.name = name
-    this.schema = schema
+    this.name = schema === 'public' ? name : `${schema}_${name}` // TODO set default schema ('public') as an env var
     this.columns = columns.map(rawColumn => new Column(this, rawColumn))
     // TODO ugly: use a new XXX() constuctor that makes the job, as in Column/RawColumn
     for (const foreignKey of foreignKeys) foreignKey.table = this
@@ -103,7 +100,6 @@ export class Table implements GraphQLNode {
     // * Data from the metadata settings table
 
     // * Calculated fields
-    this.id = `${this.schema}.${this.name}`
     this.label = new Label(this)
     this.idFields = this.columns.filter(column =>
       primaryKeyColumns.includes(column.name)

@@ -28,8 +28,6 @@ fragment mappingFragment on ColumnMapping {
 }
 #  TODO relationship permissions
 fragment targetFragment on Table {
-  id
   name
-  schema
   listQuery #  TODO remove and add optionsQuery to Relationship
 }
