@@ -17,12 +17,7 @@ div
 </template>
 
 <script lang="ts">
-/** // TODO
- * - element composable: navigate to read, edit etc.
- * - mutations composable: useDelete
- */
-
-import { createComponent, watch } from '@vue/composition-api'
+import { createComponent } from '@vue/composition-api'
 
 import { useTranslator } from '../../../composables/i18n'
 import {
@@ -32,10 +27,8 @@ import {
   useElementId,
   useElementLoader,
   useDeleteElement,
-  useEditElement,
-  elementLabel
+  useEditElement
 } from '../../../composables/metadata'
-import { useStore } from '../../../store'
 
 export default createComponent({
   props: {
@@ -48,13 +41,6 @@ export default createComponent({
     const translate = useTranslator()
     const edit = useEditElement(element)
     const remove = useDeleteElement(element)
-    const store = useStore()
-    watch(() => {
-      store.commit('navigation/setTitle', {
-        label: elementLabel(element.value),
-        translate: false
-      })
-    })
     return { metadata, element, componentName, translate, edit, remove }
   }
 })

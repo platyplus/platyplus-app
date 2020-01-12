@@ -3,7 +3,7 @@ import { RefOr, unwrap } from '../common'
 import { DataObject } from '../../modules/metadata/types/queries'
 import { tableMetadata } from '../../modules/metadata'
 import { template } from 'lodash'
-import { computed } from '@vue/composition-api'
+import { computed, Ref } from '@vue/composition-api'
 import { pick } from 'lodash'
 import { WrappedData } from './common'
 import { Location } from 'vue-router'
@@ -43,7 +43,7 @@ export const useElementLabel = (element: WrappedData) =>
   computed(() => elementLabel(element))
 
 export const useComponentName = (action: 'read' | 'edit') => (
-  property: RefOr<GenericField>
+  property: Ref<GenericField>
 ) => {
   const name = unwrap(property).component
   if (name === 'hidden') return null

@@ -8,6 +8,8 @@ import { useMetadata } from './table'
 import gql from 'graphql-tag'
 import { ObjectMap } from '../../modules/authentication/types'
 import { Ref, computed } from '@vue/composition-api'
+import { useStore } from '../../store'
+import { elementLabel } from './element'
 
 // TODO rename to useListLoader
 export const useList = (props: ExtractPropTypes<typeof tableProps>) => {
@@ -26,14 +28,19 @@ export const useElementLoader = (
   id: Readonly<Ref<Readonly<ObjectMap> | undefined>>
 ) => {
   const metadata = useMetadata(props)
+  const store = useStore()
   return computed(() => {
     const { result } = useQuery<Data>(
       gql(metadata.value.elementQuery),
-      id?.value,
-      () => ({
-        // enabled: metadata.value.canSelect
-      })
+      id?.value
     )
-    return result.value?.result || {}
+    if (result.value?.result) {
+      store.commit('navigation/setTitle', {
+        label: elementLabel(result.value?.result),
+        translate: false
+      })
+      return result.value?.result
+    }
+    return {}
   })
 }
