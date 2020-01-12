@@ -14,8 +14,9 @@ languageIds:
   # You should unescape regex string in order to fit in YAML file
   # for that, you can use https://www.freeformatter.com/json-escape.html
 keyMatchReg:
-    # * The following example show how to detect `t("your.i18n.keys")` or `translate(....)`
-    - "[^\\w\\d](t|translate)\\(['\"`]([[\\w\\d\\. \\-\\[\\]]*?)['\"`]"
+    # * The following examples show how to detect `t("your.i18n.keys")` or `translate(....)`
+    - "[^\\w\\d]t\\(['\"`]([[\\w\\d\\. \\-\\[\\]]*?)['\"`]"
+    - "[^\\w\\d]translate\\(['\"`]([[\\w\\d\\. \\-\\[\\]]*?)['\"`]"
   
 # If set to true, only enables custom framework (will disable all built-in frameworks)
 monopoly: false
