@@ -1,6 +1,6 @@
-import { GenericField, Table } from '../../modules/metadata/types/objects'
+import { GenericField } from '../../modules/metadata/types/objects'
 import { RefOr, unwrap } from '../common'
-import { DataObject } from '../../modules/metadata/types/queries'
+import { DataObject, Metadata } from '../../modules/metadata/types/queries'
 import { tableMetadata } from '../../modules/metadata'
 import { template } from 'lodash'
 import { computed, Ref } from '@vue/composition-api'
@@ -8,7 +8,6 @@ import { pick } from 'lodash'
 import { WrappedData } from './common'
 import { Location } from 'vue-router'
 
-// ? What is the typename given by Hasura when there are multiple schemas?
 export const elementMetadata = (element: WrappedData) => {
   const tableName = unwrap(element)?.__typename
   if (tableName) return tableMetadata(unwrap(element).__typename)
@@ -18,7 +17,7 @@ export const elementLabel = (element: WrappedData) =>
   template(elementMetadata(element)?.label?.template)(unwrap(element))
 
 // * Picks the id fields from an object based on a table metadata
-export const pickId = (data: WrappedData, metadata?: RefOr<Partial<Table>>) => {
+export const pickId = (data: WrappedData, metadata?: RefOr<Metadata>) => {
   const md = elementMetadata(data) || unwrap(metadata)
   if (md?.idFields)
     return pick(

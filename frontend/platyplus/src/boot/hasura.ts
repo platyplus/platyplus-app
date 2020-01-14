@@ -2,7 +2,7 @@
 import { Mixins } from 'vue-property-decorator'
 import { Route } from 'vue-router'
 import { mapGetters } from 'vuex'
-import { configure } from 'vee-validate'
+import { configure, ValidationProvider } from 'vee-validate'
 import VueCompositionApi from '@vue/composition-api'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
@@ -99,7 +99,8 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
     Vue.component(componentName, componentConfig.default || componentConfig)
   })
 
-  Vue.component('ValidationProvider', ValidationObserver) // ? Put in a distinct module?
+  Vue.component('ValidationObserver', ValidationObserver) // ? Put in a distinct module?
+  Vue.component('ValidationProvider', ValidationProvider) // ? Put in a distinct module?
 }
 
 declare module 'vue/types/vue' {

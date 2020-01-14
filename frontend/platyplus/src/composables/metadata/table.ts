@@ -4,7 +4,6 @@ import { ExtractPropTypes } from '@vue/composition-api/dist/component/componentP
 import { tableProps } from './props'
 import { useRouterQuery } from '../router'
 import { pickId } from './element'
-import { isEmpty } from '../../core'
 
 export const useMetadata = (props: ExtractPropTypes<typeof tableProps>) =>
   computed(() => tableMetadata(props.table))
@@ -14,9 +13,4 @@ export const useElementId = (props: ExtractPropTypes<typeof tableProps>) => {
   const routerQuery = useRouterQuery()
   const metadata = useMetadata(props)
   return computed(() => pickId(routerQuery, metadata))
-}
-
-export const useIsNew = (props: ExtractPropTypes<typeof tableProps>) => {
-  const id = useElementId(props)
-  return computed(() => !isEmpty(id.value))
 }

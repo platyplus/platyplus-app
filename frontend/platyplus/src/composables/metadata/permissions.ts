@@ -15,3 +15,10 @@ export const useCanEdit = (element: WrappedData) =>
     console.log(`TODO: can edit for ${unwrap(element).__typename}`)
     return true
   })
+
+export const useCanSave = (element: WrappedData) =>
+  computed(() => {
+    // TODO
+    console.log(`TODO: can save for ${unwrap(element).__typename}`)
+    return true
+  })

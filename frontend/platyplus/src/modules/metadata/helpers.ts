@@ -1,9 +1,10 @@
-import { ObjectMap, GenericObject, ObjectArray } from '../../types/common'
+import { GenericObject, ObjectArray } from '../../types/common'
 
 import { tableMetadata } from './getters'
 import { elementLabel } from '../../composables/metadata'
+import { DataObject } from './types/queries'
 
-const uniqueGraphQlId = (object: ObjectMap) => {
+const uniqueGraphQlId = (object: DataObject) => {
   if (typeof object.__typename === 'string') {
     try {
       // * Maps the table classes 'composed' ids
@@ -56,7 +57,7 @@ export const elementAsOption = (
  * @param option
  */
 export const optionAsElement = (
-  option?: GenericObject
+  option?: DataObject
 ): GenericObject | undefined => {
   if (Array.isArray(option)) {
     return option.map(item => optionAsElement(item)) as ObjectArray
@@ -67,3 +68,6 @@ export const optionAsElement = (
   }
   return option
 }
+
+export const isNew = (element: DataObject) =>
+  Object.keys(element).length === 0 && Object.keys(element)[0] === '__typename'

@@ -1,16 +1,21 @@
 import { ObjectMap } from '../../../types/common'
 import { Table } from './objects'
 
-export interface MetadataQuery {
-  _metadata: Partial<Table>[]
-}
-export interface TableQuery {
-  _metadataTable: Partial<Table>
-}
-
-export type DataObject = ObjectMap & {
+export type WithTypeName = {
   __typename?: string
 }
+
+export type DataObject = ObjectMap & WithTypeName
+
+export type Metadata = Partial<Table> & DataObject
+
+export interface MetadataQuery {
+  _metadata: Metadata[]
+}
+export interface TableQuery {
+  _metadataTable: Metadata
+}
+
 export type Result = {
   aggregate: {
     max: {

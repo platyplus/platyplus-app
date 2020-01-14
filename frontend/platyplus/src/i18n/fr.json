@@ -1,73 +1,74 @@
 {
-  "title": "Platyplus",
-  "yes": "Oui",
-  "no": "Non",
-  "ok": "OK",
+  "authentication": {
+    "errors": {
+      "password": {
+        "invalid": "Mot de passe incorrect"
+      },
+      "username": {
+        "not_found": "Utilisateur introuvable"
+      }
+    },
+    "helpers": {
+      "password": "@:user.helpers.password",
+      "username": "@:user.helpers.username"
+    },
+    "labels": {
+      "password": "@:user.labels.password",
+      "username": "@:user.labels.username"
+    },
+    "title": "Identification"
+  },
   "cancel": "Annuler",
-  "reset": "Réinitialiser",
-  "edit": "Editer",
   "create": "Créer",
-  "remove": "Supprimer",
-  "select": "Sélectionner",
+  "edit": "Editer",
   "index": {
     "title": "Accueil"
   },
-  "location": {
-    "message": "Votre emplacement: {location}.",
-    "select": "Choisissez votre emplacement:",
-    "change": "Changez d'emplacement"
-  },
   "language": "Langue",
+  "location": {
+    "change": "Changez d'emplacement",
+    "message": "Votre emplacement: {location}.",
+    "select": "Choisissez votre emplacement:"
+  },
   "login": {
     "button": "Se connecter"
   },
   "logout": {
     "message": "Êtes-vous sûr de vouloir vous déconnecter?"
   },
-  "authentication": {
-    "title": "Identification",
-    "labels": {
-      "username": "@:user.labels.username",
-      "password": "@:user.labels.password"
-    },
-    "helpers": {
-      "username": "@:user.helpers.username",
-      "password": "@:user.helpers.password"
-    },
-    "errors": {
-      "username": {
-        "not_found": "Utilisateur introuvable"
-      },
-      "password": {
-        "invalid": "Mot de passe incorrect"
-      }
-    }
-  },
+  "no": "Non",
+  "ok": "OK",
+  "read": "lire",
+  "remove": "Supprimer",
+  "reset": "Réinitialiser",
+  "select": "Sélectionner",
+  "title": "Platyplus",
   "user": {
-    "labels": {
-      "username": "Nom d'utilisateur",
+    "helpers": {
+      "first_name": "Prénom",
+      "language": "Langue",
+      "last_name": "Nom de famille",
+      "membership": "Emplacements",
       "password": "Mot de passe",
-      "created_at": "Membre depuis",
-      "roles": "Roles globaux",
-      "membership": "Membre des emplacements",
-      "preferred_org_unit": "Emplacement préféré",
+      "preferred_org_unit": "Choisir un emplacement",
+      "roles": "Rôles globaux",
+      "username": "Nom d'utilisateur"
+    },
+    "labels": {
       "attributes": {
         "first_name": "Prénom",
         "last_name": "Nom de famille"
-      }
-    },
-    "helpers": {
-      "username": "Nom d'utilisateur",
+      },
+      "created_at": "Membre depuis",
+      "membership": "Membre des emplacements",
       "password": "Mot de passe",
-      "roles": "Rôles globaux",
-      "membership": "Emplacements",
-      "language": "Langue",
-      "preferred_org_unit": "Choisir un emplacement",
-      "first_name": "Prénom",
-      "last_name": "Nom de famille"
+      "preferred_org_unit": "Emplacement préféré",
+      "roles": "Roles globaux",
+      "username": "Nom d'utilisateur"
     },
     "profile": {
       "title": "Profil"
     }
-  }
+  },
+  "yes": "Oui"
 }

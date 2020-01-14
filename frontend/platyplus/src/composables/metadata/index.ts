@@ -1,6 +1,7 @@
 export * from './common'
 export * from './element'
 export * from './props'
+export * from './form'
 export * from './property'
 export * from './queries'
 export * from './table'

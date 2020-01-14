@@ -1,0 +1,7 @@
+- args:
+    sql: alter table "public"."org_unit_type_mapping" drop constraint "org_unit_type_mapping_pkey";
+  type: run_sql
+- args:
+    sql: "alter table \"public\".\"org_unit_type_mapping\"\n    add constraint \"org_unit_type_mapping_pkey\"
+      \n    primary key ( \"from_id\", \"to_id\" );"
+  type: run_sql
