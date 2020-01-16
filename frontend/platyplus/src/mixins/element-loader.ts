@@ -1,29 +1,11 @@
-import { Component, Mixins, Watch } from 'vue-property-decorator'
-import gql from 'graphql-tag'
+import { Mixins, Watch } from 'vue-property-decorator'
 
-import { Data } from '../modules/metadata/types/queries'
 import { ObjectMap } from '../types/common'
 import { isEmpty } from '../core'
 import { GenericField } from '../modules/metadata/types/objects'
 
 import { ElementMixin } from './element'
 
-@Component({
-  apollo: {
-    element: {
-      query() {
-        return gql(this.metadata.elementQuery)
-      },
-      update: ({ result }: Data) => result, // TODO handle the case of non-existing element
-      variables() {
-        return this.id
-      },
-      skip() {
-        return this.isNew
-      }
-    }
-  }
-})
 export class ElementLoaderMixin extends Mixins(ElementMixin) {
   public element: ObjectMap = {}
 

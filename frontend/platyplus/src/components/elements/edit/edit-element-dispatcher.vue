@@ -36,6 +36,8 @@ import {
   useSaveElement,
   useResetForm
 } from '../../../composables/metadata'
+import { useRouteQuery } from '../../../composables/router'
+import { useRouter } from '../../../router'
 
 export default createComponent({
   props: {
@@ -43,8 +45,13 @@ export default createComponent({
   },
   setup(props) {
     const metadata = useMetadata(props)
+    const router = useRouter()
+    const routeQuery = useRouteQuery(router)
+    const element = useElementLoader(
+      useElementId(metadata, routeQuery),
+      metadata
+    )
     const form = reactive({})
-    const element = useElementLoader(props, useElementId(props))
     const componentName = useComponentName('edit')
     const translate = useTranslator()
     const save = useSaveElement(metadata, element, form)

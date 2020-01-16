@@ -1,13 +1,7 @@
 import { RefOr, unwrap } from '../common'
-import {
-  Metadata,
-  DataObject,
-  WithTypeName
-} from '../../modules/metadata/types/queries'
-import { set } from '@vue/composition-api'
-import { GenericField } from '../../modules/metadata/types/objects'
+import { Metadata, DataObject } from '../../modules/metadata/types/queries'
+import { set, computed, SetupContext } from '@vue/composition-api'
 import { ObjectMap } from '../../types/common'
-type TypeNamedField = GenericField & WithTypeName
 
 export const resetForm = (
   metadata: RefOr<Metadata>,
@@ -48,3 +42,12 @@ export const resetForm = (
     // else console.log(typeName)
   })
 }
+
+export const useFormFieldValue = <T>(
+  props: { value: T },
+  { emit }: SetupContext
+) =>
+  computed({
+    get: () => props.value,
+    set: value => emit('input', value)
+  })

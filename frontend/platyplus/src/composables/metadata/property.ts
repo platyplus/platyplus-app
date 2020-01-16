@@ -1,8 +1,11 @@
-import { createComponent } from '@vue/composition-api'
+import { createComponent, Ref } from '@vue/composition-api'
 import { computed } from '@vue/composition-api'
 import { ExtractPropTypes } from '@vue/composition-api/dist/component/componentProps'
 
-import { ManyToManyRelationship } from '../../modules/metadata/types/objects'
+import {
+  ManyToManyRelationship,
+  GenericField
+} from '../../modules/metadata/types/objects'
 import { ObjectMap } from '../../types/common'
 import { tableMetadata } from '../../modules/metadata'
 
@@ -17,11 +20,15 @@ export const useFieldMetadata = ({
     tableMetadata(table).fields?.find(field => field.name === property)
   )
 
-export const useFieldValue = (props: ExtractPropTypes<typeof fieldProps>) => {
-  const propertyMetadata = useFieldMetadata(props)
-  return computed(() => {
+type PropertyMetadata = Ref<GenericField | undefined>
+
+export const useFieldValue = (
+  props: ExtractPropTypes<typeof fieldProps>,
+  propertyMetadata: PropertyMetadata
+) =>
+  computed(() => {
     const value = (props.element as DataObject)[props.property] // TODO ugly
-    if (value && propertyMetadata.value?.component === 'many-to-many') {
+    if (value && propertyMetadata?.value?.component === 'many-to-many') {
       const relationship = propertyMetadata.value as Partial<
         ManyToManyRelationship
       >
@@ -32,7 +39,6 @@ export const useFieldValue = (props: ExtractPropTypes<typeof fieldProps>) => {
     }
     return value
   })
-}
 
 // TODO generic <T> that gives the field type. T by default is GenericField
 // TODO -> export const fieldComponent = <T = GenericField>() => createComponent(... useFieldValue<T>(props) ...)
@@ -41,7 +47,8 @@ export const fieldComponent = () =>
   createComponent({
     props: { ...fieldProps },
     setup(props) {
-      const value = useFieldValue(props)
+      const propertyMetadata = useFieldMetadata(props)
+      const value = useFieldValue(props, propertyMetadata)
       return { value }
     }
   })

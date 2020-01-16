@@ -1,9 +1,7 @@
 import { Route } from 'vue-router'
-import { Component, Mixins, Watch } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 
 import { ObjectMap } from '../types/common'
-
-import { ElementLoaderMixin } from './element-loader'
 
 Component.registerHooks([
   'beforeRouteEnter',
@@ -16,19 +14,9 @@ interface VeeOberverComponent extends Element {
   reset: () => void
 }
 
-@Component
-export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
+export class FormManagerMixin {
+  // extends Mixins(ElementLoaderMixin) {
   public form: ObjectMap = {}
-
-  public get action() {
-    return this.isNew ? 'insert' : 'update'
-  }
-
-  public get canSave() {
-    if (this.isNew) {
-      return this.metadata.canInsert
-    } else return this.metadata.canUpdate
-  }
 
   /**
    * 1. Insert
@@ -60,20 +48,20 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
    * - Insertion de nested objects lors d'une insertion et lors d'une mise à jour
    */
   public async submit() {
-    const validator = this.$refs.validator as VeeOberverComponent
-    if (!!validator && !(await validator.validate())) return
-    const changes = this.changes
-    if (Object.keys(changes).length > 0) {
-      console.warn('IMPLEMENT SAVE') // TODO recode
-      // const data = await saveMutation(
-      //   this.tableClass,
-      //   this.element,
-      //   this.form,
-      //   changes
-      // )
-      // this.reset() // Reset is required to then check if any field changed in the beforeRouteLeave hook
-      // this.read(pick(data, this.tableClass.idColumnNames))
-    } else this.read()
+    // const validator = this.$refs.validator as VeeOberverComponent
+    // if (!!validator && !(await validator.validate())) return
+    // const changes = this.changes
+    // if (Object.keys(changes).length > 0) {
+    //   console.warn('IMPLEMENT SAVE') // TODO recode
+    //   // const data = await saveMutation(
+    //   //   this.tableClass,
+    //   //   this.element,
+    //   //   this.form,
+    //   //   changes
+    //   // )
+    //   // this.reset() // Reset is required to then check if any field changed in the beforeRouteLeave hook
+    //   // this.read(pick(data, this.tableClass.idColumnNames))
+    // } else this.read()
   }
 
   public reset() {
@@ -87,9 +75,9 @@ export class FormManagerMixin extends Mixins(ElementLoaderMixin) {
     // TODO complicated and not really usefull here to filter allowed fields.
     // TODO Do it at field validation level/save level
     // ! https://sam.beckham.io/wrote/deep-copying-and-the-immutability-issue.html
-    this.form = JSON.parse(JSON.stringify(this.element))
-    const validator = this.$refs.validator as VeeOberverComponent
-    this.$nextTick(() => !!validator && validator.reset())
+    // this.form = JSON.parse(JSON.stringify(this.element))
+    // const validator = this.$refs.validator as VeeOberverComponent
+    // this.$nextTick(() => !!validator && validator.reset())
   }
 
   /**

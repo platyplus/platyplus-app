@@ -16,7 +16,7 @@ export interface TableQuery {
   _metadataTable: Metadata
 }
 
-export type Result = {
+export type ListObject = {
   aggregate: {
     max: {
       updated_at: string
@@ -26,6 +26,11 @@ export type Result = {
   nodes: DataObject[]
   __typename: string
 }
-export type Data = {
-  result: Result
+
+export type ListResult = {
+  result: ListObject
+}
+
+export type ElementResult = {
+  result?: DataObject
 }

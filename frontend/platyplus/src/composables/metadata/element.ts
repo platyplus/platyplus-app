@@ -8,12 +8,12 @@ import { pick } from 'lodash'
 import { WrappedData } from './common'
 import { Location } from 'vue-router'
 
-export const elementMetadata = (element: WrappedData) => {
-  const tableName = unwrap(element)?.__typename
-  if (tableName) return tableMetadata(unwrap(element).__typename)
+export const elementMetadata = (element?: WrappedData) => {
+  const tableName = element && unwrap(element)?.__typename
+  if (tableName) return tableMetadata(tableName)
 }
 
-export const elementLabel = (element: WrappedData) =>
+export const elementLabel = (element?: WrappedData) =>
   template(elementMetadata(element)?.label?.template)(unwrap(element))
 
 // * Picks the id fields from an object based on a table metadata

@@ -29,6 +29,8 @@ import {
   useDeleteElement,
   useEditElement
 } from '../../../composables/metadata'
+import { useRouteQuery } from '../../../composables/router'
+import { useRouter } from '../../../router'
 
 export default createComponent({
   props: {
@@ -36,7 +38,12 @@ export default createComponent({
   },
   setup(props) {
     const metadata = useMetadata(props)
-    const element = useElementLoader(props, useElementId(props))
+    const router = useRouter()
+    const routeQuery = useRouteQuery(router)
+    const element = useElementLoader(
+      useElementId(metadata, routeQuery),
+      metadata
+    )
     const componentName = useComponentName('read')
     const translate = useTranslator()
     const edit = useEditElement(element)

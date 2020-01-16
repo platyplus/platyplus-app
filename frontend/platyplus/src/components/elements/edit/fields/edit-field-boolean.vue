@@ -9,9 +9,34 @@ div
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
-import { FieldEditMixin } from '../../../../mixins'
+import { createComponent } from '@vue/composition-api'
 
-@Component
-export default class EditBooleanField extends Mixins(FieldEditMixin) {}
+import { useTranslator } from '../../../../composables/i18n'
+import {
+  useMetadata,
+  useComponentName,
+  useFormFieldValue,
+  fieldEditProps
+} from '../../../../composables/metadata'
+
+export default createComponent({
+  props: fieldEditProps(Boolean, false),
+  setup(props, context) {
+    const metadata = useMetadata(props)
+    const componentName = useComponentName('edit')
+    const translate = useTranslator()
+    const formValue = useFormFieldValue<boolean>(props, context)
+    return {
+      metadata,
+      componentName,
+      translate,
+      formValue
+    }
+  }
+})
+// import { Component, Mixins } from 'vue-property-decorator'
+// import { FieldEditMixin } from '../../../../mixins'
+
+// @Component
+// export default class EditBooleanField extends Mixins(FieldEditMixin) {}
 </script>

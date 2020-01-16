@@ -1,7 +1,8 @@
 import { computed } from '@vue/composition-api'
-import { useRouter } from '../router'
+import VueRouter from 'vue-router'
 
-export const useRouterQuery = () => {
-  const router = useRouter()
-  return computed(() => router.currentRoute.query)
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type RouteQuery = any // TODO
+
+export const useRouteQuery = (router: VueRouter) =>
+  computed(() => router.currentRoute.query)

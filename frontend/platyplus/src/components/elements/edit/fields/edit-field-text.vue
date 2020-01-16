@@ -14,28 +14,23 @@ div
 </template>
 
 <script lang="ts">
-import { createComponent, computed } from '@vue/composition-api'
+import { createComponent } from '@vue/composition-api'
 
 import { useTranslator } from '../../../../composables/i18n'
 import {
   useMetadata,
-  fieldProps,
-  useComponentName
+  fieldEditProps,
+  useComponentName,
+  useFormFieldValue
 } from '../../../../composables/metadata'
 
 export default createComponent({
-  props: {
-    ...fieldProps,
-    value: { type: String, required: true, default: '' }
-  },
-  setup(props, { emit }) {
+  props: fieldEditProps(String, ''),
+  setup(props, context) {
     const metadata = useMetadata(props)
     const componentName = useComponentName('edit')
     const translate = useTranslator()
-    const formValue = computed({
-      get: () => props.value,
-      set: value => emit('input', value)
-    })
+    const formValue = useFormFieldValue<string>(props, context)
     return {
       metadata,
       componentName,
