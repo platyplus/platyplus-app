@@ -48,6 +48,7 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
 
   Vue.use(ErrorsPlugin, store, { i18n: app.i18n })
 
+  // TODO merge into the Vue3 provider
   createClient({
     uri: getConfig().API,
     getToken: () => store.getters['authentication/encodedToken'],
@@ -61,6 +62,8 @@ export default async ({ Vue, app, store, router }: QuasarBootOptions) => {
 
   Vue.use(AuthenticationPlugin, { app, store, router })
   Vue.use(MetadataPlugin, { store })
+
+  // ? put this in a Vue3 provider, on a onMounted or something?
   /**
    * * Loads the user data (profile, table classes, permissions) from Apollo
    * ! Cannot be put in the authentication plugin as Vue.use does not work asynchronously
