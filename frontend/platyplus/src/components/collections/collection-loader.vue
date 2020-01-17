@@ -8,16 +8,10 @@ div
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 import { setTitle } from '../../composables/navigation'
-import {
-  tableProps,
-  useMetadata,
-  useListLoader
-} from '../../composables/metadata'
+import { tableProps, useMetadata, useListLoader } from '../../modules/metadata'
 
 export default createComponent({
-  props: {
-    ...tableProps
-  },
+  props: { ...tableProps },
   setup(props) {
     setTitle(props.table + '.label_plural')
     const metadata = useMetadata(props)

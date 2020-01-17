@@ -15,14 +15,13 @@ div
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-
-import { useTranslator } from '../../../../composables/i18n'
+import { useTranslator } from '../../../../modules/i18n'
 import {
   useMetadata,
   fieldEditProps,
   useComponentName,
   useFormFieldValue
-} from '../../../../composables/metadata'
+} from '../../../../modules/metadata'
 
 export default createComponent({
   props: fieldEditProps(String, ''),

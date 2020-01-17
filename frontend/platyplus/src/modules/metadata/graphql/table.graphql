@@ -38,6 +38,7 @@ query tableQuery($name: String!) {
         mapping {
           ...mappingFragment
         }
+        optionsQuery
       }
       ... on OneToManyRelationship {
         comment
@@ -47,6 +48,7 @@ query tableQuery($name: String!) {
         mapping {
           ...mappingFragment
         }
+        optionsQuery
       }
       ... on ManyToManyRelationship {
         comment
@@ -62,6 +64,7 @@ query tableQuery($name: String!) {
         throughMapping {
           ...mappingFragment
         }
+        optionsQuery
       }
     }
   }

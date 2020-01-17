@@ -1,4 +1,4 @@
-import { ObjectMap } from '../../../types/common'
+import { ObjectMap } from '../../common'
 import { Table } from './objects'
 
 export type WithTypeName = {

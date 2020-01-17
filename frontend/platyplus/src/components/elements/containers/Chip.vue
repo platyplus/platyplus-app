@@ -9,12 +9,10 @@ import {
   elementProps,
   useReadElement,
   useElementLabel
-} from '../../../composables/metadata'
+} from '../../../modules/metadata'
 
 export default createComponent({
-  props: {
-    ...elementProps
-  },
+  props: { ...elementProps },
   setup(props) {
     const { action: read } = useReadElement(props.element) // TODO arg: reactive props
     const label = useElementLabel(props.element) // TODO arg: reactive props

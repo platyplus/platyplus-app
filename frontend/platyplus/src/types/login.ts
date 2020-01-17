@@ -1,4 +1,5 @@
 // TODO generate the types from the authentication service in the same way as for the metadata service
+// TODO move elsewhere
 export interface LoginInputPayload {
   username: string
   password: string

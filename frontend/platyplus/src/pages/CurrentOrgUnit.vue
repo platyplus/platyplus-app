@@ -1,6 +1,6 @@
 <template lang="pug">
-q-page(v-if="$authenticated" padding class="justify-center")
-  div(v-if="$profile.preferred_org_unit" v-t="{path: 'location.message', args: {location: $profile.preferred_org_unit.name}}")
+q-page(v-if="authenticated" padding class="justify-center")
+  div(v-if="profile.preferred_org_unit" v-t="{path: 'location.message', args: {location: profile.preferred_org_unit.name}}")
   div(v-t="'location.select'")
   q-btn(v-for="(item, key) in list" :key="key"
     @click='selectOrgUnit(item.id)'
@@ -11,25 +11,31 @@ q-page(v-if="$authenticated" padding class="justify-center")
 <style></style>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import { get } from 'object-path'
+import { createComponent, computed } from '@vue/composition-api'
+import { useProfile, useAuthenticated } from '../modules/authentication'
+import { useStore } from '../modules/common'
 
-@Component
-export default class PageCurrentOrgUnit extends Vue {
-  async selectOrgUnit(id: string) {
-    await this.$store.dispatch('authentication/udpatePreferredOrgUnit', id)
-    this.$store.dispatch('navigation/route', {
-      path: this.$from ? this.$from.path : '/profile/current-org-unit'
+export default createComponent({
+  setup() {
+    const store = useStore()
+    const profile = useProfile()
+    const authenticated = useAuthenticated()
+    const selectOrgUnit = async (id: string) => {
+      await store.dispatch('authentication/udpatePreferredOrgUnit', id)
+      store.dispatch('navigation/route', {
+        // TODO path: this.$from ? this.$from.path : '/profile/current-org-unit'
+        path: '/profile/current-org-unit'
+      })
+    }
+    const list = computed(() => {
+      const preferredOrgUnitId = profile.value?.preferred_org_unit?.id
+      if (profile.value?.org_unit_memberships) {
+        return profile.value.org_unit_memberships
+          .map(item => item.org_unit)
+          .filter(item => item.id !== preferredOrgUnitId)
+      } else return []
     })
+    return { store, selectOrgUnit, list, authenticated, profile }
   }
-
-  get list() {
-    const preferredOrgUnitId = get(this.$profile, 'preferred_org_unit.id')
-    if (this.$profile.org_unit_memberships) {
-      return this.$profile.org_unit_memberships
-        .map(item => item.org_unit)
-        .filter(item => item.id !== preferredOrgUnitId)
-    } else return []
-  }
-}
+})
 </script>

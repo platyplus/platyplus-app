@@ -1,15 +1,6 @@
-import { Component, Mixins } from 'vue-property-decorator'
+import { ObjectArray } from '../modules/common'
 
-import { ObjectArray } from '../types/common'
-
-import { FieldRelationshipMixin } from './field-relationship'
-import { FieldEditMixin } from './field-edit'
-
-@Component
-export class FieldManyToManyMixin extends Mixins(
-  FieldRelationshipMixin,
-  FieldEditMixin
-) {
+export class FieldManyToManyMixin {
   public get targetList() {
     // TODO recode
     // const fieldValue = this.fieldValue as ObjectMap[]

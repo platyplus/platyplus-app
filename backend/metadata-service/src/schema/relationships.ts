@@ -2,7 +2,8 @@ import {
   Field,
   ObjectType,
   registerEnumType,
-  InterfaceType
+  InterfaceType,
+  Ctx
 } from 'type-graphql'
 
 import { Table } from './table'
@@ -97,6 +98,16 @@ export abstract class Relationship extends GenericField {
     this.mapping = mapping
     this.comment = comment
   }
+
+  @Field(type => String, {
+    name: 'optionsQuery',
+    description:
+      'Representation of the GraphQL query of the possible options of the relationship',
+    nullable: true
+  })
+  optionsQuery(@Ctx() context: Context) {
+    return JSON.stringify(context, null, 2) // ('not to be used in the abstract class')
+  }
 }
 
 @ObjectType({ implements: [Relationship, GenericField], description: '' })
@@ -117,6 +128,11 @@ export class SingleRelationship extends Relationship {
       set(result, this.name, this.target.toObject(context, action, scope))
     }
     return result
+  }
+
+  @Field(type => String, { nullable: true })
+  optionsQuery(@Ctx() context: Context) {
+    return this.target.listQuery(context)
   }
 }
 
@@ -142,6 +158,11 @@ export class OneToManyRelationship extends Relationship {
     }
     return result
   }
+
+  @Field(type => String, { nullable: true })
+  optionsQuery(@Ctx() context: Context) {
+    return this.target.listQuery(context)
+  }
 }
 
 @ObjectType({ implements: [Relationship, GenericField], description: '' })
@@ -165,6 +186,11 @@ export class ManyToManyRelationship extends Relationship
         .permittedColumnNames(context, action)
         .includes(this.name)
     }
+  }
+
+  @Field(type => String, { nullable: true })
+  optionsQuery(@Ctx() context: Context) {
+    return this.target.listQuery(context)
   }
 }
 

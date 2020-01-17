@@ -10,11 +10,9 @@ div(v-else)
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { listProps } from '../../../composables/metadata'
+import { listProps } from '../../../modules/metadata'
 
 export default createComponent({
-  props: {
-    ...listProps
-  }
+  props: { ...listProps }
 })
 </script>

@@ -2,19 +2,17 @@
 div
   slot(name="before-field" :table="table" :property="property" :element="element")
   slot(name="field" :table="table" :property="property" :element="element")
-    q-select(:label="$t(table +'.labels.'+property)"
+    q-select(:label="translate(table +'.labels.'+property)"
       filled
-      :hint="$t(table +'.helpers.'+property)"
+      :hint="translate(table +'.helpers.'+property)"
       hide-hint
-      :error-label="$t(table +'.errors.'+property)"
+      :error-label="translate(table +'.errors.'+property)"
       v-model="formValue"
       :options="options"
       option-value="_id"
       option-label="_label"
-      :clearable="!propertyMetadata.required"
       use-input
       input-debounce="0"
-      @filter="filterOptions"
       :key="property"
       :name="property"
       stack-label)
@@ -22,9 +20,44 @@ div
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from 'vue-property-decorator'
-import { FieldEditMixin, FieldOptionsMixin } from '../../../../mixins'
+//       @filter="filterOptions"
+//       :clearable="!relationship.required"
 
-@Component
-export default class Select extends Mixins(FieldEditMixin, FieldOptionsMixin) {}
+import { createComponent, computed } from '@vue/composition-api'
+
+import { useTranslator } from '../../../../modules/i18n'
+import {
+  useMetadata,
+  fieldEditProps,
+  useComponentName,
+  useFieldMetadata,
+  useOptionsLoader,
+  elementToOption
+} from '../../../../modules/metadata'
+
+export default createComponent({
+  props: fieldEditProps(Object, () => ({})),
+  setup(props, { emit }) {
+    const metadata = useMetadata(props)
+    const componentName = useComponentName('edit')
+    const translate = useTranslator()
+    const formValue = computed({
+      get: () => elementToOption(props.value),
+      set: value => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _id, _label, ...result } = value
+        emit('input', result)
+      }
+    })
+    const relationship = useFieldMetadata(props)
+    const options = useOptionsLoader(relationship)
+    return {
+      metadata,
+      componentName,
+      translate,
+      formValue,
+      options
+    }
+  }
+})
 </script>

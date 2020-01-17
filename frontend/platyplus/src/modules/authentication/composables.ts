@@ -1,0 +1,36 @@
+import { computed } from '@vue/composition-api'
+
+import { useStore, useRouter } from '../common'
+import { useLocale, useTranslator, languageCode } from '../i18n'
+import { useQuasar } from '../quasar'
+
+import { User } from './types'
+
+// ? move to authentication/composables?
+export const useLogout = () => {
+  const store = useStore()
+  const router = useRouter()
+  const locale = useLocale()
+  const translate = useTranslator()
+  const quasar = useQuasar()
+  return () =>
+    quasar
+      .dialog({
+        message: translate('logout.message'),
+        cancel: true,
+        persistent: true
+      })
+      .onOk(async () => {
+        await store.dispatch('signout')
+        locale.value = languageCode(navigator.language)
+        router.replace('/public')
+      })
+}
+
+export const useAuthenticated = () =>
+  computed(() => useStore().getters['authentication/authenticated'] as boolean)
+
+export const useProfile = () =>
+  computed(
+    () => useStore().getters['authentication/profile'] as User | undefined
+  )

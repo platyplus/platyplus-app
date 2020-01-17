@@ -4,7 +4,7 @@ component(:is="componentName" :table="table" :list="list")
 
 <script lang="ts">
 import { createComponent, computed } from '@vue/composition-api'
-import { listProps } from '../../composables/metadata'
+import { listProps } from '../../modules/metadata'
 
 export default createComponent({
   props: {

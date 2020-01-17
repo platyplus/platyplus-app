@@ -1,5 +1,5 @@
 import { SetupContext } from '@vue/composition-api'
-import { GenericObject } from '../types/common'
+import { GenericObject } from '../modules/common'
 
 interface FullSetupContext extends SetupContext {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

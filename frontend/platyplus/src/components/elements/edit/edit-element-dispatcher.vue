@@ -5,7 +5,7 @@ q-form(autofocus @reset="reset.action()" @submit="save.action()")
     slot(name="fields" :element="element")
       component(v-for="property, key in metadata.fields"
 
-        v-if="property.name === 'name'"
+        v-if="property.name === 'name' || property.name === 'type'"
 
         :key="'field-'+key"
         :is="componentName(property, 'h-edit-field')"
@@ -24,8 +24,7 @@ q-form(autofocus @reset="reset.action()" @submit="save.action()")
 
 <script lang="ts">
 import { createComponent, reactive } from '@vue/composition-api'
-
-import { useTranslator } from '../../../composables/i18n'
+import { useTranslator } from '../../../modules/i18n'
 import {
   useMetadata,
   tableProps,
@@ -35,14 +34,11 @@ import {
   useCancelEditElement,
   useSaveElement,
   useResetForm
-} from '../../../composables/metadata'
-import { useRouteQuery } from '../../../composables/router'
-import { useRouter } from '../../../router'
+} from '../../../modules/metadata'
+import { useRouteQuery, useRouter } from '../../../modules/common'
 
 export default createComponent({
-  props: {
-    ...tableProps
-  },
+  props: { ...tableProps },
   setup(props) {
     const metadata = useMetadata(props)
     const router = useRouter()

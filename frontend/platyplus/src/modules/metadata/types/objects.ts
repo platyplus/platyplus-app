@@ -56,6 +56,7 @@ export interface ManyToManyRelationship extends Relationship, GenericField {
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
+  optionsQuery?: Maybe<Scalars['String']>
   through: Table
   throughMapping: Array<ColumnMapping>
 }
@@ -68,6 +69,7 @@ export interface OneToManyRelationship extends Relationship, GenericField {
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
+  optionsQuery?: Maybe<Scalars['String']>
 }
 
 export interface Query {
@@ -93,6 +95,8 @@ export interface Relationship {
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
+  /** Representation of the GraphQL query of the possible options of the relationship */
+  optionsQuery?: Maybe<Scalars['String']>
 }
 
 /** Rule */
@@ -111,6 +115,7 @@ export interface SingleRelationship extends Relationship, GenericField {
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
+  optionsQuery?: Maybe<Scalars['String']>
 }
 
 /** The table model */

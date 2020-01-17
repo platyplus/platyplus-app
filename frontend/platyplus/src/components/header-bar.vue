@@ -13,10 +13,9 @@ q-toolbar(color="primary")
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-
-import { useTranslator, useLocale } from '../composables/i18n'
-import { useTitle } from '../composables/navigation'
+import { useTranslator, useLocale } from '../modules/i18n'
 import { locales } from '../modules/i18n'
+import { useTitle } from '../composables/navigation'
 
 export default createComponent({
   setup() {

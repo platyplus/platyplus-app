@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-
+// TODO move to .graphql files
 export const LOGIN_MUTATION = gql`
   mutation user_login($username: String!, $password: String!) {
     login(username: $username, password: $password) {

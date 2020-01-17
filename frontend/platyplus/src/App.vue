@@ -9,9 +9,8 @@ import { createComponent, provide } from '@vue/composition-api'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 import { apolloClient } from '@platyplus/hasura-apollo-client'
 
-import { provideStore } from './store'
+import { provideRouter, provideStore } from './modules/common'
 import { provideQuasar } from './modules/quasar'
-import { provideRouter } from './router'
 import { provideI18n } from './modules/i18n'
 
 export default createComponent({

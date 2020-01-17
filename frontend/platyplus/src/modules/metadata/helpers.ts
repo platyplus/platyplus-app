@@ -1,8 +1,8 @@
-import { GenericObject, ObjectArray } from '../../types/common'
+import { GenericObject, ObjectArray } from '../common'
 
 import { tableMetadata } from './getters'
-import { elementLabel } from '../../composables/metadata'
-import { DataObject } from './types/queries'
+import { DataObject } from './types'
+import { elementLabel } from './composables'
 
 const uniqueGraphQlId = (object: DataObject) => {
   if (typeof object.__typename === 'string') {

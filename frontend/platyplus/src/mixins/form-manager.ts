@@ -1,7 +1,7 @@
 import { Route } from 'vue-router'
 import { Component, Watch } from 'vue-property-decorator'
 
-import { ObjectMap } from '../types/common'
+import { ObjectMap } from '../modules/common'
 
 Component.registerHooks([
   'beforeRouteEnter',

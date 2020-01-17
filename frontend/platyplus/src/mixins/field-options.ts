@@ -1,35 +1,33 @@
-import { Component, Watch } from 'vue-property-decorator'
+import { Watch } from 'vue-property-decorator'
 
-import { ObjectMap } from '../types/common'
+import { ObjectMap } from '../modules/common'
 
-import { FieldRelationshipMixin } from './field-relationship'
-import gql from 'graphql-tag'
-
-@Component({
-  apollo: {
-    initialOptions: {
-      query() {
-        return gql(this.optionsQuery)
-      }
-      // TODO recode: many to many
-      // update({ result: { nodes } }: Data) {
-      // const tableClass = this.relationship.through
-      //   ? this.relationship.through.reference
-      //   : this.property.reference
-      // return nodes
-      //   .filter(item => this.$can('insert', item))
-      //   .map(item => elementAsOption(item, this.table))
-      // }
-    }
-  }
-})
-export class FieldOptionsMixin extends FieldRelationshipMixin {
+// @Component({
+//   apollo: {
+//     initialOptions: {
+//       query() {
+//         return gql(this.optionsQuery)
+//       }
+// TODO recode: many to many
+// update({ result: { nodes } }: Data) {
+// const tableClass = this.relationship.through
+//   ? this.relationship.through.reference
+//   : this.property.reference
+// return nodes
+//   .filter(item => this.$can('insert', item))
+//   .map(item => elementAsOption(item, this.table))
+// }
+//     }
+//   }
+// })
+export class FieldOptionsMixin {
   public options: ObjectMap[] = []
   private initialOptions: ObjectMap[] = []
   public get optionsQuery() {
     // TODO code optionsQuery in the metadata backend
     // TODO this.relationship.through if many to many!!!
-    return this.relationship.target.listQuery
+    // return this.relationship.target.listQuery
+    return
   }
 
   public filterOptions(val: string, update: Function, abort: Function) {

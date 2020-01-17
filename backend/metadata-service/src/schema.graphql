@@ -42,6 +42,7 @@ type ManyToManyRelationship implements Relationship & GenericField {
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
+  optionsQuery: String
   through: Table!
   throughMapping: [ColumnMapping!]!
 }
@@ -53,6 +54,7 @@ type OneToManyRelationship implements Relationship & GenericField {
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
+  optionsQuery: String
 }
 
 type Query {
@@ -70,6 +72,11 @@ interface Relationship {
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
+
+  """
+  Representation of the GraphQL query of the possible options of the relationship
+  """
+  optionsQuery: String
 }
 
 """Rule"""
@@ -86,6 +93,7 @@ type SingleRelationship implements Relationship & GenericField {
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
+  optionsQuery: String
 }
 
 """The table model"""

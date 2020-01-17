@@ -1,6 +1,6 @@
 import { computed, onMounted, onUpdated } from '@vue/composition-api'
 
-import { useStore } from '../store'
+import { useStore } from '../modules/common'
 import { useQuasar } from '../modules/quasar'
 
 // ? move to navigation/composables

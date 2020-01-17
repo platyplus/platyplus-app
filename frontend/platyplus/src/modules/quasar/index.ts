@@ -1,8 +1,9 @@
 import _Vue from 'vue'
 import { Store } from 'vuex'
-import { quasarModule } from './module'
+import { quasarModule } from './store'
 import { QVueGlobals } from 'quasar'
 import { inject, provide } from '@vue/composition-api'
+export * from './types'
 
 export interface QuasarOptions {
   store: Store<{}>

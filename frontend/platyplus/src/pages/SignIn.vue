@@ -4,13 +4,13 @@ q-page(padding class="justify-center")
     q-form(autofocus @keyup.enter="login")
       validation-provider(name="authentication.labels.username" vid="username" v-slot="provider" rules="required" slim)
         q-input(v-model="form.username" autocomplete="username" type="text"
-          :label="$t('authentication.labels.username')" :hint="$t('authentication.helpers.username')"
+          :label="translate('authentication.labels.username')" :hint="translate('authentication.helpers.username')"
           :error-message="errorMessage(provider)" :error="error(provider)")
       validation-provider(name="authentication.labels.password" vid="password" v-slot="provider" rules="required" slim)
         q-input(v-model="form.password" autocomplete="current-password" type="password"
-          :label="$t('authentication.labels.password')" :hint="$t('authentication.helpers.password')"
+          :label="translate('authentication.labels.password')" :hint="translate('authentication.helpers.password')"
           :error-message="errorMessage(provider)" :error="error(provider)")
-      q-btn(icon="fas fa-sign-in-alt" :label="$t('login.button')" @click="login" :loading="loading")
+      q-btn(icon="fas fa-sign-in-alt" :label="translate('login.button')" @click="login" :loading="loading")
 </template>
 
 <script lang="ts">
@@ -19,9 +19,10 @@ import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import { required } from 'vee-validate/dist/rules'
 
 import { setTitle } from '../composables/navigation'
+import { useTranslator } from '../modules/i18n'
 import { error, errorMessage, getObserver } from '../composables/validation'
 import { useLoading } from '../composables/loading'
-import { useStore } from '../store'
+import { useStore } from '../modules/common'
 
 // Install required rule and message.
 extend('required', required)
@@ -33,6 +34,7 @@ export default createComponent({
   },
   setup(props, context) {
     setTitle('authentication.title')
+    const translate = useTranslator()
     const form = reactive({ username: '', password: '' })
     const store = useStore()
     // TODO move the login action into the authentication composable
@@ -57,7 +59,8 @@ export default createComponent({
       errorMessage,
       loading: useLoading(),
       login,
-      form
+      form,
+      translate
     }
   }
 })

@@ -18,8 +18,7 @@ div
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-
-import { useTranslator } from '../../../composables/i18n'
+import { useTranslator } from '../../../modules/i18n'
 import {
   useMetadata,
   tableProps,
@@ -28,14 +27,11 @@ import {
   useElementLoader,
   useDeleteElement,
   useEditElement
-} from '../../../composables/metadata'
-import { useRouteQuery } from '../../../composables/router'
-import { useRouter } from '../../../router'
+} from '../../../modules/metadata'
+import { useRouter, useRouteQuery } from '../../../modules/common'
 
 export default createComponent({
-  props: {
-    ...tableProps
-  },
+  props: { ...tableProps },
   setup(props) {
     const metadata = useMetadata(props)
     const router = useRouter()

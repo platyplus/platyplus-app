@@ -4,13 +4,13 @@ module.exports = function(ctx) {
   return {
     // Quasar looks for *.js files by default
     sourceFiles: {
-      router: 'src/router/index.ts',
-      store: 'src/store/index.ts'
+      router: 'src/router.ts',
+      store: 'src/store.ts'
     },
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
-      'hasura'
+      'main'
       // 'moment', // ! Do not use. Use rather the built-in quasar helpers
     ],
     css: ['app.styl'],

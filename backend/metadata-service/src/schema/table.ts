@@ -386,22 +386,20 @@ export class Table implements GraphQLNode {
   listQuery(@Ctx() context: Context) {
     // TODO check aggregation permission
     // TODO sort list
-    return (
-      this.canSelect(context) &&
-      jsonToGraphQLQuery({
-        query: {
-          result: {
-            __aliasFor: `${this.name}_aggregate`,
-            aggregate: {
-              max: {
-                updated_at: true
-              }
-            },
-            nodes: this.toObject(context, 'select', 'deep')
-          }
+    // if (this.canSelect(context))
+    return jsonToGraphQLQuery({
+      query: {
+        result: {
+          __aliasFor: `${this.name}_aggregate`,
+          aggregate: {
+            max: {
+              updated_at: true
+            }
+          },
+          nodes: this.toObject(context, 'select', 'deep')
         }
-      })
-    )
+      }
+    })
   }
 
   // TODO return null if not allowed

@@ -1,6 +1,6 @@
 <template lang="pug">
 q-page(
-  v-if="$authenticated"
+  v-if="authenticated"
   padding
   class="justify-center")
   //- q-uploader(:url="url")
@@ -14,10 +14,13 @@ q-page(
 import { createComponent } from '@vue/composition-api'
 
 import { setTitle } from '../composables/navigation'
+import { useAuthenticated } from '../modules/authentication'
 
 export default createComponent({
   setup() {
     setTitle('import-export')
+    const authenticated = useAuthenticated()
+    return { authenticated }
   }
 })
 

@@ -1,5 +1,5 @@
 <template lang="pug">
-q-page(v-if="$authenticated" padding class="justify-center")
+q-page(v-if="authenticated" padding class="justify-center")
   div Profile page.
 </template>
 
@@ -8,10 +8,13 @@ q-page(v-if="$authenticated" padding class="justify-center")
 import { createComponent } from '@vue/composition-api'
 
 import { setTitle } from '../composables/navigation'
+import { useAuthenticated } from '../modules/authentication'
 
 export default createComponent({
   setup() {
     setTitle('user.profile.title')
+    const authenticated = useAuthenticated()
+    return { authenticated }
   }
 })
 </script>
