@@ -7,13 +7,11 @@ export type WithTypeName = {
 
 export type DataObject = ObjectMap & WithTypeName
 
-export type Metadata = Partial<Table> & DataObject
-
 export interface MetadataQuery {
-  _metadata: Metadata[]
+  _metadata: Table[]
 }
 export interface TableQuery {
-  _metadataTable: Metadata
+  _metadataTable: Table
 }
 
 export type ListObject = {

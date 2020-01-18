@@ -4,7 +4,7 @@ import { RefOr, unwrap, useRouter, ObjectMap } from '../../common'
 import { useQuasar } from '../../quasar'
 import { useTranslator } from '../../i18n'
 
-import { DataObject, Metadata } from '../types/queries'
+import { DataObject, Table } from '../types'
 import { isNew } from '../helpers'
 
 import { useCanDelete, useCanEdit, useCanSave } from './permissions'
@@ -86,7 +86,7 @@ export const useReadElement: ActionComposable = (
 }
 
 export const useResetForm: ActionComposable = (
-  metadata: RefOr<Metadata>,
+  metadata: RefOr<Table>,
   element: RefOr<DataObject>,
   form: RefOr<ObjectMap>
 ) => {
@@ -102,7 +102,7 @@ export const useResetForm: ActionComposable = (
 }
 
 export const useCancelEditElement: ActionComposable = (
-  metadata: RefOr<Metadata>,
+  metadata: RefOr<Table>,
   element: RefOr<DataObject>,
   form: RefOr<ObjectMap>
 ) => {
@@ -120,7 +120,7 @@ export const useCancelEditElement: ActionComposable = (
 }
 
 export const useSaveElement: ActionComposable = (
-  metadata: RefOr<Metadata>,
+  metadata: RefOr<Table>,
   element: RefOr<DataObject>,
   form: RefOr<ObjectMap>
 ) => {

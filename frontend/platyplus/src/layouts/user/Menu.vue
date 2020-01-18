@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { useDrawer } from '../../composables/navigation'
+import { useDrawer } from '../../modules/common'
 import { useTranslator } from '../../modules/i18n'
 import { useCanSelect } from '../../modules/metadata'
 import { useProfile, useAuthenticated } from '../../modules/authentication'

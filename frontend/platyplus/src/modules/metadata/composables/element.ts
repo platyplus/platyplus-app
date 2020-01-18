@@ -6,7 +6,7 @@ import { Location } from 'vue-router'
 import { unwrap, RefOr } from '../../common'
 
 import { tableMetadata } from '../getters'
-import { DataObject, Metadata, GenericField } from '../types'
+import { DataObject, Table, GenericField } from '../types'
 
 import { WrappedData } from './common'
 
@@ -28,7 +28,7 @@ export const elementToOption = (element: DataObject) => ({
   _label: elementLabel(element)
 })
 // * Picks the id fields from an object based on a table metadata
-export const pickId = (data: WrappedData, metadata?: RefOr<Metadata>) => {
+export const pickId = (data: WrappedData, metadata?: RefOr<Table>) => {
   const md = elementMetadata(data) || unwrap(metadata)
   if (md?.idFields)
     return pick(

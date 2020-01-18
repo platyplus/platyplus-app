@@ -4,10 +4,10 @@ import { ObjectMap } from '../../common'
 
 import { RefOr, unwrap } from '../../common'
 
-import { Metadata, DataObject } from '../types'
+import { Table, DataObject } from '../types'
 
 export const resetForm = (
-  metadata: RefOr<Metadata>,
+  metadata: RefOr<Table>,
   element: RefOr<DataObject>,
   form: RefOr<ObjectMap>
 ) => {

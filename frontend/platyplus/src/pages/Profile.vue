@@ -7,7 +7,7 @@ q-page(v-if="authenticated" padding class="justify-center")
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 
-import { setTitle } from '../composables/navigation'
+import { setTitle } from '../modules/common'
 import { useAuthenticated } from '../modules/authentication'
 
 export default createComponent({

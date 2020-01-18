@@ -1,21 +1,7 @@
-import { provide, inject, computed } from '@vue/composition-api'
-import VueI18n, { Values } from 'vue-i18n'
+import { computed } from '@vue/composition-api'
 import { useStore } from '../common/store'
-import { getI18n } from './instance'
-
-const I18nSymbol = Symbol()
-
-export function provideI18n() {
-  provide(I18nSymbol, getI18n())
-}
-
-export function useI18n() {
-  const i18n = inject(I18nSymbol)
-  if (!i18n) {
-    // throw error, no store provided
-  }
-  return i18n as VueI18n
-}
+import { useI18n } from './plugin'
+import { Values } from 'vue-i18n'
 
 export const useTranslator = () => {
   const i18n = useI18n()

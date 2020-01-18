@@ -3,9 +3,24 @@ export * from './types'
 export * from './store'
 export * from './router'
 export * from './config'
-
-// TODO put anything related to store and router in the common module,
-/* 
-Nothing can work without them.
-In this scenario, the basic quasar store and router management is reduced to its minimum
-*/
+export * from './apollo'
+import { provideRouter } from './router'
+import { provideStore } from './store'
+import { getConfig } from './config'
+import { provideApollo } from './apollo'
+import { IntrospectionResultData } from '@platyplus/hasura-apollo-client'
+export interface CommonOptions {
+  introspectionQueryResultData?: IntrospectionResultData
+}
+export const provideCommon = ({
+  introspectionQueryResultData
+}: CommonOptions) => {
+  const store = provideStore()
+  const router = provideRouter()
+  const apolloClient = provideApollo({
+    uri: getConfig().API,
+    getToken: () => store.getters['authentication/encodedToken'],
+    introspectionQueryResultData
+  })
+  return { store, router, apolloClient }
+}

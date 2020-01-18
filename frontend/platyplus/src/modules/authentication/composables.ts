@@ -27,10 +27,16 @@ export const useLogout = () => {
       })
 }
 
-export const useAuthenticated = () =>
-  computed(() => useStore().getters['authentication/authenticated'] as boolean)
-
-export const useProfile = () =>
-  computed(
-    () => useStore().getters['authentication/profile'] as User | undefined
+export const useAuthenticated = () => {
+  const store = useStore()
+  return computed(
+    () => store.getters['authentication/authenticated'] as boolean
   )
+}
+
+export const useProfile = () => {
+  const store = useStore()
+  return computed(
+    () => store.getters['authentication/profile'] as User | undefined
+  )
+}

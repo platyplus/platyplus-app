@@ -9,7 +9,7 @@ import UserHeader from 'layouts/user/Header.vue'
 import UserMenu from 'layouts/user/Menu.vue'
 import { tablesMetadata } from '../modules/metadata'
 
-// TODO where to put this function? How to decouple the UI components from the metadata logic?
+// TODO put this function in the metadata-quasar module
 export const createRoutes = () => {
   return [
     {

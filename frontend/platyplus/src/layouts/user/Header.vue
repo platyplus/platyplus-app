@@ -10,7 +10,7 @@ h-header-bar
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 
-import { useToggleDrawer } from '../../composables/navigation'
+import { useToggleDrawer } from '../../modules/common'
 import { useLogout, useAuthenticated } from '../../modules/authentication'
 
 export default createComponent({

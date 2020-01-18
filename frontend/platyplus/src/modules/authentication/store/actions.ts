@@ -16,7 +16,7 @@ import { User } from '../types'
 export const actions: ActionTree<UserState, {}> = {
   async signin({ commit, dispatch }, { username, password }) {
     // TODO dispatch errors reset rather when the navigation changes?
-    commit('errors/reset', null, { root: true })
+    // commit('errors/reset', null, { root: true })
     try {
       const { data } = await apolloClient.mutate({
         mutation: LOGIN_MUTATION,

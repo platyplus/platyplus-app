@@ -18,11 +18,15 @@ import { createComponent, reactive } from '@vue/composition-api'
 import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
 import { required } from 'vee-validate/dist/rules'
 
-import { setTitle } from '../composables/navigation'
 import { useTranslator } from '../modules/i18n'
-import { error, errorMessage, getObserver } from '../composables/validation'
-import { useLoading } from '../composables/loading'
-import { useStore } from '../modules/common'
+import {
+  setTitle,
+  useStore,
+  useLoading,
+  error,
+  errorMessage,
+  getObserver
+} from '../modules/common'
 
 // Install required rule and message.
 extend('required', required)
@@ -43,15 +47,12 @@ export default createComponent({
       if (await observer.validate()) {
         await store.dispatch('authentication/signin', form)
         // TODO inject/provide
-        if (!context.root.$error) {
-          await store.dispatch(
-            'navigation/route',
-            { path: '/' },
-            { root: true }
-          )
-        } else {
-          observer.setErrors(context.root.$fieldErrors('authentication')) // TODO inject/provide
-        }
+        // if (!context.root.$error) {
+        await store.dispatch('navigation/route', { path: '/' }, { root: true })
+        // } else {
+        //   console.error('Signin error')
+        // observer.setErrors(context.root.$fieldErrors('authentication')) // TODO inject/provide
+        // }
       }
     }
     return {

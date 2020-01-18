@@ -1,7 +1,7 @@
 <template lang="pug">
 q-page(v-if="authenticated" padding class="justify-center")
-  div(v-if="profile.preferred_org_unit" v-t="{path: 'location.message', args: {location: profile.preferred_org_unit.name}}")
-  div(v-t="'location.select'")
+  div(v-if="profile.preferred_org_unit") {{ translate('location.message', {location: profile.preferred_org_unit.name}) }}
+  div {{translate('location.select')}}
   q-btn(v-for="(item, key) in list" :key="key"
     @click='selectOrgUnit(item.id)'
     :label="item.name"
@@ -14,12 +14,14 @@ q-page(v-if="authenticated" padding class="justify-center")
 import { createComponent, computed } from '@vue/composition-api'
 import { useProfile, useAuthenticated } from '../modules/authentication'
 import { useStore } from '../modules/common'
+import { useTranslator } from '../modules/i18n'
 
 export default createComponent({
   setup() {
     const store = useStore()
     const profile = useProfile()
     const authenticated = useAuthenticated()
+    const translate = useTranslator()
     const selectOrgUnit = async (id: string) => {
       await store.dispatch('authentication/udpatePreferredOrgUnit', id)
       store.dispatch('navigation/route', {
@@ -35,7 +37,7 @@ export default createComponent({
           .filter(item => item.id !== preferredOrgUnitId)
       } else return []
     })
-    return { store, selectOrgUnit, list, authenticated, profile }
+    return { store, selectOrgUnit, list, authenticated, profile, translate }
   }
 })
 </script>

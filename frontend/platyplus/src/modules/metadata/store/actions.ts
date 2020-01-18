@@ -4,7 +4,7 @@ import { apolloClient } from '@platyplus/hasura-apollo-client'
 
 import tablesList from '../graphql/tablesList.graphql'
 import tableQuery from '../graphql/table.graphql'
-import { MetadataQuery, TableQuery } from '../types/queries'
+import { MetadataQuery, TableQuery } from '../types'
 
 import { MetadataState } from './state'
 

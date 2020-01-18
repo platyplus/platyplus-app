@@ -1,25 +1,22 @@
-import Vue from 'vue'
 import { Store } from 'vuex'
 import VueRouter from 'vue-router'
-
 import { userModule } from './store'
 
-export interface UserOptions {
+export interface AuthenticationOptions {
   store: Store<{}>
   router: VueRouter
-  app: Vue
   publicPath?: string
   authPath?: string
   loginPath?: string
 }
 
-const defaultOptions: Partial<UserOptions> = {
+const defaultOptions: Partial<AuthenticationOptions> = {
   publicPath: '/public',
   authPath: '/profile/current-org-unit',
   loginPath: '/public/auth/signin'
 }
 
-export function AuthenticationPlugin(_Vue: typeof Vue, options: UserOptions) {
+export const initAuthentication = async (options: AuthenticationOptions) => {
   const { store, router, publicPath, authPath, loginPath } = {
     ...defaultOptions,
     ...options
@@ -63,4 +60,7 @@ export function AuthenticationPlugin(_Vue: typeof Vue, options: UserOptions) {
     }
     return next()
   })
+
+  if (store.getters['authentication/authenticated'])
+    await store.dispatch('onAuthenticated')
 }

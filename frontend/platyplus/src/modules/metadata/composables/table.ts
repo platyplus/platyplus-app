@@ -3,13 +3,13 @@ import { ExtractPropTypes } from '@vue/composition-api/dist/component/componentP
 
 import { RouteQuery } from '../../common'
 
-import { Metadata as MetadataObjectType } from '../types/queries'
+import { Table } from '../types'
 import { tableMetadata } from '../getters'
 
 import { tableProps } from './props'
 import { pickId } from './element'
 
-export type Metadata = Readonly<Ref<Readonly<MetadataObjectType>>>
+export type Metadata = Readonly<Ref<Readonly<Table>>>
 export const useMetadata = (props: ExtractPropTypes<typeof tableProps>) =>
   computed(() => tableMetadata(props.table))
 

@@ -4,7 +4,6 @@
 import {
   InMemoryCache,
   NormalizedCacheObject,
-  IdGetter,
   IntrospectionFragmentMatcher,
   IntrospectionResultData,
   IdGetterObj,
@@ -18,10 +17,29 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
 export let apolloClient: ApolloClient<NormalizedCacheObject>
-interface CreateApolloClientOptions {
+
+/**
+ * * Returns the 'Graphql ID' of the object so it can be normalized in the cache.
+ * - Generate custom IDs for special object types e.g. table, permission...
+ * - If tableClasses are loaded, and if there is more than one primary key column, generate a custom ID
+ * - Use the default generated ID otherwise.
+ */
+export const dataIdFromObject = (object: IdGetterObj) => {
+  if (typeof object.__typename === 'string' && !object.id) {
+    const subIds = Object.keys(object).filter(key => key.endsWith('_id'))
+    if (subIds.length > 0)
+      return `${object.__typename}:${subIds
+        .map(key => (object as { [k: string]: string })[key])
+        .join('.')}`
+    // if ((object as ObjectMap).name)
+    //   return `${object.__typename}:${(object as ObjectMap).name}`
+  }
+  return defaultDataIdFromObject(object)
+}
+
+export interface CreateApolloClientOptions {
   uri: string
   getToken: () => string
-  dataIdFromObject: IdGetter
   errorsLink?: ApolloLink
   introspectionQueryResultData?: IntrospectionResultData
 }
@@ -29,7 +47,6 @@ interface CreateApolloClientOptions {
 export const createClient = ({
   uri,
   getToken,
-  dataIdFromObject,
   errorsLink,
   introspectionQueryResultData
 }: CreateApolloClientOptions) => {
@@ -102,24 +119,5 @@ export const createClient = ({
  * update the lists (e.g. org_unit, org_unit where XYZ) when an item has been added/deleted
  * etc
  */
-
-/**
- * * Returns the 'Graphql ID' of the object so it can be normalized in the cache.
- * - Generate custom IDs for special object types e.g. table, permission...
- * - If tableClasses are loaded, and if there is more than one primary key column, generate a custom ID
- * - Use the default generated ID otherwise.
- */
-export const dataIdFromObject = (object: IdGetterObj) => {
-  if (typeof object.__typename === 'string' && !object.id) {
-    const subIds = Object.keys(object).filter(key => key.endsWith('_id'))
-    if (subIds.length > 0)
-      return `${object.__typename}:${subIds
-        .map(key => (object as { [k: string]: string })[key])
-        .join('.')}`
-    // if ((object as ObjectMap).name)
-    //   return `${object.__typename}:${(object as ObjectMap).name}`
-  }
-  return defaultDataIdFromObject(object)
-}
 
 export { IntrospectionResultData }

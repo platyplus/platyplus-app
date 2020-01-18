@@ -6,7 +6,9 @@ import { getStore, RootState } from './instance'
 const StoreSymbol = Symbol()
 
 export function provideStore() {
-  provide(StoreSymbol, getStore())
+  const store = getStore()
+  provide(StoreSymbol, store)
+  return store
 }
 
 export function useStore() {

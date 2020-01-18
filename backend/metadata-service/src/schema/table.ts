@@ -47,7 +47,7 @@ export interface RawTable {
 
 @ObjectType({ description: 'The table model' })
 export class Table implements GraphQLNode {
-  @Field(type => ID)
+  @Field(type => ID, { nullable: false })
   readonly name: string
   @Field(type => [Column], { name: 'fields' })
   readonly columns: Column[]
@@ -62,11 +62,12 @@ export class Table implements GraphQLNode {
   // Calculated fields on construction
   @Field(type => Label)
   readonly label: Label
-  @Field(type => ID)
+  @Field(type => ID, { nullable: false })
   readonly id: string
   @Field(type => [Column], {
     description:
-      'Columns that compose the id of the object, either primary key or manually defined in Hasura'
+      'Columns that compose the id of the object, either primary key or manually defined in Hasura',
+    nullable: false
   })
   readonly idFields: Column[]
 

@@ -8,7 +8,7 @@ q-page(class="flex flex-center")
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 
-import { setTitle } from '../composables/navigation'
+import { setTitle } from '../modules/common'
 import { useTranslator } from '../modules/i18n'
 
 export default createComponent({

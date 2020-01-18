@@ -1,6 +1,6 @@
 import { PropType } from '@vue/composition-api'
 import { GenericObject } from '../../common'
-import { DataObject } from '../types/queries'
+import { DataObject } from '../types'
 
 export const tableProps = {
   table: { type: String, default: '' }
