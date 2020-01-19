@@ -3,10 +3,10 @@ import { computed } from '@vue/composition-api'
 import { useStore, useRouter } from '../common'
 import { useLocale, useTranslator, languageCode } from '../i18n'
 import { useQuasar } from '../quasar'
-
+// TODO get rid of the quasar dependency
+// ? and of the i18n dependency?
 import { User } from './types'
 
-// ? move to authentication/composables?
 export const useLogout = () => {
   const store = useStore()
   const router = useRouter()

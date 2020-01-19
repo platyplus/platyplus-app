@@ -1,7 +1,7 @@
 import { RouteConfig } from 'vue-router'
 import { getStore } from '../modules/common'
 
-const hasuraTableUserComponents = () => ({
+const pageLayoutComponents = () => ({
   header: () => import('layouts/user/Header.vue'),
   menu: () => import('layouts/user/Menu.vue')
 })
@@ -45,7 +45,7 @@ const routes: RouteConfig[] = [
         path: '',
         components: {
           default: () => import('pages/Index.vue'),
-          ...hasuraTableUserComponents()
+          ...pageLayoutComponents()
         }
       },
       {
@@ -53,7 +53,7 @@ const routes: RouteConfig[] = [
         path: 'profile',
         components: {
           default: () => import('pages/Profile.vue'),
-          ...hasuraTableUserComponents()
+          ...pageLayoutComponents()
         },
         props: {
           default: () => ({
@@ -67,7 +67,7 @@ const routes: RouteConfig[] = [
         path: 'profile/edit',
         components: {
           default: () => import('pages/Profile.vue'),
-          ...hasuraTableUserComponents()
+          ...pageLayoutComponents()
         },
         props: () => ({
           editFlag: true,
@@ -82,7 +82,7 @@ const routes: RouteConfig[] = [
         path: 'profile/current-org-unit',
         components: {
           default: () => import('pages/CurrentOrgUnit.vue'),
-          ...hasuraTableUserComponents()
+          ...pageLayoutComponents()
         },
         props: () => ({
           table: 'org_unit'
@@ -95,7 +95,7 @@ const routes: RouteConfig[] = [
         path: 'import-export',
         components: {
           default: () => import('pages/ImportExport.vue'),
-          ...hasuraTableUserComponents()
+          ...pageLayoutComponents()
         }
       }
     ]

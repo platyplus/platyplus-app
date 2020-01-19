@@ -1,15 +1,11 @@
 import { provide, onBeforeMount } from '@vue/composition-api'
 import { DefaultApolloClient } from '@vue/apollo-composable'
+
 import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
+import { apolloClient } from '@platyplus/hasura-apollo-client'
 
-import {
-  createClient,
-  CreateApolloClientOptions
-} from '@platyplus/hasura-apollo-client'
-
-export const provideApollo = async (options: CreateApolloClientOptions) => {
-  const apolloClient = createClient(options)
+export const provideApollo = async () => {
   provide(DefaultApolloClient, apolloClient)
-  onBeforeMount(async () => await persistApolloCache(apolloClient.cache)) // TODO test
+  onBeforeMount(async () => await persistApolloCache(apolloClient.cache))
   return apolloClient
 }

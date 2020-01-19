@@ -24,42 +24,7 @@ module.exports = function(ctx) {
     ],
 
     framework: {
-      // all: true, // --- includes everything; for dev only!
-
-      components: [
-        'QAvatar',
-        'QLayout',
-        'QHeader',
-        'QChip',
-        'QCard',
-        'QCardActions',
-        'QCardSection',
-        'QDate',
-        'QDialog',
-        'QDrawer',
-        'QField',
-        'QForm',
-        'QPageContainer',
-        'QPage',
-        'QPageSticky',
-        'QPopupProxy',
-        'QToolbar',
-        'QToolbarTitle',
-        'QBtn',
-        'QBtnDropdown',
-        'QSelect',
-        'QIcon',
-        'QList',
-        'QInput',
-        'QItem',
-        'QItemLabel',
-        'QItemSection',
-        'QSeparator',
-        'QToggle',
-        'QTree'
-      ],
-
-      directives: ['Ripple', 'ClosePopup'],
+      all: 'auto',
 
       // Quasar plugins
       plugins: ['Notify', 'Loading', 'Dialog', 'LoadingBar'],

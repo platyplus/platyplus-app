@@ -1,13 +1,17 @@
 import _Vue from 'vue'
-import { Store } from 'vuex'
 import VueRouter from 'vue-router'
+import { Store } from 'vuex'
 import { upperFirst, camelCase } from 'lodash'
+import { MetadataPlugin } from '../metadata/plugin'
+import { LayoutOptions, createRoutes } from './routes'
+import { getRouter } from '../common'
+export * from './routes'
 
-interface Options {
+interface PluginOptions {
   store: Store<{}>
   router: VueRouter
-  app: _Vue
 }
+type MetadataQuasarPluginOptions = PluginOptions & LayoutOptions
 
 /*
  * require.context is webpack-related and does not exist in node.
@@ -22,8 +26,16 @@ const requireComponent = require.context(
   /(-?[a-z]*)\.(vue)$/ // any camel-case .vue file
 )
 
-export function QuasarMetadataPlugin(Vue: typeof _Vue, options: Options) {
-  // ? only load the messages of the desired language?
+export function QuasarMetadataPlugin(
+  Vue: typeof _Vue,
+  options: MetadataQuasarPluginOptions
+) {
+  const { store, router, ...layoutOptions } = options
+  Vue.use(MetadataPlugin, { store })
+  store.subscribeAction(action => {
+    if (action.type === 'loadRoutes')
+      router.addRoutes(createRoutes(layoutOptions))
+  })
   // * Register all components from the ../components directory
   // * See https://vuejs.org/v2/guide/components-registration.html
   // * Ignore the TS error. See the comment on require.context

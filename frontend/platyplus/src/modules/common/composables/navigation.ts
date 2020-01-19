@@ -2,8 +2,8 @@ import { computed, onMounted, onUpdated } from '@vue/composition-api'
 
 import { useStore } from '../store'
 import { useQuasar } from '../../quasar'
+// TODO get rid of the quasar dependency
 
-// ? move to navigation/composables
 export const useDrawer = () => {
   const store = useStore()
   const quasar = useQuasar()

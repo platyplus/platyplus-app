@@ -40,7 +40,7 @@ export const actions: ActionTree<MetadataState, {}> = {
             dispatch('loading/incrementProgress', 'metadata', { root: true })
           }
           dispatch('loading/stopProgress', 'metadata', { root: true })
-          dispatch('navigation/loadRoutes', null, { root: true })
+          dispatch('loadRoutes', null, { root: true })
         } catch (error) {
           console.error('Error loading the metadata list')
           console.log(error)

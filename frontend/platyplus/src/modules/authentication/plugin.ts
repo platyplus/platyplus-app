@@ -1,10 +1,11 @@
-import { Store } from 'vuex'
+import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { Store } from 'vuex'
 import { userModule } from './store'
 
 export interface AuthenticationOptions {
-  store: Store<{}>
   router: VueRouter
+  store: Store<{}>
   publicPath?: string
   authPath?: string
   loginPath?: string
@@ -16,7 +17,10 @@ const defaultOptions: Partial<AuthenticationOptions> = {
   loginPath: '/public/auth/signin'
 }
 
-export const initAuthentication = async (options: AuthenticationOptions) => {
+export const AuthenticationPlugin = async (
+  _Vue: typeof Vue,
+  options: AuthenticationOptions
+) => {
   const { store, router, publicPath, authPath, loginPath } = {
     ...defaultOptions,
     ...options

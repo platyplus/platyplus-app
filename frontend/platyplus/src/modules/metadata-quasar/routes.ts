@@ -1,27 +1,25 @@
 import { RouteConfig } from 'vue-router'
 
-import CollectionLoader from '../components/collections/collection-loader.vue'
-import ReadElementDispatcher from '../components/elements/read/read-element-dispatcher.vue'
-import EditElementDispatcher from '../components/elements/edit/edit-element-dispatcher.vue'
-import PageLayout from 'layouts/Page.vue'
-import UserLayout from 'layouts/user/Layout.vue'
-import UserHeader from 'layouts/user/Header.vue'
-import UserMenu from 'layouts/user/Menu.vue'
-import { tablesMetadata } from '../modules/metadata'
+import CollectionLoader from './components/collections/collection-loader.vue'
+import ReadElementDispatcher from './components/elements/read/read-element-dispatcher.vue'
+import EditElementDispatcher from './components/elements/edit/edit-element-dispatcher.vue'
+import { tablesMetadata } from '../metadata'
 
-// TODO put this function in the metadata-quasar module
-export const createRoutes = () => {
-  return [
+type ComponentOptions = Pick<RouteConfig, 'component' | 'components'>
+export type LayoutOptions = {
+  mainLayout?: ComponentOptions
+  pageLayout?: ComponentOptions
+}
+export const createRoutes = ({ mainLayout, pageLayout }: LayoutOptions = {}) =>
+  [
     {
       path: '/data/',
-      component: UserLayout,
+      component: mainLayout?.component,
+      components: mainLayout?.components,
       children: tablesMetadata().map(table => ({
         path: table.name || '',
-        components: {
-          default: PageLayout,
-          header: UserHeader,
-          menu: UserMenu
-        },
+        component: pageLayout?.component,
+        components: pageLayout?.components,
         props: {
           default: { table: table.name },
           header: { table: table.name }
@@ -74,4 +72,3 @@ export const createRoutes = () => {
       }))
     }
   ] as RouteConfig[]
-}

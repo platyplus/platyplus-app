@@ -3,7 +3,8 @@ import { Ref, computed, ref, watch, isRef } from '@vue/composition-api'
 import { RefOr, unwrap, useRouter, ObjectMap } from '../../common'
 import { useQuasar } from '../../quasar'
 import { useTranslator } from '../../i18n'
-
+// TODO get rid of the quasar dependecy
+// ? and of the i18n dependency?
 import { DataObject, Table } from '../types'
 import { isNew } from '../helpers'
 

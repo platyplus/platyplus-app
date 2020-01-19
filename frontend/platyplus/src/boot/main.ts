@@ -1,14 +1,19 @@
-import { ValidationProvider } from 'vee-validate'
-import VueCompositionApi from '@vue/composition-api'
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
-import { ValidationObserver } from 'vee-validate'
-
 import Vue, { VueConstructor } from 'vue'
+import VueCompositionApi from '@vue/composition-api'
 import VueRouter from 'vue-router'
 import { Store } from 'vuex'
-import { initAuthentication } from '../modules/authentication'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+
+import HeaderBar from '../components/header-bar.vue'
+import MenuItem from '../components/menu-item.vue'
+
+import { AuthenticationPlugin } from '../modules/authentication'
 import { QuasarMetadataPlugin } from '../modules/metadata-quasar'
+
+import PageLayout from '../layouts/Page.vue'
+import UserLayout from '../layouts/user/Layout.vue'
+import UserHeader from '../layouts/user/Header.vue'
+import UserMenu from '../layouts/user/Menu.vue'
 
 interface QuasarBootOptions {
   app: Vue
@@ -17,43 +22,25 @@ interface QuasarBootOptions {
   store: Store<{}>
 }
 
-/*
- * require.context is webpack-related and does not exist in node.
- * However @types/node and @types/webpack-env are conflicting,
- * and lerna makes it difficult to seggregate them (no-hoist)
- * The simplest way is then to ignore the error. */
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-const requireComponent = require.context(
-  '../components',
-  true, // sub-directories
-  /(-?[a-z]*)\.(vue)$/ // any camel-case .vue file
-)
-
 export default async ({ Vue, router, store }: QuasarBootOptions) => {
   Vue.use(VueCompositionApi)
-  initAuthentication({ store, router })
-  Vue.use(QuasarMetadataPlugin, { router, store })
-  // ? only load the messages of the desired language?
-  // * Register all components from the ../components directory
-  // * See https://vuejs.org/v2/guide/components-registration.html
-  // * Ignore the TS error. See the comment on require.context
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-  requireComponent.keys().forEach(fileName => {
-    const componentConfig = requireComponent(fileName)
-    const componentName =
-      'H' +
-      upperFirst(
-        camelCase(
-          fileName
-            .split('/')
-            .pop()
-            ?.replace(/\.\w+$/, '')
-        )
-      )
-    Vue.component(componentName, componentConfig.default || componentConfig)
+  Vue.use(QuasarMetadataPlugin, {
+    store,
+    router,
+    mainLayout: { component: UserLayout },
+    pageLayout: {
+      components: {
+        default: PageLayout,
+        header: UserHeader,
+        menu: UserMenu
+      }
+    }
   })
+  Vue.use(AuthenticationPlugin, { router, store })
+
+  // ? only load the messages of the desired language?
+  Vue.component('h-header-bar', HeaderBar)
+  Vue.component('h-menu-item', MenuItem)
 
   // TODO put in provideValidation, part of a validation module
   // configure({
