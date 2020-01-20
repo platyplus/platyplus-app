@@ -4,16 +4,20 @@ import VueRouter from 'vue-router'
 import { Store } from 'vuex'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 
+import { createClient } from '@platyplus/hasura-apollo-client'
+
 import HeaderBar from '../components/header-bar.vue'
 import MenuItem from '../components/menu-item.vue'
 
 import { AuthenticationPlugin } from '../modules/authentication'
 import { QuasarMetadataPlugin } from '../modules/metadata-quasar'
+import { getConfig } from '../modules/common'
 
 import PageLayout from '../layouts/Page.vue'
 import UserLayout from '../layouts/user/Layout.vue'
 import UserHeader from '../layouts/user/Header.vue'
 import UserMenu from '../layouts/user/Menu.vue'
+import introspectionQueryResultData from '../modules/metadata/fragmentTypes.json'
 
 interface QuasarBootOptions {
   app: Vue
@@ -23,10 +27,16 @@ interface QuasarBootOptions {
 }
 
 export default async ({ Vue, router, store }: QuasarBootOptions) => {
+  const apolloClient = createClient({
+    uri: getConfig().API,
+    getToken: () => store.getters['authentication/encodedToken'],
+    introspectionQueryResultData
+  })
   Vue.use(VueCompositionApi)
   Vue.use(QuasarMetadataPlugin, {
     store,
     router,
+    apolloClient,
     mainLayout: { component: UserLayout },
     pageLayout: {
       components: {
@@ -36,7 +46,7 @@ export default async ({ Vue, router, store }: QuasarBootOptions) => {
       }
     }
   })
-  Vue.use(AuthenticationPlugin, { router, store })
+  Vue.use(AuthenticationPlugin, { router, store, apolloClient })
 
   // ? only load the messages of the desired language?
   Vue.component('h-header-bar', HeaderBar)

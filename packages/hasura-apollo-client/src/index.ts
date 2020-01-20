@@ -17,6 +17,7 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
 export let apolloClient: ApolloClient<NormalizedCacheObject>
+export { ApolloClient }
 
 /**
  * * Returns the 'Graphql ID' of the object so it can be normalized in the cache.

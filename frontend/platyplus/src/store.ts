@@ -1,9 +1,13 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
-import { initStore } from './modules/common'
-
+import Vuex, { Store } from 'vuex'
 Vue.use(Vuex)
 
+let _store: Store<{}>
+export const getStore = () => _store
+
 export default function(/* { ssrContext } */) {
-  return initStore()
+  _store = new Store<{}>({
+    modules: {}
+  })
+  return _store
 }

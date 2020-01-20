@@ -1,7 +1,6 @@
 import { provide, inject } from '@vue/composition-api'
 import { Store } from 'vuex'
-
-import { getStore, RootState } from './instance'
+import { getStore } from '..'
 
 const StoreSymbol = Symbol()
 
@@ -16,5 +15,5 @@ export function useStore() {
   if (!store) {
     // throw error, no store provided
   }
-  return store as Store<RootState>
+  return store as Store<{}>
 }

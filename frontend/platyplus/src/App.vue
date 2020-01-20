@@ -5,18 +5,20 @@
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { createComponent, onBeforeMount } from '@vue/composition-api'
 import { provideCommon } from './modules/common'
 import { provideQuasar } from './modules/quasar'
 import { provideI18n } from './modules/i18n'
 import messages from './i18n'
+import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
 
 export default createComponent({
   setup(props, context) {
-    const { store } = provideCommon()
+    const { store, apolloClient } = provideCommon()
     // ? only load the messages of the desired language?
     provideI18n({ store, messages })
     provideQuasar(store, context.root.$q) // TODO not ideal: try to put this in the Vue plugin
+    onBeforeMount(async () => await persistApolloCache(apolloClient.cache))
   }
 })
 </script>

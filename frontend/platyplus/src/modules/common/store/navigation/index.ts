@@ -1,12 +1,11 @@
 import { Module } from 'vuex'
 
-import { RootState } from '..'
 import { actions } from './actions'
 import { getters } from './getters'
 import { mutations } from './mutations'
 import { state, NavigationState } from './state'
 
-export const navigation: Module<NavigationState, RootState> = {
+export const navigation: Module<NavigationState, {}> = {
   namespaced: true,
   state,
   getters,

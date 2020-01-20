@@ -1,9 +1,8 @@
 import { ActionTree } from 'vuex'
 import { LoaderState } from './state'
-import { RootState } from '..'
 import { Loading, LoadingBar } from 'quasar'
 
-export const actions: ActionTree<LoaderState, RootState> = {
+export const actions: ActionTree<LoaderState, {}> = {
   start: ({ commit }, message?: string) => {
     commit('start', message)
     Loading.show({ message })

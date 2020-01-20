@@ -1,5 +1,5 @@
 import { RouteConfig } from 'vue-router'
-import { getStore } from '../modules/common'
+import { getStore } from '../store'
 
 const pageLayoutComponents = () => ({
   header: () => import('layouts/user/Header.vue'),

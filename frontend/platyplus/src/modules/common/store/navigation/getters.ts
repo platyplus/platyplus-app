@@ -1,9 +1,8 @@
 import { GetterTree } from 'vuex'
 
-import { RootState } from '..'
 import { NavigationState } from './state'
 
-export const getters: GetterTree<NavigationState, RootState> = {
+export const getters: GetterTree<NavigationState, {}> = {
   drawer(state) {
     return state.drawer
   },

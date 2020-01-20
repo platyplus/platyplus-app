@@ -1,11 +1,9 @@
-import { provide, onBeforeMount } from '@vue/composition-api'
+import { provide } from '@vue/composition-api'
 import { DefaultApolloClient } from '@vue/apollo-composable'
 
-import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
-import { apolloClient } from '@platyplus/hasura-apollo-client'
+import { getApolloClient } from '.'
 
-export const provideApollo = async () => {
-  provide(DefaultApolloClient, apolloClient)
-  onBeforeMount(async () => await persistApolloCache(apolloClient.cache))
-  return apolloClient
+export const provideApollo = () => {
+  provide(DefaultApolloClient, getApolloClient())
+  return getApolloClient()
 }

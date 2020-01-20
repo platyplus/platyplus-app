@@ -2,7 +2,6 @@ import { Store } from 'vuex'
 import { quasarModule } from './store'
 import { QVueGlobals } from 'quasar'
 import { inject, provide } from '@vue/composition-api'
-export * from './types'
 
 declare module 'vue/types/vue' {
   interface Vue {

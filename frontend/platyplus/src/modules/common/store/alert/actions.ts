@@ -1,8 +1,7 @@
 import { ActionTree } from 'vuex'
 import { AlertState } from './state'
-import { RootState } from '..'
 
-export const actions: ActionTree<AlertState, RootState> = {
+export const actions: ActionTree<AlertState, {}> = {
   success: ({ commit }, message) => {
     commit('success', message)
   },

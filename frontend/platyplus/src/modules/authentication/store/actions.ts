@@ -1,7 +1,5 @@
 import { ActionTree } from 'vuex'
 
-import { apolloClient } from '@platyplus/hasura-apollo-client'
-
 import { UserState } from './state'
 
 import {
@@ -12,13 +10,14 @@ import {
 } from '../graphql'
 
 import { User } from '../types'
+import { getApolloClient } from '..'
 
 export const actions: ActionTree<UserState, {}> = {
   async signin({ commit, dispatch }, { username, password }) {
     // TODO dispatch errors reset rather when the navigation changes?
     // commit('errors/reset', null, { root: true })
     try {
-      const { data } = await apolloClient.mutate({
+      const { data } = await getApolloClient().mutate({
         mutation: LOGIN_MUTATION,
         variables: {
           username,
@@ -52,7 +51,7 @@ export const actions: ActionTree<UserState, {}> = {
       if (!(state.token && state.token.id)) return // TODO handle this error
       const {
         data: { profile }
-      }: { data: { profile: User } } = await apolloClient.query({
+      }: { data: { profile: User } } = await getApolloClient().query({
         query: PROFILE_QUERY,
         variables: {
           id: state.token.id
@@ -69,7 +68,7 @@ export const actions: ActionTree<UserState, {}> = {
       const profile = getters['profile']
       if (profile.locale && profile.locale !== locale) {
         // * update the locale through a mutation
-        await apolloClient.mutate({
+        await getApolloClient().mutate({
           mutation: UPDATE_LOCALE,
           variables: {
             userId: profile.id,
@@ -84,7 +83,7 @@ export const actions: ActionTree<UserState, {}> = {
   udpatePreferredOrgUnit: async ({ getters }, id) => {
     const profile = getters['profile']
     if (profile) {
-      await apolloClient.mutate({
+      await getApolloClient().mutate({
         mutation: UPDATE_PREFERRED_ORG_UNIT,
         variables: {
           userId: profile.id,
@@ -99,7 +98,7 @@ export const actions: ActionTree<UserState, {}> = {
     handler: async ({ commit, dispatch }) => {
       dispatch('loading/start', 'Signout', { root: true }) // TODO translate
       commit('reset')
-      apolloClient.resetStore()
+      getApolloClient().resetStore()
       // ? reset other Vuex modules?
       dispatch('loading/stop', 'Signout', { root: true }) // TODO translate
     }

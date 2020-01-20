@@ -1,19 +1,17 @@
 import { Store } from 'vuex'
 import Vue from 'vue'
 
+import { ApolloClient } from '@platyplus/hasura-apollo-client'
+
 export * from './composables'
 export * from './types'
 export * from './store'
 export * from './router'
 export * from './config'
 export * from './apollo'
+
 import { provideRouter } from './router'
-import { provideStore } from './store'
-import { getConfig } from './config'
-import {
-  IntrospectionResultData,
-  createClient
-} from '@platyplus/hasura-apollo-client'
+import { provideStore, CommonStorePlugin } from './store'
 import { provideApollo } from './apollo'
 
 export const provideCommon = () => {
@@ -23,17 +21,22 @@ export const provideCommon = () => {
   return { store, router, apolloClient }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type DefaultApolloClient = ApolloClient<any>
+
+let _apolloClient: DefaultApolloClient
+export const getApolloClient = () => _apolloClient
+let _store: Store<{}>
+export const getStore = () => _store
 export interface CommonOptions {
   store: Store<{}>
-  introspectionQueryResultData?: IntrospectionResultData
+  apolloClient: DefaultApolloClient
 }
 export function CommonPlugin(
   _Vue: typeof Vue,
-  { store, introspectionQueryResultData }: CommonOptions
+  { apolloClient, store }: CommonOptions
 ) {
-  createClient({
-    uri: getConfig().API,
-    getToken: () => store.getters['authentication/encodedToken'],
-    introspectionQueryResultData
-  })
+  _apolloClient = apolloClient
+  _store = store
+  CommonStorePlugin(store)
 }

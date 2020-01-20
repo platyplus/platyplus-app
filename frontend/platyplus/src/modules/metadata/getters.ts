@@ -1,11 +1,11 @@
-import { apolloClient } from '@platyplus/hasura-apollo-client'
-
 import { TableQuery, MetadataQuery, Table } from './types'
 import tablesList from './graphql/tablesList.graphql'
 import tableQuery from './graphql/table.graphql'
+import { getApolloClient } from '.'
+
 export const tableNamesList = (): Table[] => {
   try {
-    const result = apolloClient.readQuery<MetadataQuery>({
+    const result = getApolloClient().readQuery<MetadataQuery>({
       query: tablesList
     })
     return result?._metadata || []
@@ -16,7 +16,7 @@ export const tableNamesList = (): Table[] => {
 
 export const tableMetadata = (name?: string): Table => {
   try {
-    const result = apolloClient.readQuery<TableQuery>({
+    const result = getApolloClient().readQuery<TableQuery>({
       query: tableQuery,
       variables: { name }
     })

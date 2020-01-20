@@ -1,10 +1,9 @@
 import { ActionTree } from 'vuex'
 
-import { apolloClient } from '@platyplus/hasura-apollo-client'
-
 import tablesList from '../graphql/tablesList.graphql'
 import tableQuery from '../graphql/table.graphql'
 import { MetadataQuery, TableQuery } from '../types'
+import { getApolloClient } from '..'
 
 import { MetadataState } from './state'
 
@@ -19,7 +18,7 @@ export const actions: ActionTree<MetadataState, {}> = {
         try {
           const {
             data: { _metadata: tableList }
-          } = await apolloClient.query<MetadataQuery>({
+          } = await getApolloClient().query<MetadataQuery>({
             query: tablesList,
             fetchPolicy: 'cache-first' // * Make sure the query is cached regardless of any default fetchPolicy of the client
           })
@@ -33,7 +32,7 @@ export const actions: ActionTree<MetadataState, {}> = {
             { root: true }
           )
           for (const { name } of tableList) {
-            await apolloClient.query<TableQuery>({
+            await getApolloClient().query<TableQuery>({
               query: tableQuery,
               variables: { name }
             })

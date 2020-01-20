@@ -2,14 +2,18 @@ import _Vue from 'vue'
 import VueRouter from 'vue-router'
 import { Store } from 'vuex'
 import { upperFirst, camelCase } from 'lodash'
-import { MetadataPlugin } from '../metadata/plugin'
+import { MetadataPlugin } from '../metadata'
 import { LayoutOptions, createRoutes } from './routes'
-import { getRouter } from '../common'
+import { ApolloClient } from '@platyplus/hasura-apollo-client'
 export * from './routes'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type DefaultApolloClient = ApolloClient<any>
 
 interface PluginOptions {
   store: Store<{}>
   router: VueRouter
+  apolloClient: DefaultApolloClient
 }
 type MetadataQuasarPluginOptions = PluginOptions & LayoutOptions
 
@@ -30,8 +34,8 @@ export function QuasarMetadataPlugin(
   Vue: typeof _Vue,
   options: MetadataQuasarPluginOptions
 ) {
-  const { store, router, ...layoutOptions } = options
-  Vue.use(MetadataPlugin, { store })
+  const { store, router, apolloClient, ...layoutOptions } = options
+  Vue.use(MetadataPlugin, { store, apolloClient })
   store.subscribeAction(action => {
     if (action.type === 'loadRoutes')
       router.addRoutes(createRoutes(layoutOptions))

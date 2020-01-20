@@ -1,9 +1,8 @@
 import { ActionTree } from 'vuex'
 import { getRouter } from '../../router/instance'
-import { RootState } from '../instance'
 import { NavigationState } from './state'
 
-export const actions: ActionTree<NavigationState, RootState> = {
+export const actions: ActionTree<NavigationState, {}> = {
   routeRequest({ commit }, { path }) {
     commit('setDrawer', false)
     commit('routeRequest', path)
