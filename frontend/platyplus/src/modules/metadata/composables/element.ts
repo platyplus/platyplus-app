@@ -18,15 +18,6 @@ export const elementMetadata = (element?: WrappedData) => {
 export const elementLabel = (element?: WrappedData) =>
   template(elementMetadata(element)?.label?.template)(unwrap(element))
 
-export const elementToOption = (element: DataObject) => ({
-  ...element,
-  _id:
-    element &&
-    elementMetadata(element)
-      ?.idFields?.map(field => element[field.name])
-      .join('.'),
-  _label: elementLabel(element)
-})
 // * Picks the id fields from an object based on a table metadata
 export const pickId = (data: WrappedData, metadata?: RefOr<Table>) => {
   const md = elementMetadata(data) || unwrap(metadata)

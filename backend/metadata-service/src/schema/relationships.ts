@@ -106,7 +106,10 @@ export abstract class Relationship extends GenericField {
     nullable: true
   })
   optionsQuery(@Ctx() context: Context) {
-    return JSON.stringify(context, null, 2) // ('not to be used in the abstract class')
+    console.warn(
+      'optionsQuery should not be used in the Relationship abstract class'
+    )
+    return ''
   }
 }
 
@@ -134,10 +137,42 @@ export class SingleRelationship extends Relationship {
   optionsQuery(@Ctx() context: Context) {
     return this.target.listQuery(context)
   }
+
+  get idFields() {
+    const idFieldNames = this.mapping.map(item => item.from.name)
+    return this.table.columns.filter(column =>
+      idFieldNames.includes(column.name)
+    )
+  }
+
+  @Field(type => Boolean, { nullable: true })
+  canSelect(@Ctx() context: Context) {
+    return (
+      this.idFields.every(field => field.canSelect(context)) &&
+      this.target.canSelect(context)
+    )
+  }
+
+  @Field(type => Boolean, { nullable: true })
+  canInsert(@Ctx() context: Context) {
+    return (
+      this.idFields.every(field => field.canInsert(context)) &&
+      this.target.canInsert(context)
+    )
+  }
+
+  @Field(type => Boolean, { nullable: true })
+  canUpdate(@Ctx() context: Context) {
+    return (
+      this.idFields.every(field => field.canUpdate(context)) &&
+      this.target.canUpdate(context)
+    )
+  }
 }
 
 @ObjectType({ implements: [Relationship, GenericField], description: '' })
 export class OneToManyRelationship extends Relationship {
+  // TODO implement canSelect, Insert, Update
   toObject(context: Context, action: ColumnAction, scope: NodeScope = 'id') {
     const result: ObjectMap = {}
     const fkColumns = this.mapping.map(m => m.to.name)
@@ -163,9 +198,37 @@ export class OneToManyRelationship extends Relationship {
   optionsQuery(@Ctx() context: Context) {
     return this.target.listQuery(context)
   }
+
+  @Field(type => Boolean, { nullable: true })
+  canSelect(@Ctx() context: Context) {
+    return (
+      // TODO can select the fk fields
+      // this.idFields.every(field => field.canSelect(context)) &&
+      this.target.canSelect(context)
+    )
+  }
+
+  @Field(type => Boolean, { nullable: true })
+  canInsert(@Ctx() context: Context) {
+    return (
+      // TODO can select the fk fields
+      // this.idFields.every(field => field.canInsert(context)) &&
+      this.target.canInsert(context)
+    )
+  }
+
+  @Field(type => Boolean, { nullable: true })
+  canUpdate(@Ctx() context: Context) {
+    return (
+      // TODO can select the fk fields
+      // this.idFields.every(field => field.canUpdate(context)) &&
+      this.target.canUpdate(context)
+    )
+  }
 }
 
 @ObjectType({ implements: [Relationship, GenericField], description: '' })
+// TODO implement canSelect, Insert, Update
 export class ManyToManyRelationship extends Relationship
   implements ManyToManyRelationshipInterface {
   @Field(type => Table)
@@ -191,6 +254,27 @@ export class ManyToManyRelationship extends Relationship
   @Field(type => String, { nullable: true })
   optionsQuery(@Ctx() context: Context) {
     return this.target.listQuery(context)
+  }
+
+  originProperty() {
+    return this.through.relationships.find(
+      relationship => relationship.target.name === this.table.name
+    )
+  }
+  targetProperty() {
+    return this.through.relationships.find(
+      relationship => relationship.target.name === this.target.name
+    )
+  }
+
+  @Field(type => String)
+  targetPropertyName() {
+    return this.targetProperty()?.name
+  }
+
+  @Field(type => String)
+  originPropertyName() {
+    return this.originProperty()?.name
   }
 }
 
@@ -297,7 +381,7 @@ export const createRelationships = (table: Table, tables: Table[]) =>
         ).find(rel =>
           rel.mapping.every(
             m =>
-              idFieldNames.includes(m.from.name) ||
+              idFieldNames.includes(m.from.name) &&
               !originNamesInRef.includes(m.from.name)
           )
         )

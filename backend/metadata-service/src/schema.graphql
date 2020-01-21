@@ -5,6 +5,9 @@
 
 """Columns of an SQL table"""
 type Column implements GenericField {
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
@@ -13,8 +16,6 @@ type Column implements GenericField {
   nullable: Boolean!
   insertDefault: String
   updateDefault: String
-  insertReadonly: Boolean
-  updateReadonly: Boolean
   insertRules: [Rule!]
   updateRules: [Rule!]
   deleteRules: [Rule!]
@@ -26,6 +27,9 @@ type ColumnMapping {
 }
 
 interface GenericField {
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
@@ -36,6 +40,9 @@ type Label {
 }
 
 type ManyToManyRelationship implements Relationship & GenericField {
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
@@ -45,9 +52,14 @@ type ManyToManyRelationship implements Relationship & GenericField {
   optionsQuery: String
   through: Table!
   throughMapping: [ColumnMapping!]!
+  targetPropertyName: String!
+  originPropertyName: String!
 }
 
 type OneToManyRelationship implements Relationship & GenericField {
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
@@ -66,6 +78,9 @@ type Query {
 }
 
 interface Relationship {
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
@@ -87,6 +102,9 @@ type Rule {
 }
 
 type SingleRelationship implements Relationship & GenericField {
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!

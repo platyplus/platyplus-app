@@ -6,14 +6,23 @@ div
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
-import { setTitle } from '../../../common'
+import { createComponent, watch } from '@vue/composition-api'
+import { useStore } from '../../../common'
 import { tableProps, useMetadata, useListLoader } from '../../../metadata'
 
 export default createComponent({
   props: { ...tableProps },
   setup(props) {
-    setTitle(props.table + '.label_plural')
+    const store = useStore()
+    watch(
+      () => props.table,
+      () => {
+        store.commit('navigation/setTitle', {
+          label: props.table + '.label_plural',
+          translate: true
+        })
+      }
+    )
     const metadata = useMetadata(props)
     const list = useListLoader(metadata)
     return { list, metadata }

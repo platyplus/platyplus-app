@@ -2,7 +2,7 @@
 div
   slot(name="before-fields" :element="element")
   slot(name="fields" :element="element")
-    component(v-for="property in metadata.fields"
+    component(v-for="property in fields"
       :key="'field-'+property.name"
       :is="componentName(property)"
       :property="property.name"
@@ -17,7 +17,7 @@ div
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { createComponent, computed } from '@vue/composition-api'
 import { useTranslator } from '../../../../i18n'
 import {
   useMetadata,
@@ -44,7 +44,11 @@ export default createComponent({
     const translate = useTranslator()
     const edit = useEditElement(element)
     const remove = useDeleteElement(element)
-    return { metadata, element, componentName, translate, edit, remove }
+    const fields = computed(
+      () => metadata.value.fields.filter(property => property.canSelect) // TODO only works with columns
+    )
+
+    return { metadata, element, componentName, translate, edit, remove, fields }
   }
 })
 </script>

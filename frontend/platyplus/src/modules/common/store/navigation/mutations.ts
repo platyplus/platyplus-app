@@ -17,5 +17,8 @@ export const mutations: MutationTree<NavigationState> = {
   },
   setTitle(state, title) {
     state.title = title
+  },
+  setFrom(state, from) {
+    state.from = from
   }
 }

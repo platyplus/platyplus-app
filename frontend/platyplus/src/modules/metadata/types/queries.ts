@@ -30,5 +30,5 @@ export type ListResult = {
 }
 
 export type ElementResult = {
-  result?: DataObject
+  result: DataObject
 }

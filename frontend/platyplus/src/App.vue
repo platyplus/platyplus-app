@@ -14,7 +14,7 @@ import { persistApolloCache } from '@platyplus/vuex-apollo-offline'
 
 export default createComponent({
   setup(props, context) {
-    const { store, apolloClient } = provideCommon()
+    const { store, apolloClient } = provideCommon(props, context)
     // ? only load the messages of the desired language?
     provideI18n({ store, messages })
     provideQuasar(store, context.root.$q) // TODO not ideal: try to put this in the Vue plugin

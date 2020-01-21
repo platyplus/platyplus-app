@@ -15,6 +15,9 @@ export interface Scalars {
 
 export interface Column extends GenericField {
   __typename?: 'Column'
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
@@ -23,8 +26,6 @@ export interface Column extends GenericField {
   nullable: Scalars['Boolean']
   insertDefault?: Maybe<Scalars['String']>
   updateDefault?: Maybe<Scalars['String']>
-  insertReadonly?: Maybe<Scalars['Boolean']>
-  updateReadonly?: Maybe<Scalars['Boolean']>
   insertRules?: Maybe<Array<Rule>>
   updateRules?: Maybe<Array<Rule>>
   deleteRules?: Maybe<Array<Rule>>
@@ -37,6 +38,9 @@ export interface ColumnMapping {
 }
 
 export interface GenericField {
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
@@ -49,6 +53,9 @@ export interface Label {
 
 export interface ManyToManyRelationship extends Relationship, GenericField {
   __typename?: 'ManyToManyRelationship'
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
@@ -58,10 +65,15 @@ export interface ManyToManyRelationship extends Relationship, GenericField {
   optionsQuery?: Maybe<Scalars['String']>
   through: Table
   throughMapping: Array<ColumnMapping>
+  targetPropertyName: Scalars['String']
+  originPropertyName: Scalars['String']
 }
 
 export interface OneToManyRelationship extends Relationship, GenericField {
   __typename?: 'OneToManyRelationship'
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
@@ -86,6 +98,9 @@ export interface QueryMetadataTableArgs {
 }
 
 export interface Relationship {
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
@@ -104,6 +119,9 @@ export interface Rule {
 
 export interface SingleRelationship extends Relationship, GenericField {
   __typename?: 'SingleRelationship'
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']

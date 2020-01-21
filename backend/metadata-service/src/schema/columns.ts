@@ -141,7 +141,7 @@ export class Column extends GenericField {
    * @param context
    * @param action
    */
-  private readonly(context: Context, action: 'insert' | 'update') {
+  private canAction(context: Context, action: 'insert' | 'update' | 'select') {
     const permission = this.getPermission(context, action)
     if (permission) {
       // ? set readonly to 'true' if a 'column preset' has been defined in the insert/update permission
@@ -157,20 +157,25 @@ export class Column extends GenericField {
         Array.isArray(actionnableColumns) &&
         actionnableColumns.includes(this.name)
       )
-        return false
-      else return true
+        return true
+      else return false
       // }
-    } else return true // * Set readonly to true if no permission has been found at all
+    } else return false // * Set readonly to true if no permission has been found at all
   }
 
   @Field(type => Boolean, { nullable: true })
-  insertReadonly(@Ctx() context: Context) {
-    return this.readonly(context, 'insert')
+  canSelect(@Ctx() context: Context) {
+    return this.canAction(context, 'select')
   }
 
   @Field(type => Boolean, { nullable: true })
-  updateReadonly(@Ctx() context: Context) {
-    return this.readonly(context, 'update')
+  canInsert(@Ctx() context: Context) {
+    return this.canAction(context, 'insert')
+  }
+
+  @Field(type => Boolean, { nullable: true })
+  canUpdate(@Ctx() context: Context) {
+    return this.canAction(context, 'update')
   }
 
   private rules(

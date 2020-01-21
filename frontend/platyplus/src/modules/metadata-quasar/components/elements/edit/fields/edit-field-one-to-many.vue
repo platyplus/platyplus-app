@@ -2,23 +2,30 @@
 div
   slot(name="before-field" :table="table" :property="property" :element="element")
   slot(name="field" :table="table" :property="property" :element="element")
-    q-select(:label="translate(table +'.labels.'+property)"
-      filled
-      multiple
-      use-chips
-      :hint="translate(table +'.helpers.'+property)"
-      hide-hint
+    q-select(
+      :clearable="true"
       :error-label="translate(table +'.errors.'+property)"
-      v-model="formValue"
+      :hint="translate(table +'.helpers.'+property)"
+      :key="property"
+      :label="translate(table +'.labels.'+property)"
+      :name="property"
       :options="options"
+      v-model="formValue"
+      @filter="filter"
+      filled
+      fill-input
+      hide-hint
+      input-debounce="0"
+      multiple
       option-value="_id"
       option-label="_label"
+      use-chips
       use-input
-      input-debounce="0"
-      :key="property"
-      :name="property"
       stack-label)
-      //- template(v-slot:selected-item="{opt, removeAtIndex, tabindex, index}")
+      template(#no-option)
+        q-item
+          q-item-section(class="text-grey") No results
+      template(#selected-item="{opt, removeAtIndex, tabindex, index}")
         q-chip(dense
           :removable="canRemove(opt)" 
           @remove="removeAtIndex(index)"
@@ -27,41 +34,43 @@ div
 </template>
 
 <script lang="ts">
-// @filter="filterOptions"
 // :clearable="!propertyMetadata.required"
 import { createComponent, computed } from '@vue/composition-api'
 import { useTranslator } from '../../../../../i18n'
 import {
   useMetadata,
   fieldEditProps,
-  useComponentName,
   useFieldMetadata,
   useOptionsLoader,
-  elementToOption
+  elementToOption,
+  optionToElement,
+  OptionObject,
+  DataObject
 } from '../../../../../metadata'
 
 export default createComponent({
-  props: fieldEditProps(Object, () => ({})),
+  props: fieldEditProps(Array, () => []),
   setup(props, { emit }) {
     const metadata = useMetadata(props)
-    const componentName = useComponentName('edit')
     const translate = useTranslator()
     const formValue = computed({
-      get: () => elementToOption(props.value),
-      set: value => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { _id, _label, ...result } = value
-        emit('input', result)
-      }
+      get: () =>
+        props.value?.map((item: DataObject) => elementToOption(item)) || [],
+      set: value =>
+        emit(
+          'input',
+          value?.map((item: OptionObject) => optionToElement(item))
+        )
     })
     const relationship = useFieldMetadata(props)
-    const options = useOptionsLoader(relationship)
+    const { options, filter, canRemove } = useOptionsLoader(relationship)
     return {
       metadata,
-      componentName,
       translate,
       formValue,
-      options
+      options,
+      filter,
+      canRemove
     }
   }
 })

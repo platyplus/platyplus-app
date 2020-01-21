@@ -1,9 +1,9 @@
 <template lang="pug">
 h-header-bar
-  template(v-slot:left)
+  template(#left)
     q-btn(flat dense round @click="toggleDrawer" aria-label="Menu")
       q-icon(name="fas fa-bars")
-  template(v-slot:right)
+  template(#right)
     q-btn(v-if="authenticated" flat dense round icon="fas fa-sign-out-alt" @click="logout")
 </template>
 

@@ -13,11 +13,17 @@ export * from './apollo'
 import { provideRouter } from './router'
 import { provideStore, CommonStorePlugin } from './store'
 import { provideApollo } from './apollo'
+import { SetupContext, watch } from '@vue/composition-api'
 
-export const provideCommon = () => {
+export const provideCommon = (_props: never, context: SetupContext) => {
   const store = provideStore()
   const router = provideRouter()
   const apolloClient = provideApollo()
+  watch(
+    () => context.root.$route,
+    (_currentRoute, previousRoute) =>
+      store.commit('navigation/setFrom', previousRoute) // TODO usePrevious composable
+  )
   return { store, router, apolloClient }
 }
 

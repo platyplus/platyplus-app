@@ -27,21 +27,13 @@ query tableQuery($name: String!) {
       id
       name
       component
+      canSelect
+      canInsert
+      canUpdate
       ... on Column {
         ...columnFragment
       }
-      ... on SingleRelationship {
-        comment
-        target {
-          ...targetFragment
-        }
-        mapping {
-          ...mappingFragment
-        }
-        optionsQuery
-      }
-      ... on OneToManyRelationship {
-        comment
+      ... on Relationship {
         target {
           ...targetFragment
         }
@@ -51,19 +43,14 @@ query tableQuery($name: String!) {
         optionsQuery
       }
       ... on ManyToManyRelationship {
-        comment
-        target {
-          ...targetFragment
-        }
-        mapping {
-          ...mappingFragment
-        }
         through {
           ...targetFragment
         }
         throughMapping {
           ...mappingFragment
         }
+        originPropertyName
+        targetPropertyName
         optionsQuery
       }
     }

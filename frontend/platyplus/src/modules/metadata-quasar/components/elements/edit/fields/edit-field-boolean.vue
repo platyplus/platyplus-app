@@ -3,7 +3,7 @@ div
   slot(name="before-field" :table="table" :property="property" :element="element")
   slot(name="field" :table="table" :property="property" :element="element")
     q-field(:label="translate(table +'.labels.'+property)" :key="property" :name="property" stack-label filled)
-      template(v-slot:control)
+      template(#control)
         q-toggle(v-model="formValue")
   slot(name="after-field" :table="table" :property="property" :element="element")
 </template>

@@ -5,9 +5,9 @@ import { CommonPlugin } from '../common'
 import { ApolloClient } from '@platyplus/hasura-apollo-client'
 
 export { tableNamesList, tableMetadata, tablesMetadata } from './getters'
-export { elementAsOption, optionAsElement } from './helpers'
 export * from './composables'
 export { default as introspectionQueryResultData } from './fragmentTypes.json'
+export * from './types'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type DefaultApolloClient = ApolloClient<any>

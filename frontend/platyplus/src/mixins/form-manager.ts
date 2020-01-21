@@ -1,23 +1,10 @@
-import { Route } from 'vue-router'
-import { Component, Watch } from 'vue-property-decorator'
-
-import { ObjectMap } from '../modules/common'
-
-Component.registerHooks([
-  'beforeRouteEnter',
-  'beforeRouteLeave',
-  'beforeRouteUpdate'
-])
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface VeeOberverComponent extends Element {
   validate: () => boolean
   reset: () => void
 }
 
 export class FormManagerMixin {
-  // extends Mixins(ElementLoaderMixin) {
-  public form: ObjectMap = {}
-
   /**
    * 1. Insert
    * a. Basic scalar columns: object { x: "abc", y: true, z: 123 }
@@ -53,44 +40,18 @@ export class FormManagerMixin {
     // const changes = this.changes
     // if (Object.keys(changes).length > 0) {
     //   console.warn('IMPLEMENT SAVE') // TODO recode
-    //   // const data = await saveMutation(
-    //   //   this.tableClass,
-    //   //   this.element,
-    //   //   this.form,
-    //   //   changes
-    //   // )
-    //   // this.reset() // Reset is required to then check if any field changed in the beforeRouteLeave hook
-    //   // this.read(pick(data, this.tableClass.idColumnNames))
+    // const data = await saveMutation(
+    //   this.tableClass,
+    //   this.element,
+    //   this.form,
+    //   changes
+    // )
+    // this.reset() // Reset is required to then check if any field changed in the beforeRouteLeave hook
+    // this.read(pick(data, this.tableClass.idColumnNames))
     // } else this.read()
   }
 
-  public reset() {
-    // TODO sort the following todos either in the 'reset' method (when the user can still modify the field) or in the 'save' method (when the user is not allowed to modify its value)
-    // TODO set 'fixed' values from the route query e.g. query: {parent_id: '1234'} when creating a child org_unit -> field component
-    // TODO set default values from the initial element -> on save
-    // TODO set default values from the hasura permissions and from the backend schema -> on save
-    /**
-     * Every field is checked with the user's ability before being added
-     */
-    // TODO complicated and not really usefull here to filter allowed fields.
-    // TODO Do it at field validation level/save level
-    // ! https://sam.beckham.io/wrote/deep-copying-and-the-immutability-issue.html
-    // this.form = JSON.parse(JSON.stringify(this.element))
-    // const validator = this.$refs.validator as VeeOberverComponent
-    // this.$nextTick(() => !!validator && validator.reset())
-  }
-
-  /**
-   * Watches if the element has been loaded, so it can set the initial form.
-   */
-  @Watch('element')
-  public onElementChanged() {
-    this.reset()
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public beforeRouteEnter(to: Route, from: Route, next: any) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public beforeRouteEnter(_to: any, _from: any, next: any) {
     next((vm: any) => {
       vm.reset()
       if (!vm.canSave) {
@@ -99,60 +60,11 @@ export class FormManagerMixin {
     })
   }
 
-  /**
-   * * Returns the changes made in the form based on the initial element
-   * ! The objects are compared with JSON.stringify, which requires a strict manipulation
-   * TODO the many2many selected options are not correctly generated (returns all the columns instead of id + label columns)
-   */
-  public get changes(): ObjectMap {
-    const newValue: ObjectMap = {}
-    // TODO recode
-    // for (const property of this.fields(this.action)) {
-    //   const name = property.name
-    //   if (property.isColumn) {
-    //     if (this.form[name] !== this.element[name])
-    //       newValue[name] = this.form[name]
-    //   } else {
-    //     const relationship = property as RelationshipProperty
-    //     if (relationship.isMultiple) {
-    //       const oldArray = (this.element[name] || []) as ObjectMap[]
-    //       const newArray = (this.form[name] || []) as ObjectMap[]
-    //       const oldStrArray = oldArray.map(item => JSON.stringify(item))
-    //       const newStrArray = newArray.map(item => JSON.stringify(item))
-    //       const _add = newStrArray
-    //         .filter(item => !oldStrArray.includes(item))
-    //         .map(item => JSON.parse(item))
-    //       const _remove = oldStrArray
-    //         .filter(item => !newStrArray.includes(item))
-    //         .map(item => JSON.parse(item))
-    //       if (_add.length || _remove.length) {
-    //         newValue[name] = { _add, _remove }
-    //       }
-    //     } else {
-    //       if (
-    //         JSON.stringify(this.element[name]) !==
-    //         JSON.stringify(this.form[name])
-    //       )
-    //         newValue[name] = this.form[name]
-    //     }
-    //   }
-    // }
-    return newValue
-  }
-
-  /**
-   * * Returns true if any modification has been done in the form
-   */
-  public get formChanged(): boolean {
-    return Object.keys(this.changes).length > 0
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public beforeRouteLeave(to: Route, from: Route, next: any) {
+  public beforeRouteLeave(_to: any, _from: any, next: any) {
     //* See https://router.vuejs.org/guide/advanced/navigation-guards.html#in-component-guards
-    if (this.formChanged) {
-      console.log('Confirm leaving the page if modifications done') // TODO
-    }
+    // if (this.formChanged) {
+    //   console.log('Confirm leaving the page if modifications done') // TODO
+    // }
     next()
   }
 }

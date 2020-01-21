@@ -2,26 +2,33 @@
 div
   slot(name="before-field" :table="table" :property="property" :element="element")
   slot(name="field" :table="table" :property="property" :element="element")
-    q-select(:label="translate(table +'.labels.'+property)"
-      filled
-      :hint="translate(table +'.helpers.'+property)"
-      hide-hint
+    q-select(
+      :clearable="true"
       :error-label="translate(table +'.errors.'+property)"
-      v-model="formValue"
+      :hint="translate(table +'.helpers.'+property)"
+      :key="property"
+      :label="translate(table +'.labels.'+property)"
+      :name="property"
       :options="options"
+      v-model="formValue"
+      @filter="filter"
+      filled
+      fill-input
+      hide-hint
+      hide-selected
+      input-debounce="0"
       option-value="_id"
       option-label="_label"
       use-input
-      input-debounce="0"
-      :key="property"
-      :name="property"
       stack-label)
+      template(#no-option)
+        q-item
+          q-item-section(class="text-grey") No results
   slot(name="after-field" :table="table" :property="property" :element="element")
 </template>
 
 <script lang="ts">
-//       @filter="filterOptions"
-//       :clearable="!relationship.required"
+// TODO     :clearable="!relationship.required"
 
 import { createComponent, computed } from '@vue/composition-api'
 
@@ -29,34 +36,29 @@ import { useTranslator } from '../../../../../i18n'
 import {
   useMetadata,
   fieldEditProps,
-  useComponentName,
   useFieldMetadata,
   useOptionsLoader,
-  elementToOption
+  elementToOption,
+  optionToElement
 } from '../../../../../metadata'
 
 export default createComponent({
   props: fieldEditProps(Object, () => ({})),
   setup(props, { emit }) {
     const metadata = useMetadata(props)
-    const componentName = useComponentName('edit')
     const translate = useTranslator()
     const formValue = computed({
       get: () => elementToOption(props.value),
-      set: value => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { _id, _label, ...result } = value
-        emit('input', result)
-      }
+      set: value => emit('input', optionToElement(value))
     })
     const relationship = useFieldMetadata(props)
-    const options = useOptionsLoader(relationship)
+    const { options, filter } = useOptionsLoader(relationship)
     return {
       metadata,
-      componentName,
       translate,
       formValue,
-      options
+      options,
+      filter
     }
   }
 })

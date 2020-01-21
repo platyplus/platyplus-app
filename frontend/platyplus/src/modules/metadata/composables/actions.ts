@@ -93,10 +93,10 @@ export const useResetForm: ActionComposable = (
 ) => {
   const translate = useTranslator()
   const permission = ref(true) // ? Not really relevant here
-  if (isRef(element))
-    watch(element, () => {
-      resetForm(metadata, element, form)
-    })
+  // if (isRef(element))
+  //   watch(element, () => {
+  //     resetForm(metadata, element, form)
+  //   })
   const label = computed(() => translate('reset'))
   const action = () => resetForm(metadata, element, form as DataObject)
   return { permission, label, action }
@@ -114,6 +114,7 @@ export const useCancelEditElement: ActionComposable = (
   const { action: reset } = useResetForm(metadata, element, form)
   const action = () => {
     reset()
+    // TODO get rid of isNew, use useIsNew instead
     if (isNew(unwrap(element))) router.go(-1)
     else router.push(elementLink(element, 'read').value)
   }

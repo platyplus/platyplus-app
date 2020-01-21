@@ -1,5 +1,5 @@
 <template lang="pug">
-component(:is="componentName" :table="table" :list="list")
+component(:is="componentName" :table="table" :list="list" :key="table.name")
 </template>
 
 <script lang="ts">

@@ -25,8 +25,7 @@ export function useToggleDrawer() {
   }
 }
 
-// ? crappy, not sure to make it so complicated with the composition api
-// ? use a watcher instead? -> param title should be reactive
+// ! Only works with non reactive title
 export const setTitle = (title: string) => {
   const store = useStore()
   onUpdated(() => {

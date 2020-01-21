@@ -8,12 +8,10 @@ fragment columnFragment on Column {
   type
   domain
   insertDefault
-  insertReadonly
   insertRules {
     ...ruleFragment
   }
   updateDefault
-  updateReadonly
   updateRules {
     ...ruleFragment
   }
@@ -26,10 +24,8 @@ fragment mappingFragment on ColumnMapping {
     ...columnFragment
   }
 }
-#  TODO relationship permissions
 fragment targetFragment on Table {
   name
-  listQuery #  TODO remove and add optionsQuery to Relationship
   idFields {
     id
     name
