@@ -9,7 +9,7 @@ export * from './routes'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type DefaultApolloClient = ApolloClient<any>
-
+// TODO rename the metadata-quasar module into data-quasar
 interface PluginOptions {
   store: Store<{}>
   router: VueRouter

@@ -7,7 +7,6 @@ export const actions: ActionTree<I18nState, {}> = {
     root: true,
     handler: ({ commit }, locale) => {
       getI18n().locale = locale
-      // this.$i18n.setLocaleMessage(locale, messages)
       commit('set', locale)
     }
   }

@@ -52,7 +52,7 @@ export default createComponent({
       get: () => {
         const target = relationship.value?.targetPropertyName
         return props.value?.map((item: DataObject) =>
-          elementToOption(item[target])
+          elementToOption(item[target] as DataObject)
         )
       },
       set: value => {

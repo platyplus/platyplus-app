@@ -9,9 +9,8 @@ import {
 import { isEqual } from 'lodash'
 
 import { Table, DataObject } from '../types'
-import { ObjectMap, RefOr, unwrap, RouteQuery } from '../../common'
+import { ObjectMap, RefOr, unwrap } from '../../common'
 import { elementLabel } from './element'
-import { Metadata, useElementId } from './table'
 import { uniqueGraphQlId } from '../helpers'
 
 export type OptionObject = DataObject & {
@@ -26,7 +25,7 @@ export type OptionObject = DataObject & {
  * This function is used to create a standard label and a standard key
  * regardless of the underlying table class
  */
-export const elementToOption = (element?: DataObject) =>
+export const elementToOption = (element?: DataObject | null) =>
   element &&
   ({
     ...element,
@@ -38,7 +37,7 @@ export const elementToOption = (element?: DataObject) =>
  * * Converts an 'option element' that has been enriched by the above function
  * * in removing the _id and _label fields
  */
-export const optionToElement = (option?: OptionObject) => {
+export const optionToElement = (option?: OptionObject | null) => {
   if (option) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, _label, ...result } = option
