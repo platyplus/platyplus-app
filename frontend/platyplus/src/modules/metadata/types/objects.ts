@@ -15,20 +15,20 @@ export interface Scalars {
 
 export interface Column extends GenericField {
   __typename?: 'Column'
-  canSelect?: Maybe<Scalars['Boolean']>
-  canInsert?: Maybe<Scalars['Boolean']>
-  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
+  insertRules?: Maybe<Array<Rule>>
+  updateRules?: Maybe<Array<Rule>>
+  deleteRules?: Maybe<Array<Rule>>
   type: Scalars['String']
   domain?: Maybe<Scalars['String']>
   nullable: Scalars['Boolean']
   insertDefault?: Maybe<Scalars['String']>
   updateDefault?: Maybe<Scalars['String']>
-  insertRules?: Maybe<Array<Rule>>
-  updateRules?: Maybe<Array<Rule>>
-  deleteRules?: Maybe<Array<Rule>>
 }
 
 export interface ColumnMapping {
@@ -38,12 +38,15 @@ export interface ColumnMapping {
 }
 
 export interface GenericField {
-  canSelect?: Maybe<Scalars['Boolean']>
-  canInsert?: Maybe<Scalars['Boolean']>
-  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
+  insertRules?: Maybe<Array<Rule>>
+  updateRules?: Maybe<Array<Rule>>
+  deleteRules?: Maybe<Array<Rule>>
 }
 
 export interface Label {
@@ -53,12 +56,15 @@ export interface Label {
 
 export interface ManyToManyRelationship extends Relationship, GenericField {
   __typename?: 'ManyToManyRelationship'
-  canSelect?: Maybe<Scalars['Boolean']>
-  canInsert?: Maybe<Scalars['Boolean']>
-  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
+  insertRules?: Maybe<Array<Rule>>
+  updateRules?: Maybe<Array<Rule>>
+  deleteRules?: Maybe<Array<Rule>>
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
@@ -71,12 +77,15 @@ export interface ManyToManyRelationship extends Relationship, GenericField {
 
 export interface OneToManyRelationship extends Relationship, GenericField {
   __typename?: 'OneToManyRelationship'
-  canSelect?: Maybe<Scalars['Boolean']>
-  canInsert?: Maybe<Scalars['Boolean']>
-  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
+  insertRules?: Maybe<Array<Rule>>
+  updateRules?: Maybe<Array<Rule>>
+  deleteRules?: Maybe<Array<Rule>>
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
@@ -98,12 +107,15 @@ export interface QueryMetadataTableArgs {
 }
 
 export interface Relationship {
-  canSelect?: Maybe<Scalars['Boolean']>
-  canInsert?: Maybe<Scalars['Boolean']>
-  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
+  insertRules?: Maybe<Array<Rule>>
+  updateRules?: Maybe<Array<Rule>>
+  deleteRules?: Maybe<Array<Rule>>
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>
@@ -119,12 +131,15 @@ export interface Rule {
 
 export interface SingleRelationship extends Relationship, GenericField {
   __typename?: 'SingleRelationship'
-  canSelect?: Maybe<Scalars['Boolean']>
-  canInsert?: Maybe<Scalars['Boolean']>
-  canUpdate?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
   name: Scalars['String']
   component: Scalars['String']
+  canSelect?: Maybe<Scalars['Boolean']>
+  canInsert?: Maybe<Scalars['Boolean']>
+  canUpdate?: Maybe<Scalars['Boolean']>
+  insertRules?: Maybe<Array<Rule>>
+  updateRules?: Maybe<Array<Rule>>
+  deleteRules?: Maybe<Array<Rule>>
   comment?: Maybe<Scalars['String']>
   target: Table
   mapping: Array<ColumnMapping>

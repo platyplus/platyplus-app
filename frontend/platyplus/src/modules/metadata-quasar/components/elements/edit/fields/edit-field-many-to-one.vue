@@ -52,7 +52,10 @@ export default createComponent({
       set: value => emit('input', optionToElement(value))
     })
     const relationship = useFieldMetadata(props)
-    const { options, filter } = useOptionsLoader(relationship)
+    const { options, filter } = useOptionsLoader(
+      computed(() => props.element),
+      relationship
+    )
     return {
       metadata,
       translate,

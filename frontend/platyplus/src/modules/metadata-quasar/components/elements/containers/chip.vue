@@ -4,7 +4,7 @@ q-chip(:clickable="true" @click="read()")
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { createComponent, computed } from '@vue/composition-api'
 import {
   elementProps,
   useReadElement,
@@ -14,8 +14,9 @@ import {
 export default createComponent({
   props: { ...elementProps },
   setup(props) {
-    const { action: read } = useReadElement(props.element) // TODO arg: reactive props
-    const label = useElementLabel(props.element) // TODO arg: reactive props
+    const element = computed(() => props.element)
+    const { action: read } = useReadElement(element)
+    const label = useElementLabel(element) // TODO arg: reactive props
     return { read, label }
   }
 })

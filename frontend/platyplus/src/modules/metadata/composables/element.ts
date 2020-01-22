@@ -15,8 +15,8 @@ export const elementMetadata = (element?: WrappedData) => {
   if (tableName) return tableMetadata(tableName)
 }
 
-export const elementLabel = (element?: WrappedData) =>
-  template(elementMetadata(element)?.label?.template)(unwrap(element))
+export const elementLabel = (element?: DataObject) =>
+  template(elementMetadata(element)?.label?.template)(element)
 
 // * Picks the id fields from an object based on a table metadata
 export const pickId = (data: WrappedData, metadata?: RefOr<Table>) => {
@@ -40,8 +40,8 @@ export const elementLink = (
   }))
 }
 
-export const useElementLabel = (element: WrappedData) =>
-  computed(() => elementLabel(element))
+export const useElementLabel = (element: Ref<DataObject>) =>
+  computed(() => elementLabel(element.value))
 
 export const useComponentName = (action: 'read' | 'edit') => (
   property: Ref<GenericField>

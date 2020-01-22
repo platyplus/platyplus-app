@@ -158,5 +158,16 @@ export const useFormChanges = (
     return {}
   })
 
-export const useIsNew = (elementId: Ref<DataObject>) =>
-  computed(() => Object.keys(elementId.value).length === 0)
+export const useIsNew = (element: Ref<DataObject | undefined>) =>
+  computed(() => {
+    if (!element.value) return true
+    else {
+      if (Object.keys(element.value).length === 0) return true
+      if (
+        Object.keys(element).length === 1 &&
+        Object.keys(element)[0] === '__typename'
+      )
+        return true
+    }
+    return false
+  })

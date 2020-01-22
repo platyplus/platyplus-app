@@ -5,7 +5,7 @@ div(v-else) Element does not exist
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { createComponent, computed } from '@vue/composition-api'
 import {
   useReadElement,
   useElementLabel,
@@ -14,7 +14,8 @@ import {
 
 export default createComponent({
   props: { ...elementProps },
-  setup({ element }) {
+  setup(props) {
+    const element = computed(() => props.element)
     const { action: read } = useReadElement(element)
     const label = useElementLabel(element)
     return { read, label }

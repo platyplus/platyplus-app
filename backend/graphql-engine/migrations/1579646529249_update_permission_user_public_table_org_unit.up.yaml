@@ -1,0 +1,29 @@
+- args:
+    role: user
+    table:
+      name: org_unit
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check:
+        _and:
+        - name:
+            _gte: "5"
+        - type:
+            name:
+              _eq: mission
+      columns:
+      - id
+      - name
+      - parent_id
+      - type_id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: org_unit
+      schema: public
+  type: create_insert_permission

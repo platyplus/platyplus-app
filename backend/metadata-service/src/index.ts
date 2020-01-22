@@ -53,7 +53,7 @@ async function bootstrap() {
 
   server.applyMiddleware({ app })
 
-  console.log(`GraphQL endpoint will be: ${server.graphqlPath}`)
+  console.info(`GraphQL endpoint will be: ${server.graphqlPath}`)
 }
 
 bootstrap()

@@ -63,7 +63,10 @@ export default createComponent({
         )
     })
     const relationship = useFieldMetadata(props)
-    const { options, filter, canRemove } = useOptionsLoader(relationship)
+    const { options, filter, canRemove } = useOptionsLoader(
+      computed(() => props.element),
+      relationship
+    )
     return {
       metadata,
       translate,

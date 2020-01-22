@@ -12,7 +12,7 @@ import { GenericField } from './field'
 import { ForeignKey } from './foreign-keys'
 import { objectFlip, ObjectMap } from '../core'
 import { Context } from 'koa'
-import { ColumnAction } from './rules'
+import { ColumnAction, Rule } from './rules'
 import { set } from 'object-path'
 import { NodeScope } from './common'
 
@@ -78,9 +78,9 @@ export abstract class Relationship extends GenericField {
   definition: RelationshipDefinition
   @Field({ nullable: true })
   comment?: string
-  @Field(type => Table)
+  @Field(() => Table)
   target: Table
-  @Field(type => [ColumnMapping])
+  @Field(() => [ColumnMapping])
   mapping: ColumnMapping[]
   // TODO inverse
   // ? implement update/insert default?
@@ -99,13 +99,14 @@ export abstract class Relationship extends GenericField {
     this.comment = comment
   }
 
-  @Field(type => String, {
+  @Field(() => String, {
     name: 'optionsQuery',
     description:
       'Representation of the GraphQL query of the possible options of the relationship',
     nullable: true
   })
-  optionsQuery(@Ctx() context: Context) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  optionsQuery(context: Context): string | undefined {
     console.warn(
       'optionsQuery should not be used in the Relationship abstract class'
     )
@@ -133,7 +134,7 @@ export class SingleRelationship extends Relationship {
     return result
   }
 
-  @Field(type => String, { nullable: true })
+  @Field(() => String, { nullable: true })
   optionsQuery(@Ctx() context: Context) {
     return this.target.listQuery(context)
   }
@@ -145,7 +146,7 @@ export class SingleRelationship extends Relationship {
     )
   }
 
-  @Field(type => Boolean, { nullable: true })
+  @Field(() => Boolean, { nullable: true })
   canSelect(@Ctx() context: Context) {
     return (
       this.idFields.every(field => field.canSelect(context)) &&
@@ -153,7 +154,7 @@ export class SingleRelationship extends Relationship {
     )
   }
 
-  @Field(type => Boolean, { nullable: true })
+  @Field(() => Boolean, { nullable: true })
   canInsert(@Ctx() context: Context) {
     return (
       this.idFields.every(field => field.canInsert(context)) &&
@@ -161,12 +162,27 @@ export class SingleRelationship extends Relationship {
     )
   }
 
-  @Field(type => Boolean, { nullable: true })
+  @Field(() => Boolean, { nullable: true })
   canUpdate(@Ctx() context: Context) {
     return (
       this.idFields.every(field => field.canUpdate(context)) &&
       this.target.canUpdate(context)
     )
+  }
+
+  @Field(type => [Rule], { nullable: true })
+  insertRules(@Ctx() context: Context) {
+    return this.rules(context, 'insert')
+  }
+
+  @Field(type => [Rule], { nullable: true })
+  updateRules(@Ctx() context: Context) {
+    return this.rules(context, 'update')
+  }
+
+  @Field(type => [Rule], { nullable: true })
+  deleteRules(@Ctx() context: Context) {
+    return this.rules(context, 'delete')
   }
 }
 
@@ -194,12 +210,12 @@ export class OneToManyRelationship extends Relationship {
     return result
   }
 
-  @Field(type => String, { nullable: true })
+  @Field(() => String, { nullable: true })
   optionsQuery(@Ctx() context: Context) {
     return this.target.listQuery(context)
   }
 
-  @Field(type => Boolean, { nullable: true })
+  @Field(() => Boolean, { nullable: true })
   canSelect(@Ctx() context: Context) {
     return (
       // TODO can select the fk fields
@@ -208,7 +224,7 @@ export class OneToManyRelationship extends Relationship {
     )
   }
 
-  @Field(type => Boolean, { nullable: true })
+  @Field(() => Boolean, { nullable: true })
   canInsert(@Ctx() context: Context) {
     return (
       // TODO can select the fk fields
@@ -217,7 +233,7 @@ export class OneToManyRelationship extends Relationship {
     )
   }
 
-  @Field(type => Boolean, { nullable: true })
+  @Field(() => Boolean, { nullable: true })
   canUpdate(@Ctx() context: Context) {
     return (
       // TODO can select the fk fields
@@ -231,9 +247,9 @@ export class OneToManyRelationship extends Relationship {
 // TODO implement canSelect, Insert, Update
 export class ManyToManyRelationship extends Relationship
   implements ManyToManyRelationshipInterface {
-  @Field(type => Table)
+  @Field(() => Table)
   through: Table
-  @Field(type => [ColumnMapping])
+  @Field(() => [ColumnMapping])
   throughMapping: ColumnMapping[]
 
   constructor(initialData: ManyToManyRelationshipInterface) {
@@ -251,7 +267,7 @@ export class ManyToManyRelationship extends Relationship
     }
   }
 
-  @Field(type => String, { nullable: true })
+  @Field(() => String, { nullable: true })
   optionsQuery(@Ctx() context: Context) {
     return this.target.listQuery(context)
   }
@@ -267,12 +283,12 @@ export class ManyToManyRelationship extends Relationship
     )
   }
 
-  @Field(type => String)
+  @Field(() => String)
   targetPropertyName() {
     return this.targetProperty()?.name
   }
 
-  @Field(type => String)
+  @Field(() => String)
   originPropertyName() {
     return this.originProperty()?.name
   }
@@ -311,7 +327,7 @@ export const flatRelationships = (table: Table, tables: Table[]) =>
         fkColumn = fkColumn.column
       }
       const foreignKey = lookupTable.foreignKeys.find(fk =>
-        Object.entries(fk.mapping).some(([from, to]) => from === fkColumn)
+        Object.entries(fk.mapping).some(([from]) => from === fkColumn)
       ) as ForeignKey // * 'as' trick: will raise an error next if no foreign key is found
       const refTable = isArray ? foreignKey.table.name : foreignKey.ref_name
       target = tables.find(table => table.name === refTable) as Table // * 'as' trick: will raise an error next if no table is found

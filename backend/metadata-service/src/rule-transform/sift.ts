@@ -39,7 +39,7 @@ export const sqlToSift = (value: string) => {
     },
     mergeFunction: (functionName, args) => {
       if (args.length !== 1)
-        console.log(
+        console.warn(
           "Don't know how to handle functions with multiple arguments"
         ) // TODO
       return {

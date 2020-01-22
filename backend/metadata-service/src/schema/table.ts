@@ -131,7 +131,7 @@ export class Table implements GraphQLNode {
   })
   get relationships() {
     if (!this._relationships)
-      this._relationships = createRelationships(this, tables)
+      this._relationships = createRelationships(this, tables) as Relationship[]
     return this._relationships
   }
 
@@ -236,7 +236,7 @@ export class Table implements GraphQLNode {
     const permissions = this.permissions.filter(
       permission => permission.role === role
     )
-    return permissions && permissions[0]
+    return permissions?.[0]
   }
 
   /**
@@ -263,7 +263,7 @@ export class Table implements GraphQLNode {
 
   private canAction(context: Context, action: ActionType) {
     const permissions = this.userPermissions(context)
-    return !!permissions && !!permissions[action] // TODO optional chaining
+    return !!permissions?.[action]
   }
 
   // ? Move into a resolver file?
@@ -379,7 +379,6 @@ export class Table implements GraphQLNode {
     } else return []
   }
 
-  // TODO return null if not allowed
   @Field(type => String, {
     description: 'Representation of the GraphQL query of the table', // TODO improve the description
     nullable: true
@@ -387,20 +386,20 @@ export class Table implements GraphQLNode {
   listQuery(@Ctx() context: Context) {
     // TODO check aggregation permission
     // TODO sort list
-    // if (this.canSelect(context))
-    return jsonToGraphQLQuery({
-      query: {
-        result: {
-          __aliasFor: `${this.name}_aggregate`,
-          aggregate: {
-            max: {
-              updated_at: true
-            }
-          },
-          nodes: this.toObject(context, 'select', 'deep')
+    if (this.canSelect(context))
+      return jsonToGraphQLQuery({
+        query: {
+          result: {
+            __aliasFor: `${this.name}_aggregate`,
+            aggregate: {
+              max: {
+                updated_at: true
+              }
+            },
+            nodes: this.toObject(context, 'select', 'deep')
+          }
         }
-      }
-    })
+      })
   }
 
   // TODO return null if not allowed

@@ -6,6 +6,7 @@ import { Rule as SqlRule, hasuraToVee, sqlToVee } from '../rule-transform'
 import { get } from 'object-path'
 import { Context } from 'koa'
 import { getClaims } from '../config'
+import { mergeRules } from '../rule-transform/vee-validate'
 interface FilterPermissionComponent {
   filter: ObjectMap
 }
@@ -104,7 +105,7 @@ export const createRules = (
     else if (action === 'update') filter = get(permissions, 'update.filter')
     else if (action === 'delete') filter = get(permissions, 'delete.filter')
     if (filter && !isEmpty(filter))
-      rules.push(hasuraToVee(filter, getClaims(context)))
+      rules.push(...hasuraToVee(filter, getClaims(context)))
 
     // * Adds the rules from the check constraints
     for (const check of table.checks) rules.push(...sqlToVee(check.check))
@@ -121,6 +122,6 @@ export const createRules = (
       ))
         rules.push(new RequiredRule(column))
     }
-    return rules
+    return mergeRules(rules)
   }
 }

@@ -178,24 +178,13 @@ export class Column extends GenericField {
     return this.canAction(context, 'update')
   }
 
-  private rules(
-    @Ctx() context: Context,
-    @Arg('action') action: 'insert' | 'update' | 'delete'
-  ) {
+  rules(context: Context, action: 'insert' | 'update' | 'delete') {
     if (
-      action != 'delete' &&
+      action !== 'delete' &&
       !this.table.permittedColumnNames(context, action).includes(this.name)
     )
-      return null
-    const tableRules = this.table.rules(context, action)
-    return (
-      tableRules &&
-      tableRules.filter(rule =>
-        rule.paths.find(
-          path => path === this.name || path.startsWith(`${this.name}.`)
-        )
-      )
-    )
+      return undefined
+    return super.rules(context, action)
   }
 
   @Field(type => [Rule], { nullable: true })

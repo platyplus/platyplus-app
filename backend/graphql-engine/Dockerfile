@@ -1,4 +1,5 @@
-FROM hasura/graphql-engine:latest.cli-migrations
+FROM hasura/graphql-engine:v1.1.0-beta.2.cli-migrations
+
 # * See https://gitlab.com/tactable.io/graphql-next-app/
 WORKDIR /hasura
 

@@ -1,30 +1,24 @@
-import { Ref, computed, ref, watch, isRef } from '@vue/composition-api'
+import { Ref, computed, ref } from '@vue/composition-api'
 
-import { RefOr, unwrap, useRouter, ObjectMap } from '../../common'
+import { useRouter, ObjectMap } from '../../common'
 import { useQuasar } from '../../quasar'
 import { useTranslator } from '../../i18n'
 // TODO get rid of the quasar dependecy
 // ? and of the i18n dependency?
 import { DataObject, Table } from '../types'
-import { isNew } from '../helpers'
 
 import { useCanDelete, useCanEdit, useCanSave } from './permissions'
 import { elementLabel, elementMetadata, elementLink } from './element'
-import { resetForm } from './form'
+import { resetForm, useIsNew } from './form'
 
-type ActionComposable = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ...data: RefOr<any>[]
-) => {
+type ActionResult = {
   action: () => void
   permission: Readonly<Ref<boolean>>
   label?: Readonly<Ref<string>>
 }
 
 // ? Move to a 'navigation' composable submodule ?
-export const useDeleteElement: ActionComposable = (
-  element: Ref<DataObject>
-) => {
+export const useDeleteElement = (element: Ref<DataObject>): ActionResult => {
   const translate = useTranslator()
   const quasar = useQuasar()
   const router = useRouter()
@@ -34,7 +28,7 @@ export const useDeleteElement: ActionComposable = (
     const table = elementMetadata(element)
     const message = translate('delete.label', {
       tableLabel: translate(`${table?.name}.label`),
-      label: elementLabel(element)
+      label: elementLabel(element.value)
     })
     quasar
       .dialog({
@@ -64,9 +58,7 @@ export const useDeleteElement: ActionComposable = (
   return { permission, label, action }
 }
 
-export const useEditElement: ActionComposable = (
-  element: RefOr<DataObject>
-) => {
+export const useEditElement = (element: Ref<DataObject>): ActionResult => {
   const translate = useTranslator()
   const router = useRouter()
   const permission = useCanEdit(element)
@@ -75,9 +67,7 @@ export const useEditElement: ActionComposable = (
   return { permission, label, action }
 }
 
-export const useReadElement: ActionComposable = (
-  element: RefOr<DataObject>
-) => {
+export const useReadElement = (element: Ref<DataObject>): ActionResult => {
   const translate = useTranslator()
   const router = useRouter()
   const permission = ref(true)
@@ -86,11 +76,11 @@ export const useReadElement: ActionComposable = (
   return { permission, label, action }
 }
 
-export const useResetForm: ActionComposable = (
-  metadata: RefOr<Table>,
-  element: RefOr<DataObject>,
-  form: RefOr<ObjectMap>
-) => {
+export const useResetForm = (
+  metadata: Ref<Table>,
+  element: Ref<DataObject>,
+  form: ObjectMap
+): ActionResult => {
   const translate = useTranslator()
   const permission = ref(true) // ? Not really relevant here
   // if (isRef(element))
@@ -98,34 +88,35 @@ export const useResetForm: ActionComposable = (
   //     resetForm(metadata, element, form)
   //   })
   const label = computed(() => translate('reset'))
-  const action = () => resetForm(metadata, element, form as DataObject)
+  const action = () => resetForm(metadata, element, form)
   return { permission, label, action }
 }
 
-export const useCancelEditElement: ActionComposable = (
-  metadata: RefOr<Table>,
-  element: RefOr<DataObject>,
-  form: RefOr<ObjectMap>
-) => {
+export const useCancelEditElement = (
+  metadata: Ref<Table>,
+  element: Ref<DataObject>,
+  form: ObjectMap
+): ActionResult => {
   const translate = useTranslator()
   const router = useRouter()
   const permission = ref(true)
   const label = computed(() => translate('cancel'))
   const { action: reset } = useResetForm(metadata, element, form)
+  const isNew = useIsNew(element)
   const action = () => {
     reset()
     // TODO get rid of isNew, use useIsNew instead
-    if (isNew(unwrap(element))) router.go(-1)
+    if (isNew.value) router.go(-1)
     else router.push(elementLink(element, 'read').value)
   }
   return { permission, label, action }
 }
 
-export const useSaveElement: ActionComposable = (
-  metadata: RefOr<Table>,
-  element: RefOr<DataObject>,
-  form: RefOr<ObjectMap>
-) => {
+export const useSaveElement = (
+  metadata: Ref<Table>,
+  element: Ref<DataObject>,
+  form: ObjectMap
+): ActionResult => {
   const translate = useTranslator()
   const router = useRouter()
   const permission = useCanSave(element)

@@ -30,6 +30,12 @@ query tableQuery($name: String!) {
       canSelect
       canInsert
       canUpdate
+      insertRules {
+        ...ruleFragment
+      }
+      updateRules {
+        ...ruleFragment
+      }
       ... on Column {
         ...columnFragment
       }

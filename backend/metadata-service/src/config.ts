@@ -17,11 +17,7 @@ export const JWKS_URL = `${AUTHENTICATION_URL}/jwks`
 // * Schema being used to install the required tables/views/triggers for handling metadata
 export const DATABASE_SCHEMA = 'platyplus'
 
-export const getClaims = (context: Context) =>
-  context.user && context.user[HASURA_CLAIMS]
+export const getClaims = (context: Context) => context.user?.[HASURA_CLAIMS]
 
-export const getRole = (context: Context): string => {
-  const claims = getClaims(context)
-  if (claims) return claims['x-hasura-default-role'] || UNAUTHORIZED_ROLE
-  return UNAUTHORIZED_ROLE
-}
+export const getRole = (context: Context): string =>
+  getClaims(context)?.['x-hasura-default-role'] || UNAUTHORIZED_ROLE

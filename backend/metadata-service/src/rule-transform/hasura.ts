@@ -56,6 +56,7 @@ const booleanOperatorsMapping: { [key in BooleanOperators]: string } = {
   _or: '||',
   _not: '!'
 }
+const allOperators = { ...operatorsMapping, ...booleanOperatorsMapping }
 
 const recursiveHasuraToLodash = (
   expression: HasuraExpression,
@@ -110,14 +111,14 @@ const recursiveHasuraToLodash = (
       const mappedOperator = operatorsMapping[operator as Operators]
       const environmentKey = String(subExpression).toLowerCase()
       const environmentValue = JSON.stringify(
-        get(environment, environmentKey, environmentKey)
+        get(environment, environmentKey, subExpression)
       )
       return {
         template: ` ${mappedOperator} ${environmentValue}`,
         fields
       }
     } else if (operatorsMapping[Object.keys(subExpression)[0] as Operators]) {
-      // console.log('==== end of value')
+      // end of value
       fields.push([...currentFieldPath, operator].join('.'))
       const result = recursiveHasuraToLodash(
         subExpression,
@@ -130,7 +131,7 @@ const recursiveHasuraToLodash = (
         fields: result.fields
       }
     } else {
-      // console.log('==== transition value')
+      // transition value
       currentFieldPath.push(operator)
       const result = recursiveHasuraToLodash(
         subExpression,

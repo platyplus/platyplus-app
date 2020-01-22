@@ -5,20 +5,20 @@
 
 """Columns of an SQL table"""
 type Column implements GenericField {
-  canSelect: Boolean
-  canInsert: Boolean
-  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
+  insertRules: [Rule!]
+  updateRules: [Rule!]
+  deleteRules: [Rule!]
   type: String!
   domain: String
   nullable: Boolean!
   insertDefault: String
   updateDefault: String
-  insertRules: [Rule!]
-  updateRules: [Rule!]
-  deleteRules: [Rule!]
 }
 
 type ColumnMapping {
@@ -27,12 +27,15 @@ type ColumnMapping {
 }
 
 interface GenericField {
-  canSelect: Boolean
-  canInsert: Boolean
-  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
+  insertRules: [Rule!]
+  updateRules: [Rule!]
+  deleteRules: [Rule!]
 }
 
 type Label {
@@ -40,12 +43,15 @@ type Label {
 }
 
 type ManyToManyRelationship implements Relationship & GenericField {
-  canSelect: Boolean
-  canInsert: Boolean
-  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
+  insertRules: [Rule!]
+  updateRules: [Rule!]
+  deleteRules: [Rule!]
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
@@ -57,12 +63,15 @@ type ManyToManyRelationship implements Relationship & GenericField {
 }
 
 type OneToManyRelationship implements Relationship & GenericField {
-  canSelect: Boolean
-  canInsert: Boolean
-  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
+  insertRules: [Rule!]
+  updateRules: [Rule!]
+  deleteRules: [Rule!]
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
@@ -78,12 +87,15 @@ type Query {
 }
 
 interface Relationship {
-  canSelect: Boolean
-  canInsert: Boolean
-  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
+  insertRules: [Rule!]
+  updateRules: [Rule!]
+  deleteRules: [Rule!]
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!
@@ -102,12 +114,15 @@ type Rule {
 }
 
 type SingleRelationship implements Relationship & GenericField {
-  canSelect: Boolean
-  canInsert: Boolean
-  canUpdate: Boolean
   id: ID!
   name: String!
   component: String!
+  canSelect: Boolean
+  canInsert: Boolean
+  canUpdate: Boolean
+  insertRules: [Rule!]
+  updateRules: [Rule!]
+  deleteRules: [Rule!]
   comment: String
   target: Table!
   mapping: [ColumnMapping!]!

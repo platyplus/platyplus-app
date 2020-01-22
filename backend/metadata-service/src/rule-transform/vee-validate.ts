@@ -68,6 +68,30 @@ class LodashRule extends Rule {
   }
 }
 
+export const mergeRules = (rules: Rule[]) => {
+  const result = [...rules]
+  // * Merge any couple of min_value/max_value rules for the same field into a 'between' rule
+  rules
+    .filter(rule => rule.type === 'max_value')
+    .forEach((ruleMax, indexMax) => {
+      const field = ruleMax.paths[0]
+      const indexMin = rules.findIndex(
+        ruleMin => ruleMin.type === 'min_value' && ruleMin.paths.includes(field)
+      )
+      if (indexMin >= 0) {
+        result.push(
+          new Rule('between', [
+            rules[indexMin].parameters[0],
+            ruleMax.parameters[0]
+          ])
+        )
+        result.splice(Math.max(indexMax, indexMin), 1)
+        result.splice(Math.min(indexMax, indexMin), 1)
+      }
+    })
+  return result
+}
+
 export const sqlToVee = (value: string) => {
   let rootOperation = stringToOperation(value)
   // * Skip the typecast if the entire operation is typecasted
@@ -77,7 +101,7 @@ export const sqlToVee = (value: string) => {
   if (rootOperation.BoolExpr && rootOperation.BoolExpr.boolop === 0) {
     operations = rootOperation.BoolExpr.args
   }
-  const rules = operations.map(operation => {
+  return operations.map(operation => {
     const expression = getExp(operation)
     if (expression) {
       const kind = expression.kind
@@ -130,37 +154,22 @@ export const sqlToVee = (value: string) => {
     }
     return new LodashRule(operationToLodash(operation))
   })
-  // * Copy the generated rules to then modify the final list
-  const result = [...rules]
-  // * Merge any couple of min_value/max_value rules for the same field into a 'between' rule
-  rules
-    .filter(rule => rule.type === 'max_value')
-    .forEach((ruleMax, indexMax) => {
-      const field = ruleMax.paths[0]
-      const indexMin = rules.findIndex(
-        ruleMin => ruleMin.type === 'min_value' && ruleMin.paths.includes(field)
-      )
-      if (indexMin >= 0) {
-        result.push(
-          new Rule('between', [
-            rules[indexMin].parameters[0],
-            ruleMax.parameters[0]
-          ])
-        )
-        result.splice(Math.max(indexMax, indexMin), 1)
-        result.splice(Math.min(indexMax, indexMin), 1)
-      }
-    })
-  return result
 }
 
 export const hasuraToVee = (
   expression: HasuraExpression,
   environment: ObjectMap = {}
 ) => {
+  const singleHasuraToVee = (exp: HasuraExpression) => {
+    const { template, fields } = hasuraToLodash(exp, environment)
+    return new LodashRule(template, fields)
+  }
   // TODO better granularity in the hasuraToLodash method -> code a hasuraToVee method similar to sqlToVee:
-  // TODO 1. decompose into subrules if the inital rule is an _and
+  // * OK: 1. decompose into subrules if the inital rule is an _and
   // TODO 2. recognise the patterns and match with vee rules when possible
-  const { template, fields } = hasuraToLodash(expression, environment)
-  return new LodashRule(template, fields)
+  if (expression._and)
+    return (expression._and as HasuraExpression[]).map(item =>
+      singleHasuraToVee(item)
+    )
+  else return [singleHasuraToVee(expression)]
 }

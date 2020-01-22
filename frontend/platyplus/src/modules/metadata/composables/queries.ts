@@ -10,7 +10,8 @@ import { ListResult, ElementResult, Relationship, DataObject } from '../types'
 import { Metadata } from './table'
 import { elementLabel } from './element'
 import { PropertyMetadata } from './property'
-import { elementToOption, OptionObject } from './form'
+import { elementToOption, OptionObject, useIsNew } from './form'
+import { validateRules } from '../helpers'
 
 export const useListLoader = (metadata: Metadata) => {
   const query = computed(() => gql(metadata.value.listQuery) as DocumentNode)
@@ -20,7 +21,10 @@ export const useListLoader = (metadata: Metadata) => {
   return useResult(result, [], data => data.result?.nodes)
 }
 
-export const useOptionsLoader = (property?: PropertyMetadata) => {
+export const useOptionsLoader = (
+  element: Ref<DataObject>,
+  property?: PropertyMetadata
+) => {
   // TODO reload filteredOptions if options change. E.g. with a watcher
   // TODO this.relationship.through if many to many!!!
   // TODO many to many. Something like:
@@ -41,25 +45,45 @@ export const useOptionsLoader = (property?: PropertyMetadata) => {
   const { result } = useQuery<ListResult>(query, undefined, () => ({
     // enabled: metadata.value.canSelect
   }))
-  const options = useResult(result, [], data =>
+  // * Possible options according to the server's result
+  const availableOptions = useResult(result, [], data =>
     data.result?.nodes.map(node => elementToOption(node) as OptionObject)
   )
-  const filteredOptions = ref(options.value)
+  const inputValue = ref('')
+  const isNew = useIsNew(element)
+  // * Server options filtered with the user's permissions
+  const allowedOptions = computed(() => {
+    const rules = isNew.value
+      ? property?.value?.insertRules
+      : property?.value?.updateRules
+    if (rules) {
+      console.log(rules)
+      return availableOptions.value.filter(item =>
+        validateRules(
+          { ...element.value, [property?.value?.name || '__unknown']: item },
+          rules
+        )
+      )
+    } else return availableOptions.value
+  })
+  // * Options filtered with the current user input
+  const options = computed(() => {
+    if (inputValue.value)
+      return allowedOptions.value.filter(
+        item => item._label?.toLowerCase().indexOf(inputValue.value) > -1
+      )
+    else return allowedOptions.value
+  })
   const filter = (val: string, update: Function, abort: Function) => {
     update(() => {
-      const value = val.toLowerCase()
-      filteredOptions.value = options.value.filter(
-        item =>
-          item._label &&
-          (item._label as string).toLowerCase().indexOf(value) > -1
-      )
+      inputValue.value = val.toLowerCase()
     })
     abort(() => {
-      filteredOptions.value = [...options.value]
+      inputValue.value = ''
     })
   }
   const canRemove = () => true // TODO
-  return { filter, options: filteredOptions, canRemove }
+  return { filter, options, canRemove }
 }
 
 export const useElementLoader = (

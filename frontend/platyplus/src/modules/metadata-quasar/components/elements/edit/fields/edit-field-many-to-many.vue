@@ -65,7 +65,10 @@ export default createComponent({
         )
       }
     })
-    const { options, filter } = useOptionsLoader(relationship)
+    const { options, filter } = useOptionsLoader(
+      computed(() => props.element),
+      relationship
+    )
     return {
       metadata,
       translate,

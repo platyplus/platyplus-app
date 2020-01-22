@@ -15,16 +15,16 @@ export const loadRawMetadata = async () => {
   )
   const lastUpdate = new Date(occurred)
   if (lastLoad < lastUpdate) {
-    console.log('fetching metadata from the database...')
+    console.info('fetching metadata from the database...')
     lastLoad = new Date()
     // TODO implement GraphQL field names
     const { rows } = await pool.query<RawTable>(
       sql`SELECT * from ${sql.identifier([DATABASE_SCHEMA, 'metadata'])}`
     )
     await pool.end()
-    console.log('metadata fetching done.')
+    console.info('metadata fetching done.')
     tables = rows.map(row => new Table(row))
-    console.log('metadata loaded.')
+    console.info('metadata loaded.')
   }
   return tables
 }

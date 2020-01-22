@@ -1,5 +1,6 @@
 import { tableMetadata } from './getters'
-import { DataObject } from './types'
+import { DataObject, Rule } from './types'
+import { template } from 'lodash'
 
 export const uniqueGraphQlId = (object: DataObject) => {
   try {
@@ -17,5 +18,14 @@ export const uniqueGraphQlId = (object: DataObject) => {
   }
 }
 
-export const isNew = (element: DataObject) =>
-  Object.keys(element).length === 1 && Object.keys(element)[0] === '__typename'
+export const validateRule = (element: DataObject, rule: Rule) => {
+  console.log(rule)
+  if (rule.type === 'lodash')
+    return !!JSON.parse(template(rule.parameters[0])(element))
+  return true // TODO code other rules
+}
+
+export const validateRules = (
+  element: DataObject,
+  rules: Rule[] | null | undefined
+) => (rules ? rules.every(rule => validateRule(element, rule)) : true)
