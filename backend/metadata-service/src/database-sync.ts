@@ -1,14 +1,14 @@
 import runner, { RunnerOption } from 'node-pg-migrate'
-import { DATABASE_URL, DATABASE_SCHEMA } from './config'
+import { DATABASE_URL, METADATA_SCHEMA } from './config'
 
 const options: RunnerOption = {
   databaseUrl: DATABASE_URL,
-  schema: DATABASE_SCHEMA,
+  schema: METADATA_SCHEMA,
   createSchema: true,
   createMigrationsSchema: true,
   dir: __dirname + '/migrations',
   direction: 'up',
-  migrationsSchema: DATABASE_SCHEMA,
+  migrationsSchema: METADATA_SCHEMA,
   migrationsTable: 'migrations',
   count: -1
 }

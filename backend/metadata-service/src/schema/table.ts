@@ -4,7 +4,7 @@ import { Context } from 'koa'
 import { jsonToGraphQLQuery, VariableType } from 'json-to-graphql-query'
 
 import { tables } from '../data-loader'
-import { getRole } from '../config'
+import { getRole, DATA_SCHEMA } from '../config'
 import { ObjectMap } from '../core'
 
 import { Label } from './label'
@@ -82,7 +82,7 @@ export class Table implements GraphQLNode {
     checks,
     permissions
   }: RawTable) {
-    this.name = schema === 'public' ? name : `${schema}_${name}` // TODO set default schema ('public') as an env var
+    this.name = schema === DATA_SCHEMA ? name : `${schema}_${name}`
     this.columns = columns.map(rawColumn => new Column(this, rawColumn))
     // TODO ugly: use a new XXX() constuctor that makes the job, as in Column/RawColumn
     for (const foreignKey of foreignKeys) foreignKey.table = this
@@ -117,7 +117,6 @@ export class Table implements GraphQLNode {
   })
   get fields() {
     // TODO sort the fields according to an order defined somewhere in the platyplus database schema
-    // TODO relationships should implement genericfield
     return [...this.basicFields, ...this.relationships]
   }
 
@@ -272,6 +271,8 @@ export class Table implements GraphQLNode {
       'Return true if the user is allowed to select elements in the table'
   })
   canSelect(@Ctx() context: Context) {
+    // TODO all the id fields are in the user permissions
+    // TODO check aggregation permission
     return this.canAction(context, 'select')
   }
 
@@ -380,11 +381,10 @@ export class Table implements GraphQLNode {
   }
 
   @Field(type => String, {
-    description: 'Representation of the GraphQL query of the table', // TODO improve the description
+    description: 'GraphQL query to list the elements of the table',
     nullable: true
   })
   listQuery(@Ctx() context: Context) {
-    // TODO check aggregation permission
     // TODO sort list
     if (this.canSelect(context))
       return jsonToGraphQLQuery({
@@ -402,10 +402,8 @@ export class Table implements GraphQLNode {
       })
   }
 
-  // TODO return null if not allowed
   @Field(type => String, {
-    description:
-      'Representation of the GraphQL query for getting one single element', // TODO improve the description
+    description: 'GraphQL query to get one single element',
     nullable: true
   })
   elementQuery(@Ctx() context: Context) {

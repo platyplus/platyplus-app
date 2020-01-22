@@ -205,9 +205,9 @@ type Table {
   """Representation of the GraphQL query of the table"""
   query: [String!]!
 
-  """Representation of the GraphQL query of the table"""
+  """GraphQL query to list the elements of the table"""
   listQuery: String
 
-  """Representation of the GraphQL query for getting one single element"""
+  """GraphQL query to get one single element"""
   elementQuery: String
 }

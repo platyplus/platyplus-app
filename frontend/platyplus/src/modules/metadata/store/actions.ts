@@ -5,9 +5,7 @@ import tableQuery from '../graphql/table.graphql'
 import { MetadataQuery, TableQuery } from '../types'
 import { getApolloClient } from '..'
 
-import { MetadataState } from './state'
-
-export const actions: ActionTree<MetadataState, {}> = {
+export const actions: ActionTree<{}, {}> = {
   /**
    * Loads the metadata into the Apollo cache
    */
@@ -42,7 +40,7 @@ export const actions: ActionTree<MetadataState, {}> = {
           dispatch('loadRoutes', null, { root: true })
         } catch (error) {
           console.error('Error loading the metadata list')
-          console.log(error)
+          console.error(error)
         }
       }
     }

@@ -9,6 +9,7 @@ export * from './store'
 export * from './router'
 export * from './config'
 export * from './apollo'
+export * from './helpers'
 
 import { provideRouter } from './router'
 import { provideStore, CommonStorePlugin } from './store'

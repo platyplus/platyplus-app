@@ -1,0 +1,7 @@
+fragment preferred_org_unit on user {
+  preferred_org_unit_id
+  preferred_org_unit {
+    id
+    name
+  }
+}

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 import { MigrationBuilder } from 'node-pg-migrate'
 import { sql } from 'slonik'
-import { DATABASE_SCHEMA } from '../config'
+import { METADATA_SCHEMA, DATA_SCHEMA } from '../config'
 
 export const up = (pgm: MigrationBuilder) => {
   pgm.createTable(
@@ -14,7 +14,7 @@ export const up = (pgm: MigrationBuilder) => {
       schema: {
         type: 'string',
         primaryKey: true,
-        default: 'public'
+        default: DATA_SCHEMA
       }
     },
     { ifNotExists: true }
@@ -98,7 +98,7 @@ export const up = (pgm: MigrationBuilder) => {
             -- Additional settings
             LEFT JOIN ( SELECT t.schema,
                         t.name,
-                        FROM ${sql.identifier([DATABASE_SCHEMA, 'table'])} t
+                        FROM ${sql.identifier([METADATA_SCHEMA, 'table'])} t
                       ) settings ON tables.table_schema::text = settings.schema::text AND tables.table_name::text = settings.name::text
             -- View info: not being used (yet?)
             LEFT JOIN ( SELECT v.table_schema,

@@ -1,0 +1,26 @@
+#import "./fragments.graphql"
+query user_profile($id: uuid!) {
+  profile: user_by_pk(id: $id) {
+    id
+    username
+    attributes
+    locale
+    org_unit_memberships {
+      org_unit {
+        id
+        name
+      }
+    }
+    ...preferred_org_unit
+    role_attributions {
+      role {
+        id
+        name
+      }
+      org_unit {
+        id
+        name
+      }
+    }
+  }
+}

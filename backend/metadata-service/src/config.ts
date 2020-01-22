@@ -15,8 +15,8 @@ const AUTHENTICATION_URL =
 export const JWKS_URL = `${AUTHENTICATION_URL}/jwks`
 
 // * Schema being used to install the required tables/views/triggers for handling metadata
-export const DATABASE_SCHEMA = 'platyplus'
-
+export const METADATA_SCHEMA = process.env.METADATA_SCHEMA || 'platyplus'
+export const DATA_SCHEMA = process.env.DATA_SCHEMA || 'public'
 export const getClaims = (context: Context) => context.user?.[HASURA_CLAIMS]
 
 export const getRole = (context: Context): string =>

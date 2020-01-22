@@ -1,4 +1,4 @@
-// TODO yurky definition: generate like metadata?
+// TODO generate the types in the same way as for the metadata service
 interface OrgUnit {
   id: string
 }

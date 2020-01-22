@@ -19,7 +19,6 @@ export const uniqueGraphQlId = (object: DataObject) => {
 }
 
 export const validateRule = (element: DataObject, rule: Rule) => {
-  console.log(rule)
   if (rule.type === 'lodash')
     return !!JSON.parse(template(rule.parameters[0])(element))
   return true // TODO code other rules

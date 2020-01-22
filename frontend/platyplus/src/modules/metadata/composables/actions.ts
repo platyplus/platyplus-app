@@ -40,7 +40,7 @@ export const useDeleteElement = (element: Ref<DataObject>): ActionResult => {
       .onOk(async () => {
         // TODO recode
         if (permission.value) {
-          console.log('TODO recode')
+          console.warn('TODO recode')
           router.replace(`/data/${table?.name}`) // ? or go back to the previous page?
         }
         //   if (this.$can('delete', element)) {

@@ -2,12 +2,10 @@ import { ActionTree } from 'vuex'
 
 import { UserState } from './state'
 
-import {
-  LOGIN_MUTATION,
-  PROFILE_QUERY,
-  UPDATE_LOCALE,
-  UPDATE_PREFERRED_ORG_UNIT
-} from '../graphql'
+import LOGIN_MUTATION from '../graphql/login-mutation.graphql'
+import PROFILE_QUERY from '../graphql/profile-query.graphql'
+import UPDATE_LOCALE from '../graphql/update-locale.graphql'
+import UPDATE_PREFERRED_ORG_UNIT from '../graphql/update-preferred-org-unit.graphql'
 
 import { User } from '../types'
 import { getApolloClient } from '..'

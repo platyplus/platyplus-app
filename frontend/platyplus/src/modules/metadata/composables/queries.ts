@@ -25,17 +25,11 @@ export const useOptionsLoader = (
   element: Ref<DataObject>,
   property?: PropertyMetadata
 ) => {
-  // TODO reload filteredOptions if options change. E.g. with a watcher
   // TODO this.relationship.through if many to many!!!
   // TODO many to many. Something like:
   // const tableClass = this.relationship.through
   //   ? this.relationship.through.reference
   //   : this.property.reference
-  // ? Old piece of code:
-  // @Watch('initialOptions', { deep: true })
-  // public onOptionsChanged(newValue: ObjectMap[]) {
-  //   this.options = newValue
-  // }
   const query = computed(
     () =>
       gql(
@@ -56,15 +50,14 @@ export const useOptionsLoader = (
     const rules = isNew.value
       ? property?.value?.insertRules
       : property?.value?.updateRules
-    if (rules) {
-      console.log(rules)
+    if (rules)
       return availableOptions.value.filter(item =>
         validateRules(
           { ...element.value, [property?.value?.name || '__unknown']: item },
           rules
         )
       )
-    } else return availableOptions.value
+    else return availableOptions.value
   })
   // * Options filtered with the current user input
   const options = computed(() => {

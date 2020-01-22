@@ -1,3 +1,4 @@
+// TODO put in a 'core' module
 export type GenericObject =
   | boolean
   | number

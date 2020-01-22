@@ -29,7 +29,7 @@ export const actions: ActionTree<LoaderState, {}> = {
     LoadingBar.increment(100.0 / totalTarget)
   },
 
-  stopProgress: ({ commit, getters, state }, key) => {
+  stopProgress: ({ commit, state }, key) => {
     commit('stopProgress', key)
     if (state.progress.size === 0) {
       LoadingBar.stop()

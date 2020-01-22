@@ -5,7 +5,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "> TODO: description",
+  "description": "Documentation of the Platyplus suite",
   "author": "Pierre-Louis Mercereau <24897252+plmercereau@users.noreply.github.com>",
   "homepage": "https://github.com/platyplus/platyplus#readme",
   "license": "MIT",

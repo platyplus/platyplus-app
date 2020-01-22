@@ -1,0 +1,11 @@
+#import "./fragments.graphql"
+mutation update_preferred_org_unit_id($userId: uuid!, $orgUnitId: uuid!) {
+  update_user(
+    where: { id: { _eq: $userId } }
+    _set: { preferred_org_unit_id: $orgUnitId }
+  ) {
+    returning {
+      ...preferred_org_unit
+    }
+  }
+}

@@ -1,8 +1,7 @@
 import { ActionTree } from 'vuex'
-import { QuasarState } from './state'
 import Quasar from 'quasar'
 
-export const actions: ActionTree<QuasarState, {}> = {
+export const actions: ActionTree<{}, {}> = {
   setLocale: {
     root: true,
     handler: (_, locale) => {

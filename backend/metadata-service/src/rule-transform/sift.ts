@@ -26,7 +26,7 @@ export const sqlToSift = (value: string) => {
       if (typeof left === 'string')
         return { [left]: { [operationName]: right } }
       else {
-        // TODO vaseux, non récursif
+        // ! vaseux, non récursif
         const [leftKey, leftValue] = Object.entries(left)[0] as [string, string]
         return {
           [leftValue]: {
@@ -41,7 +41,7 @@ export const sqlToSift = (value: string) => {
       if (args.length !== 1)
         console.warn(
           "Don't know how to handle functions with multiple arguments"
-        ) // TODO
+        )
       return {
         [functionName]: args[0]
       }

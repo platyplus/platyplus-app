@@ -1,6 +1,6 @@
 import { sql, createPool } from 'slonik'
 
-import { DATABASE_URL, DATABASE_SCHEMA } from './config'
+import { DATABASE_URL, METADATA_SCHEMA } from './config'
 import { Table, RawTable } from './schema/table'
 
 export let tables: Table[] = []
@@ -19,7 +19,7 @@ export const loadRawMetadata = async () => {
     lastLoad = new Date()
     // TODO implement GraphQL field names
     const { rows } = await pool.query<RawTable>(
-      sql`SELECT * from ${sql.identifier([DATABASE_SCHEMA, 'metadata'])}`
+      sql`SELECT * from ${sql.identifier([METADATA_SCHEMA, 'metadata'])}`
     )
     await pool.end()
     console.info('metadata fetching done.')

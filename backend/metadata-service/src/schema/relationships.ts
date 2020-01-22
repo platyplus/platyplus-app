@@ -84,7 +84,6 @@ export abstract class Relationship extends GenericField {
   mapping: ColumnMapping[]
   // TODO inverse
   // ? implement update/insert default?
-  // TODO implement update/insert readonly
   constructor({
     table,
     name,
@@ -217,29 +216,17 @@ export class OneToManyRelationship extends Relationship {
 
   @Field(() => Boolean, { nullable: true })
   canSelect(@Ctx() context: Context) {
-    return (
-      // TODO can select the fk fields
-      // this.idFields.every(field => field.canSelect(context)) &&
-      this.target.canSelect(context)
-    )
+    return this.target.canSelect(context)
   }
 
   @Field(() => Boolean, { nullable: true })
   canInsert(@Ctx() context: Context) {
-    return (
-      // TODO can select the fk fields
-      // this.idFields.every(field => field.canInsert(context)) &&
-      this.target.canInsert(context)
-    )
+    return this.target.canInsert(context)
   }
 
   @Field(() => Boolean, { nullable: true })
   canUpdate(@Ctx() context: Context) {
-    return (
-      // TODO can select the fk fields
-      // this.idFields.every(field => field.canUpdate(context)) &&
-      this.target.canUpdate(context)
-    )
+    return this.target.canUpdate(context)
   }
 }
 

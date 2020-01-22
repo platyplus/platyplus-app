@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { Store } from 'vuex'
-import { userModule } from './store'
+
 import { ApolloClient } from '@platyplus/hasura-apollo-client'
+
+import { userModule } from './store'
 
 export * from './composables'
 

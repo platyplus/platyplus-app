@@ -55,7 +55,7 @@ export class FormManagerMixin {
     next((vm: any) => {
       vm.reset()
       if (!vm.canSave) {
-        console.log(`cannot ${vm.action}`) // TODO navigation guard insert + update
+        console.warn(`cannot ${vm.action}`) // TODO navigation guard insert + update
       }
     })
   }

@@ -2,8 +2,7 @@ import { SetupContext } from '@vue/composition-api'
 import { GenericObject } from '../types'
 
 interface FullSetupContext extends SetupContext {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  refs: Record<string, any>
+  refs: Record<string, never>
 }
 
 interface VeeObserver {
