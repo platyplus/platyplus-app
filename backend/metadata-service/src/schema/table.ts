@@ -57,7 +57,7 @@ export class Table implements GraphQLNode {
   readonly constraints: UniqueConstraint[]
   readonly checks: Check[]
   readonly permissions: Permission[]
-  readonly isTransitionTable: boolean
+  readonly isTransitionTable: boolean //? set the value or remove
 
   // Calculated fields on construction
   @Field(type => Label)

@@ -89,7 +89,7 @@ export const up = (pgm: MigrationBuilder) => {
                         table_name,
                         json_agg(permission) as permissions
                         FROM (SELECT table_schema,
-                                table_name, 
+                                table_name,
                                 role_name,
                                 jsonb_build_object('role', p.role_name) || jsonb_object_agg(p.perm_type, p.perm_def) as permission
                             FROM hdb_catalog.hdb_permission p
@@ -97,7 +97,7 @@ export const up = (pgm: MigrationBuilder) => {
                         GROUP BY s.table_schema, s.table_name) permissions ON tables.table_schema::text = permissions.table_schema::text AND tables.table_name::text = permissions.table_name::text
             -- Additional settings
             LEFT JOIN ( SELECT t.schema,
-                        t.name,
+                        t.name
                         FROM ${sql.identifier([METADATA_SCHEMA, 'table'])} t
                       ) settings ON tables.table_schema::text = settings.schema::text AND tables.table_name::text = settings.name::text
             -- View info: not being used (yet?)
