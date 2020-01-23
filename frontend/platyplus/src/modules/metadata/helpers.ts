@@ -1,6 +1,7 @@
+import { template } from 'lodash'
+
 import { tableMetadata } from './getters'
 import { DataObject, Rule } from './types'
-import { template } from 'lodash'
 
 export const uniqueGraphQlId = (object: DataObject) => {
   try {

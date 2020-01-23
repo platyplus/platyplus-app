@@ -1,14 +1,15 @@
-import { Field, ObjectType, Ctx, Arg } from 'type-graphql'
+import { Field, ObjectType, Ctx } from 'type-graphql'
+import { get } from 'object-path'
 import { Context } from 'koa'
 
-import { sqlToLodash } from '../rule-transform'
+import { isEmpty } from '../../core'
+import { getRole, getClaims } from '../../config'
 
-import { GenericField } from './field'
-import { Table } from './table'
-import { Rule, ColumnAction } from './rules'
-import { getRole, getClaims } from '../config'
-import { get } from 'object-path'
-import { isEmpty } from '../core'
+import { Table } from '../tables'
+import { GenericRule, ColumnAction } from '../rules'
+
+import { GenericField } from './generic'
+import { sqlToLodash } from '../../transformers'
 
 export interface RawColumn {
   name: string
@@ -39,6 +40,7 @@ const componentKind = ({ name, type }: RawColumn) => {
   if (['created_at', 'updated_at'].includes(name)) return 'hidden'
   return componentKinds.get(type) || type
 }
+
 @ObjectType({
   implements: GenericField,
   description: 'Columns of an SQL table'
@@ -187,17 +189,17 @@ export class Column extends GenericField {
     return super.rules(context, action)
   }
 
-  @Field(type => [Rule], { nullable: true })
+  @Field(type => [GenericRule], { nullable: true })
   insertRules(@Ctx() context: Context) {
     return this.rules(context, 'insert')
   }
 
-  @Field(type => [Rule], { nullable: true })
+  @Field(type => [GenericRule], { nullable: true })
   updateRules(@Ctx() context: Context) {
     return this.rules(context, 'update')
   }
 
-  @Field(type => [Rule], { nullable: true })
+  @Field(type => [GenericRule], { nullable: true })
   deleteRules(@Ctx() context: Context) {
     return this.rules(context, 'delete')
   }

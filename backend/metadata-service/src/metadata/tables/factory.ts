@@ -1,7 +1,7 @@
 import { sql, createPool } from 'slonik'
 
-import { DATABASE_URL, METADATA_SCHEMA } from './config'
-import { Table, RawTable } from './schema/table'
+import { DATABASE_URL, METADATA_SCHEMA } from '../../config'
+import { Table, RawTable } from '.'
 
 export let tables: Table[] = []
 

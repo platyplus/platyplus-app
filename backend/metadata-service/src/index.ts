@@ -8,7 +8,7 @@ import { buildSchema, BuildSchemaOptions } from 'type-graphql'
 import microservice from '@platyplus/microservice'
 
 import { JWKS_URL } from './config'
-import { TableResolver } from './table-resolver'
+import { TableResolver } from './metadata'
 import generateSchema from './database-sync'
 
 const { app } = microservice()

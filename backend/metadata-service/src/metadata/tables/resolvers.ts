@@ -1,8 +1,10 @@
-import { Context } from 'koa'
 import { Resolver, Query, Ctx, Arg } from 'type-graphql'
-import { loadRawMetadata } from './data-loader'
-import { Table } from './schema/table'
-import { getRole } from './config'
+import { Context } from 'koa'
+
+import { getRole } from '../../config'
+
+import { Table } from './table'
+import { loadRawMetadata } from './factory'
 
 @Resolver(of => Table)
 export class TableResolver {

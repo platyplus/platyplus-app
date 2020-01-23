@@ -1,8 +1,10 @@
-import { operationToLodash } from './lodash'
-import { HasuraExpression, hasuraToLodash } from './hasura'
-import { ObjectMap } from '../core'
-import { stringToOperation } from './parser'
+import { get } from 'object-path'
+import { ObjectMap } from '../../core'
 import {
+  operationToLodash,
+  HasuraExpression,
+  hasuraToLodash,
+  stringToOperation,
   columnName,
   constValue,
   functionName,
@@ -12,8 +14,8 @@ import {
   getFunction,
   expressionValue,
   getNullTest
-} from './helpers'
-import { get } from 'object-path'
+} from '../../transformers'
+import { GenericRule, LodashRule } from './kinds'
 
 /* 
 * List of implemented rules:
@@ -51,24 +53,7 @@ TODO List of rules to be implemented:
 
 */
 
-export class Rule {
-  type: string
-  parameters: string[]
-  paths: string[]
-  constructor(type: string, params: string[] = [], fields: string[] = []) {
-    this.type = type
-    this.parameters = params
-    this.paths = fields
-  }
-}
-
-class LodashRule extends Rule {
-  constructor(template: string, fields: string[] = []) {
-    super('lodash', [template], fields)
-  }
-}
-
-export const mergeRules = (rules: Rule[]) => {
+export const mergeRules = (rules: GenericRule[]) => {
   const result = [...rules]
   // * Merge any couple of min_value/max_value rules for the same field into a 'between' rule
   rules
@@ -80,7 +65,7 @@ export const mergeRules = (rules: Rule[]) => {
       )
       if (indexMin >= 0) {
         result.push(
-          new Rule('between', [
+          new GenericRule('between', [
             rules[indexMin].parameters[0],
             ruleMax.parameters[0]
           ])
@@ -120,10 +105,10 @@ export const sqlToVee = (value: string) => {
               ['>=', 'min_value']
             ])
             const rule = rules.get(operator)
-            if (rule) return new Rule(rule, [constValue(other)], fields)
+            if (rule) return new GenericRule(rule, [constValue(other)], fields)
           }
           if (getColumn(other)) {
-            return new Rule('confirmed', [columnName(other)], fields)
+            return new GenericRule('confirmed', [columnName(other)], fields)
           }
         }
         const func = getFunction(left) || getFunction(right)
@@ -139,7 +124,11 @@ export const sqlToVee = (value: string) => {
             ])
             const rule = rules.get(operator)
             if (rule)
-              return new Rule(rule, [constValue(other)], [columnName(funcArg)])
+              return new GenericRule(
+                rule,
+                [constValue(other)],
+                [columnName(funcArg)]
+              )
           }
         }
       } else {
@@ -150,7 +139,7 @@ export const sqlToVee = (value: string) => {
     if (nullTest) {
       // * Convert any 'is not null' column to a required rule
       if (getColumn(nullTest.arg) && nullTest.nulltesttype === 1)
-        return new Rule('required', [], [columnName(nullTest.arg)])
+        return new GenericRule('required', [], [columnName(nullTest.arg)])
     }
     return new LodashRule(operationToLodash(operation))
   })

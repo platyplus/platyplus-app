@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Field, InterfaceType, ID, Ctx, Arg } from 'type-graphql'
-import { Table } from './table'
-import { ObjectMap } from '../core'
+import { Field, InterfaceType, ID, Ctx } from 'type-graphql'
 import { Context } from 'koa'
-import { GraphQLNode, NodeScope } from './common'
-import { ColumnAction, Rule } from './rules'
+
+import { ObjectMap } from '../../core'
+
+import { Table } from '../tables'
+import { GraphQLNode, NodeScope } from '../types'
+import { ColumnAction, GenericRule } from '../rules'
 
 @InterfaceType()
 export abstract class GenericField implements GraphQLNode {
@@ -66,21 +68,21 @@ export abstract class GenericField implements GraphQLNode {
     return false
   }
 
-  @Field(type => [Rule], { nullable: true })
+  @Field(type => [GenericRule], { nullable: true })
   insertRules(@Ctx() context: Context) {
     console.warn(
       'This method should be implemented in the classes exending GenericField!!!'
     )
   }
 
-  @Field(type => [Rule], { nullable: true })
+  @Field(type => [GenericRule], { nullable: true })
   updateRules(@Ctx() context: Context) {
     console.warn(
       'This method should be implemented in the classes exending GenericField!!!'
     )
   }
 
-  @Field(type => [Rule], { nullable: true })
+  @Field(type => [GenericRule], { nullable: true })
   deleteRules(@Ctx() context: Context) {
     console.warn(
       'This method should be implemented in the classes exending GenericField!!!'

@@ -1,8 +1,6 @@
 import { Field, ObjectType, ID, registerEnumType } from 'type-graphql'
 
-import { tables } from '../data-loader'
-
-import { Table } from './table'
+import { Table, tables } from '../tables'
 
 enum Action {
   NO_ACTION = 'a',

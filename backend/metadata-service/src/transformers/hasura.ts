@@ -56,7 +56,6 @@ const booleanOperatorsMapping: { [key in BooleanOperators]: string } = {
   _or: '||',
   _not: '!'
 }
-const allOperators = { ...operatorsMapping, ...booleanOperatorsMapping }
 
 const recursiveHasuraToLodash = (
   expression: HasuraExpression,

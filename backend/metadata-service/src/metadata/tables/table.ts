@@ -3,33 +3,31 @@ import { Field, ObjectType, ID, Ctx } from 'type-graphql'
 import { Context } from 'koa'
 import { jsonToGraphQLQuery, VariableType } from 'json-to-graphql-query'
 
-import { tables } from '../data-loader'
-import { getRole, DATA_SCHEMA } from '../config'
-import { ObjectMap } from '../core'
+import { tables } from './factory'
+import { getRole, DATA_SCHEMA } from '../../config'
+import { ObjectMap } from '../../core'
 
-import { Label } from './label'
+import { Label } from '../label'
 import {
-  Relationship,
-  SingleRelationship,
   RawRelationship,
   createRelationships,
-  OneToManyRelationship,
-  ManyToManyRelationship
-} from './relationships'
-import { Column, RawColumn } from './columns'
-import { ForeignKey } from './foreign-keys'
+  ManyToManyRelationship,
+  Relationship,
+  SingleRelationship,
+  OneToManyRelationship
+} from '../relationships'
+import { Column, RawColumn, ForeignKey, GenericField } from '../fields'
 import {
   Permission,
-  Rule,
+  GenericRule,
   Check,
   UniqueConstraint,
   MutationAction,
   createRules,
   ColumnAction,
   ActionType
-} from './rules'
-import { GenericField } from './field'
-import { GraphQLNode, NodeScope } from './common'
+} from '../rules'
+import { GraphQLNode, NodeScope } from '../types'
 
 export interface RawTable {
   name: string
@@ -304,7 +302,7 @@ export class Table implements GraphQLNode {
   }
 
   // * The rules are cached into a map
-  private _rules = new Map<string, Rule[] | undefined>()
+  private _rules = new Map<string, GenericRule[] | undefined>()
   /**
    * * Returns an array of the rules to comply to perform the given action. Returns null if the action is not allowed.
    */
@@ -316,7 +314,7 @@ export class Table implements GraphQLNode {
   }
 
   // ? Move into a resolver file?
-  @Field(type => [Rule], {
+  @Field(type => [GenericRule], {
     nullable: true,
     description:
       'Returns an array of the rules to comply to insert an item. Returns null if no insert is not allowed.'
@@ -326,7 +324,7 @@ export class Table implements GraphQLNode {
   }
 
   // ? Move into a resolver file?
-  @Field(type => [Rule], {
+  @Field(type => [GenericRule], {
     nullable: true,
     description:
       'Returns an array of the rules to comply to update an item. Returns null if no update is not allowed.'
@@ -336,7 +334,7 @@ export class Table implements GraphQLNode {
   }
 
   // ? Move into a resolver file?
-  @Field(type => [Rule], {
+  @Field(type => [GenericRule], {
     nullable: true,
     description:
       'Returns an array of the rules to comply to delete an item. Returns null if deletion is not allowed.'

@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/camelcase */
+import { Operation } from 'pg-query-parser'
+
 import {
   processStringExpression,
   ProcessSettings,
   processOperation
 } from './parser'
-import { Operation } from 'pg-query-parser'
+
 const settings: ProcessSettings<string> = {
   escapeFinal: (finalResult: string) => `<%= ${finalResult} %>`,
   functionsMapping: {

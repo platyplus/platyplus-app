@@ -1,12 +1,24 @@
 import { Field, ObjectType } from 'type-graphql'
-
-import { getHandlebarsVars } from '../helpers'
-
-import { Table } from './table'
-import { GraphQLNode } from './common'
-import { ObjectMap } from '../core'
 import { set } from 'object-path'
+import Handlebars from 'handlebars'
 
+import { ObjectMap } from '../core'
+
+import { Table } from './tables'
+import { GraphQLNode } from './types'
+
+const getHandlebarsVars = (value: string) => {
+  const ast = Handlebars.parse(value)
+  const result: string[] = []
+  for (const i in ast.body) {
+    if (ast.body[i].type === 'MustacheStatement') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const bodyElement = ast.body[i] as any
+      result.push(bodyElement.path.original)
+    }
+  }
+  return result
+}
 @ObjectType({ description: '' })
 export class Label implements GraphQLNode {
   table: Table
