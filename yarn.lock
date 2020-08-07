@@ -3785,9 +3785,9 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-class-transformer@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.2.3.tgz#598c92ca71dcca73f91ccb875d74a3847ccfa32d"
+class-transformer@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.3.1.tgz#ee681a5439ff2230fc57f5056412d3befa70d597"
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -7587,10 +7587,6 @@ koa-convert@^1.2.0:
   dependencies:
     co "^4.6.0"
     koa-compose "^3.0.0"
-
-koa-history-api-fallback@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/koa-history-api-fallback/-/koa-history-api-fallback-1.0.0.tgz#b232e7d118d0dd5afeea3613c649608d9b0f9087"
 
 koa-is-json@^1.0.0:
   version "1.0.0"
